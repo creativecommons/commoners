@@ -1,0 +1,133 @@
+label,
+label span {
+	padding-left: 6px;
+	margin-right: 6px;
+	}
+br {
+	line-height: 24px;
+	}
+.mail_tabs {
+	margin: 22px 0 -1px 0;
+	padding: 0;	
+	}
+.mail_tabs ul {
+	margin: 0;
+	padding: 0;
+	}	
+.mail_tabs ul li {
+	box-sizing: border-box;
+	display: inline-block;
+	padding: 12px 24px;
+	border: 1px solid #ccc;
+	margin: 0 4px 0 0;
+	-webkit-border-top-left-radius: 12px;
+	-webkit-border-top-right-radius: 12px;
+	-moz-border-radius-topleft: 12px;
+	-moz-border-radius-topright: 12px;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	cursor: pointer;
+	}
+.mail_tabs ul li.active {
+	border-bottom: 1px solid #f5f5f5;	
+	}
+.mail_tabs ul li a {
+	text-decoration: none;
+	}		
+.message_container {
+	margin: 0;
+	padding: 22px;
+	border: 1px solid #ccc;
+	-webkit-border-radius: 12px;
+	-webkit-border-top-left-radius: 0;
+	-moz-border-radius: 12px;
+	-moz-border-radius-topleft: 0;
+	border-radius: 12px;
+	border-top-left-radius: 0;
+	}	
+.mail_body div {
+	float: left;
+	width: 50%;
+	}	
+.mail_body textarea {
+	width: 90%;
+	min-height: 200px;
+	}
+.grey_text {
+	color: #8e8e8e;
+	}
+.message_container > p {
+	display: inline-block;
+	padding-top: 4px;
+	}		
+.availability_result {
+	padding: 6px 12px;
+	margin: 6px 0 0 172px;
+	color: #fff;
+	display: inline-block;	
+	}	
+.availability_result.avaiable {
+	background: green;	
+	}	
+.availability_result.not-responding {
+	background: red;	
+	}	
+
+.availability_result.checking {
+	background: orange;	
+}
+		
+.column-primary {
+width: 72% !important; 
+padding: 0;
+}
+
+.column-secondary {
+width: 28% !important;
+float: right !important;
+padding: 0;
+}
+
+.meta-box-sortables {
+margin: 0 8px;
+}
+
+.submit {
+	float: right;
+}
+
+.cas_form th {
+	text-align: right;
+}
+
+.main_content {
+	width: 50%;
+	float: left;
+}
+.sidebar {
+	width: 35%;
+	float: left;
+	padding-left: 44px;
+	display: inline;
+}
+
+#ldap_container {
+	display: none;
+}
+
+#wait_for_access {
+	display: none;
+}
+
+#wpcas_u1dates .inside {
+	text-align: center;
+}
+
+#wpcas_u1dates .inside img {
+	width: 100%;
+	max-width: 420px;
+}
+
+input.required_field {
+	border: 1px solid orange;
+}

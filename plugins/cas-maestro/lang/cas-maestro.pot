@@ -1,0 +1,332 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: CAS Maestro\n"
+"POT-Creation-Date: 2013-10-03 09:24+0100\n"
+"PO-Revision-Date: 2013-10-03 09:25+0100\n"
+"Last-Translator: \n"
+"Language-Team: NME <nme@ist.utl.pt>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__;__ngettext;_n:1,2;"
+"_nc:4c,1,2\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../cas_error.php:14
+msgid "Ooops, there was an error."
+msgstr ""
+
+#: ../cas_error.php:19
+#, php-format
+msgid ""
+"The username %s isn't allowed to register in this website. If you think this "
+"is a mistake, please contact the <a href=\"mailto:%s\">website "
+"administrator</a>."
+msgstr ""
+
+#: ../cas-maestro.php:148
+msgid ""
+"wpCAS is not configured. Please, login, go to the settings and configure "
+"with your credentials."
+msgstr ""
+
+#: ../cas-maestro.php:365
+#, php-format
+msgid ""
+"You don't have a email set. You need to set a email to get ride of this "
+"message... \n"
+"\t       \t<a href=\"%s\"> Click here </a> to access your profile. "
+msgstr ""
+
+#: ../cas-maestro.php:376 ../views/admin_interface.php:3
+msgid "CAS Maestro Settings"
+msgstr ""
+
+#: ../cas-maestro.php:377 ../cas-maestro.php:386 ../cas-maestro.php:387
+msgid "CAS Maestro"
+msgstr ""
+
+#: ../cas-maestro.php:400
+msgid "General Settings"
+msgstr ""
+
+#: ../cas-maestro.php:410
+msgid "Registration"
+msgstr ""
+
+#: ../cas-maestro.php:420
+msgid "Mailing"
+msgstr ""
+
+#: ../cas-maestro.php:431
+msgid "Important note"
+msgstr ""
+
+#: ../cas-maestro.php:441
+msgid "Credits"
+msgstr ""
+
+#: ../cas-maestro.php:471
+msgid "CAS is responding"
+msgstr ""
+
+#: ../cas-maestro.php:472
+msgid "CAS is not responding"
+msgstr ""
+
+#: ../cas-maestro.php:473
+msgid "LDAP is responding"
+msgstr ""
+
+#: ../cas-maestro.php:474
+msgid "LDAP is not responding"
+msgstr ""
+
+#: ../cas-maestro.php:475
+msgid "Checking..."
+msgstr ""
+
+#: ../cas-maestro.php:476
+msgid "Choose the User's role"
+msgstr ""
+
+#: ../views/admin_interface.php:7
+msgid "CAS Maestro settings has been updated."
+msgstr ""
+
+#: ../views/admin_interface.php:9
+msgid ""
+"CAS Maestro settings has been updated, yet there's still information that "
+"needs to be filled."
+msgstr ""
+
+#: ../views/metaboxes/registration.php:18
+msgid "User registration"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:22
+msgid ""
+"In order to register a new user an email address is required. In case you "
+"don’t want to set the email address manually, please chose from the options "
+"below."
+msgstr ""
+
+#: ../views/metaboxes/registration.php:24
+msgid "No mail creation"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:25
+msgid "E-mail suffix username@"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:26
+msgid "LDAP server connection"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:29
+msgid ""
+"You should finish this configuration with LDAP server data. For anonymous "
+"server access, which could not be enough, leave the fields “RDN User” and "
+"“Password” blank."
+msgstr ""
+
+#: ../views/metaboxes/registration.php:43 ../views/metaboxes/general.php:17
+msgid "Server hostname"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:43
+#, php-format
+msgid "(with %s or %s)"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:47
+msgid "Username <abbr title='(Relative Distinguished Name)'>RDN</abbr>"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:51
+msgid "Password"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:55
+msgid "Base DN"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:64
+msgid ""
+"The option to register all users, allows all users to be added to the system "
+"with subscriber profile, with no exception."
+msgstr ""
+
+#: ../views/metaboxes/registration.php:65
+msgid "Register all users?"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:70
+msgid "Users Allowed to Register"
+msgstr ""
+
+#: ../views/metaboxes/registration.php:71
+msgid ""
+"If you indentify users with the ability to register on the system upfront "
+"without confirmation you can also set their names and profile."
+msgstr ""
+
+#: ../views/metaboxes/registration.php:120
+msgid "To add another user, just fill the last blank element."
+msgstr ""
+
+#: ../views/metaboxes/registration.php:124 ../views/metaboxes/general.php:46
+#: ../views/metaboxes/mail.php:69
+msgid "Update options"
+msgstr ""
+
+#: ../views/metaboxes/help_metabox.php:1
+msgid ""
+"In case you can not access the content manager due to a misconfiguration of "
+"this plugin, the following steps should be performed:"
+msgstr ""
+
+#: ../views/metaboxes/help_metabox.php:3
+msgid "Remove the directory of plugin CAS Maestro"
+msgstr ""
+
+#: ../views/metaboxes/help_metabox.php:4
+msgid "Perform access according to the login WordPess"
+msgstr ""
+
+#: ../views/metaboxes/help_metabox.php:5
+msgid "Reinstall CAS Maestro"
+msgstr ""
+
+#: ../views/metaboxes/help_metabox.php:7
+msgid ""
+"Alternatively, you may simply disable the behavior of CAS Maestro as follows:"
+msgstr ""
+
+#: ../views/metaboxes/help_metabox.php:9
+#, php-format
+msgid "Edit the file %s and search for %s definition"
+msgstr ""
+
+#: ../views/metaboxes/help_metabox.php:10
+#, php-format
+msgid "Before that definition, write %s"
+msgstr ""
+
+#: ../views/metaboxes/help_metabox.php:11
+msgid "Reconfigure the plugin and remove the line that was added."
+msgstr ""
+
+#: ../views/metaboxes/general.php:1
+msgid "Server settings"
+msgstr ""
+
+#: ../views/metaboxes/general.php:3
+msgid ""
+"The plugin will only be active after the CAS server definitions are filled. "
+"After the configuration is done, please verify if the connection is valid. "
+"This is strongly advised because If you fill the data incorrrectly, your "
+"access to WordPress might be denied."
+msgstr ""
+
+#: ../views/metaboxes/general.php:4
+msgid ""
+"In case you don’t know all the data, or in doubt, you should contact the "
+"person responsible for the CAS server."
+msgstr ""
+
+#: ../views/metaboxes/general.php:8
+msgid "CAS version"
+msgstr ""
+
+#: ../views/metaboxes/general.php:21
+msgid "Server port"
+msgstr ""
+
+#: ../views/metaboxes/general.php:27
+msgid "Server path"
+msgstr ""
+
+#: ../views/metaboxes/general.php:35
+msgid "Menu localization"
+msgstr ""
+
+#: ../views/metaboxes/general.php:38
+msgid "Sidebar"
+msgstr ""
+
+#: ../views/metaboxes/general.php:41
+msgid "Settings menu"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:2
+msgid "Sender"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:6
+msgid ""
+"All mails are sent from a unique sender. This sender may recieve "
+"notification emails alerting for new users and/or activations, estabilished "
+"by the following configuration."
+msgstr ""
+
+#: ../views/metaboxes/mail.php:9
+msgid "E-mail address:"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:13
+msgid "Full name:"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:18
+msgid "Mails"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:19
+msgid ""
+"Please set up on witch actions should emails be sent. It’s possible to send "
+"emails to the user and the sender, depending on your configuration."
+msgstr ""
+
+#: ../views/metaboxes/mail.php:23
+msgid "Welcoming"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:24
+msgid "Wait for access"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:30
+msgid "Send to the User"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:30
+msgid "Send to the Sender"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:31 ../views/metaboxes/mail.php:48
+msgid "Subject"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:33 ../views/metaboxes/mail.php:50
+msgid "Body"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:36 ../views/metaboxes/mail.php:53
+msgid "Message body sent to the User"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:40 ../views/metaboxes/mail.php:57
+msgid "Message body sent to the Sender"
+msgstr ""
+
+#: ../views/metaboxes/mail.php:63
+msgid ""
+"You can use the following tokens: %sitename% for the website name, %username"
+"% for the user’s name and %realname% for the user’s real name."
+msgstr ""

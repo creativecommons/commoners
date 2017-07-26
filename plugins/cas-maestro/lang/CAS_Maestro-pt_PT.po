@@ -1,0 +1,370 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: CAS Maestro\n"
+"POT-Creation-Date: 2013-10-03 09:24+0100\n"
+"PO-Revision-Date: 2013-10-14 14:55-0000\n"
+"Last-Translator: João Pedro Sequeria Correia Pargana <jpargana@ist.utl.pt>\n"
+"Language-Team: NME <nme@ist.utl.pt>\n"
+"Language: pt_PT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__;__ngettext;_n:1,2;"
+"_nc:4c,1,2\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: ../cas_error.php:14
+msgid "Ooops, there was an error."
+msgstr "Ooops, ocorreu um erro."
+
+#: ../cas_error.php:19
+#, php-format
+msgid ""
+"The username %s isn't allowed to register in this website. If you think this "
+"is a mistake, please contact the <a href=\"mailto:%s\">website "
+"administrator</a>."
+msgstr ""
+"O utilizador %s não está autorizado a registar-se neste website. Se "
+"considera que isto se trata de um erro, por favor contacte o <a href="
+"\"mailto:%s\">administrador do website</a>."
+
+#: ../cas-maestro.php:148
+msgid ""
+"wpCAS is not configured. Please, login, go to the settings and configure "
+"with your credentials."
+msgstr ""
+"O CAS Maestro não está configurado. Por favor, inicie a sessão, aceda as "
+"definições e configure o plugin com as suas credenciais."
+
+#: ../cas-maestro.php:365
+#, php-format
+msgid ""
+"You don't have a email set. You need to set a email to get ride of this "
+"message... \n"
+"\t       \t<a href=\"%s\"> Click here </a> to access your profile. "
+msgstr ""
+"Não tem um email definido. É necessário configurar um email para remover "
+"esta mensagem... \n"
+"\t       \t<a href=\"%s\"> Clique aqui </a> para aceder ao seu perfil. "
+
+#: ../cas-maestro.php:376 ../views/admin_interface.php:3
+msgid "CAS Maestro Settings"
+msgstr "Definições do CAS Maestro"
+
+#: ../cas-maestro.php:377 ../cas-maestro.php:386 ../cas-maestro.php:387
+msgid "CAS Maestro"
+msgstr "CAS Maestro"
+
+#: ../cas-maestro.php:400
+msgid "General Settings"
+msgstr "Definições Gerais"
+
+#: ../cas-maestro.php:410
+msgid "Registration"
+msgstr "Registo"
+
+#: ../cas-maestro.php:420
+msgid "Mailing"
+msgstr "Definições de Email"
+
+#: ../cas-maestro.php:431
+msgid "Important note"
+msgstr "Aviso importante"
+
+#: ../cas-maestro.php:441
+msgid "Credits"
+msgstr "Créditos"
+
+#: ../cas-maestro.php:471
+msgid "CAS is responding"
+msgstr "CAS a responder"
+
+#: ../cas-maestro.php:472
+msgid "CAS is not responding"
+msgstr "CAS não responde"
+
+#: ../cas-maestro.php:473
+msgid "LDAP is responding"
+msgstr "LDAP a responder"
+
+#: ../cas-maestro.php:474
+msgid "LDAP is not responding"
+msgstr "LDAP não responde"
+
+#: ../cas-maestro.php:475
+msgid "Checking..."
+msgstr "A verificar..."
+
+#: ../cas-maestro.php:476
+msgid "Choose the User's role"
+msgstr "Escolher o perfil do Utilizador"
+
+#: ../views/admin_interface.php:7
+msgid "CAS Maestro settings has been updated."
+msgstr "As definições do CAS Maestro foram actualizadas."
+
+#: ../views/admin_interface.php:9
+msgid ""
+"CAS Maestro settings has been updated, yet there's still information that "
+"needs to be filled."
+msgstr ""
+"As definições do CAS Maestro foram actualizadas, no entanto, há informação "
+"que necessita de ser preenchida."
+
+#: ../views/metaboxes/registration.php:18
+msgid "User registration"
+msgstr "Registo de Utilizadores"
+
+#: ../views/metaboxes/registration.php:22
+msgid ""
+"In order to register a new user an email address is required. In case you "
+"don’t want to set the email address manually, please chose from the options "
+"below."
+msgstr ""
+"O registo de um novo utilizador pressupõe o preenchimento obrigatório do seu "
+"e-mail. Caso não pretenda o preenchimento manual, indique a forma a usar"
+
+#: ../views/metaboxes/registration.php:24
+msgid "No mail creation"
+msgstr "Sem geração de e-mail"
+
+#: ../views/metaboxes/registration.php:25
+msgid "E-mail suffix username@"
+msgstr "Sufixo de email - username@"
+
+#: ../views/metaboxes/registration.php:26
+msgid "LDAP server connection"
+msgstr "Ligação a um servidor LDAP"
+
+#: ../views/metaboxes/registration.php:29
+msgid ""
+"You should finish this configuration with LDAP server data. For anonymous "
+"server access, which could not be enough, leave the fields “RDN User” and "
+"“Password” blank."
+msgstr ""
+"Deve finalizar esta configuração com os dados do servidor de LDAP. Para "
+"acesso anónimo ao servidor (que poderá não ser suficiente), deixe o Nome de "
+"Utilizador RDN e a Password em branco."
+
+#: ../views/metaboxes/registration.php:43 ../views/metaboxes/general.php:17
+msgid "Server hostname"
+msgstr "Endereço"
+
+#: ../views/metaboxes/registration.php:43
+#, php-format
+msgid "(with %s or %s)"
+msgstr "(com %s ou %s)"
+
+#: ../views/metaboxes/registration.php:47
+msgid "Username <abbr title='(Relative Distinguished Name)'>RDN</abbr>"
+msgstr "Utilizador <abbr title='(Relative Distinguished Name)'>RDN</abbr>"
+
+#: ../views/metaboxes/registration.php:51
+msgid "Password"
+msgstr "Password"
+
+#: ../views/metaboxes/registration.php:55
+msgid "Base DN"
+msgstr "Base DN"
+
+#: ../views/metaboxes/registration.php:64
+msgid ""
+"The option to register all users, allows all users to be added to the system "
+"with subscriber profile, with no exception."
+msgstr ""
+"A opção de registar todos os utilizadores, permite que, todos sem exceção, "
+"sejam adicionados ao sistema com o perfil de subscritores."
+
+#: ../views/metaboxes/registration.php:65
+msgid "Register all users?"
+msgstr "Registar todos os utilizadores?"
+
+#: ../views/metaboxes/registration.php:70
+msgid "Users Allowed to Register"
+msgstr "Utilizadores com registo autorizado"
+
+#: ../views/metaboxes/registration.php:71
+msgid ""
+"If you indentify users with the ability to register on the system upfront "
+"without confirmation you can also set their names and profile."
+msgstr ""
+"Se identificar previamente utilizadores que deverão ter autorização de "
+"registo ao sistema, sem qualquer confirmação, poderá acrescentar à lista os "
+"nomes de utilizadores e o perfil que pretende que seja atribuído."
+
+#: ../views/metaboxes/registration.php:120
+msgid "To add another user, just fill the last blank element."
+msgstr "Para adicionar outro utilizador, preencha o último elemento em branco."
+
+#: ../views/metaboxes/registration.php:124 ../views/metaboxes/general.php:46
+#: ../views/metaboxes/mail.php:69
+msgid "Update options"
+msgstr "Actualizar opções"
+
+#: ../views/metaboxes/help_metabox.php:1
+msgid ""
+"In case you can not access the content manager due to a misconfiguration of "
+"this plugin, the following steps should be performed:"
+msgstr ""
+"No caso de não conseguir aceder ao gestor de conteúdos devido a uma má "
+"configuração deste plugin, devem ser realizados os seguintes passos:"
+
+#: ../views/metaboxes/help_metabox.php:3
+msgid "Remove the directory of plugin CAS Maestro"
+msgstr "Remover a diretoria do plugin CAS Maestro"
+
+#: ../views/metaboxes/help_metabox.php:4
+msgid "Perform access according to the login WordPess"
+msgstr "Realizar o acesso segundo o login do WordPress"
+
+#: ../views/metaboxes/help_metabox.php:5
+msgid "Reinstall CAS Maestro"
+msgstr "Voltar a instalar "
+
+#: ../views/metaboxes/help_metabox.php:7
+msgid ""
+"Alternatively, you may simply disable the behavior of CAS Maestro as follows:"
+msgstr ""
+"Alternativamente, poderá simplesmente desativar o comportamento do Cas "
+"Maestro do seguinte modo:"
+
+#: ../views/metaboxes/help_metabox.php:9
+#, php-format
+msgid "Edit the file %s and search for %s definition"
+msgstr "Edite o ficheiro %s e procure a definição %s"
+
+#: ../views/metaboxes/help_metabox.php:10
+#, php-format
+msgid "Before that definition, write %s"
+msgstr "Antes dessa definição, acrescentar  %s"
+
+#: ../views/metaboxes/help_metabox.php:11
+msgid "Reconfigure the plugin and remove the line that was added."
+msgstr "Reconfigurar o plugin e retirar a linha que foi acrescentada"
+
+#: ../views/metaboxes/general.php:1
+msgid "Server settings"
+msgstr "Definições do Servidor"
+
+#: ../views/metaboxes/general.php:3
+msgid ""
+"The plugin will only be active after the CAS server definitions are filled. "
+"After the configuration is done, please verify if the connection is valid. "
+"This is strongly advised because If you fill the data incorrrectly, your "
+"access to WordPress might be denied."
+msgstr ""
+"O plugin só estará ativo depois de preenchidas as definições do servidor "
+"CAS. Depois de configurado, verifique se a ligação é valida porque se "
+"introduzir incorretamente os dados poderá ficar impedido de aceder ao gestor "
+"de conteúdos."
+
+#: ../views/metaboxes/general.php:4
+msgid ""
+"In case you don’t know all the data, or in doubt, you should contact the "
+"person responsible for the CAS server."
+msgstr ""
+"Caso não possua todos os dados, deverá requisitá-los ao responsável pelo seu "
+"servidor de CAS."
+
+#: ../views/metaboxes/general.php:8
+msgid "CAS version"
+msgstr "Versão do CAS"
+
+#: ../views/metaboxes/general.php:21
+msgid "Server port"
+msgstr "Porta"
+
+#: ../views/metaboxes/general.php:27
+msgid "Server path"
+msgstr "Caminho"
+
+#: ../views/metaboxes/general.php:35
+msgid "Menu localization"
+msgstr "Localização do menu"
+
+#: ../views/metaboxes/general.php:38
+msgid "Sidebar"
+msgstr "Barra Lateral"
+
+#: ../views/metaboxes/general.php:41
+msgid "Settings menu"
+msgstr "Menu de definições"
+
+#: ../views/metaboxes/mail.php:2
+msgid "Sender"
+msgstr "Remetente"
+
+#: ../views/metaboxes/mail.php:6
+msgid ""
+"All mails are sent from a unique sender. This sender may recieve "
+"notification emails alerting for new users and/or activations, estabilished "
+"by the following configuration."
+msgstr ""
+"Todos os mails serão enviados de um remetente único. Este também poderá "
+"receber mails com notificações de novos utilizadores e/ou activações, "
+"conforme a configuração seguinte."
+
+#: ../views/metaboxes/mail.php:9
+msgid "E-mail address:"
+msgstr "Endereço de E-mail:"
+
+#: ../views/metaboxes/mail.php:13
+msgid "Full name:"
+msgstr "Nome completo:"
+
+#: ../views/metaboxes/mail.php:18
+msgid "Mails"
+msgstr "E-Mails"
+
+#: ../views/metaboxes/mail.php:19
+msgid ""
+"Please set up on witch actions should emails be sent. It’s possible to send "
+"emails to the user and the sender, depending on your configuration."
+msgstr ""
+"Defina em que ações devem ser enviados mails. Podem ser enviados mails para "
+"o utilizador e para o remetente, conforme a sua configuração."
+
+#: ../views/metaboxes/mail.php:23
+msgid "Welcoming"
+msgstr "Boas-vindas"
+
+#: ../views/metaboxes/mail.php:24
+msgid "Wait for access"
+msgstr "À espera de acesso"
+
+#: ../views/metaboxes/mail.php:30
+msgid "Send to the User"
+msgstr "Enviar para o Utilizador"
+
+#: ../views/metaboxes/mail.php:30
+msgid "Send to the Sender"
+msgstr "Enviar para o Remetente"
+
+#: ../views/metaboxes/mail.php:31 ../views/metaboxes/mail.php:48
+msgid "Subject"
+msgstr "Assunto"
+
+#: ../views/metaboxes/mail.php:33 ../views/metaboxes/mail.php:50
+msgid "Body"
+msgstr "Corpo"
+
+#: ../views/metaboxes/mail.php:36 ../views/metaboxes/mail.php:53
+msgid "Message body sent to the User"
+msgstr "Corpo da mensagem enviada ao Utilizador"
+
+#: ../views/metaboxes/mail.php:40 ../views/metaboxes/mail.php:57
+msgid "Message body sent to the Sender"
+msgstr "Corpo da mensagem enviada ao Remetente"
+
+#: ../views/metaboxes/mail.php:63
+msgid ""
+"You can use the following tokens: %sitename% for the website name, %username"
+"% for the user’s name and %realname% for the user’s real name."
+msgstr ""
+"Poderá utilizar os seguintes códigos: %sitename% para o nome do site; "
+"%username% para o nome de utilizador e %realname% para o nome real do "
+"utilizador."
