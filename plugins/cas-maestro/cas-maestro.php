@@ -292,10 +292,6 @@ class CAS_Maestro {
 
 			$attr = phpCAS::getAttributes();
 			$globalnick = $attr['global'];
-            error_log('///');
-            error_log($globalnick);
-            error_log(json_encode($attr));
-            error_log('\\\\\\');
 			$user_info = array();
 			$user_info['user_pass'] = $password;
 			$user_info['user_nicename'] = $globalnick;
