@@ -1,27 +1,6 @@
 <?php
-/*
-  Plugin Name: Commoners Registration
-  Plugin URI: http://github.com/creativecommons/commoners
-  Description: Fine-tune sign-up via CCID.
-  Author: Creative Commons Corporation
-  Version: 1.0
-  Author URI: http://github.com/creativecommons/
-  License: GPLv2 or later at your option.
-*/
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
-
-////////////////////////////////////////////////////////////////////////////////
-// Disallow user from changing settings.
-// Password and email are functions of CCID so they must not be changed.
-////////////////////////////////////////////////////////////////////////////////
-
-function commoners_remove_settings() {
-    bp_core_remove_nav_item( 'settings');
-    //FIXME: Do this then restore other items
-    //bp_core_remove_subnav_item( 'settings', 'general' );
-}
-add_action( 'bp_setup_nav', 'commoners_remove_settings', 15 );
 
 ////////////////////////////////////////////////////////////////////////////////
 // CCID 'global'(lowercased nickname) is used for user_nicename but is not
@@ -68,8 +47,6 @@ function _bp_core_get_user_domain($domain, $user_id, $user_nicename = false, $us
     return $domain;
 }
 
-add_filter('bp_core_get_user_domain', '_bp_core_get_user_domain', 10, 4);
-
 function _bp_core_get_userid($userid, $username){
     if(is_numeric($username)){
         $aux = get_userdata( $username );
@@ -83,15 +60,12 @@ function _bp_core_get_userid($userid, $username){
     return $userid;
 }
 
-add_filter('bp_core_get_userid', '_bp_core_get_userid', 10, 2);
-
 function _bp_get_activity_parent_content($content){
     global $bp;
     $user = get_user_by('slug', $bp->displayed_user->fullname); // 'slug' - user_nicename
     return preg_replace('/href=\"(.*?)\"/is', 'href="'.bp_core_get_user_domain($user->ID, $bp->displayed_user->fullname).'"', $content);
 }
 
-add_filter( 'bp_get_activity_parent_content','_bp_get_activity_parent_content', 10, 1 );
 
 function _bp_get_activity_action_pre_meta($content){
     global $bp;
@@ -104,22 +78,3 @@ function _bp_get_activity_action_pre_meta($content){
     }
     return preg_replace('/href=\"(.*?)\"/is', 'href="'.bp_core_get_user_domain($user->ID, $fullname).'"', $content);
 }
-
-add_action('bp_get_activity_action_pre_meta', '_bp_get_activity_action_pre_meta');
-
-add_filter('bp_core_get_userid_from_nicename', '_bp_core_get_userid', 10, 2);
-
-////////////////////////////////////////////////////////////////////////////////
-// Add vouched user role
-////////////////////////////////////////////////////////////////////////////////
-
-function commoners_add_user_roles() {
-    // Copy subscriber capabilities
-    $subscriber = get_role( 'subscriber' );
-    add_role(
-        'vouched', __( 'Vouched' ),
-        $subscriber->capabilities
-    );
-}
-
-register_activation_hook( __FILE__, 'commoners_add_user_roles' );
