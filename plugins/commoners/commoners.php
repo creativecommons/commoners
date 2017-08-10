@@ -2,7 +2,7 @@
 /*
   Plugin Name: CC Commoners
   Plugin URI: http://github.com/creativecommons/commoners
-  Description: Buddypress extensions for commonors.creativecommons.org .
+  Description: Buddypress extensions for commoners.creativecommons.org .
   Author: Creative Commons Corporation
   Version: 1.0
   Author URI: http://github.com/creativecommons/
