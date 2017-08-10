@@ -6,16 +6,16 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Vouching GUI
 ////////////////////////////////////////////////////////////////////////////////
 
-if ( ! defined( 'COMMONERS_VOUCH_URL' ) ) {
+if ( ! defined( 'COMMONERS_VOUCHING_VOUCH_URL' ) ) {
     define(
-        'COMMONERS_VOUCH_URL',
+        'COMMONERS_VOUCHING_VOUCH_URL',
         wp_make_link_relative( plugin_dir_url( __FILE__ ) . 'vouch-for')
     );
 }
 
 function commoners_vouching_url_handler () {
     if ( // isset( $_GET['myplugin'] ) &&
-        $_SERVER["REQUEST_URI"] == COMMONERS2_VOUCH_URL ) {
+        $_SERVER["REQUEST_URI"] == COMMONERS_VOUCHING_VOUCH_URL ) {
         commoners_vouching_control_post_handler();
     }
 }
