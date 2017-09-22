@@ -18,11 +18,11 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // username until we cache the ids on save.
 
 function commoners_vouching_request_exists ( $applicant_id,
-                                             $voucher_username ) {
+                                             $voucher_id ) {
     $result = false;
     $vouchers = commoners_vouching_request_entry ( $applicant_id );
     foreach( COMMONERS_GF_VOUCH_VOUCHER_FIELDS as $field_id ) {
-        if ( $vouchers[ $field_id ] == $voucher_username ) {
+        if ( $vouchers[ $field_id ] == $voucher_id ) {
             $result = true;
         }
     }
@@ -55,11 +55,10 @@ function commoners_vouching_shortcode_render ( $atts ) {
     $applicant_id = $_GET[ 'applicant_id' ];
     $voucher = wp_get_current_user();
     $voucher_id = get_current_user_id();
-    $voucher_username = $voucher->user_nicename;
 
     // Render correct UI for state of vouching
     if ( ! commoners_vouching_request_exists( $applicant_id,
-                                              $voucher_username ) ) {
+                                              $voucher_id ) ) {
         echo _( "<p>Request couldn't be found.<p>" );
     } elseif ( ! commoners_vouching_request_active ( $applicant_id ) ) {
         echo _( "<p>That person's application to become a Member of the Creative Commons Global Network has already been resolved.<p></p>Thank you!</p>" );
@@ -92,15 +91,14 @@ function commoners_vouching_shortcode_render ( $atts ) {
 function commoners_vouching_form_post_validate ( $validation_result ) {
     $form = $validation_result['form'];
     if ( $form[ 'name' ] == COMMONERS_GF_VOUCH ) {
-        $applicant_id = rgpost(COMMONERS_GF_VOUCH_APPLICANT_ID );
+        $applicant_id = rgpost( COMMONERS_GF_VOUCH_APPLICANT_ID );
         $voucher_id = form[ 'created_by' ];
-        $voucher_username = get_user_by( 'ID', $voucher_id  )->user_nicename;
         // Don't check commoners_vouching_request_active, as the user may be
         // responding after that is no longer true and we don't want to annoy
         // them.
         $ok = commoners_vouching_request_exists (
             $applicant_id,
-            $voucher_username
+            $voucher_id
         ) && commoners_vouching_request_open (
             $applicant_id,
             $voucher_id

@@ -61,18 +61,18 @@ function commoners_settings_emails_approved_message () {
     <?php
 }
 
-function commoners_settings_emails_declined_subject () {
-    $options = get_option( 'commoners-email-declined' );
+function commoners_settings_emails_rejected_subject () {
+    $options = get_option( 'commoners-email-rejected' );
     ?>
-    <input type="text" name="commoners-email-declined[subject]"
+    <input type="text" name="commoners-email-rejected[subject]"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
 
-function commoners_settings_emails_declined_message () {
-    $options = get_option( 'commoners-email-declined' );
+function commoners_settings_emails_rejected_message () {
+    $options = get_option( 'commoners-email-rejected' );
     ?>
-    <textarea name="commoners-email-declined[message]"
+    <textarea name="commoners-email-rejected[message]"
       ><?php echo $options['message']; ?></textarea>
     <?php
 }
@@ -170,12 +170,12 @@ function commoners_settings_emails_register () {
 
         register_setting(
         'commoners-emails',
-        'commoners-email-declined'
+        'commoners-email-rejected'
     );
 
     add_settings_section(
-        'commoners-email-declined',
-        'Application Declined',
+        'commoners-email-rejected',
+        'Application Rejected',
         'commoners_settings_emails_section_callback',
         'global-network-emails'
     );
@@ -183,17 +183,17 @@ function commoners_settings_emails_register () {
     add_settings_field(
         'registration-subject',
         'Subject',
-        commoners_settings_emails_declined_subject,
+        commoners_settings_emails_rejected_subject,
         'global-network-emails',
-        'commoners-email-declined'
+        'commoners-email-rejected'
     );
 
     add_settings_field(
         'registration-message',
         'Message',
-        commoners_settings_emails_declined_message,
+        commoners_settings_emails_rejected_message,
         'global-network-emails',
-        'commoners-email-declined'
+        'commoners-email-rejected'
     );
 }
 

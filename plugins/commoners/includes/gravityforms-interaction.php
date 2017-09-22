@@ -141,6 +141,27 @@ function commoners_application_vouchers ( $applicant_id ) {
     return $entries[0];
 }
 
+function commoners_application_vouchers_users_ids ( $applicant_id ) {
+    $vouchers_entry = commoners_application_vouchers ( $applicant_id );
+    $users = array();
+    foreach ( COMMONERS_GF_VOUCH_VOUCHER_FIELDS as $field ) {
+        $voucher_id = trim( $vouchers_entry[ $field ] );
+        if ( $voucher_id ) {
+            $users[] = $voucher_id;
+        }
+    }
+    return $users;
+}
+
+function commoners_application_vouchers_users ( $applicant_id ) {
+    $voucher_ids = commoners_application_vouchers_user_ids ( $applicant_id );
+    $users = array();
+    foreach ( $voucher_ids as $id) {
+        $users[] = get_user_by( 'ID', $voucher_id);
+    }
+    return $users;
+}
+
 // Get the list of submitted vouches for the user
 
 function commoners_applicantion_vouches ( $applicant_id ) {

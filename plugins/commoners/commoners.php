@@ -39,8 +39,6 @@ require_once(COMMONERS_PATH . 'includes/gravityforms-interaction.php');
 
 // Sign-up form workflow for application
 
-require_once(COMMONERS_PATH . 'public/autocomplete-members.php');
-
 require_once(COMMONERS_PATH . 'includes/registration-form-emails.php');
 require_once(COMMONERS_PATH . 'public/registration-form-shortcode.php');
 
@@ -105,16 +103,6 @@ add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 // Registration Form
 ////////////////////////////////////////////////////////////////////////////////
 
-// After each form in the Member sign-up process is submitted,
-// we update the user's application stage/state
-
-add_action(
-    'gform_after_submission',
-    'commoners_registration_form_submit_handler',
-    10,
-    2
-);
-
 // The shortcode to display the sign-up workflow forms.
 // The exact form (or other content) displayed depends on the user's
 // application state/stage.
@@ -126,22 +114,14 @@ add_shortcode(
 
 add_filter( 'gform_validation', 'commoners_vouching_form_post_validate' );
 
-// Filter applicant form submissions to hook in state changes
-
-add_filter( 'gform_validation', 'commoners_registration_post' );
-
-// Autocompletion of member usernames
-
-add_action( 'wp_ajax_the_ajax_hook', 'the_action_function' );
-add_action( 'wp_ajax_nopriv_the_ajax_hook', 'the_action_function' );
+// After each form in the Member sign-up process is submitted,
+// we update the user's application stage/state
 
 add_action(
-    'wp_ajax_autocomplete_members',
-    commoners_ajax_autocomplete_members
-);
-add_action(
-    'wp_ajax_nopriv_autocomplete_members',
-    commoners_ajax_autocomplete_members
+    'gform_after_submission',
+    'commoners_registration_form_submit_handler',
+    10,
+    2
 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +162,13 @@ if ( is_admin() ){
     // creation and notification email sending.
     add_action(
         'gform_after_submission',
-        'commoners_application_users_page_form_submit_handler',
+        'commoners_application_users_page_final_form_submit_handler',
+        10,
+        2
+    );
+    add_action(
+        'gform_after_submission',
+        'commoners_application_users_page_pre_form_submit_handler',
         10,
         2
     );

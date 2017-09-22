@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 ////////////////////////////////////////////////////////////////////////////////
 
 function commoners_registration_email_sub($key, $value, $text) {
-    return string_replace(
+    return str_replace(
         "*|${key}|*",
         $value,
         $text
@@ -98,10 +98,10 @@ function commoners_registration_email_application_approved ( $applicant ) {
     );
 }
 
-function commoners_registration_email_application_declined ( $applicant ) {
+function commoners_registration_email_application_rejected ( $applicant ) {
     commoners_registration_email_to_applicant(
         $applicant,
-        'commoners-email-declined'
+        'commoners-email-rejected'
     );
 }
 

@@ -14,7 +14,7 @@ function commoners_list_applications_for_pre_approval () {
         // The user entered a name here
         $details_entry = commoners_application_details($user_id);
         echo '<tr><td><a href="'
-            . get_edit_user_link( $user_id )
+            . commoners_application_user_application_page_url( $user_id )
             . '">'
             . $user->user_nicename
             . '</a></td><td>'

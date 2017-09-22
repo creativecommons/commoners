@@ -107,6 +107,13 @@ function commoners_user_level_set_applicant( $user ) {
 
 }
 
+function commoners_user_level_set_pre_approved ( $user ) {
+    commoners_registration_user_set_stage(
+        $user,
+        COMMONERS_APPLICATION_STATE_VOUCHING
+    );
+}
+
 function commoners_user_level_set_approved ( $user ) {
     //$user->remove_role( 'subscriber' );
     //$user->add_role( COMMONERS_USER_ROLE_VOUCHED );
@@ -117,7 +124,10 @@ function commoners_user_level_set_approved ( $user ) {
     );
 }
 
-function commoners_user_level_set_declined ( $user ) {
+function commoners_user_level_set_rejected ( $user ) {
+    // Lock the account
+    $user->set_role( '' );
+    $user->remove_all_caps();
     commoners_registration_user_set_stage(
         $user,
         COMMONERS_APPLICATION_STATE_REJECTED

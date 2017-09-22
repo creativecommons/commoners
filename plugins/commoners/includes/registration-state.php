@@ -53,10 +53,15 @@ function commoners_registration_current_user_set_stage ( $stage ) {
     commoners_registration_user_set_stage ( $user, $stage );
 }
 
+function commoners_registration_user_get_stage ( $user_id ) {
+    commoners_registration_user_set_stage ( $user, $stage );
+}
+
 // Is the request active?
+// Not the best name, as it's pre/post approval as well as vouching.
 
 function commoners_vouching_request_active ( $applicant_id ) {
-    $state = get_user_meta( $applicant_id, COMMONERS_APPLICATION_STATE );
+    $state = commoners_registration_user_get_stage ( $applicant_id );
     // Check registration-form-callbacks.php if this isn't happy
     return
         $state[ 0 ] == COMMONERS_APPLICATION_STATE_RECEIVED
@@ -68,7 +73,7 @@ function commoners_vouching_request_active ( $applicant_id ) {
 // not have received final approval.
 
 function commoners_vouching_request_vouching ( $applicant_id ) {
-    $state = get_user_meta( $applicant_id, COMMONERS_APPLICATION_STATE );
+    $state = commoners_registration_user_get_stage ( $applicant_id );
     // Check registration-form-callbacks.php if this isn't happy
     return $state[ 0 ] == COMMONERS_APPLICATION_STATE_VOUCHING;
 }
