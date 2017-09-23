@@ -2,7 +2,9 @@
 <footer>
   <div class="logo"><span>CC Commoners</span></div>
   <div class="footer-text-block">
-    <p>Licence, photo and icon credits.</p>
+    <?php if ( is_active_sidebar( 'sidebar-footer-text' ) ) {
+        dynamic_sidebar( 'sidebar-footer-text' );
+    } ?>
     <nav class="bottom-nav">
       <?php wp_nav_menu( array(
             'depth'=>1,

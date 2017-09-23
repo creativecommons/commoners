@@ -3,13 +3,31 @@
 function cc_commoners_theme_setup () {
     register_nav_menus(
         array(
-            'top'    => __( 'Top Menu', 'cc_commoners' ),
-            'bottom' => __( 'Bottom Menu', 'cc_commoners' )
+            'top'    => __( 'Top Menu', 'cc-commoners' ),
+            'bottom' => __( 'Bottom Menu', 'cc-commoners' )
         )
     );
 }
 
 add_action( 'after_setup_theme', 'cc_commoners_theme_setup' );
+
+function cc_commoners_widgets () {
+    unregister_sidebar( 'sidebar-2' );
+    unregister_sidebar( 'sidebar-3' );
+    register_sidebar(
+        array(
+            'name'          => __( 'Footer Text', 'cc-commoners' ),
+            'id'            => 'sidebar-footer-text',
+            'description'   => __( 'Add widgets here to appear in your footer.', 'cc-commoners' ),
+            'before_widget' => '',
+            'after_widget'  => '',
+            'before_title'  => '',
+            'after_title'   => '',
+        )
+    );
+}
+
+add_action( 'widgets_init', 'cc_commoners_widgets', 11 );
 
 function cc_commoners_theme_scripts () {
     wp_enqueue_script(
