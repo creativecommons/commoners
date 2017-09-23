@@ -1,8 +1,8 @@
-#top-menu .menu-item {
+#top-menu li {
     display:inline;
 }
 
-#bottom-menu .page_item {
+#bottom-menu li {
     display:inline;
 }
 
