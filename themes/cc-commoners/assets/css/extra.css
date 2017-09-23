@@ -6,3 +6,16 @@
     display:inline;
 }
 
+@media screen and (min-width: 48em) {
+    body.page-template-full-width .entry-header {
+        display: none;
+    }
+
+    body.page-template-full-width .page-full-width #primary .entry-content {
+        width: 100%;
+    }
+
+    body.page-template-full-width .page-full-width #primary .entry-header {
+        width: 100%;
+    }
+}
