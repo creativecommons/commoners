@@ -52,8 +52,9 @@ function commoners_registration_email( $applicant_name, $applicant_id,
     wp_mail( $to_address, $subject_substituted, $message_substituted );
 }
 
-function commoners_registration_email_to_applicant ( $applicant,
+function commoners_registration_email_to_applicant ( $applicant_id,
                                                      $email_option ) {
+    $applicant = new WP_User( $applicant_id );
     $options = get_option( $email_option );
     $subject = $options[ 'subject' ];
     $message = $options[ 'message' ];
@@ -67,13 +68,14 @@ function commoners_registration_email_to_applicant ( $applicant,
     );
 }
 
-function commoners_registration_email_to_voucher ( $applicant,
-                                                   $voucher,
+function commoners_registration_email_to_voucher ( $applicant_id,
+                                                   $voucher_id,
                                                    $email_option ) {
+    $applicant = new WP_User( $applicant_id );
+    $voucher = new WP_User( $voucher_id );
     $options = get_option( $email_option );
     $subject = $options[ 'subject' ];
     $message = $options[ 'message' ];
-
     commoners_registration_email(
         $user->user_nicename,
         $applicant->ID,
@@ -84,31 +86,31 @@ function commoners_registration_email_to_voucher ( $applicant,
     );
 }
 
-function commoners_registration_email_application_received ( $applicant ) {
+function commoners_registration_email_application_received ( $applicant_id ) {
     commoners_registration_email_to_applicant(
-        $applicant,
+        $applicant_id,
         'commoners-email-received'
     );
 }
 
-function commoners_registration_email_application_approved ( $applicant ) {
+function commoners_registration_email_application_approved ( $applicant_id ) {
     commoners_registration_email_to_applicant(
-        $applicant,
+        $applicant_id,
         'commoners-email-approved'
     );
 }
 
-function commoners_registration_email_application_rejected ( $applicant ) {
+function commoners_registration_email_application_rejected ( $applicant_id ) {
     commoners_registration_email_to_applicant(
-        $applicant,
+        $applicant_id,
         'commoners-email-rejected'
     );
 }
 
-function commoners_registration_email_vouching_request ( $applicant,
+function commoners_registration_email_vouching_request ( $applicant_id,
                                                          $voucher_id ) {
     commoners_registration_email_to_voucher(
-        $applicant,
+        $applicant_id,
         $voucher_id,
         'commoners-email-vouch-request'
     );

@@ -113,10 +113,8 @@ function commoners_registration_shortcode_render ( $atts ) {
                      . '/sign-up/member/' );
         exit;
     }
-
     $user = wp_get_current_user();
     $state = $user->get( COMMONERS_APPLICATION_STATE );
-    error_log($state);
     switch ( $state ) {
     case '':
         gravity_form( COMMONERS_GF_AGREE_TO_TERMS, false, false );

@@ -22,26 +22,27 @@ define( 'COMMONERS_APPLICATION_STATE_REJECTED', 'rejected' );
 // The user's application has been accepted in final approval
 define( 'COMMONERS_APPLICATION_STATE_ACCEPTED', 'accepted' );
 
-// States that indicate that the user is past the initial application form-
-// filling stage.
+// States that indicate that the user is past the final approval stage.
 define(
-    'COMMONERS_APPLICATION_STATE_PAST_FORMS',
+    'COMMONERS_APPLICATION_STATE_PAST_APPROVAL',
     [
-        COMMONERS_APPLICATION_STATE_RECEIVED,
-        COMMONERS_APPLICATION_STATE_VOUCHING,
         COMMONERS_APPLICATION_STATE_REJECTED,
         COMMONERS_APPLICATION_STATE_ACCEPTED
     ]
 );
 
-// Note that this isn't general-purpose: it will refuse to update if the user
-// is already past the form entry stage
+function commoners_registration_user_get_stage ( $user_id ) {
+    return get_user_meta( $user_id, COMMONERS_APPLICATION_STATE )[0];
+}
 
-function commoners_registration_user_set_stage ( $user, $stage ) {
-    $current = get_user_meta( $user, COMMONERS_APPLICATION_STATE );
-    if ( ! in_array( $current, COMMONERS_APPLICATION_STATE_PAST_FORMS ) ) {
-        update_user_meta(
-            $user,
+// Note that this isn't general-purpose: it will refuse to update if the user
+// is past final approval
+
+function commoners_registration_user_set_stage ( $user_id, $stage ) {
+    $current = commoners_registration_user_get_stage( $user_id );
+    if ( ! in_array( $current, COMMONERS_APPLICATION_STATE_PAST_APPROVAL ) ) {
+        $result = update_user_meta(
+            $user_id,
             COMMONERS_APPLICATION_STATE,
             $stage
         );
@@ -49,12 +50,8 @@ function commoners_registration_user_set_stage ( $user, $stage ) {
 }
 
 function commoners_registration_current_user_set_stage ( $stage ) {
-    $user = get_current_user_id();
-    commoners_registration_user_set_stage ( $user, $stage );
-}
-
-function commoners_registration_user_get_stage ( $user_id ) {
-    commoners_registration_user_set_stage ( $user, $stage );
+    $user_id = get_current_user_id();
+    commoners_registration_user_set_stage ( $user_id, $stage );
 }
 
 // Is the request active?
@@ -64,8 +61,8 @@ function commoners_vouching_request_active ( $applicant_id ) {
     $state = commoners_registration_user_get_stage ( $applicant_id );
     // Check registration-form-callbacks.php if this isn't happy
     return
-        $state[ 0 ] == COMMONERS_APPLICATION_STATE_RECEIVED
-        || $state[ 0 ] == COMMONERS_APPLICATION_STATE_VOUCHING;
+        $state == COMMONERS_APPLICATION_STATE_RECEIVED
+        || $state == COMMONERS_APPLICATION_STATE_VOUCHING;
 }
 
 // Is the user at the vouching stage?
@@ -75,7 +72,7 @@ function commoners_vouching_request_active ( $applicant_id ) {
 function commoners_vouching_request_vouching ( $applicant_id ) {
     $state = commoners_registration_user_get_stage ( $applicant_id );
     // Check registration-form-callbacks.php if this isn't happy
-    return $state[ 0 ] == COMMONERS_APPLICATION_STATE_VOUCHING;
+    return $state == COMMONERS_APPLICATION_STATE_VOUCHING;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

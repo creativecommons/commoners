@@ -66,9 +66,8 @@ function commoners_application_users_page_pre_form_submit_handler ( $entry,
         echo 'Must be admin';
         exit;
     }
-    if ( $form[ 'name' ] == COMMONERS_GF_PRE_APPROVAL ) {
+    if ( $form[ 'title' ] == COMMONERS_GF_PRE_APPROVAL ) {
         $applicant_id = $entry[ COMMONERS_GF_PRE_APPROVAL_APPLICANT_ID ];
-        $applicant = new WP_User( $applicant_id );
         $stage = commoners_registration_user_get_stage( $applicant_id);
         if ( $stage != COMMONERS_APPLICATION_STATE_RECEIVED ) {
             echo 'User already pre-approved';
@@ -78,11 +77,11 @@ function commoners_application_users_page_pre_form_submit_handler ( $entry,
             COMMONERS_GF_PRE_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION
         ];
         if ( $application_status == COMMONERS_GF_PRE_APPROVAL_APPROVED_YES ) {
-            commoners_user_level_set_pre_approved( $applicant );
-            commoners_registration_email_vouching_requests( $applicant );
+            commoners_user_level_set_pre_approved( $applicant_id );
+            commoners_registration_email_vouching_requests( $applicant_id );
         } else {
-            commoners_user_level_set_rejected( $applicant );
-            commoners_registration_email_application_rejected( $applicant );
+            commoners_user_level_set_rejected( $applicant_id );
+            commoners_registration_email_application_rejected( $applicant_id );
         }
     }
 }
@@ -96,7 +95,8 @@ function commoners_application_users_page_pre_form ( $applicant_id ) {
             false,
             false,
             array(
-                COMMONERS_GF_PRE_APPROVAL_APPLICANT_ID => applicant_id
+                COMMONERS_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER
+                    => $applicant_id
             )
         );
 }
@@ -104,14 +104,13 @@ function commoners_application_users_page_pre_form ( $applicant_id ) {
 // Handle final form results
 
 function commoners_application_users_page_final_form_submit_handler ( $entry,
-                                                                $form ) {
+                                                                      $form ) {
     if (! current_user_can( 'administrator' ) ) {
         echo 'Must be admin';
         return;
     }
-    if ( $form[ 'name' ] == COMMONERS_GF_FINAL_APPROVAL ) {
+    if ( $form[ 'title' ] == COMMONERS_GF_FINAL_APPROVAL ) {
         $applicant_id = $entry[ COMMONERS_GF_FINAL_APPROVAL_APPLICANT_ID ];
-        $applicant = new WP_User( $applicant_id );
         $stage = commoners_registration_user_get_stage( $applicant_id);
         if ( $stage != COMMONERS_APPLICATION_STATE_VOUCHING ) {
             echo 'User already post-approved';
@@ -121,11 +120,11 @@ function commoners_application_users_page_final_form_submit_handler ( $entry,
             COMMONERS_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION
         ];
         if ( $application_status == COMMONERS_GF_FINAL_APPROVAL_APPROVED_YES ) {
-            commoners_user_level_set_approved( $applicant );
-            commoners_create_profile( $applicant );
+            commoners_user_level_set_approved( $applicant_id );
+            commoners_create_profile( $applicant_id );
             commoners_registration_email_application_approved( $applicant );
         } else {
-            commoners_user_level_set_rejected( $applicant );
+            commoners_user_level_set_rejected( $applicant_id );
             commoners_registration_email_application_rejected( $applicant );
         }
     }
@@ -157,7 +156,8 @@ function commoners_application_users_page_final_form ( $applicant_id ) {
             false,
             false,
             array(
-                COMMONERS_GF_FINAL_APPROVAL_APPLICANT_ID => applicant_id
+                COMMONERS_GF_FINAL_APPROVAL_APPLICANT_ID_PARAMETER
+                    => $applicant_id
             )
         );
     ?>

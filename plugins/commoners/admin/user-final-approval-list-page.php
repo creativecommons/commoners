@@ -18,7 +18,7 @@ function commoners_final_approval_status_for_vouch_counts( $counts ) {
 
 function commoners_list_applications_for_final_approval () {
     $user_entries = commoners_applicants_with_state(
-        COMMONERS_APPLICATION_STATE_RECEIVED
+        COMMONERS_APPLICATION_STATE_VOUCHING
     );
     foreach ($user_entries as $user_entry) {
         $user_id = $user_entry->ID;

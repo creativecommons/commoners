@@ -40,12 +40,18 @@ define( 'COMMONERS_GF_VOUCH_APPLICANT_ID', 'applicant_id' );
 define( 'COMMONERS_GF_VOUCH_DO_YOU_VOUCH', '3' );
 define( 'COMMONERS_GF_VOUCH_REASON', '4' );
 
+define( 'COMMONERS_GF_PRE_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
+define( 'COMMONERS_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
+define( 'COMMONERS_GF_PRE_APPROVAL_APPLICANT_ID', '4' );
+
 define( 'COMMONERS_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '2' );
+define( 'COMMONERS_GF_FINAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'COMMONERS_GF_FINAL_APPROVAL_APPLICANT_ID', '4' );
 
 // Field values that we need to check
 
 define( 'COMMONERS_GF_VOUCH_DO_YOU_VOUCH_YES', 'Yes' );
+define( 'COMMONERS_GF_PRE_APPROVAL_APPROVED_YES', 'Yes' );
 define( 'COMMONERS_GF_FINAL_APPROVAL_APPROVED_YES', 'Yes' );
 
 // The field IDs containing user names in the "Choose Vouchers" form
@@ -154,7 +160,7 @@ function commoners_application_vouchers_users_ids ( $applicant_id ) {
 }
 
 function commoners_application_vouchers_users ( $applicant_id ) {
-    $voucher_ids = commoners_application_vouchers_user_ids ( $applicant_id );
+    $voucher_ids = commoners_application_vouchers_users_ids ( $applicant_id );
     $users = array();
     foreach ( $voucher_ids as $id) {
         $users[] = get_user_by( 'ID', $voucher_id);
@@ -207,24 +213,24 @@ function commoners_applicantion_vouches_counts ( $applicant_id ) {
 // User profile creation based on GravityForms information
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_create_profile( $applicant ) {
-    if ( $applicant == 0 ) {
+function commoners_create_profile( $applicant_id ) {
+    if ( $applicant_id == 0 ) {
         echo 'Could not get user to create BuddyPress profile for.';
     }
     $details = commoners_application_details ( $applicant_id );
     xprofile_set_field_data(
         'Short Bio',
-        $applicant->id,
+        $applicant_id,
         $details[ COMMONERS_GF_DETAILS_BIO ]
     );
     xprofile_set_field_data(
         'Location',
-        $applicant->id,
+        $applicant_id,
         $details[ COMMONERS_GF_DETAILS_LOCATION ]
     );
     xprofile_set_field_data(
         'Short Bio',
-        $applicant->id,
+        $applicant_id,
         $details[ COMMONERS_GF_DETAILS_LANGUAGES ]
     );
     // FINISH ME
