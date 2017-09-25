@@ -100,36 +100,38 @@ function commoners_filter_role_groups ( $groups ) {
     return $accessible;
 }
 
-function commoners_user_level_set_applicant( $user ) {
+function commoners_user_level_set_applicant( $user_id ) {
+    $user = get_user_by( 'ID', $user_id );
     //$user->remove_role( 'subscriber' );
     //$user->add_role( COMMONERS_USER_ROLE_UNVOUCHED );
     $user->set_role( COMMONERS_USER_ROLE_UNVOUCHED );
-
 }
 
-function commoners_user_level_set_pre_approved ( $user ) {
+function commoners_user_level_set_pre_approved ( $user_id ) {
     commoners_registration_user_set_stage(
-        $user,
+        $user_id,
         COMMONERS_APPLICATION_STATE_VOUCHING
     );
 }
 
-function commoners_user_level_set_approved ( $user ) {
+function commoners_user_level_set_approved ( $user_id ) {
+    $user = get_user_by( 'ID', $user_id );
     //$user->remove_role( 'subscriber' );
     //$user->add_role( COMMONERS_USER_ROLE_VOUCHED );
     $user->set_role( COMMONERS_USER_ROLE_VOUCHED );
     commoners_registration_user_set_stage(
-        $user,
+        $user_id,
         COMMONERS_APPLICATION_STATE_ACCEPTED
     );
 }
 
-function commoners_user_level_set_rejected ( $user ) {
+function commoners_user_level_set_rejected ( $user_id ) {
+    $user = get_user_by( 'ID', $user_id );
     // Lock the account
     $user->set_role( '' );
     $user->remove_all_caps();
     commoners_registration_user_set_stage(
-        $user,
+        $user_id,
         COMMONERS_APPLICATION_STATE_REJECTED
     );
 }
@@ -147,14 +149,14 @@ function commoners_user_level_should_autovouch( $email ) {
             COMMONERS_AUTOVOUCH_EMAIL_DOMAINS
         );
 }
-function commoners_user_level_register( $userid ) {
-    $user = get_userdata( $userid );
+function commoners_user_level_register( $user_id ) {
+    $userdata = get_userdata( $user_id );
     if ( $user ) {
-        $email = $user->user_email;
+        $email = $userdata->user_email;
         if ( commoners_vouching_should_autovouch( $email ) ) {
-            commoners_vouching_user_level_set_approved( $user );
+            commoners_vouching_user_level_set_approved( $user_id );
         } else {
-            commoners_user_level_set_applicant( $user );
+            commoners_user_level_set_applicant( $user_id );
         }
     }
 }

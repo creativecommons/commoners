@@ -28,7 +28,7 @@ function commoners_list_applications_for_final_approval () {
         // The user entered a name here
         $details_entry = commoners_application_details($user_id);
         // The actual count of vouches
-        $vouch_counts = commoners_applicantion_vouches_counts( $applicant_id );
+        $vouch_counts = commoners_application_vouches_counts( $user_id );
         if ($vouch_counts['no'] > 0) {
             $no_style = 'font-weight: bold';
         }
@@ -43,7 +43,7 @@ function commoners_list_applications_for_final_approval () {
             . '</td><td style="' . $no_style . '">'
             . $vouch_counts['no']
             . '</td><td>'
-            . rgar( $vouchers_entry, 'date_created' )
+            . $vouchers_entry[ 'date_created' ]
             .'</td></tr>';
     }
 }

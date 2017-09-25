@@ -33,9 +33,9 @@ function commoners_vp_clean_string( $string ) {
 function commoners_vp_format_field ( $entry, $field_name, $field_id ) {
     global $commoners_vp_map;
     $val = $entry[ $commoners_vp_map[ $field_id ] ];
-    return '<strong>'
-        . $field_name . '</strong><p>'
-        . commoners_vp_clean_string( $val ) . '</p>';
+    return '<p><strong>'
+        . $field_name . '</strong><br />'
+        . commoners_vp_clean_string( $val ) . '<br />&nbsp;</p>';
 }
 
 // Format the avatar image from the Applicant Details as an html IMG tag.
