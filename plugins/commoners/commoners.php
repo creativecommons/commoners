@@ -152,12 +152,13 @@ if ( is_admin() ){
         'wp_before_admin_bar_render',
         '_bp_admin_bar_remove_some_menu_items'
     );
-    add_action('admin_menu', 'commoners_application_users_menu');
-    add_action('admin_menu', 'commoners_application_pre_approval_menu');
-    add_action('admin_menu', 'commoners_application_final_approval_menu');
+    add_action( 'admin_menu', 'commoners_application_users_menu' );
+    add_action( 'admin_menu', 'commoners_hide_application_users_menu', 999 );
+    add_action( 'admin_menu', 'commoners_application_pre_approval_menu' );
+    add_action( 'admin_menu', 'commoners_application_final_approval_menu' );
     // add_action( 'admin_menu', 'add_mymenu' );
     add_action( 'admin_menu', 'commoners_settings_emails_register' );
-    add_filter('user_row_actions', 'commoners_application_user_link', 10, 2);
+    add_filter( 'user_row_actions', 'commoners_application_user_link', 10, 2 );
     // Filter applicant user page form approve/declines to hook in user profile
     // creation and notification email sending.
     add_action(

@@ -234,13 +234,17 @@ function commoners_application_user_application_page_url( $user_id ) {
 
 function commoners_application_users_menu () {
     add_users_page(
-        // No menu title, as we don't want to show up in the sidebar
-        NULL,
         'Global Network Membership',
+        // No menu title, as we don't want to show up in the sidebar
+        'Hello',
         edit_users,
         'commoners-global-network-membership',
         'commoners_application_users_page'
     );
+}
+
+function commoners_hide_application_users_menu () {
+    remove_submenu_page( 'users.php', 'commoners-global-network-membership' );
 }
 
 // If the user is at the vouching / final approval stage, link to this page
