@@ -122,10 +122,10 @@ function commoners_application_users_page_final_form_submit_handler ( $entry,
         if ( $application_status == COMMONERS_GF_FINAL_APPROVAL_APPROVED_YES ) {
             commoners_user_level_set_approved( $applicant_id );
             commoners_create_profile( $applicant_id );
-            commoners_registration_email_application_approved( $applicant );
+            commoners_registration_email_application_approved( $applicant_id );
         } else {
             commoners_user_level_set_rejected( $applicant_id );
-            commoners_registration_email_application_rejected( $applicant );
+            commoners_registration_email_application_rejected( $applicant_id );
         }
     }
 }

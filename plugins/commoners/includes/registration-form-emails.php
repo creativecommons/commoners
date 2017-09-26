@@ -28,7 +28,7 @@ function commoners_registration_email_sub_names($applicant_name, $applicant_id,
     );
     $result = commoners_registration_email_sub(
         'VOUCHER_NAME',
-        $voucher,
+        $voucher_name,
         $result
     );
     return $result;
@@ -38,23 +38,27 @@ function commoners_registration_email( $applicant_name, $applicant_id,
                                        $voucher_name, $to_address,
                                        $subject, $message ) {
     $subject_substituted = commoners_registration_email_sub_names(
-        $applicant,
+        $applicant_name,
         $applicant_id,
-        $voucher,
+        $voucher_name,
         $subject
     );
     $message_substituted = commoners_registration_email_sub_names(
-        $applicant,
+        $applicant_name,
         $applicant_id,
-        $voucher,
+        $voucher_name,
         $message
     );
-    wp_mail( $to_address, $subject_substituted, $message_substituted );
+    $result = wp_mail(
+        $to_address,
+        $subject_substituted,
+        $message_substituted
+    );
 }
 
 function commoners_registration_email_to_applicant ( $applicant_id,
                                                      $email_option ) {
-    $applicant = new WP_User( $applicant_id );
+    $applicant = get_user_by( 'ID', $applicant_id );
     $options = get_option( $email_option );
     $subject = $options[ 'subject' ];
     $message = $options[ 'message' ];
@@ -62,7 +66,7 @@ function commoners_registration_email_to_applicant ( $applicant_id,
         $applicant->user_nicename,
         $applicant->ID,
         '',
-        $applicant->email,
+        $applicant->user_email,
         $subject,
         $message
     );
@@ -71,16 +75,16 @@ function commoners_registration_email_to_applicant ( $applicant_id,
 function commoners_registration_email_to_voucher ( $applicant_id,
                                                    $voucher_id,
                                                    $email_option ) {
-    $applicant = new WP_User( $applicant_id );
-    $voucher = new WP_User( $voucher_id );
+    $applicant = get_user_by( 'ID', $applicant_id );
+    $voucher = get_user_by( 'ID', $voucher_id );
     $options = get_option( $email_option );
     $subject = $options[ 'subject' ];
     $message = $options[ 'message' ];
     commoners_registration_email(
-        $user->user_nicename,
+        $applicant->user_nicename,
         $applicant->ID,
         $voucher->user_nicename,
-        $voucher->email,
+        $voucher->user_email,
         $subject,
         $message
     );
