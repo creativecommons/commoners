@@ -18,7 +18,7 @@ function commoners_list_applications_for_pre_approval () {
             . '">'
             . $user->user_nicename
             . '</a></td><td>'
-            . rgar( $vouchers_entry, 'date_created' )
+            . $vouchers_entry[ 'date_created' ]
             .'</td></tr>';
     }
 }

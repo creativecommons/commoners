@@ -37,6 +37,7 @@ define( 'COMMONERS_GF_DETAILS_SOCIAL_MEDIA_URLS', '9' );
 define( 'COMMONERS_GF_DETAILS_AVATAR_FILE', '10' );
 
 define( 'COMMONERS_GF_VOUCH_APPLICANT_ID', 'applicant_id' );
+define( 'COMMONERS_GF_VOUCH_APPLICANT_ID_FIELD', '7' );
 define( 'COMMONERS_GF_VOUCH_DO_YOU_VOUCH', '3' );
 define( 'COMMONERS_GF_VOUCH_REASON', '4' );
 
@@ -70,11 +71,15 @@ define(
 
 function commoners_vouching_request_entry ( $applicant_id ) {
     $form_id = RGFormsModel::get_form_id( COMMONERS_GF_CHOOSE_VOUCHERS );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' =>  'created_by',
+            'value' => $applicant_id
+        );
     $entries = GFAPI::get_entries(
         $form_id,
-        array(
-            'created_by' => $applicant_id,
-        ),
+        $search_criteria,
         array(
             array(
                 'key' => 'date',
@@ -91,12 +96,20 @@ function commoners_vouching_request_entry ( $applicant_id ) {
 
 function commoners_vouching_request_open ( $applicant_id, $voucher_id ) {
     $form_id = RGFormsModel::get_form_id( COMMONERS_GF_VOUCH );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' =>  'created_by',
+            'value' => $voucher_id
+        );
+    $search_criteria['field_filters'][]
+        = array(
+            'key' =>  COMMONERS_GF_VOUCH_APPLICANT_ID_FIELD,
+            'value' => $applicant_id
+        );
     $entries = GFAPI::get_entries(
         $form_id,
-        array(
-            'created_by' => $voucher_id,
-            'applicant_id' => $applicant_id
-        )
+        $search_criteria
     );
     return $entries == [];
 }
@@ -109,11 +122,15 @@ function commoners_vouching_request_open ( $applicant_id, $voucher_id ) {
 
 function commoners_application_details ( $applicant_id ) {
     $form_id = RGFormsModel::get_form_id( COMMONERS_GF_APPLICANT_DETAILS );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' =>  'created_by',
+            'value' => $applicant_id
+        );
     $entries = GFAPI::get_entries(
         $form_id,
-        array(
-            'created_by' => $applicant_id,
-        ),
+        $search_criteria,
         array(
             array(
                 'key' => 'date',
@@ -126,15 +143,20 @@ function commoners_application_details ( $applicant_id ) {
     return $entries[0];
 }
 
-// Get the list of vouchers for the id
+// Get the list of vouchers for the id.
+// This is the applicant's voucher choices from the form.
 
 function commoners_application_vouchers ( $applicant_id ) {
     $form_id = RGFormsModel::get_form_id( COMMONERS_GF_CHOOSE_VOUCHERS );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' =>  'created_by',
+            'value' => $applicant_id
+        );
     $entries = GFAPI::get_entries(
         $form_id,
-        array(
-            'created_by' => $applicant_id,
-        ),
+        $search_criteria,
         array(
             array(
                 'key' => 'date',
@@ -162,21 +184,25 @@ function commoners_application_vouchers_users_ids ( $applicant_id ) {
 function commoners_application_vouchers_users ( $applicant_id ) {
     $voucher_ids = commoners_application_vouchers_users_ids ( $applicant_id );
     $users = array();
-    foreach ( $voucher_ids as $id) {
-        $users[] = get_user_by( 'ID', $voucher_id);
+    foreach ( $voucher_ids as $voucher_id) {
+        $users[] = get_user_by('ID', $voucher_id);
     }
     return $users;
 }
 
 // Get the list of submitted vouches for the user
 
-function commoners_applicantion_vouches ( $applicant_id ) {
+function commoners_application_vouches ( $applicant_id ) {
     $form_id = RGFormsModel::get_form_id( COMMONERS_GF_VOUCH );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' =>  COMMONERS_GF_VOUCH_APPLICANT_ID_FIELD,
+            'value' => $applicant_id
+        );
     $entries = GFAPI::get_entries(
         $form_id,
-        array(
-            'created_by' => $applicant_id,
-        ),
+        $search_criteria,
         array(
             array(
                 'key' => 'date',
@@ -185,18 +211,17 @@ function commoners_applicantion_vouches ( $applicant_id ) {
             )
         )
     );
-
     return $entries;
 }
 
 // Count the number of vouches received
 
-function commoners_applicantion_vouches_counts ( $applicant_id ) {
+function commoners_application_vouches_counts ( $applicant_id ) {
     $yes = 0;
     $no = 0;
-    $vouches = commoners_applicantion_vouches( $applicant_id );
+    $vouches = commoners_application_vouches( $applicant_id );
     foreach ($vouches as $vouch) {
-        $did_they = rgar( $vouch, COMMONERS_GF_VOUCH_DO_YOU_VOUCH );
+        $did_they = $vouch[ COMMONERS_GF_VOUCH_DO_YOU_VOUCH ];
         if ( $did_they == COMMONERS_GF_VOUCH_DO_YOU_VOUCH_YES ) {
             $yes += 1;
         } else  {

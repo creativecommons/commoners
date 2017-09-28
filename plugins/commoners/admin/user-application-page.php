@@ -10,16 +10,16 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 function commoners_application_users_page_vouch_responses ( $applicant_id ) {
     $result = '';
-    $vouches = commoners_applicantion_vouches ( $applicant_id );
+    $vouches = commoners_application_vouches ( $applicant_id );
     foreach ($vouches as $vouch) {
         $voucher = get_user_by('ID', $vouch['created_by']);
         $result .=
                 '<h4>From: '
-                . $voucher->user_nicename
+                . $voucher->display_name
                 . '</h4><p><strong>Vouched:</strong> '
-                . rgar( $vouch, COMMONERS_GF_VOUCH_DO_YOU_VOUCH)
+                . $vouch[ COMMONERS_GF_VOUCH_DO_YOU_VOUCH ]
                 . '</p><p><strong>Reason:</strong> '
-                . rgar( $vouch, COMMONERS_GF_VOUCH_REASON)
+                . $vouch[ COMMONERS_GF_VOUCH_REASON ]
                 . '</p>';
     }
     return $result;
@@ -28,7 +28,7 @@ function commoners_application_users_page_vouch_responses ( $applicant_id ) {
 // Format the count of vouches
 
 function commoners_application_users_page_vouch_counts ( $applicant_id ) {
-    $counts = commoners_applicantion_vouches_counts( $applicant_id );
+    $counts = commoners_application_vouches_counts( $applicant_id );
     return '<p><strong>Yes: </strong>'
         . $counts['yes']
         . '<p><strong>No: </strong>'
@@ -122,10 +122,10 @@ function commoners_application_users_page_final_form_submit_handler ( $entry,
         if ( $application_status == COMMONERS_GF_FINAL_APPROVAL_APPROVED_YES ) {
             commoners_user_level_set_approved( $applicant_id );
             commoners_create_profile( $applicant_id );
-            commoners_registration_email_application_approved( $applicant );
+            commoners_registration_email_application_approved( $applicant_id );
         } else {
             commoners_user_level_set_rejected( $applicant_id );
-            commoners_registration_email_application_rejected( $applicant );
+            commoners_registration_email_application_rejected( $applicant_id );
         }
     }
 }
@@ -133,7 +133,7 @@ function commoners_application_users_page_final_form_submit_handler ( $entry,
 // Format the approval form with any required pre-sets
 
 function commoners_application_users_page_final_form ( $applicant_id ) {
-    $counts = commoners_applicantion_vouches_counts( $applicant_id );
+    $counts = commoners_application_vouches_counts( $applicant_id );
     $yes = $counts['yes'];
     $no = $counts['no'];
     // Note that $approve and $decline indicate *disbling* these options
@@ -175,20 +175,27 @@ function commoners_application_users_page_final_form ( $applicant_id ) {
 function commoners_application_users_page () {
     echo _('<h1>Membership Application Details</h1>');
     if ( ! isset( $_GET[ 'user_id' ] ) ) {
-        echo _( 'No user id specified.' );
+        echo _( '<br />No user id specified.' );
         return;
     }
     $applicant_id = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
     if ($applicant_id === false) {
-        echo _( 'Invalid user id.' );
+        echo _( '<br />Invalid user id.' );
         return;
     }
     if ( $applicant_id == get_current_user_id() ) {
-        echo _( 'You cannot edit your own application status' );
+        echo _( '<br />You cannot edit your own application status' );
         return;
     }
-    if ( ! commoners_vouching_request_active ( $applicant_id ) ) {
-        echo _( 'User is not currently applying to become a member.' );
+    $applicant = get_user_by( 'ID', $applicant_id );
+    if( $applicant === false ) {
+        echo _( '<br />Invalid user specified.' );
+        return;
+    }
+    //FIXME: Check to see if really autovouched, check if not and should be
+    if ( commoners_user_level_should_autovouch( $applicant->user_email ) ) {
+        echo '<br><h4><i>User was autovouched, no application details.</i></h4>';
+        echo '<p>Autovouching is by CCID user email domain.</p>';
         return;
     }
     $state = commoners_registration_user_get_stage ( $applicant_id );
@@ -227,13 +234,17 @@ function commoners_application_user_application_page_url( $user_id ) {
 
 function commoners_application_users_menu () {
     add_users_page(
-        // No menu title, as we don't want to show up in the sidebar
-        NULL,
         'Global Network Membership',
+        // No menu title, as we don't want to show up in the sidebar
+        'Hello',
         edit_users,
         'commoners-global-network-membership',
         'commoners_application_users_page'
     );
+}
+
+function commoners_hide_application_users_menu () {
+    remove_submenu_page( 'users.php', 'commoners-global-network-membership' );
 }
 
 // If the user is at the vouching / final approval stage, link to this page

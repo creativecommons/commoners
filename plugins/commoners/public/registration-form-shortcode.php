@@ -114,6 +114,11 @@ function commoners_registration_shortcode_render ( $atts ) {
         exit;
     }
     $user = wp_get_current_user();
+    if ( commoners_user_is_institution_applicant ( $user->ID ) ) {
+        echo _( '<p>You are already applying for membership on behalf of an Instituion.</p>' );
+        echo _( '<p>If this is an error, <a href="/contact/">contact us.</a></p>' );
+        return;
+    }
     $state = $user->get( COMMONERS_APPLICATION_STATE );
     switch ( $state ) {
     case '':
