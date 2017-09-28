@@ -18,12 +18,9 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 defined( 'COMMONERS_PATH' )
     or define( 'COMMONERS_PATH', plugin_dir_path( __FILE__ ) );
 
-
 // Buddypress UI behaviour configuration
 
-require_once(COMMONERS_PATH . 'includes/registration-settings.php');
-require_once(COMMONERS_PATH . 'includes/registration-integration.php');
-require_once(COMMONERS_PATH . 'includes/registration-levels.php');
+require_once(COMMONERS_PATH . 'includes/buddypress-integration.php');
 
 // Configuration options for this plugin
 
@@ -31,7 +28,7 @@ require_once(COMMONERS_PATH . 'admin/options-emails.php');
 
 // Tracking user membership application state
 
-require_once(COMMONERS_PATH . 'includes/registration-state.php');
+require_once(COMMONERS_PATH . 'includes/application-state.php');
 
 // Interfacing with GravityForms
 
