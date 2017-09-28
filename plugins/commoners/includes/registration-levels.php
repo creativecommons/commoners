@@ -9,10 +9,18 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // This does mean we have to do our own lookup though.
 ////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
+// User Roles
+////////////////////////////////////////////////////////////////////////////////
+
 // Unvouched users cannot create a profile and can only see limited profiles
 
-define ( 'COMMONERS_USER_ROLE_UNVOUCHED', 'unvouched' );
-define ( 'COMMONERS_USER_ROLE_VOUCHED', 'subscriber' );
+define( 'COMMONERS_USER_ROLE_APPLICANT_NEW', 'applicant-new' );
+define( 'COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL', 'applicant-individual' );
+define( 'COMMONERS_USER_ROLE_APPLICANT_INSTITUTION', 'applicant-institution' );
+define( 'COMMONERS_USER_ROLE_MEMBER_INDIVIDUAL', 'member-individual' );
+define( 'COMMONERS_USER_ROLE_MEMBER_INSTITUTION', 'member-institution' );
+define( 'COMMONERS_USER_ROLE_MEMBER_AUTOVOUCHED', 'member-autovouched' );
 
 // Which Field Groups different levels of registration/vouching can see
 // Admin users are handled separately
@@ -26,17 +34,75 @@ $commoners_access_levels = [
 
 function commoners_add_roles_on_plugin_activation () {
     add_role(
-        'unvouched',
-        'Unvouched',
+        COMMONERS_USER_ROLE_APPLICANT_NEW,
+        'Individual Applicant',
         array(
             'read' => true,
             'level_0' => true
         )
     );
+    add_role(
+        COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL,
+        'Individual Applicant',
+        array(
+            'read' => true,
+            'level_0' => true
+        )
+    );
+    add_role(
+        COMMONERS_USER_ROLE_APPLICANT_INSTITUTION,
+        'Institution Applicant',
+        array(
+            'read' => true,
+            'level_0' => true
+        )
+    );
+    $subscriber = get_role( 'subscriber' );
+    add_role(
+        COMMONERS_USER_ROLE_MEMBER_INDIVIDUAL,
+        'Individual Member',
+        $subscriber->capabilities
+    );
+    add_role(
+        COMMONERS_USER_ROLE_MEMBER_INSTITUTION,
+        'Institution Member',
+        $subscriber->capabilities
+    );
+    add_role(
+        COMMONERS_USER_ROLE_MEMBER_AUTOVOUCHED,
+        'Autovouched Member',
+        $subscriber->capabilities
+    );
+}
+
+function commoners_user_is_new ( $user_id ) {
+    return in_array( COMMONERS_USER_ROLE_APPLICANT_NEW, $user->roles );
+}
+
+function commoners_user_is_individual_applicant ( $user_id ) {
+    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles );
+}
+
+function commoners_user_is_institution_applicant ( $user_id ) {
+    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles );
+}
+
+function commoners_user_is_individual ( $user_id ) {
+    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles )
+        || in_array( COMMONERS_USER_ROLE_MEMBER_INDIVIDUAL, $user->roles )
+        || in_array( COMMONERS_USER_ROLE_MEMBER_AUTOVOUCHED, $user->roles );
+}
+
+function commoners_user_is_institution ( $user_id ) {
+    return in_array( COMMONERS_USER_ROLE_APPLICANT_INSTITUTION, $user->roles )
+        || in_array( COMMONERS_USER_ROLE_MEMBER_INSTITUTION, $user->roles );
 }
 
 function commoners_user_is_vouched ( $user ) {
-    return ! in_array( COMMONERS_USER_ROLE_UNVOUCHED, $user->roles);
+    return ! (
+        in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles )
+        || in_array( COMMONERS_USER_ROLE_APPLICANT_INSTITUTION, $user->roles )
+    );
 }
 
 function commoners_current_user_is_vouched () {
@@ -63,6 +129,179 @@ function commoners_current_user_level () {
     }
     return $level;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Buddypress member types
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+function my_school_community_register_member_types() {
+// Register Student Type member with directory
+bp_register_member_type( 'student', array(
+	'labels' => array(
+		'name' => 'Students',
+		'singular_name' => 'Student',
+		),
+	'has_directory' => 'student-directory'
+));
+// Register Parent type member with Directory
+bp_register_member_type( 'parent', array(
+	'labels' => array(
+		'name' => 'Parents',
+		'singular_name' => 'Parent',
+		),
+	'has_directory' => 'parent-directory'
+));
+// Register Teacher type member with Directory
+bp_register_member_type( 'teacher', array(
+	'labels' => array(
+		'name' => 'Teachers',
+		'singular_name' => 'Teacher',
+	),
+	'has_directory' => 'teacher-directory'
+));
+}
+add_action( 'bp_init', 'my_school_community_register_member_types' );
+
+////////////////////////////////////////////////////////////////////////////////
+// Buddypress fields for member type
+////////////////////////////////////////////////////////////////////////////////
+
+DEFINE( 'COMMONERS_PROFILE_FIELD_GROUP_INDIVIDUAL', 'Individual Member' );
+DEFINE( 'COMMONERS_PROFILE_FIELD_GROUP_INSTITUTION', 'Institutional Member' );
+
+function commoners_buddypress_member_field ($group, $name, $desc, $order,
+                                            $required = true,
+                                            $type = 'textbox',
+                                            $member_types = false ) {
+    $id = xprofile_insert_field(
+        array (
+            'field_group_id'  => $group,
+            'name'            => $name,
+            'description'     => $desc,
+            'field_order'     => $order,
+            'is_required'     => $required,
+            'type'            => $type
+        )
+    );
+    if ( $id && $member_types ) {
+        $field = new BP_XProfile_field( $id );
+        $field->set_member_types( $member_types );
+    }
+    return $id
+}
+
+function commoners_create_profile_fields_individual () {
+    $individual_id = xprofile_insert_field_group(
+        array(
+            'name' => COMMONERS_PROFILE_FIELD_GROUP_INDIVIDUAL
+        )
+    );
+    $bio_id = xprofile_insert_field(
+        array (
+            'field_group_id'  => $individual_id,
+            'name'            => 'Bio',
+            'description'     => 'A brief biography for the member',
+            'field_order'     => 1,
+            'is_required'     => false,
+            'type'            => 'textbox'
+        )
+    );
+    xprofile_insert_field(
+        array (
+            'field_group_id'  => $individual_id,
+            'name'            => 'Languages',
+            'description'     => 'Languages the member can speak',
+            'field_order'     => 2,
+            'is_required'     => false,
+            'type'            => 'textbox'
+        )
+    );
+    xprofile_insert_field(
+        array (
+            'field_group_id'  => $individual_id,
+            'name'            => 'Location',
+            'description'     => 'The country the member is based in',
+            'field_order'     => 3,
+            'is_required'     => false,
+            'type'            => 'textbox'
+        )
+    );
+    xprofile_insert_field(
+        array (
+            'field_group_id'  => $individual_id,
+            'name'            => 'Links',
+            'description'     => 'Links to the user\'s publicly shareable web sites, social media profiles etc.',
+            'field_order'     => 4,
+            'is_required'     => false,
+            'type'            => 'textbox'
+        )
+    );
+}
+
+function commoners_create_profile_fields_institution () {
+    $institution_id = xprofile_insert_field_group(
+        array(
+            'name' => COMMONERS_PROFILE_FIELD_GROUP_INSTITUTION
+        )
+    );
+    xprofile_insert_field(
+        array (
+            'field_group_id'  => $institution_id,
+            'name'            => 'Website',
+            'description'     => 'The URL of the organization\'s web site',
+            'field_order'     => 1,
+            'is_required'     => false,
+            'type'            => 'textbox'
+        )
+    );
+    xprofile_insert_field(
+        array (
+            'field_group_id'  => $institution_id,
+            'name'            => 'About',
+            'description'     => 'A brief description of the organization',
+            'field_order'     => 2,
+            'is_required'     => false,
+            'type'            => 'textbox'
+        )
+    );
+    xprofile_insert_field(
+        array (
+            'field_group_id'  => $institution_id,
+            'name'            => 'Representative',
+            'description'     => 'The person to contact at the organization about Creative Commons Global Network-related matters',
+            'field_order'     => 3,
+            'is_required'     => false,
+            'type'            => 'textbox'
+        )
+    );
+    xprofile_insert_field(
+        array (
+            'field_group_id'  => $institution_id,
+            'name'            => 'Contact',
+            'description'     => 'An email address or other means of getting in touch with the organization\'s representative',
+            'field_order'     => 4,
+            'is_required'     => false,
+            'type'            => 'textbox'
+        )
+    );
+}
+
+function commoners_profile_group_id_by_name ( $name ) {
+    $groups = bp_profile_get_field_groups();
+    $id = false;
+    foreach ( $groups as $group ) {
+        if ($group[ 'name' ] == $name) {
+            $id = $group[ 'id' ];
+        }
+    }
+    return $id;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BuddyPress UI display control by user level
+////////////////////////////////////////////////////////////////////////////////
 
 // Hide core UI if the user is not logged in
 
@@ -100,11 +339,25 @@ function commoners_filter_role_groups ( $groups ) {
     return $accessible;
 }
 
-function commoners_user_level_set_applicant( $user_id ) {
+function commoners_user_level_set_applicant_new( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
     //$user->remove_role( 'subscriber' );
     //$user->add_role( COMMONERS_USER_ROLE_UNVOUCHED );
-    $user->set_role( COMMONERS_USER_ROLE_UNVOUCHED );
+    $user->set_role( COMMONERS_USER_ROLE_APPLICANT_NEW );
+}
+
+function commoners_user_level_set_applicant_individual( $user_id ) {
+    $user = get_user_by( 'ID', $user_id );
+    //$user->remove_role( 'subscriber' );
+    //$user->add_role( COMMONERS_USER_ROLE_UNVOUCHED );
+    $user->set_role( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL );
+}
+
+function commoners_user_level_set_applicant_institution( $user_id ) {
+    $user = get_user_by( 'ID', $user_id );
+    //$user->remove_role( 'subscriber' );
+    //$user->add_role( COMMONERS_USER_ROLE_UNVOUCHED );
+    $user->set_role( COMMONERS_USER_ROLE_APPLICANT_INSTITUTION );
 }
 
 function commoners_user_level_set_pre_approved ( $user_id ) {
@@ -118,7 +371,22 @@ function commoners_user_level_set_approved ( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
     //$user->remove_role( 'subscriber' );
     //$user->add_role( COMMONERS_USER_ROLE_VOUCHED );
-    $user->set_role( COMMONERS_USER_ROLE_VOUCHED );
+    if ( commoners_user_is_individua( $user_id ) ) {
+        $user->set_role( COMMONERS_USER_ROLE_MEMBER_INDIVIDUAL );
+    } else {
+        $user->set_role( COMMONERS_USER_ROLE_MEMBER_INSTITUTION );
+    }
+    commoners_registration_user_set_stage(
+        $user_id,
+        COMMONERS_APPLICATION_STATE_ACCEPTED
+    );
+}
+
+function commoners_user_level_set_autovouched ( $user_id ) {
+    $user = get_user_by( 'ID', $user_id );
+    //$user->remove_role( 'subscriber' );
+    //$user->add_role( COMMONERS_USER_ROLE_VOUCHED );
+    $user->set_role( COMMONERS_USER_ROLE_MEMBER_AUTOVOUCHED );
     commoners_registration_user_set_stage(
         $user_id,
         COMMONERS_APPLICATION_STATE_ACCEPTED
@@ -154,9 +422,9 @@ function commoners_user_level_register( $user_id ) {
     if ( $user ) {
         $email = $userdata->user_email;
         if ( commoners_vouching_should_autovouch( $email ) ) {
-            commoners_vouching_user_level_set_approved( $user_id );
+            commoners_vouching_user_level_set_autovouched ( $user_id );
         } else {
-            commoners_user_level_set_applicant( $user_id );
+            commoners_user_level_set_applicant_new( $user_id );
         }
     }
 }
