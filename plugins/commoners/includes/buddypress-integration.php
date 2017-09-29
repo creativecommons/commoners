@@ -3,8 +3,12 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 ////////////////////////////////////////////////////////////////////////////////
-// Autovouch domains
+// Autovouching
 ////////////////////////////////////////////////////////////////////////////////
+
+define( 'COMMONERS_NUMBER_OF_VOUCHES_NEEDED', 2 );
+
+define( 'COMMONER_USER_IS_AUTOVOUCHED', 'commoners-user-autovouched' );
 
 define(
     'COMMONERS_AUTOVOUCH_EMAIL_DOMAINS',
@@ -13,18 +17,23 @@ define(
     ]
 );
 
+function commoners_user_level_should_autovouch( $email ) {
+    return
+        // Make sure the explode won't give an Undefined Offset error
+        (strpos( $email, '@') !== false)
+        && in_array(
+            explode( '@', $email )[1],
+            COMMONERS_AUTOVOUCH_EMAIL_DOMAINS
+        );
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // User Roles
 ////////////////////////////////////////////////////////////////////////////////
 
 // Unvouched users cannot create a profile and can only see limited profiles
 
-define( 'COMMONERS_USER_ROLE_APPLICANT_NEW', 'applicant-new' );
-define( 'COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL', 'applicant-individual' );
-define( 'COMMONERS_USER_ROLE_APPLICANT_INSTITUTION', 'applicant-institution' );
-define( 'COMMONERS_USER_ROLE_MEMBER_INDIVIDUAL', 'member-individual' );
-define( 'COMMONERS_USER_ROLE_MEMBER_INSTITUTION', 'member-institution' );
-define( 'COMMONERS_USER_ROLE_MEMBER_AUTOVOUCHED', 'member-autovouched' );
+define( 'COMMONERS_USER_ROLE_NEW', 'new-user' );
 
 // Which Field Groups different levels of registration/vouching can see
 // Admin users are handled separately
@@ -38,75 +47,23 @@ $commoners_access_levels = [
 
 function commoners_add_roles_on_plugin_activation () {
     add_role(
-        COMMONERS_USER_ROLE_APPLICANT_NEW,
-        'Individual Applicant',
+        COMMONERS_USER_ROLE_NEW,
+        'New User',
         array(
             'read' => true,
             'level_0' => true
         )
-    );
-    add_role(
-        COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL,
-        'Individual Applicant',
-        array(
-            'read' => true,
-            'level_0' => true
-        )
-    );
-    add_role(
-        COMMONERS_USER_ROLE_APPLICANT_INSTITUTION,
-        'Institution Applicant',
-        array(
-            'read' => true,
-            'level_0' => true
-        )
-    );
-    $subscriber = get_role( 'subscriber' );
-    add_role(
-        COMMONERS_USER_ROLE_MEMBER_INDIVIDUAL,
-        'Individual Member',
-        $subscriber->capabilities
-    );
-    add_role(
-        COMMONERS_USER_ROLE_MEMBER_INSTITUTION,
-        'Institution Member',
-        $subscriber->capabilities
-    );
-    add_role(
-        COMMONERS_USER_ROLE_MEMBER_AUTOVOUCHED,
-        'Autovouched Member',
-        $subscriber->capabilities
     );
 }
 
 function commoners_user_is_new ( $user_id ) {
-    return in_array( COMMONERS_USER_ROLE_APPLICANT_NEW, $user->roles );
+    $user = get_user_by( 'ID', $user_id );
+    return in_array( COMMONERS_USER_ROLE_NEW, $user->roles );
 }
 
-function commoners_user_is_individual_applicant ( $user_id ) {
-    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles );
-}
-
-function commoners_user_is_institution_applicant ( $user_id ) {
-    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles );
-}
-
-function commoners_user_is_individual ( $user_id ) {
-    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles )
-        || in_array( COMMONERS_USER_ROLE_MEMBER_INDIVIDUAL, $user->roles )
-        || in_array( COMMONERS_USER_ROLE_MEMBER_AUTOVOUCHED, $user->roles );
-}
-
-function commoners_user_is_institution ( $user_id ) {
-    return in_array( COMMONERS_USER_ROLE_APPLICANT_INSTITUTION, $user->roles )
-        || in_array( COMMONERS_USER_ROLE_MEMBER_INSTITUTION, $user->roles );
-}
-
-function commoners_user_is_vouched ( $user ) {
-    return ! (
-        in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles )
-        || in_array( COMMONERS_USER_ROLE_APPLICANT_INSTITUTION, $user->roles )
-    );
+function commoners_user_is_vouched( $user_id ) {
+    // To get past being new, you must be vouched
+    return ! commoners_user_is_new ( $user_id );
 }
 
 function commoners_current_user_is_vouched () {
@@ -138,35 +95,34 @@ function commoners_current_user_level () {
 // Buddypress member types
 ////////////////////////////////////////////////////////////////////////////////
 
-
-
-function my_school_community_register_member_types() {
-// Register Student Type member with directory
-bp_register_member_type( 'student', array(
-	'labels' => array(
-		'name' => 'Students',
-		'singular_name' => 'Student',
-		),
-	'has_directory' => 'student-directory'
-));
-// Register Parent type member with Directory
-bp_register_member_type( 'parent', array(
-	'labels' => array(
-		'name' => 'Parents',
-		'singular_name' => 'Parent',
-		),
-	'has_directory' => 'parent-directory'
-));
-// Register Teacher type member with Directory
-bp_register_member_type( 'teacher', array(
-	'labels' => array(
-		'name' => 'Teachers',
-		'singular_name' => 'Teacher',
-	),
-	'has_directory' => 'teacher-directory'
-));
+function commoners_register_member_types() {
+    // Register Parent type member with Directory
+    bp_register_member_type( 'individual-member', array(
+        'labels' => array(
+            'name' => 'Individual Members',
+            'singular_name' => 'Individual Member',
+        ),
+        'has_directory' => 'member/individual'
+    ));
+    // Register Parent type member with Directory
+    bp_register_member_type( 'institutional-member', array(
+        'labels' => array(
+            'name' => 'Institutional Members',
+            'singular_name' => 'Institutional Member',
+        ),
+        'has_directory' => 'member/institution'
+    ));
 }
-add_action( 'bp_init', 'my_school_community_register_member_types' );
+
+function commoners_member_is_individual ( $user_id ) {
+    $type = bp_get_member_type( $user_id );
+    return $type == 'individual-member';
+}
+
+function commoners_member_is_institution ( $user_id ) {
+    $type = bp_get_member_type( $user_id );
+    return $type == 'institutional-member';
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Buddypress fields for member type
@@ -256,7 +212,7 @@ function commoners_create_profile_fields_institution () {
             'name'            => 'Website',
             'description'     => 'The URL of the organization\'s web site',
             'field_order'     => 1,
-            'is_required'     => false,
+            'is_required'     => true,
             'type'            => 'textbox'
         )
     );
@@ -266,7 +222,7 @@ function commoners_create_profile_fields_institution () {
             'name'            => 'About',
             'description'     => 'A brief description of the organization',
             'field_order'     => 2,
-            'is_required'     => false,
+            'is_required'     => true,
             'type'            => 'textbox'
         )
     );
@@ -276,7 +232,7 @@ function commoners_create_profile_fields_institution () {
             'name'            => 'Representative',
             'description'     => 'The person to contact at the organization about Creative Commons Global Network-related matters',
             'field_order'     => 3,
-            'is_required'     => false,
+            'is_required'     => true,
             'type'            => 'textbox'
         )
     );
@@ -286,7 +242,7 @@ function commoners_create_profile_fields_institution () {
             'name'            => 'Contact',
             'description'     => 'An email address or other means of getting in touch with the organization\'s representative',
             'field_order'     => 4,
-            'is_required'     => false,
+            'is_required'     => true,
             'type'            => 'textbox'
         )
     );
@@ -314,7 +270,6 @@ function commons_not_logged_in_ui () {
     if (! is_user_logged_in() ) {
         bp_core_remove_nav_item( 'activity' );
         bp_core_remove_nav_item( 'groups' );
-        bp_core_remove_nav_item( 'vouching' );
         // Hide the "view" subtab. Ideally we'd hide the "profile" tab...
         unset($bp->bp_options_nav['profile']['public']);
     }
@@ -343,26 +298,30 @@ function commoners_filter_role_groups ( $groups ) {
     return $accessible;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// BuddyPress Member type (and WordPress Role) setting
+////////////////////////////////////////////////////////////////////////////////
+
 function commoners_user_level_set_applicant_new( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
-    //$user->remove_role( 'subscriber' );
-    //$user->add_role( COMMONERS_USER_ROLE_UNVOUCHED );
     $user->set_role( COMMONERS_USER_ROLE_APPLICANT_NEW );
 }
 
-function commoners_user_level_set_applicant_individual( $user_id ) {
+function commoners_user_level_set_member_individual( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
-    //$user->remove_role( 'subscriber' );
-    //$user->add_role( COMMONERS_USER_ROLE_UNVOUCHED );
-    $user->set_role( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL );
+    $user->set_role( 'subscriber' );
+    bp_set_member_type( $user_id, 'individual-member' );
 }
 
-function commoners_user_level_set_applicant_institution( $user_id ) {
+function commoners_user_level_set_member_institution( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
-    //$user->remove_role( 'subscriber' );
-    //$user->add_role( COMMONERS_USER_ROLE_UNVOUCHED );
-    $user->set_role( COMMONERS_USER_ROLE_APPLICANT_INSTITUTION );
+    $user->set_role( 'subscriber' );
+    bp_set_member_type( $user_id, 'institutional-member' );
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Setting user level on registration
+////////////////////////////////////////////////////////////////////////////////
 
 function commoners_user_level_set_pre_approved ( $user_id ) {
     commoners_registration_user_set_stage(
@@ -372,13 +331,10 @@ function commoners_user_level_set_pre_approved ( $user_id ) {
 }
 
 function commoners_user_level_set_approved ( $user_id ) {
-    $user = get_user_by( 'ID', $user_id );
-    //$user->remove_role( 'subscriber' );
-    //$user->add_role( COMMONERS_USER_ROLE_VOUCHED );
-    if ( commoners_user_is_individua( $user_id ) ) {
-        $user->set_role( COMMONERS_USER_ROLE_MEMBER_INDIVIDUAL );
+    if ( commoners_user_is_individual_applicant( $user_id ) ) {
+        commoners_user_level_set_member_individual( $user_id );
     } else {
-        $user->set_role( COMMONERS_USER_ROLE_MEMBER_INSTITUTION );
+        commoners_user_level_set_member_institution( $user_id );
     }
     commoners_registration_user_set_stage(
         $user_id,
@@ -387,14 +343,12 @@ function commoners_user_level_set_approved ( $user_id ) {
 }
 
 function commoners_user_level_set_autovouched ( $user_id ) {
-    $user = get_user_by( 'ID', $user_id );
-    //$user->remove_role( 'subscriber' );
-    //$user->add_role( COMMONERS_USER_ROLE_VOUCHED );
-    $user->set_role( COMMONERS_USER_ROLE_MEMBER_AUTOVOUCHED );
+    commoners_user_level_set_member_individual( $user_id );
     commoners_registration_user_set_stage(
         $user_id,
         COMMONERS_APPLICATION_STATE_ACCEPTED
     );
+    update_user_meta( $user_id, COMMONER_USER_IS_AUTOVOUCHED, true );
 }
 
 function commoners_user_level_set_rejected ( $user_id ) {
@@ -408,19 +362,8 @@ function commoners_user_level_set_rejected ( $user_id ) {
     );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Setting user level on registration
-////////////////////////////////////////////////////////////////////////////////
+// This is called by WordPress when the user signs up to the site
 
-function commoners_user_level_should_autovouch( $email ) {
-    return
-        // Make sure the explode won't give an Undefined Offset error
-        (strpos( $email, '@') !== false)
-        && in_array(
-            explode( '@', $email )[1],
-            COMMONERS_AUTOVOUCH_EMAIL_DOMAINS
-        );
-}
 function commoners_user_level_register( $user_id ) {
     $userdata = get_userdata( $user_id );
     if ( $user ) {
@@ -489,7 +432,6 @@ function commoners_remove_settings() {
     //bp_core_remove_subnav_item( 'settings', 'general' );
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // CCID 'global'(lowercased nickname) is used for user_nicename but is not
 // url-safe.
@@ -553,7 +495,6 @@ function _bp_get_activity_parent_content($content){
     $user = get_user_by('slug', $bp->displayed_user->fullname); // 'slug' - user_nicename
     return preg_replace('/href=\"(.*?)\"/is', 'href="'.bp_core_get_user_domain($user->ID, $bp->displayed_user->fullname).'"', $content);
 }
-
 
 function _bp_get_activity_action_pre_meta($content){
     global $bp;

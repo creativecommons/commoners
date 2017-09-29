@@ -57,7 +57,9 @@ function commoners_vouching_shortcode_render ( $atts ) {
     $voucher_id = get_current_user_id();
 
     // Render correct UI for state of vouching
-    if ( ! commoners_vouching_request_exists( $applicant_id,
+    if ( ! commoners_user_is_vouched( $voucher_id ) ) {
+        echo _( "<p>You must be vouched before you can vouch for others.<p>" );
+    } elseif ( ! commoners_vouching_request_exists( $applicant_id,
                                               $voucher_id ) ) {
         echo _( "<p>Request couldn't be found.<p>" );
     } elseif ( ! commoners_vouching_request_active ( $applicant_id ) ) {
@@ -70,9 +72,12 @@ function commoners_vouching_shortcode_render ( $atts ) {
         // So we make sure it will read well in both cases.
         echo _( "<p>Thank you for responding to this request!<p>" );
     } else {
+        if ( commoners_user_is_institutional_applicant ( $user_id ) ) {
+            echo _( "<i>Note that this is an institution applying to join the Global Network. We still need you to vouch for this institution as you would for an individual that you know.</i>" );
+        }
         // We were going to pass this as the content of an HTML field in the
         // gravity form but this is easier
-        echo commoners_vouching_form_profile_text( $applicant_id );
+        echo commoners_vouching_form_applicant_profile_text( $applicant_id );
         gravity_form(
             COMMONERS_GF_VOUCH,
             false,
@@ -102,7 +107,7 @@ function commoners_vouching_form_post_validate ( $validation_result ) {
         ) && commoners_vouching_request_open (
             $applicant_id,
             $voucher_id
-        );
+        ) && commoners_user_is_vouched( $voucher_id );
 
         if ( ! $ok ) {
             // set the form validation to false

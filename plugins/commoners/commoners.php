@@ -34,10 +34,17 @@ require_once(COMMONERS_PATH . 'includes/application-state.php');
 
 require_once(COMMONERS_PATH . 'includes/gravityforms-interaction.php');
 
+require_once(COMMONERS_PATH . 'includes/format-applicant-profile.php');
+
 // Sign-up form workflow for application
 
 require_once(COMMONERS_PATH . 'includes/registration-form-emails.php');
-require_once(COMMONERS_PATH . 'public/registration-form-shortcode.php');
+require_once(
+    COMMONERS_PATH . 'public/registration-individual-form-shortcode.php'
+);
+require_once(
+    COMMONERS_PATH . 'public/registration-institution-form-shortcode.php'
+);
 
 // User page application interface for admins
 
@@ -47,7 +54,6 @@ require_once(COMMONERS_PATH . 'admin/user-final-approval-list-page.php');
 
 // Vouching UI for existing members to vouch for new applicant
 
-require_once(COMMONERS_PATH . 'includes/vouching-applicant-profile.php');
 require_once(COMMONERS_PATH . 'public/vouching-form-shortcode.php');
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +87,11 @@ add_filter(
     10,
     1
 );
+
+// Member types, registration, and application
+
+add_action( 'bp_register_member_types', 'commoners_register_member_types' );
+
 add_action(
     'bp_get_activity_action_pre_meta',
     '_bp_get_activity_action_pre_meta'
@@ -97,7 +108,7 @@ add_action( 'bp_ready', '_bp_remove_profile_options_if_unvouched' );
 add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
 ////////////////////////////////////////////////////////////////////////////////
-// Registration Form
+// Registration Forms
 ////////////////////////////////////////////////////////////////////////////////
 
 // The shortcode to display the sign-up workflow forms.
@@ -105,8 +116,8 @@ add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 // application state/stage.
 
 add_shortcode(
-    'commoners-signup-form',
-    'commoners_registration_shortcode_render'
+    'commoners-signup-individual-form',
+    'commoners_registration_individual_shortcode_render'
 );
 
 add_filter( 'gform_validation', 'commoners_vouching_form_post_validate' );

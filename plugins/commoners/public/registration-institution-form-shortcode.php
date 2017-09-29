@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Called by the last form.
 // This is its own function so we can move it if we change which form is last.
 
-function commoners_registration_post_last_form () {
+function commoners_registration_institution_post_last_form () {
     $applicant_id = get_current_user_id();
     // This shouldn't happen, but just in case
     if ( $applicant_id == 0 ) {
@@ -25,7 +25,8 @@ function commoners_registration_post_last_form () {
 
 // Perform post-submit actions for each form
 
-function commoners_registration_form_submit_handler ( $entry, $form ) {
+function commoners_registration_institution_form_submit_handler ( $entry,
+                                                                 $form ) {
     switch( $form[ 'title' ] ) {
     case COMMONERS_GF_AGREE_TO_TERMS:
         commoners_registration_current_user_set_stage (
@@ -48,65 +49,7 @@ function commoners_registration_form_submit_handler ( $entry, $form ) {
     }
 }
 
-function commoners_registration_list_members () {
-    global $wpdb;
-
-    // Format match string as SQL LIKE string
-    $to_match = "%$to_match%";
-
-    // Query the database for username matches. Note exclusion of admin.
-
-    $table_name = $wpdb->prefix . 'users';
-    $rows = $wpdb->get_results(
-        $wpdb->prepare(
-            "
-                 SELECT           ID, display_name
-                 FROM             $table_name
-                 WHERE            ID > 1
-                 ORDER BY         display_name
-                 DESC
-                ",
-            $to_match
-        )
-    );
-
-    //FIXME: filter inactive users !!!
-
-    $members = array();
-    foreach ( $rows as $row ){
-        $members[] = array(
-            $row->ID,
-            $row->display_name
-        );
-    }
-    return $members;
-}
-
-// Why do it like this? To save download space rather than send thousands
-// of options for each of several selects.
-
-function commoners_registration_populate_vouchers () {
-    $members = commoners_registration_list_members();
-    ?>
-    <script>
-    var commoners_members = <?php echo json_encode( $members ); ?>;
-    jQuery(document).ready(function () {
-      jQuery('select').each(function () {
-      var select = jQuery(this);
-      select.empty();
-      select.append(jQuery('<option disabled selected value>Select Voucher</option>'));
-      for (var i = 0; i < commoners_members.length; i++) {
-        select.append(jQuery("<option></option>")
-              .attr("value", commoners_members[i][0])
-              .text(commoners_members[i][1]));
-        }
-      });
-    });
-    </script>
-    <?php
-}
-
-function commoners_registration_shortcode_render ( $atts ) {
+function commoners_registration_institution_shortcode_render ( $atts ) {
     if ( ! is_user_logged_in() ) {
         wp_redirect( 'https://login.creativecommons.org/login?service='
                      . get_site_url()
@@ -114,22 +57,29 @@ function commoners_registration_shortcode_render ( $atts ) {
         exit;
     }
     $user = wp_get_current_user();
-    if ( commoners_user_is_institution_applicant ( $user->ID ) ) {
-        echo _( '<p>You are already applying for membership on behalf of an Instituion.</p>' );
+    if ( commoners_user_is_individual_applicant ( $user->ID ) ) {
+        echo _( '<p>You are already applying for membership as an Individual.</p>' );
         echo _( '<p>If this is an error, <a href="/contact/">contact us.</a></p>' );
         return;
+    }
+    //FIXME: Model update code in the view
+    if ( ! commoners_user_is_institution_applicant ( $user_id ) ) {
+        commoners_user_set_institution_applicant ( $user_id );
     }
     $state = $user->get( COMMONERS_APPLICATION_STATE );
     switch ( $state ) {
     case '':
         gravity_form( COMMONERS_GF_AGREE_TO_TERMS, false, false );
         break;
+    case COMMONERS_APPLICATION_STATE_CHARTER:
+        gravity_form( COMMONERS_GF_SIGN_CHARTER, false, false );
+        break;
     case COMMONERS_APPLICATION_STATE_DETAILS:
-        gravity_form( COMMONERS_GF_APPLICANT_DETAILS, false, false );
+        gravity_form( COMMONERS_GF_INSTITUTION_DETAILS, false, false );
         break;
     case COMMONERS_APPLICATION_STATE_VOUCHERS:
         gravity_form( COMMONERS_GF_CHOOSE_VOUCHERS, false, false );
-        commoners_registration_populate_vouchers();
+        commoners_registration_form_populate_vouchers();
         break;
     case COMMONERS_APPLICATION_STATE_RECEIVED:
         echo _( '<h2>Thank you for applying to join the Creative Commons Global Network</h2></p><p>Your application has been received.</p><p>It will take several days to be reviewed.</p><p>If you have any questions you can <a href="/contact/">contact us.</a></p>' );

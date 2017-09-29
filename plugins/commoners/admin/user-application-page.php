@@ -200,7 +200,7 @@ function commoners_application_users_page () {
     }
     $state = commoners_registration_user_get_stage ( $applicant_id );
     echo _('<h2>Details Provided By Applicant</h2>');
-    echo commoners_vouching_form_profile_text( $applicant_id );
+    echo commoners_user_page_applicant_profile_text( $applicant_id );
     echo _('<h2>Vouchers Requested</h2>');
     echo commoners_application_users_page_vouchers( $applicant_id );
     if ( $state != COMMONERS_APPLICATION_STATE_RECEIVED ) {

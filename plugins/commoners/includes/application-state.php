@@ -3,12 +3,63 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 ////////////////////////////////////////////////////////////////////////////////
+// Application type: individual or institutional
+////////////////////////////////////////////////////////////////////////////////
 
-define ('COMMONERS_NUMBER_OF_VOUCHES_NEEDED', 2);
+// The WordPress user metadata property that tracks application kind
+define(
+    'COMMONERS_APPLICATION_TYPE',
+    'commoners-application-type'
+);
+
+define(
+    'COMMONERS_APPLICATION_INDIVIDUAL',
+    'commoners-application-type-individual'
+);
+define(
+    'COMMONERS_APPLICATION_INSTITUTIONAL',
+    'commoners-application-type-institutional'
+);
+
+function commoners_registration_user_get_application_type ( $user_id ) {
+    return get_user_meta( $user_id, COMMONERS_APPLICATION_TYPE )[0];
+}
+
+function commoners_registration_user_set_application_type ( $user_id, $type ) {
+    update_user_meta( $user_id, COMMONERS_APPLICATION_TYPE, $type );
+}
+
+function commoners_user_set_individual_applicant ( $user_id ) {
+    commoners_registration_user_set_application_type (
+        $user_id,
+        COMMONERS_APPLICATION_INDIVIDUAL
+    );
+}
+
+function commoners_user_set_institutional_applicant ( $user_id ) {
+    commoners_registration_user_set_application_type (
+        $user_id,
+        COMMONERS_APPLICATION_INSTITUTIONAL
+    );
+}
+
+function commoners_user_is_individual_applicant ( $user_id ) {
+    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles );
+}
+
+function commoners_user_is_institutional_applicant ( $user_id ) {
+    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Application state (workflow stage)
+////////////////////////////////////////////////////////////////////////////////
 
 // The WordPress user metadata property that tracks application state
 define( 'COMMONERS_APPLICATION_STATE', 'commoners-application-state' );
 
+// The user is agreeing with the Charter
+define( 'COMMONERS_APPLICATION_STATE_CHARTER', 'charter-form' );
 // The user is filling out the details form
 define( 'COMMONERS_APPLICATION_STATE_DETAILS', 'details-form' );
 // The user is selecting vouchers
@@ -91,6 +142,29 @@ function commoners_applicants_with_state ( $state ) {
                     'value' => $state,
                     'compare' => '='
                 )
+            )
+        )
+    );
+    return $users;
+}
+
+function commoners_applicants_of_type_with_state ( $state, $type ) {
+    $users = get_users(
+        array(
+            'fields' => array(
+                'ID'
+            ),
+            'meta_query' => array(
+                array(
+                    'key' => COMMONERS_APPLICATION_STATE,
+                    'value' => $state,
+                    'compare' => '='
+                ),
+                array(
+                    'key' => COMMONERS_APPLICATION_TYPE,
+                    'value' => $state,
+                    'compare' => '='
+                ),
             )
         )
     );
