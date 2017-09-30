@@ -113,11 +113,6 @@ add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
 // Populate voucher selects
 
-add_action(
-    'gform_register_init_scripts',
-    'commoners_registration_form_populate_vouchers'
-);
-
 add_action("gform_pre_render", "commoners_set_vouchers_options");
 
 // The shortcode to display the sign-up workflow forms.
@@ -172,7 +167,7 @@ add_shortcode(
 
 if ( is_admin() ){
     // Remove various BuddyPress settings in various circumstances
-    add_action(
+        add_action(
         'wp_before_admin_bar_render',
         '_bp_admin_bar_remove_some_menu_items'
     );
@@ -184,20 +179,19 @@ if ( is_admin() ){
     add_action( 'admin_menu', 'commoners_hide_application_users_menu', 999 );
     add_action( 'admin_menu', 'commoners_application_pre_approval_menu' );
     add_action( 'admin_menu', 'commoners_application_final_approval_menu' );
-    // add_action( 'admin_menu', 'add_mymenu' );
     add_action( 'admin_menu', 'commoners_settings_emails_register' );
     add_filter( 'user_row_actions', 'commoners_application_user_link', 10, 2 );
     // Filter applicant user page form approve/declines to hook in user profile
     // creation and notification email sending.
     add_action(
         'gform_after_submission',
-        'commoners_application_users_page_final_form_submit_handler',
+        'commoners_application_users_page_pre_form_submit_handler',
         10,
         2
     );
     add_action(
         'gform_after_submission',
-        'commoners_application_users_page_pre_form_submit_handler',
+        'commoners_application_users_page_final_form_submit_handler',
         10,
         2
     );

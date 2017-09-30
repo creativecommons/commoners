@@ -26,7 +26,7 @@ function commoners_vp_format_field ( $entry, $item ) {
         $html = '<p><strong>'
               . $item[ 0 ] . '</strong><br />'
               . commoners_vp_clean_string( $entry[ $item[ 1 ] ] )
-              . '<br />&nbsp;</p>';
+              . '</p>';
     }
     return $html;
 }
@@ -70,9 +70,9 @@ function commoners_vouching_form_institution_profile_text ( $applicant_id ) {
 }
 
 function commoners_vouching_form_applicant_profile_text ( $applicant_id ) {
-    if( commoners_member_is_individual( $applicant_id ) ) {
+    if( commoners_user_is_individual_applicant( $applicant_id ) ) {
         return commoners_vouching_form_individual_profile_text( $applicant_id );
-    } elseif( commoners_member_is_institution( $applicant_id ) ) {
+    } elseif( commoners_user_is_institution( $applicant_id ) ) {
         return commoners_vouching_form_institution_profile_text(
             $applicant_id
         );
@@ -96,9 +96,9 @@ function commoners_user_page_institution_profile_text ( $applicant_id ) {
 }
 
 function commoners_user_page_applicant_profile_text ( $applicant_id ) {
-    if( commoners_member_is_individual( $applicant_id ) ) {
+    if( commoners_user_is_individual_applicant( $applicant_id ) ) {
         return commoners_user_page_individual_profile_text( $applicant_id );
-    } elseif( commoners_member_is_institution( $applicant_id ) ) {
+    } elseif( commoners_user_is_institutional_applicant( $applicant_id ) ) {
         return commoners_user_page_institution_profile_text( $applicant_id );
     } else {
         return "<p>Error: newbie.</p>";

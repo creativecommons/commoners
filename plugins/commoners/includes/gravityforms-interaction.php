@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // to handle that feature.
 ////////////////////////////////////////////////////////////////////////////////
 
-// Application initial application fields
+// Application initial application forms
 
 define( 'COMMONERS_GF_AGREE_TO_TERMS', 'Agree To Terms' );
 define( 'COMMONERS_GF_SIGN_CHARTER', 'Sign The Charter' );
@@ -456,13 +456,11 @@ function commoners_registration_form_list_members ( $current_user ) {
 // how do I dynamically populate a gravityforms select using javascript ?
 
 function commoners_set_vouchers_options ( $form ) {
-    if( $form[ 'title' ] != COMMONERS_GF_CHOOSE_VOUCHERS ) {
-        return;
-    }
-    $current_member = get_current_user_id();
-    $members = commoners_registration_form_list_members( $current_member );
-    ?>
-    <script type="text/javascript">
+    if( $form[ 'title' ] == COMMONERS_GF_CHOOSE_VOUCHERS ) {
+        $current_member = get_current_user_id();
+        $members = commoners_registration_form_list_members( $current_member );
+        ?>
+        <script type="text/javascript">
         var commoners_members = <?php echo json_encode( $members ); ?>;
         jQuery(document).ready(function(){
             gform.addFilter('gform_chosen_options', function(options, element){
@@ -484,7 +482,8 @@ function commoners_set_vouchers_options ( $form ) {
                 return options;
             });
         });
-    </script>
-    <?php
+        </script>
+        <?php
+    }
     return $form;
 }
