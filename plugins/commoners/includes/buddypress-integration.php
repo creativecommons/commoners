@@ -423,7 +423,6 @@ function _bp_admin_bar_remove_some_menu_items () {
 }
 
 function commoners_profile_access_control () {
-    commoners_user_level_set_applicant_new( 22 );
     if ( ! commoners_current_user_is_vouched() ) {
         if( IS_PROFILE_PAGE === true ) {
             wp_die( 'You will be able to edit your profile once your membership is approved' );

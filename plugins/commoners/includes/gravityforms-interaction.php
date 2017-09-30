@@ -413,39 +413,29 @@ function commoners_create_profile( $applicant_id ) {
 // Form field population
 ////////////////////////////////////////////////////////////////////////////////
 
-
-function commoners_registration_form_list_members ( $current_user ) {
-    global $wpdb;
-
-    // Format match string as SQL LIKE string
-    $to_match = "%$to_match%";
-
-    // Query the database for username matches. Note exclusion of admin.
-
-    $table_name = $wpdb->prefix . 'users';
-    $rows = $wpdb->get_results(
-        $wpdb->prepare(
-            "
-                 SELECT           ID, display_name
-                 FROM             $table_name
-                 WHERE            ID > 1
-                 AND              ID != $current_user
-                 ORDER BY         display_name
-                 DESC
-                ",
-            $to_match
+function commoners_get_individual_ids () {
+    $query = new BP_User_Query(
+        array(
+            'member_type' => 'individual-member'
         )
     );
+    $users = $query->results;
+    return $users;
+}
 
-    //FIXME: filter inactive users !!!
-    //FIXME: filter institutions!!!
+// This excludes the initial admin user (1) and the applicant from the list
 
+function commoners_registration_form_list_members ( $current_user_id ) {
+    $individuals = commoners_get_individual_ids();
     $members = array();
-    foreach ( $rows as $row ){
-        $members[] = array(
-            $row->ID,
-            $row->display_name
-        );
+    foreach ( $individuals as $individual ){
+        if ( ( $individuals->ID != 1 ) // Exclude admin
+            && ( $individuals->ID != $current_user_id ) ) { // Exclude applicant
+            $members[] = array(
+                $individual->ID,
+                $individual->display_name
+            );
+        }
     }
     return $members;
 }
