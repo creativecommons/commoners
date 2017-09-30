@@ -100,7 +100,7 @@ add_filter( 'bp_core_get_userid_from_nicename', '_bp_core_get_userid', 10, 2 );
 add_filter( 'bp_xprofile_get_groups', 'commoners_filter_role_groups' );
 
 // Must be called after commoners_vouching_add_tabs
-add_action( 'bp_setup_nav', 'commons_not_logged_in_ui', 150 );
+add_action( 'bp_setup_nav', 'commoners_not_logged_in_ui', 150 );
 
 // Don't let unvouched users set their profiles
 
@@ -165,16 +165,20 @@ add_shortcode(
 // Add admin settings, menus etc.
 ////////////////////////////////////////////////////////////////////////////////
 
+// Remove various BuddyPress settings in various circumstances
+// This isn't in admin as we need to hide it from the bar on every page on site
+add_action(
+    'wp_before_admin_bar_render',
+    '_bp_admin_bar_remove_some_menu_items'
+);
+
 if ( is_admin() ){
     // Remove various BuddyPress settings in various circumstances
-        add_action(
-        'wp_before_admin_bar_render',
-        '_bp_admin_bar_remove_some_menu_items'
-    );
     add_action(
         'bp_members_admin_user_metaboxes',
         'commoners_remove_member_type_metabox'
     );
+    add_action( 'admin_init', 'commoners_profile_access_control' );
     add_action( 'admin_menu', 'commoners_application_users_menu' );
     add_action( 'admin_menu', 'commoners_hide_application_users_menu', 999 );
     add_action( 'admin_menu', 'commoners_application_pre_approval_menu' );

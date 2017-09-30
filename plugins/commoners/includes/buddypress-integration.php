@@ -72,7 +72,7 @@ function commoners_current_user_is_vouched () {
     $user = wp_get_current_user();
     // Check that the user is logged in
     if ( $user->exists() ) {
-        $vouched = commoners_user_is_vouched( $user );
+        $vouched = commoners_user_is_vouched( $user->ID );
     }
     return $vouched;
 }
@@ -278,7 +278,7 @@ function commoners_remove_member_type_metabox() {
 
 // Hide core UI if the user is not logged in
 
-function commons_not_logged_in_ui () {
+function commoners_not_logged_in_ui () {
     global $bp;
     if (! is_user_logged_in() ) {
         bp_core_remove_nav_item( 'activity' );
@@ -317,7 +317,7 @@ function commoners_filter_role_groups ( $groups ) {
 
 function commoners_user_level_set_applicant_new( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
-    $user->set_role( COMMONERS_USER_ROLE_APPLICANT_NEW );
+    $user->set_role( COMMONERS_USER_ROLE_NEW );
 }
 
 function commoners_user_level_set_member_individual( $user_id ) {
@@ -378,13 +378,13 @@ function commoners_user_level_set_rejected ( $user_id ) {
 // This is called by WordPress when the user signs up to the site
 
 function commoners_user_level_register( $user_id ) {
+    // We could just set the default user type option...
+    commoners_user_level_set_applicant_new( $user_id );
     $userdata = get_userdata( $user_id );
-    if ( $user ) {
+    if ( $userdata ) {
         $email = $userdata->user_email;
         if ( commoners_vouching_should_autovouch( $email ) ) {
             commoners_vouching_user_level_set_autovouched ( $user_id );
-        } else {
-            commoners_user_level_set_applicant_new( $user_id );
         }
     }
 }
@@ -415,22 +415,20 @@ function _bp_set_default_component () {
 
 function _bp_admin_bar_remove_some_menu_items () {
     global $wp_admin_bar;
-    $wp_admin_bar->remove_node(
-        'wp-admin-bar-my-account-settings'
-    );
     if ( ! commoners_current_user_is_vouched() ) {
-        $wp_admin_bar->remove_node(
-            'wp-admin-bar-edit-profile'
-        );
-        $wp_admin_bar->remove_node(
-            'wp-admin-bar-my-account-xprofile-edit'
-        );
-        $wp_admin_bar->remove_node(
-            'wp-admin-bar-my-account-xprofile-change-avatar'
-        );
-        $wp_admin_bar->remove_node(
-            'wp-admin-bar-my-account-xprofile-change-cover'
-        );
+        // Do not allow un-approved members to edit their WordPress profile
+        $wp_admin_bar->remove_menu( 'edit-profile', 'user-actions');
+        $wp_admin_bar->remove_node('my-account');
+    }
+}
+
+function commoners_profile_access_control () {
+    commoners_user_level_set_applicant_new( 22 );
+    if ( ! commoners_current_user_is_vouched() ) {
+        if( IS_PROFILE_PAGE === true ) {
+            wp_die( 'You will be able to edit your profile once your membership is approved' );
+        }
+        remove_menu_page( 'profile.php' );
     }
 }
 

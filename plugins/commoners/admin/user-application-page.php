@@ -69,7 +69,6 @@ function commoners_application_users_page_pre_form_submit_handler ( $entry,
     if ( $form[ 'title' ] == COMMONERS_GF_PRE_APPROVAL ) {
         $applicant_id = $entry[ COMMONERS_GF_PRE_APPROVAL_APPLICANT_ID ];
         $stage = commoners_registration_user_get_stage( $applicant_id);
-        error_log($stage);
         if ( $stage != COMMONERS_APPLICATION_STATE_RECEIVED ) {
             echo 'User already pre-approved';
             return;
