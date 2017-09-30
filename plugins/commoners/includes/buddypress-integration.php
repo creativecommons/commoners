@@ -58,7 +58,8 @@ function commoners_add_roles_on_plugin_activation () {
 
 function commoners_user_is_new ( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
-    return in_array( COMMONERS_USER_ROLE_NEW, $user->roles );
+    return ($user->roles == null)
+           || in_array( COMMONERS_USER_ROLE_NEW, $user->roles );
 }
 
 function commoners_user_is_vouched( $user_id ) {
@@ -79,7 +80,7 @@ function commoners_current_user_is_vouched () {
 function commoners_current_user_level () {
     if ( is_user_logged_in() ) {
         $user = wp_get_current_user();
-        if ( $commoners_user_is_vouched( $user )) {
+        if ( commoners_user_is_vouched( $user )) {
             $level = 'LOGGED_IN_AND_VOUCHED';
         }else {
             $level = 'LOGGED_IN';
@@ -260,6 +261,18 @@ function commoners_profile_group_id_by_name ( $name ) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// No, users should not be able to change their own member type, that's silly
+////////////////////////////////////////////////////////////////////////////////
+
+function commoners_remove_member_type_metabox() {
+	remove_meta_box(
+        'bp_members_admin_member_type',
+        get_current_screen()->id,
+        'side'
+    );
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // BuddyPress UI display control by user level
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -285,7 +298,7 @@ function commoners_filter_role_groups ( $groups ) {
     } else {
         // Otherwise, users can access only what their level permits
         global $commoners_access_levels;
-        $level = commoners_user_level( $user );
+        $level = commoners_current_user_level();
         $userGroups = $commoners_access_levels[ $level ];
         $accessible = [];
         // TODO: Cache group IDs and check these instead

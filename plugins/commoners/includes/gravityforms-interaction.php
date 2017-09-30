@@ -414,7 +414,7 @@ function commoners_create_profile( $applicant_id ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 
-function commoners_registration_form_list_members () {
+function commoners_registration_form_list_members ( $current_user ) {
     global $wpdb;
 
     // Format match string as SQL LIKE string
@@ -429,6 +429,7 @@ function commoners_registration_form_list_members () {
                  SELECT           ID, display_name
                  FROM             $table_name
                  WHERE            ID > 1
+                 AND              ID != $current_user
                  ORDER BY         display_name
                  DESC
                 ",
@@ -451,24 +452,39 @@ function commoners_registration_form_list_members () {
 
 // Why do it like this? To save download space rather than send thousands
 // of options for each of several selects.
+// Search terms:
+// how do I dynamically populate a gravityforms select using javascript ?
 
-function commoners_registration_form_populate_vouchers () {
-    $members = commoners_registration_form_list_members();
+function commoners_set_vouchers_options ( $form ) {
+    if( $form[ 'title' ] != COMMONERS_GF_CHOOSE_VOUCHERS ) {
+        return;
+    }
+    $current_member = get_current_user_id();
+    $members = commoners_registration_form_list_members( $current_member );
     ?>
-    <script>
-    var commoners_members = <?php echo json_encode( $members ); ?>;
-    jQuery(document).ready(function () {
-      jQuery('select').each(function () {
-      var select = jQuery(this);
-      select.empty();
-      select.append(jQuery('<option disabled selected value>Select Voucher</option>'));
-      for (var i = 0; i < commoners_members.length; i++) {
-        select.append(jQuery("<option></option>")
-              .attr("value", commoners_members[i][0])
-              .text(commoners_members[i][1]));
-        }
-      });
-    });
+    <script type="text/javascript">
+        var commoners_members = <?php echo json_encode( $members ); ?>;
+        jQuery(document).ready(function(){
+            gform.addFilter('gform_chosen_options', function(options, element){
+                var new_options = commoners_members.forEach(function(member){
+                    console.log(jQuery(element));
+                    return jQuery("<option></option>")
+                        .attr("value", member[0])
+                        .text(member[1]);
+                });
+                var select = jQuery(element);
+                //FIXME: We should remove everything except the first element
+                select.empty();
+                select.append(jQuery("<option disabled selected value>Select Voucher</option>"));
+                for (var i = 0; i < commoners_members.length; i++) {
+                    select.append(jQuery("<option></option>")
+                                  .attr("value", commoners_members[i][0])
+                                  .text(commoners_members[i][1]));
+                }
+                return options;
+            });
+        });
     </script>
     <?php
+    return $form;
 }

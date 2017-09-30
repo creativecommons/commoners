@@ -27,7 +27,12 @@ function commoners_registration_institution_post_last_form () {
 
 function commoners_registration_institution_form_submit_handler ( $entry,
                                                                  $form ) {
-    switch( $form[ 'title' ] ) {
+    if ( ! commoners_user_is_institutional_applicant(
+        $entry[ 'created_by' ]
+    ) ) {
+        return;
+    }
+    /*    switch( $form[ 'title' ] ) {
     case COMMONERS_GF_AGREE_TO_TERMS:
         commoners_registration_current_user_set_stage (
             COMMONERS_APPLICATION_STATE_DETAILS
@@ -46,7 +51,7 @@ function commoners_registration_institution_form_submit_handler ( $entry,
         // the initial data entry stage!
         commoners_registration_post_last_form ();
         break;
-    }
+        }*/
 }
 
 function commoners_registration_institution_shortcode_render ( $atts ) {
@@ -63,8 +68,8 @@ function commoners_registration_institution_shortcode_render ( $atts ) {
         return;
     }
     //FIXME: Model update code in the view
-    if ( ! commoners_user_is_institution_applicant ( $user_id ) ) {
-        commoners_user_set_institution_applicant ( $user_id );
+    if ( ! commoners_user_is_institutional_applicant ( $user->ID ) ) {
+        commoners_user_set_institutional_applicant ( $user->ID );
     }
     $state = $user->get( COMMONERS_APPLICATION_STATE );
     switch ( $state ) {
@@ -79,7 +84,6 @@ function commoners_registration_institution_shortcode_render ( $atts ) {
         break;
     case COMMONERS_APPLICATION_STATE_VOUCHERS:
         gravity_form( COMMONERS_GF_CHOOSE_VOUCHERS, false, false );
-        commoners_registration_form_populate_vouchers();
         break;
     case COMMONERS_APPLICATION_STATE_RECEIVED:
         echo _( '<h2>Thank you for applying to join the Creative Commons Global Network</h2></p><p>Your application has been received.</p><p>It will take several days to be reviewed.</p><p>If you have any questions you can <a href="/contact/">contact us.</a></p>' );

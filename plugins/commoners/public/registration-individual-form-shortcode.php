@@ -27,13 +27,21 @@ function commoners_registration_individual_post_last_form () {
 
 function commoners_registration_individual_form_submit_handler ( $entry,
                                                                  $form ) {
+    if ( ! commoners_user_is_individual_applicant( $entry[ 'created_by' ] ) ) {
+        return;
+    }
     switch( $form[ 'title' ] ) {
     case COMMONERS_GF_AGREE_TO_TERMS:
+        commoners_registration_current_user_set_stage (
+            COMMONERS_APPLICATION_STATE_CHARTER
+        );
+        break;
+    case COMMONERS_GF_SIGN_CHARTER:
         commoners_registration_current_user_set_stage (
             COMMONERS_APPLICATION_STATE_DETAILS
         );
         break;
-    case COMMONERS_GF_APPLICANT_DETAILS:
+    case COMMONERS_GF_INDIVIDUAL_DETAILS:
         commoners_registration_current_user_set_stage (
             COMMONERS_APPLICATION_STATE_VOUCHERS
         );
@@ -44,7 +52,7 @@ function commoners_registration_individual_form_submit_handler ( $entry,
         );
         // Move if this is no longer the last form the applicant completes in
         // the initial data entry stage!
-        commoners_registration_post_last_form ();
+        commoners_registration_individual_post_last_form ();
         break;
     }
 }
@@ -57,14 +65,15 @@ function commoners_registration_individual_shortcode_render ( $atts ) {
         exit;
     }
     $user = wp_get_current_user();
-    if ( commoners_user_is_institution_applicant ( $user->ID ) ) {
+    if ( commoners_user_is_institutional_applicant ( $user->ID ) ) {
         echo _( '<p>You are already applying for membership on behalf of an Instituion.</p>' );
         echo _( '<p>If this is an error, <a href="/contact/">contact us.</a></p>' );
         return;
     }
     //FIXME: Model update code in the view
-    if ( ! commoners_user_is_individual_applicant ( $user_id ) ) {
-        commoners_user_set_individual_applicant ( $user_id );
+    if ( ! commoners_user_is_individual_applicant ( $user->ID ) ) {
+        commoners_user_set_individual_applicant ( $user->ID );
+
     }
     $state = $user->get( COMMONERS_APPLICATION_STATE );
     switch ( $state ) {
@@ -79,7 +88,6 @@ function commoners_registration_individual_shortcode_render ( $atts ) {
         break;
     case COMMONERS_APPLICATION_STATE_VOUCHERS:
         gravity_form( COMMONERS_GF_CHOOSE_VOUCHERS, false, false );
-        commoners_registration_form_populate_vouchers();
         break;
     case COMMONERS_APPLICATION_STATE_RECEIVED:
         echo _( '<h2>Thank you for applying to join the Creative Commons Global Network</h2></p><p>Your application has been received.</p><p>It will take several days to be reviewed.</p><p>If you have any questions you can <a href="/contact/">contact us.</a></p>' );

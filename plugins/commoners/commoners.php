@@ -111,6 +111,15 @@ add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 // Registration Forms
 ////////////////////////////////////////////////////////////////////////////////
 
+// Populate voucher selects
+
+add_action(
+    'gform_register_init_scripts',
+    'commoners_registration_form_populate_vouchers'
+);
+
+add_action("gform_pre_render", "commoners_set_vouchers_options");
+
 // The shortcode to display the sign-up workflow forms.
 // The exact form (or other content) displayed depends on the user's
 // application state/stage.
@@ -127,7 +136,14 @@ add_filter( 'gform_validation', 'commoners_vouching_form_post_validate' );
 
 add_action(
     'gform_after_submission',
-    'commoners_registration_form_submit_handler',
+    'commoners_registration_individual_form_submit_handler',
+    10,
+    2
+);
+
+add_action(
+    'gform_after_submission',
+    'commoners_registration_institution_form_submit_handler',
     10,
     2
 );
@@ -159,6 +175,10 @@ if ( is_admin() ){
     add_action(
         'wp_before_admin_bar_render',
         '_bp_admin_bar_remove_some_menu_items'
+    );
+    add_action(
+        'bp_members_admin_user_metaboxes',
+        'commoners_remove_member_type_metabox'
     );
     add_action( 'admin_menu', 'commoners_application_users_menu' );
     add_action( 'admin_menu', 'commoners_hide_application_users_menu', 999 );

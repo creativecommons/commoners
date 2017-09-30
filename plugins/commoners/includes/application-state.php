@@ -44,11 +44,13 @@ function commoners_user_set_institutional_applicant ( $user_id ) {
 }
 
 function commoners_user_is_individual_applicant ( $user_id ) {
-    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles );
+    return commoners_registration_user_get_application_type( $user_id )
+        == COMMONERS_APPLICATION_INDIVIDUAL;
 }
 
 function commoners_user_is_institutional_applicant ( $user_id ) {
-    return in_array( COMMONERS_USER_ROLE_APPLICANT_INDIVIDUAL, $user->roles );
+    return commoners_registration_user_get_application_type( $user_id )
+        == COMMONERS_APPLICATION_INSTITUTIONAL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
