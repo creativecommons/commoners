@@ -92,14 +92,27 @@ add_filter(
 
 add_action( 'bp_register_member_types', 'commoners_register_member_types' );
 
+// Profile fields
+
+register_activation_hook(
+    __FILE__,
+    'commoners_create_profile_fields_individual'
+);
+
+register_activation_hook(
+    __FILE__,
+    'commoners_create_profile_fields_institution'
+);
+
 add_action(
     'bp_get_activity_action_pre_meta',
     '_bp_get_activity_action_pre_meta'
 );
 add_filter( 'bp_core_get_userid_from_nicename', '_bp_core_get_userid', 10, 2 );
-add_filter( 'bp_xprofile_get_groups', 'commoners_filter_role_groups' );
 
-// Must be called after commoners_vouching_add_tabs
+//FIXME: This hides them from the admin. So no.
+//add_filter( 'bp_xprofile_get_groups', 'commoners_filter_role_groups' );
+
 add_action( 'bp_setup_nav', 'commoners_not_logged_in_ui', 150 );
 
 // Don't let unvouched users set their profiles

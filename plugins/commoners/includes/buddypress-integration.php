@@ -96,7 +96,7 @@ function commoners_current_user_level () {
 // Buddypress member types
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_register_member_types() {
+function commoners_register_member_types () {
     // Register Parent type member with Directory
     bp_register_member_type( 'individual-member', array(
         'labels' => array(
@@ -132,13 +132,45 @@ function commoners_member_is_institution ( $user_id ) {
 DEFINE( 'COMMONERS_PROFILE_FIELD_GROUP_INDIVIDUAL', 'Individual Member' );
 DEFINE( 'COMMONERS_PROFILE_FIELD_GROUP_INSTITUTION', 'Institutional Member' );
 
+function commoners_profile_group_id_by_name ( $name ) {
+    // Not cached, but bp_profile_get_field_groups fails for some reason
+    $groups = bp_xprofile_get_groups();
+    $id = false;
+    foreach ( $groups as $group ) {
+        if ($group->name == $name) {
+            $id = $group->id;
+        }
+    }
+    return $id;
+}
+
+// This will update the group if it exists
+
+function commoners_ensure_profile_group ( $name, $desc ) {
+    $group_id = xprofile_insert_field_group(
+        array(
+            'field_group_id' => commoners_profile_group_id_by_name( $name ),
+            'name' => $name,
+            'description' => $desc
+        )
+    );
+    return $group_id;
+}
+
+// FIXME: check if field exists, update if so
+
 function commoners_buddypress_member_field ($group, $name, $desc, $order,
                                             $required = true,
                                             $type = 'textbox',
-                                            $member_types = false ) {
+                                            $member_type = false ) {
+    $existing_id = xprofile_get_field_id_from_name( $name );
+    if ( $existing_id === false ) {
+        $existing_id = null;
+    }
     $id = xprofile_insert_field(
         array (
             'field_group_id'  => $group,
+            'field_id'        => $existing_id,
             'name'            => $name,
             'description'     => $desc,
             'field_order'     => $order,
@@ -146,118 +178,106 @@ function commoners_buddypress_member_field ($group, $name, $desc, $order,
             'type'            => $type
         )
     );
-    if ( $id && $member_types ) {
-        $field = new BP_XProfile_field( $id );
-        $field->set_member_types( $member_types );
+    if ( $id && $member_type ) {
+        //FIXME: Update to handle multiple member types
+        // This works, BP_XProfile_Field::set_member_types doesn't
+        bp_xprofile_update_meta( $id, 'field', 'member_type', $member_type );
     }
     return $id;
 }
 
 function commoners_create_profile_fields_individual () {
-    $individual_id = xprofile_insert_field_group(
-        array(
-            'name' => COMMONERS_PROFILE_FIELD_GROUP_INDIVIDUAL
-        )
+    $individual_id = commoners_ensure_profile_group(
+        COMMONERS_PROFILE_FIELD_GROUP_INDIVIDUAL,
+        'Individual Member Profile Fields'
     );
-    $bio_id = xprofile_insert_field(
-        array (
-            'field_group_id'  => $individual_id,
-            'name'            => 'Bio',
-            'description'     => 'A brief biography for the member',
-            'field_order'     => 1,
-            'is_required'     => false,
-            'type'            => 'textbox'
-        )
+    commoners_buddypress_member_field(
+        $individual_id,
+        'Biography',
+        'A brief biography for the member',
+        1,
+        false,
+        'textbox',
+        'individual-member'
     );
-    xprofile_insert_field(
-        array (
-            'field_group_id'  => $individual_id,
-            'name'            => 'Languages',
-            'description'     => 'Languages the member can speak',
-            'field_order'     => 2,
-            'is_required'     => false,
-            'type'            => 'textbox'
-        )
+       commoners_buddypress_member_field(
+         $individual_id,
+         'Languages',
+         'Languages the member can speak',
+         2,
+         false,
+         'textbox',
+         'individual-member'
     );
-    xprofile_insert_field(
-        array (
-            'field_group_id'  => $individual_id,
-            'name'            => 'Location',
-            'description'     => 'The country the member is based in',
-            'field_order'     => 3,
-            'is_required'     => false,
-            'type'            => 'textbox'
-        )
+    commoners_buddypress_member_field(
+         $individual_id,
+         'Languages',
+         'Languages the member can speak',
+         2,
+         false,
+         'individual-member'
     );
-    xprofile_insert_field(
-        array (
-            'field_group_id'  => $individual_id,
-            'name'            => 'Links',
-            'description'     => 'Links to the user\'s publicly shareable web sites, social media profiles etc.',
-            'field_order'     => 4,
-            'is_required'     => false,
-            'type'            => 'textbox'
-        )
+    commoners_buddypress_member_field(
+        $individual_id,
+        'Location',
+        'The country the member is based in',
+        3,
+        false,
+        'textbox',
+        'individual-member'
+    );
+    commoners_buddypress_member_field(
+        $individual_id,
+        'Links',
+        'Links to the user\'s publicly shareable web sites, social media profiles etc.',
+        4,
+        false,
+        'textbox',
+        'individual-member'
     );
 }
 
 function commoners_create_profile_fields_institution () {
-    $institution_id = xprofile_insert_field_group(
-        array(
-            'name' => COMMONERS_PROFILE_FIELD_GROUP_INSTITUTION
-        )
+    $institution_id = commoners_ensure_profile_group(
+        COMMONERS_PROFILE_FIELD_GROUP_INSTITUTION,
+        'Institutional Member Profile Fields'
     );
-    xprofile_insert_field(
-        array (
-            'field_group_id'  => $institution_id,
-            'name'            => 'Website',
-            'description'     => 'The URL of the organization\'s web site',
-            'field_order'     => 1,
-            'is_required'     => true,
-            'type'            => 'textbox'
-        )
+    commoners_buddypress_member_field(
+        $institution_id,
+        'Website',
+        'The URL of the organization\'s web site',
+        1,
+        true,
+        'textbox',
+        'institutional-member'
     );
-    xprofile_insert_field(
-        array (
-            'field_group_id'  => $institution_id,
-            'name'            => 'About',
-            'description'     => 'A brief description of the organization',
-            'field_order'     => 2,
-            'is_required'     => true,
-            'type'            => 'textbox'
-        )
+    commoners_buddypress_member_field(
+        $institution_id,
+        'About',
+        'A brief description of the organization',
+        2,
+        true,
+        'textbox',
+        'institutional-member'
     );
-    xprofile_insert_field(
-        array (
-            'field_group_id'  => $institution_id,
-            'name'            => 'Representative',
-            'description'     => 'The person to contact at the organization about Creative Commons Global Network-related matters',
-            'field_order'     => 3,
-            'is_required'     => true,
-            'type'            => 'textbox'
-        )
+    commoners_buddypress_member_field(
+        $institution_id,
+        'Representative',
+        'The person to contact at the organization about Creative Commons Global Network-related matters',
+        3,
+        true,
+        'textbox',
+        'institutional-member'
     );
-    xprofile_insert_field(
-        array (
-            'field_group_id'  => $institution_id,
-            'name'            => 'Contact',
-            'description'     => 'An email address or other means of getting in touch with the organization\'s representative',
-            'field_order'     => 4,
-            'is_required'     => true,
-            'type'            => 'textbox'
-        )
+    commoners_buddypress_member_field(
+        $institution_id,
+        'Contact',
+        'An email address or other means of getting in touch with the organization\'s representative',
+        4,
+        true,
+        'textbox',
+        'institutional-member'
     );
-}
-
-function commoners_profile_group_id_by_name ( $name ) {
-    $groups = bp_profile_get_field_groups();
-    $id = false;
-    foreach ( $groups as $group ) {
-        if ($group[ 'name' ] == $name) {
-            $id = $group[ 'id' ];
-        }
-    }
-    return $id;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
