@@ -386,13 +386,10 @@ function commoners_application_vouches_counts ( $applicant_id ) {
 // User profile creation based on GravityForms information
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_create_profile( $applicant_id ) {
-    if ( $applicant_id == 0 ) {
-        echo 'Could not get user to create BuddyPress profile for.';
-    }
-    $details = commoners_application_details ( $applicant_id );
+function commoners_create_profile_individual( $applicant_id ) {
+    $details = commoners_details_individual_form_entry ( $applicant_id );
     xprofile_set_field_data(
-        'Short Bio',
+        'Bio',
         $applicant_id,
         $details[ COMMONERS_GF_DETAILS_BIO ]
     );
@@ -402,11 +399,31 @@ function commoners_create_profile( $applicant_id ) {
         $details[ COMMONERS_GF_DETAILS_LOCATION ]
     );
     xprofile_set_field_data(
-        'Short Bio',
+        'Languages',
         $applicant_id,
         $details[ COMMONERS_GF_DETAILS_LANGUAGES ]
     );
-    // FINISH ME
+    xprofile_set_field_data(
+        'Links',
+        $applicant_id,
+        $details[ COMMONERS_GF_DETAILS_SOCIAL_MEDIA_URLS ]
+    );
+    //FIXME: avatar - COMMONERS_GF_DETALS_AVATAR_FILE
+    //FIXME: user name?
+}
+
+function commoners_create_profile_institutional( $applicant_id ) {
+    //IMPLEMENTME
+}
+
+function commoners_create_profile( $applicant_id ) {
+    if( commoners_user_is_individual_applicant( $applicant_id ) ) {
+        commoners_create_profile_individual( $applicant_id );
+    } elseif( commoners_user_is_institutional_applicant( $applicant_id ) ) {
+        commoners_create_profile_institutional( $applicant_id );
+    } else {
+        wp_die('Not an applicant');
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -193,29 +193,21 @@ function commoners_create_profile_fields_individual () {
     );
     commoners_buddypress_member_field(
         $individual_id,
-        'Biography',
+        'Bio',
         'A brief biography for the member',
         1,
         false,
         'textbox',
         'individual-member'
     );
-       commoners_buddypress_member_field(
-         $individual_id,
-         'Languages',
-         'Languages the member can speak',
-         2,
-         false,
-         'textbox',
-         'individual-member'
-    );
     commoners_buddypress_member_field(
-         $individual_id,
-         'Languages',
-         'Languages the member can speak',
-         2,
-         false,
-         'individual-member'
+        $individual_id,
+        'Languages',
+        'Languages the member can speak',
+        2,
+        false,
+        'textbox',
+        'individual-member'
     );
     commoners_buddypress_member_field(
         $individual_id,
