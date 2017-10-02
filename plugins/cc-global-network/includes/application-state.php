@@ -164,7 +164,7 @@ function ccgn_applicants_of_type_with_state ( $state, $type ) {
                 ),
                 array(
                     'key' => CCGN_APPLICATION_TYPE,
-                    'value' => $state,
+                    'value' => $type,
                     'compare' => '='
                 ),
             )

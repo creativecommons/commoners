@@ -223,7 +223,7 @@ function ccgn_application_users_page () {
 
 function ccgn_application_user_application_page_url( $user_id ) {
     return admin_url(
-        'users.php?page=ccgn-global-network-membership&user_id='
+        'users.php?page=global-network-membership&user_id='
         . $user_id
     );
 }
@@ -236,7 +236,7 @@ function ccgn_application_users_menu () {
     add_users_page(
         'Global Network Membership',
         // No menu title, as we don't want to show up in the sidebar
-        'Hello',
+        '',
         edit_users,
         'global-network-membership',
         'ccgn_application_users_page'
