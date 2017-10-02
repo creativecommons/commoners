@@ -17,6 +17,7 @@ function ccgn_settings_emails_received_subject () {
     $options = get_option( 'ccgn-email-received' );
     ?>
     <input type="text" name="ccgn-email-received[subject]"
+      class="large-text"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
@@ -25,6 +26,7 @@ function ccgn_settings_emails_received_message () {
     $options = get_option( 'ccgn-email-received' );
     ?>
     <textarea name="ccgn-email-received[message]"
+      rows="12" cols="64" class="large-text"
       ><?php echo $options['message']; ?></textarea>
     <?php
 }
@@ -33,6 +35,7 @@ function ccgn_settings_emails_vouch_request_subject () {
     $options = get_option( 'ccgn-email-vouch-request' );
     ?>
     <input type="text" name="ccgn-email-vouch-request[subject]"
+      class="large-text"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
@@ -41,6 +44,7 @@ function ccgn_settings_emails_vouch_request_message () {
     $options = get_option( 'ccgn-email-vouch-request' );
     ?>
     <textarea name="ccgn-email-vouch-request[message]"
+      rows="12" cols="64" class="large-text"
       ><?php echo $options['message']; ?></textarea>
     <?php
 }
@@ -49,6 +53,7 @@ function ccgn_settings_emails_approved_subject () {
     $options = get_option( 'ccgn-email-approved' );
     ?>
     <input type="text" name="ccgn-email-approved[subject]"
+      class="large-text"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
@@ -57,6 +62,7 @@ function ccgn_settings_emails_approved_message () {
     $options = get_option( 'ccgn-email-approved' );
     ?>
     <textarea name="ccgn-email-approved[message]"
+      rows="12" cols="64" class="large-text"
       ><?php echo $options['message']; ?></textarea>
     <?php
 }
@@ -65,6 +71,7 @@ function ccgn_settings_emails_rejected_subject () {
     $options = get_option( 'ccgn-email-rejected' );
     ?>
     <input type="text" name="ccgn-email-rejected[subject]"
+      class="large-text"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
@@ -73,6 +80,7 @@ function ccgn_settings_emails_rejected_message () {
     $options = get_option( 'ccgn-email-rejected' );
     ?>
     <textarea name="ccgn-email-rejected[message]"
+      rows="12" cols="64" class="large-text"
       ><?php echo $options['message']; ?></textarea>
     <?php
 }
