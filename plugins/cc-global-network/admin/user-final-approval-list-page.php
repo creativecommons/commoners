@@ -37,6 +37,8 @@ function ccgn_list_applications_for_final_approval () {
             . '">'
             . $user->user_nicename
             . '</a></td><td>'
+            . ccgn_applicant_type_desc( $user_id )
+            . '</td><td>'
             . ccgn_final_approval_status_for_vouch_counts( $counts )
             . '</td><td>'
             . $vouch_counts['yes']
@@ -55,6 +57,7 @@ function ccgn_application_final_approval_page () {
   <thead>
     <tr>
       <th>User</th>
+      <th>Type</th>
       <th>Vouching Status</th>
       <th>Vouches For</th>
       <th>Vouches Against</th>

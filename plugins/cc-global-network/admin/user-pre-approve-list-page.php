@@ -18,6 +18,8 @@ function ccgn_list_applications_for_pre_approval () {
             . '">'
             . $user->user_nicename
             . '</a></td><td>'
+            . ccgn_applicant_type_desc( $user_id )
+            . '</td><td>'
             . $vouchers_entry[ 'date_created' ]
             .'</td></tr>';
     }
@@ -28,7 +30,9 @@ function ccgn_application_pre_approval_page () {
 <h1>Applicants for Pre Approval</h1>
 <table class="ccgn-approval-table">
   <thead>
-    <tr><th>User</th>
+    <tr>
+      <th>User</th>
+      <th>Type</th>
       <th>Application date</th>
     </tr>
   </thead>

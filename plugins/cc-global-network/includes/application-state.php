@@ -53,6 +53,17 @@ function ccgn_user_is_institutional_applicant ( $user_id ) {
         == CCGN_APPLICATION_INSTITUTIONAL;
 }
 
+
+function ccgn_applicant_type_desc ( $user_id ) {
+    $type = 'Unknown';
+    if ( ccgn_user_is_individual_applicant( $user_id ) ) {
+        $type = 'Individual';
+    } elseif ( ccgn_user_is_institutional_applicant( $user_id ) ) {
+        $type = 'Insitutution';
+    }
+    return $type;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Application state (workflow stage)
 ////////////////////////////////////////////////////////////////////////////////
