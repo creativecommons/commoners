@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_registration_email_sub($key, $value, $text) {
+function ccgn_registration_email_sub($key, $value, $text) {
     return str_replace(
         "*|${key}|*",
         $value,
@@ -14,19 +14,19 @@ function commoners_registration_email_sub($key, $value, $text) {
     );
 }
 
-function commoners_registration_email_sub_names($applicant_name, $applicant_id,
+function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
                                                 $voucher_name, $text) {
-    $result = commoners_registration_email_sub(
+    $result = ccgn_registration_email_sub(
         'APPLICANT_NAME',
         $applicant_name,
         $text
     );
-    $result = commoners_registration_email_sub(
+    $result = ccgn_registration_email_sub(
         'APPLICANT_ID',
         $applicant_id,
         $result
     );
-    $result = commoners_registration_email_sub(
+    $result = ccgn_registration_email_sub(
         'VOUCHER_NAME',
         $voucher_name,
         $result
@@ -34,16 +34,16 @@ function commoners_registration_email_sub_names($applicant_name, $applicant_id,
     return $result;
 }
 
-function commoners_registration_email( $applicant_name, $applicant_id,
+function ccgn_registration_email( $applicant_name, $applicant_id,
                                        $voucher_name, $to_address,
                                        $subject, $message ) {
-    $subject_substituted = commoners_registration_email_sub_names(
+    $subject_substituted = ccgn_registration_email_sub_names(
         $applicant_name,
         $applicant_id,
         $voucher_name,
         $subject
     );
-    $message_substituted = commoners_registration_email_sub_names(
+    $message_substituted = ccgn_registration_email_sub_names(
         $applicant_name,
         $applicant_id,
         $voucher_name,
@@ -56,13 +56,13 @@ function commoners_registration_email( $applicant_name, $applicant_id,
     );
 }
 
-function commoners_registration_email_to_applicant ( $applicant_id,
+function ccgn_registration_email_to_applicant ( $applicant_id,
                                                      $email_option ) {
     $applicant = get_user_by( 'ID', $applicant_id );
     $options = get_option( $email_option );
     $subject = $options[ 'subject' ];
     $message = $options[ 'message' ];
-    commoners_registration_email(
+    ccgn_registration_email(
         $applicant->user_nicename,
         $applicant->ID,
         '',
@@ -72,7 +72,7 @@ function commoners_registration_email_to_applicant ( $applicant_id,
     );
 }
 
-function commoners_registration_email_to_voucher ( $applicant_id,
+function ccgn_registration_email_to_voucher ( $applicant_id,
                                                    $voucher_id,
                                                    $email_option ) {
     $applicant = get_user_by( 'ID', $applicant_id );
@@ -80,7 +80,7 @@ function commoners_registration_email_to_voucher ( $applicant_id,
     $options = get_option( $email_option );
     $subject = $options[ 'subject' ];
     $message = $options[ 'message' ];
-    commoners_registration_email(
+    ccgn_registration_email(
         $applicant->user_nicename,
         $applicant->ID,
         $voucher->user_nicename,
@@ -90,32 +90,32 @@ function commoners_registration_email_to_voucher ( $applicant_id,
     );
 }
 
-function commoners_registration_email_application_received ( $applicant_id ) {
-    commoners_registration_email_to_applicant(
+function ccgn_registration_email_application_received ( $applicant_id ) {
+    ccgn_registration_email_to_applicant(
         $applicant_id,
-        'commoners-email-received'
+        'ccgn-email-received'
     );
 }
 
-function commoners_registration_email_application_approved ( $applicant_id ) {
-    commoners_registration_email_to_applicant(
+function ccgn_registration_email_application_approved ( $applicant_id ) {
+    ccgn_registration_email_to_applicant(
         $applicant_id,
-        'commoners-email-approved'
+        'ccgn-email-approved'
     );
 }
 
-function commoners_registration_email_application_rejected ( $applicant_id ) {
-    commoners_registration_email_to_applicant(
+function ccgn_registration_email_application_rejected ( $applicant_id ) {
+    ccgn_registration_email_to_applicant(
         $applicant_id,
-        'commoners-email-rejected'
+        'ccgn-email-rejected'
     );
 }
 
-function commoners_registration_email_vouching_request ( $applicant_id,
+function ccgn_registration_email_vouching_request ( $applicant_id,
                                                          $voucher_id ) {
-    commoners_registration_email_to_voucher(
+    ccgn_registration_email_to_voucher(
         $applicant_id,
         $voucher_id,
-        'commoners-email-vouch-request'
+        'ccgn-email-vouch-request'
     );
 }

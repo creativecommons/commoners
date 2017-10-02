@@ -6,24 +6,24 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Autovouching
 ////////////////////////////////////////////////////////////////////////////////
 
-define( 'COMMONERS_NUMBER_OF_VOUCHES_NEEDED', 2 );
+define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 2 );
 
-define( 'COMMONER_USER_IS_AUTOVOUCHED', 'commoners-user-autovouched' );
+define( 'COMMONERS_USER_IS_AUTOVOUCHED', 'ccgn-user-autovouched' );
 
 define(
-    'COMMONERS_AUTOVOUCH_EMAIL_DOMAINS',
+    'CCGN_AUTOVOUCH_EMAIL_DOMAINS',
     [
         'creativecommons.org'
     ]
 );
 
-function commoners_user_level_should_autovouch( $email ) {
+function ccgn_user_level_should_autovouch( $email ) {
     return
         // Make sure the explode won't give an Undefined Offset error
         (strpos( $email, '@') !== false)
         && in_array(
             explode( '@', $email )[1],
-            COMMONERS_AUTOVOUCH_EMAIL_DOMAINS
+            CCGN_AUTOVOUCH_EMAIL_DOMAINS
         );
 }
 
@@ -33,21 +33,21 @@ function commoners_user_level_should_autovouch( $email ) {
 
 // Unvouched users cannot create a profile and can only see limited profiles
 
-define( 'COMMONERS_USER_ROLE_NEW', 'new-user' );
+define( 'CCGN_USER_ROLE_NEW', 'new-user' );
 
 // Which Field Groups different levels of registration/vouching can see
 // Admin users are handled separately
 
-$commoners_access_levels = [
+$ccgn_access_levels = [
     'PUBLIC' => [],
     'LOGGED_IN' => [ 'Base' ],
     'LOGGED_IN_AND_VOUCHED' => [ 'Base', 'Profile Details' ],
     'ADMIN' => ['Base', 'Profile Details']
 ];
 
-function commoners_add_roles_on_plugin_activation () {
+function ccgn_add_roles_on_plugin_activation () {
     add_role(
-        COMMONERS_USER_ROLE_NEW,
+        CCGN_USER_ROLE_NEW,
         'New User',
         array(
             'read' => true,
@@ -56,31 +56,31 @@ function commoners_add_roles_on_plugin_activation () {
     );
 }
 
-function commoners_user_is_new ( $user_id ) {
+function ccgn_user_is_new ( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
     return ($user->roles == null)
-           || in_array( COMMONERS_USER_ROLE_NEW, $user->roles );
+           || in_array( CCGN_USER_ROLE_NEW, $user->roles );
 }
 
-function commoners_user_is_vouched( $user_id ) {
+function ccgn_user_is_vouched( $user_id ) {
     // To get past being new, you must be vouched
-    return ! commoners_user_is_new ( $user_id );
+    return ! ccgn_user_is_new ( $user_id );
 }
 
-function commoners_current_user_is_vouched () {
+function ccgn_current_user_is_vouched () {
     $vouched = false;
     $user = wp_get_current_user();
     // Check that the user is logged in
     if ( $user->exists() ) {
-        $vouched = commoners_user_is_vouched( $user->ID );
+        $vouched = ccgn_user_is_vouched( $user->ID );
     }
     return $vouched;
 }
 
-function commoners_current_user_level () {
+function ccgn_current_user_level () {
     if ( is_user_logged_in() ) {
         $user = wp_get_current_user();
-        if ( commoners_user_is_vouched( $user )) {
+        if ( ccgn_user_is_vouched( $user )) {
             $level = 'LOGGED_IN_AND_VOUCHED';
         }else {
             $level = 'LOGGED_IN';
@@ -96,7 +96,7 @@ function commoners_current_user_level () {
 // Buddypress member types
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_register_member_types () {
+function ccgn_register_member_types () {
     // Register Parent type member with Directory
     bp_register_member_type( 'individual-member', array(
         'labels' => array(
@@ -115,12 +115,12 @@ function commoners_register_member_types () {
     ));
 }
 
-function commoners_member_is_individual ( $user_id ) {
+function ccgn_member_is_individual ( $user_id ) {
     $type = bp_get_member_type( $user_id );
     return $type == 'individual-member';
 }
 
-function commoners_member_is_institution ( $user_id ) {
+function ccgn_member_is_institution ( $user_id ) {
     $type = bp_get_member_type( $user_id );
     return $type == 'institutional-member';
 }
@@ -129,10 +129,10 @@ function commoners_member_is_institution ( $user_id ) {
 // Buddypress fields for member type
 ////////////////////////////////////////////////////////////////////////////////
 
-DEFINE( 'COMMONERS_PROFILE_FIELD_GROUP_INDIVIDUAL', 'Individual Member' );
-DEFINE( 'COMMONERS_PROFILE_FIELD_GROUP_INSTITUTION', 'Institutional Member' );
+DEFINE( 'CCGN_PROFILE_FIELD_GROUP_INDIVIDUAL', 'Individual Member' );
+DEFINE( 'CCGN_PROFILE_FIELD_GROUP_INSTITUTION', 'Institutional Member' );
 
-function commoners_profile_group_id_by_name ( $name ) {
+function ccgn_profile_group_id_by_name ( $name ) {
     // Not cached, but bp_profile_get_field_groups fails for some reason
     $groups = bp_xprofile_get_groups();
     $id = false;
@@ -146,10 +146,10 @@ function commoners_profile_group_id_by_name ( $name ) {
 
 // This will update the group if it exists
 
-function commoners_ensure_profile_group ( $name, $desc ) {
+function ccgn_ensure_profile_group ( $name, $desc ) {
     $group_id = xprofile_insert_field_group(
         array(
-            'field_group_id' => commoners_profile_group_id_by_name( $name ),
+            'field_group_id' => ccgn_profile_group_id_by_name( $name ),
             'name' => $name,
             'description' => $desc
         )
@@ -159,7 +159,7 @@ function commoners_ensure_profile_group ( $name, $desc ) {
 
 // FIXME: check if field exists, update if so
 
-function commoners_buddypress_member_field ($group, $name, $desc, $order,
+function ccgn_buddypress_member_field ($group, $name, $desc, $order,
                                             $required = true,
                                             $type = 'textbox',
                                             $member_type = false ) {
@@ -186,12 +186,12 @@ function commoners_buddypress_member_field ($group, $name, $desc, $order,
     return $id;
 }
 
-function commoners_create_profile_fields_individual () {
-    $individual_id = commoners_ensure_profile_group(
-        COMMONERS_PROFILE_FIELD_GROUP_INDIVIDUAL,
+function ccgn_create_profile_fields_individual () {
+    $individual_id = ccgn_ensure_profile_group(
+        CCGN_PROFILE_FIELD_GROUP_INDIVIDUAL,
         'Individual Member Profile Fields'
     );
-    commoners_buddypress_member_field(
+    ccgn_buddypress_member_field(
         $individual_id,
         'Bio',
         'A brief biography for the member',
@@ -200,7 +200,7 @@ function commoners_create_profile_fields_individual () {
         'textbox',
         'individual-member'
     );
-    commoners_buddypress_member_field(
+    ccgn_buddypress_member_field(
         $individual_id,
         'Languages',
         'Languages the member can speak',
@@ -209,7 +209,7 @@ function commoners_create_profile_fields_individual () {
         'textbox',
         'individual-member'
     );
-    commoners_buddypress_member_field(
+    ccgn_buddypress_member_field(
         $individual_id,
         'Location',
         'The country the member is based in',
@@ -218,7 +218,7 @@ function commoners_create_profile_fields_individual () {
         'textbox',
         'individual-member'
     );
-    commoners_buddypress_member_field(
+    ccgn_buddypress_member_field(
         $individual_id,
         'Links',
         'Links to the user\'s publicly shareable web sites, social media profiles etc.',
@@ -229,12 +229,12 @@ function commoners_create_profile_fields_individual () {
     );
 }
 
-function commoners_create_profile_fields_institution () {
-    $institution_id = commoners_ensure_profile_group(
-        COMMONERS_PROFILE_FIELD_GROUP_INSTITUTION,
+function ccgn_create_profile_fields_institution () {
+    $institution_id = ccgn_ensure_profile_group(
+        CCGN_PROFILE_FIELD_GROUP_INSTITUTION,
         'Institutional Member Profile Fields'
     );
-    commoners_buddypress_member_field(
+    ccgn_buddypress_member_field(
         $institution_id,
         'Website',
         'The URL of the organization\'s web site',
@@ -243,7 +243,7 @@ function commoners_create_profile_fields_institution () {
         'textbox',
         'institutional-member'
     );
-    commoners_buddypress_member_field(
+    ccgn_buddypress_member_field(
         $institution_id,
         'About',
         'A brief description of the organization',
@@ -252,7 +252,7 @@ function commoners_create_profile_fields_institution () {
         'textbox',
         'institutional-member'
     );
-    commoners_buddypress_member_field(
+    ccgn_buddypress_member_field(
         $institution_id,
         'Representative',
         'The person to contact at the organization about Creative Commons Global Network-related matters',
@@ -261,7 +261,7 @@ function commoners_create_profile_fields_institution () {
         'textbox',
         'institutional-member'
     );
-    commoners_buddypress_member_field(
+    ccgn_buddypress_member_field(
         $institution_id,
         'Contact',
         'An email address or other means of getting in touch with the organization\'s representative',
@@ -276,7 +276,7 @@ function commoners_create_profile_fields_institution () {
 // No, users should not be able to change their own member type, that's silly
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_remove_member_type_metabox() {
+function ccgn_remove_member_type_metabox() {
 	remove_meta_box(
         'bp_members_admin_member_type',
         get_current_screen()->id,
@@ -290,7 +290,7 @@ function commoners_remove_member_type_metabox() {
 
 // Hide core UI if the user is not logged in
 
-function commoners_not_logged_in_ui () {
+function ccgn_not_logged_in_ui () {
     global $bp;
     if (! is_user_logged_in() ) {
         bp_core_remove_nav_item( 'activity' );
@@ -302,16 +302,16 @@ function commoners_not_logged_in_ui () {
 
 // Hide various field grous depending on the user's logged in / vouched status
 
-function commoners_filter_role_groups ( $groups ) {
+function ccgn_filter_role_groups ( $groups ) {
     $user = wp_get_current_user();
     // Admins can access everything
     if ( $user->roles[0] === 'administrator' ) {
         $accessible = $groups;
     } else {
         // Otherwise, users can access only what their level permits
-        global $commoners_access_levels;
-        $level = commoners_current_user_level();
-        $userGroups = $commoners_access_levels[ $level ];
+        global $ccgn_access_levels;
+        $level = ccgn_current_user_level();
+        $userGroups = $ccgn_access_levels[ $level ];
         $accessible = [];
         // TODO: Cache group IDs and check these instead
         foreach ( $groups as $group ) {
@@ -327,18 +327,18 @@ function commoners_filter_role_groups ( $groups ) {
 // BuddyPress Member type (and WordPress Role) setting
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_user_level_set_applicant_new( $user_id ) {
+function ccgn_user_level_set_applicant_new( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
-    $user->set_role( COMMONERS_USER_ROLE_NEW );
+    $user->set_role( CCGN_USER_ROLE_NEW );
 }
 
-function commoners_user_level_set_member_individual( $user_id ) {
+function ccgn_user_level_set_member_individual( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
     $user->set_role( 'subscriber' );
     bp_set_member_type( $user_id, 'individual-member' );
 }
 
-function commoners_user_level_set_member_institution( $user_id ) {
+function ccgn_user_level_set_member_institution( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
     $user->set_role( 'subscriber' );
     bp_set_member_type( $user_id, 'institutional-member' );
@@ -348,55 +348,55 @@ function commoners_user_level_set_member_institution( $user_id ) {
 // Setting user level on registration
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_user_level_set_pre_approved ( $user_id ) {
-    commoners_registration_user_set_stage(
+function ccgn_user_level_set_pre_approved ( $user_id ) {
+    ccgn_registration_user_set_stage(
         $user_id,
-        COMMONERS_APPLICATION_STATE_VOUCHING
+        CCGN_APPLICATION_STATE_VOUCHING
     );
 }
 
-function commoners_user_level_set_approved ( $user_id ) {
-    if ( commoners_user_is_individual_applicant( $user_id ) ) {
-        commoners_user_level_set_member_individual( $user_id );
+function ccgn_user_level_set_approved ( $user_id ) {
+    if ( ccgn_user_is_individual_applicant( $user_id ) ) {
+        ccgn_user_level_set_member_individual( $user_id );
     } else {
-        commoners_user_level_set_member_institution( $user_id );
+        ccgn_user_level_set_member_institution( $user_id );
     }
-    commoners_registration_user_set_stage(
+    ccgn_registration_user_set_stage(
         $user_id,
-        COMMONERS_APPLICATION_STATE_ACCEPTED
+        CCGN_APPLICATION_STATE_ACCEPTED
     );
 }
 
-function commoners_user_level_set_autovouched ( $user_id ) {
-    commoners_user_level_set_member_individual( $user_id );
-    commoners_registration_user_set_stage(
+function ccgn_user_level_set_autovouched ( $user_id ) {
+    ccgn_user_level_set_member_individual( $user_id );
+    ccgn_registration_user_set_stage(
         $user_id,
-        COMMONERS_APPLICATION_STATE_ACCEPTED
+        CCGN_APPLICATION_STATE_ACCEPTED
     );
-    update_user_meta( $user_id, COMMONER_USER_IS_AUTOVOUCHED, true );
+    update_user_meta( $user_id, CCGN_USER_IS_AUTOVOUCHED, true );
 }
 
-function commoners_user_level_set_rejected ( $user_id ) {
+function ccgn_user_level_set_rejected ( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
     // Lock the account
     $user->set_role( '' );
     $user->remove_all_caps();
-    commoners_registration_user_set_stage(
+    ccgn_registration_user_set_stage(
         $user_id,
-        COMMONERS_APPLICATION_STATE_REJECTED
+        CCGN_APPLICATION_STATE_REJECTED
     );
 }
 
 // This is called by WordPress when the user signs up to the site
 
-function commoners_user_level_register( $user_id ) {
+function ccgn_user_level_register( $user_id ) {
     // We could just set the default user type option...
-    commoners_user_level_set_applicant_new( $user_id );
+    ccgn_user_level_set_applicant_new( $user_id );
     $userdata = get_userdata( $user_id );
     if ( $userdata ) {
         $email = $userdata->user_email;
-        if ( commoners_vouching_should_autovouch( $email ) ) {
-            commoners_vouching_user_level_set_autovouched ( $user_id );
+        if ( ccgn_vouching_should_autovouch( $email ) ) {
+            ccgn_vouching_user_level_set_autovouched ( $user_id );
         }
     }
 }
@@ -406,7 +406,7 @@ function commoners_user_level_register( $user_id ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function _bp_remove_profile_options_if_unvouched () {
-    if ( ! commoners_current_user_is_vouched() ) {
+    if ( ! ccgn_current_user_is_vouched() ) {
         bp_core_remove_nav_item( 'activity' );
         bp_core_remove_nav_item( 'profile' );
         bp_core_remove_nav_item( 'groups' );
@@ -416,7 +416,7 @@ function _bp_remove_profile_options_if_unvouched () {
 }
 
 function _bp_set_default_component () {
-    if ( ! commoners_current_user_is_vouched() ) {
+    if ( ! ccgn_current_user_is_vouched() ) {
         define ( 'BP_DEFAULT_COMPONENT', 'notifications' );
     } else {
         define ( 'BP_DEFAULT_COMPONENT', 'profile' );
@@ -427,15 +427,15 @@ function _bp_set_default_component () {
 
 function _bp_admin_bar_remove_some_menu_items () {
     global $wp_admin_bar;
-    if ( ! commoners_current_user_is_vouched() ) {
+    if ( ! ccgn_current_user_is_vouched() ) {
         // Do not allow un-approved members to edit their WordPress profile
         $wp_admin_bar->remove_menu( 'edit-profile', 'user-actions');
         $wp_admin_bar->remove_node('my-account');
     }
 }
 
-function commoners_profile_access_control () {
-    if ( ! commoners_current_user_is_vouched() ) {
+function ccgn_profile_access_control () {
+    if ( ! ccgn_current_user_is_vouched() ) {
         if( IS_PROFILE_PAGE === true ) {
             wp_die( 'You will be able to edit your profile once your membership is approved' );
         }
@@ -448,7 +448,7 @@ function commoners_profile_access_control () {
 // Password and email are functions of CCID so they must not be changed.
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_remove_settings() {
+function ccgn_remove_settings() {
     bp_core_remove_nav_item( 'settings' );
     //FIXME: Do this then restore other items
     //bp_core_remove_subnav_item( 'settings', 'general' );
@@ -467,7 +467,7 @@ function commoners_remove_settings() {
 // Get the user ID from the nicename.
 // Which should be the slug but doesn't seem to be...
 
-function commoners_user_by_nicename ($nicename) {
+function ccgn_user_by_nicename ($nicename) {
     $result = false;
     $query = new WP_User_Query(
         array (
@@ -507,7 +507,7 @@ function _bp_core_get_userid($userid, $username){
         }
     } else {
         $decoded_username = rawurldecode( $username );
-        $userid = commoners_user_by_nicename( $decoded_username );
+        $userid = ccgn_user_by_nicename( $decoded_username );
     }
     return $userid;
 }

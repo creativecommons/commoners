@@ -8,206 +8,206 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 //   includes/registration-form-emails.php
 ////////////////////////////////////////////////////////////////////////////////
 
-function commoners_settings_emails_section_callback () {
+function ccgn_settings_emails_section_callback () {
     ?>
     <?php
 }
 
-function commoners_settings_emails_received_subject () {
-    $options = get_option( 'commoners-email-received' );
+function ccgn_settings_emails_received_subject () {
+    $options = get_option( 'ccgn-email-received' );
     ?>
-    <input type="text" name="commoners-email-received[subject]"
+    <input type="text" name="ccgn-email-received[subject]"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
 
-function commoners_settings_emails_received_message () {
-    $options = get_option( 'commoners-email-received' );
+function ccgn_settings_emails_received_message () {
+    $options = get_option( 'ccgn-email-received' );
     ?>
-    <textarea name="commoners-email-received[message]"
+    <textarea name="ccgn-email-received[message]"
       ><?php echo $options['message']; ?></textarea>
     <?php
 }
 
-function commoners_settings_emails_vouch_request_subject () {
-    $options = get_option( 'commoners-email-vouch-request' );
+function ccgn_settings_emails_vouch_request_subject () {
+    $options = get_option( 'ccgn-email-vouch-request' );
     ?>
-    <input type="text" name="commoners-email-vouch-request[subject]"
+    <input type="text" name="ccgn-email-vouch-request[subject]"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
 
-function commoners_settings_emails_vouch_request_message () {
-    $options = get_option( 'commoners-email-vouch-request' );
+function ccgn_settings_emails_vouch_request_message () {
+    $options = get_option( 'ccgn-email-vouch-request' );
     ?>
-    <textarea name="commoners-email-vouch-request[message]"
+    <textarea name="ccgn-email-vouch-request[message]"
       ><?php echo $options['message']; ?></textarea>
     <?php
 }
 
-function commoners_settings_emails_approved_subject () {
-    $options = get_option( 'commoners-email-approved' );
+function ccgn_settings_emails_approved_subject () {
+    $options = get_option( 'ccgn-email-approved' );
     ?>
-    <input type="text" name="commoners-email-approved[subject]"
+    <input type="text" name="ccgn-email-approved[subject]"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
 
-function commoners_settings_emails_approved_message () {
-    $options = get_option( 'commoners-email-approved' );
+function ccgn_settings_emails_approved_message () {
+    $options = get_option( 'ccgn-email-approved' );
     ?>
-    <textarea name="commoners-email-approved[message]"
+    <textarea name="ccgn-email-approved[message]"
       ><?php echo $options['message']; ?></textarea>
     <?php
 }
 
-function commoners_settings_emails_rejected_subject () {
-    $options = get_option( 'commoners-email-rejected' );
+function ccgn_settings_emails_rejected_subject () {
+    $options = get_option( 'ccgn-email-rejected' );
     ?>
-    <input type="text" name="commoners-email-rejected[subject]"
+    <input type="text" name="ccgn-email-rejected[subject]"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
 
-function commoners_settings_emails_rejected_message () {
-    $options = get_option( 'commoners-email-rejected' );
+function ccgn_settings_emails_rejected_message () {
+    $options = get_option( 'ccgn-email-rejected' );
     ?>
-    <textarea name="commoners-email-rejected[message]"
+    <textarea name="ccgn-email-rejected[message]"
       ><?php echo $options['message']; ?></textarea>
     <?php
 }
 
-function commoners_settings_emails_register () {
+function ccgn_settings_emails_register () {
     add_options_page(
         'Global Network Emails',
         'Global Network Emails',
         'manage_options',
         'global-network-emails',
-        'commoners_settings_emails_render'
+        'ccgn_settings_emails_render'
     );
 
     register_setting(
-        'commoners-emails',
-        'commoners-email-received'
+        'ccgn-emails',
+        'ccgn-email-received'
     );
     add_settings_section(
-        'commoners-email-received',
+        'ccgn-email-received',
         'Application Received',
-        'commoners_settings_emails_section_callback',
+        'ccgn_settings_emails_section_callback',
         'global-network-emails'
     );
 
     add_settings_field(
         'registration-subject',
         'Subject',
-        commoners_settings_emails_received_subject,
+        ccgn_settings_emails_received_subject,
         'global-network-emails',
-        'commoners-email-received'
+        'ccgn-email-received'
     );
 
     add_settings_field(
         'registration-message',
         'Message',
-        commoners_settings_emails_received_message,
+        ccgn_settings_emails_received_message,
         'global-network-emails',
-        'commoners-email-received'
+        'ccgn-email-received'
     );
 
     register_setting(
-        'commoners-emails',
-        'commoners-email-vouch-request'
+        'ccgn-emails',
+        'ccgn-email-vouch-request'
     );
     add_settings_section(
-        'commoners-email-vouch-request',
+        'ccgn-email-vouch-request',
         'Application Vouch Request',
-        'commoners_settings_emails_section_callback',
+        'ccgn_settings_emails_section_callback',
         'global-network-emails'
     );
 
     add_settings_field(
         'registration-subject',
         'Subject',
-        commoners_settings_emails_vouch_request_subject,
+        ccgn_settings_emails_vouch_request_subject,
         'global-network-emails',
-        'commoners-email-vouch-request'
+        'ccgn-email-vouch-request'
     );
 
     add_settings_field(
         'registration-message',
         'Message',
-        commoners_settings_emails_vouch_request_message,
+        ccgn_settings_emails_vouch_request_message,
         'global-network-emails',
-        'commoners-email-vouch-request'
+        'ccgn-email-vouch-request'
     );
 
     register_setting(
-        'commoners-emails',
-        'commoners-email-approved'
+        'ccgn-emails',
+        'ccgn-email-approved'
     );
 
     add_settings_section(
-        'commoners-email-approved',
+        'ccgn-email-approved',
         'Application Approved',
-        'commoners_settings_emails_section_callback',
+        'ccgn_settings_emails_section_callback',
         'global-network-emails'
     );
 
     add_settings_field(
         'registration-subject',
         'Subject',
-        commoners_settings_emails_approved_subject,
+        ccgn_settings_emails_approved_subject,
         'global-network-emails',
-        'commoners-email-approved'
+        'ccgn-email-approved'
     );
 
     add_settings_field(
         'registration-message',
         'Message',
-        commoners_settings_emails_approved_message,
+        ccgn_settings_emails_approved_message,
         'global-network-emails',
-        'commoners-email-approved'
+        'ccgn-email-approved'
     );
 
         register_setting(
-        'commoners-emails',
-        'commoners-email-rejected'
+        'ccgn-emails',
+        'ccgn-email-rejected'
     );
 
     add_settings_section(
-        'commoners-email-rejected',
+        'ccgn-email-rejected',
         'Application Rejected',
-        'commoners_settings_emails_section_callback',
+        'ccgn_settings_emails_section_callback',
         'global-network-emails'
     );
 
     add_settings_field(
         'registration-subject',
         'Subject',
-        commoners_settings_emails_rejected_subject,
+        ccgn_settings_emails_rejected_subject,
         'global-network-emails',
-        'commoners-email-rejected'
+        'ccgn-email-rejected'
     );
 
     add_settings_field(
         'registration-message',
         'Message',
-        commoners_settings_emails_rejected_message,
+        ccgn_settings_emails_rejected_message,
         'global-network-emails',
-        'commoners-email-rejected'
+        'ccgn-email-rejected'
     );
 }
 
-function commoners_settings_emails_print_info () {
+function ccgn_settings_emails_print_info () {
     print 'These are the emails that people are sent during application. Only update after discussion with Legal and Comms.';
 }
 
-function commoners_settings_emails_render () {
+function ccgn_settings_emails_render () {
     ?>
     <div class="wrap">
       <h2>Membership Application Notification Emails</h2>
       <form method="post" action="options.php">
         <?php
-          settings_fields( 'commoners-emails' );
+          settings_fields( 'ccgn-emails' );
           do_settings_sections( 'global-network-emails' );
           submit_button();
         ?>
