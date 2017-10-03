@@ -61,7 +61,7 @@ function ccgn_registration_individual_shortcode_render ( $atts ) {
     if ( ! is_user_logged_in() ) {
         wp_redirect( 'https://login.creativecommons.org/login?service='
                      . get_site_url()
-                     . '/sign-up/member/' );
+                     . '/sign-up/individual/' );
         exit;
     }
     $user = wp_get_current_user();
