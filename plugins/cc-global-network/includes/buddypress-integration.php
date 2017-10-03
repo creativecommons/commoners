@@ -103,7 +103,7 @@ function ccgn_register_member_types () {
             'name' => 'Individual Members',
             'singular_name' => 'Individual Member',
         ),
-        'has_directory' => 'member/individual'
+        'has_directory' => 'individual'
     ));
     // Register Parent type member with Directory
     bp_register_member_type( 'institutional-member', array(
@@ -111,7 +111,7 @@ function ccgn_register_member_types () {
             'name' => 'Institutional Members',
             'singular_name' => 'Institutional Member',
         ),
-        'has_directory' => 'member/institution'
+        'has_directory' => 'institution'
     ));
 }
 
