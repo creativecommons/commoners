@@ -446,8 +446,8 @@ function ccgn_registration_form_list_members ( $current_user_id ) {
     $individuals = ccgn_get_individual_ids();
     $members = array();
     foreach ( $individuals as $individual ){
-        if ( ( $individuals->ID != 1 ) // Exclude admin
-            && ( $individuals->ID != $current_user_id ) ) { // Exclude applicant
+        if ( ( $individual->ID != 1 ) // Exclude admin
+            && ( $individual->ID != $current_user_id ) ) { // Exclude applicant
             $members[] = array(
                 $individual->ID,
                 $individual->display_name
