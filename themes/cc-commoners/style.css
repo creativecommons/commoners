@@ -12,9 +12,9 @@ Text Domain: cc-commoners
 Template: twentyseventeen
 */
 
-@import "normalize.css";
-@import "modernscale.css";
-@import "forms.css";
+@import "assets/css/normalize.css";
+@import "assets/css/modernscale.css";
+@import "assets/css/forms.css";
 
 .cf::after {
     position: relative;
