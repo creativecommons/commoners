@@ -41,8 +41,8 @@ define( 'CCGN_USER_ROLE_NEW', 'new-user' );
 $ccgn_access_levels = [
     'PUBLIC' => [],
     'LOGGED_IN' => [ 'Base' ],
-    'LOGGED_IN_AND_VOUCHED' => [ 'Base', 'Profile Details' ],
-    'ADMIN' => ['Base', 'Profile Details']
+    'LOGGED_IN_AND_VOUCHED' => [ 'Base', 'Individual Member', 'Insititutional Member' ],
+    'ADMIN' => [ 'Base', 'Individual Member', 'Institutional Member' ]
 ];
 
 function ccgn_add_roles_on_plugin_activation () {
@@ -277,7 +277,7 @@ function ccgn_create_profile_fields_institution () {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_remove_member_type_metabox() {
-	remove_meta_box(
+    remove_meta_box(
         'bp_members_admin_member_type',
         get_current_screen()->id,
         'side'
@@ -293,10 +293,12 @@ function ccgn_remove_member_type_metabox() {
 function ccgn_not_logged_in_ui () {
     global $bp;
     if (! is_user_logged_in() ) {
+        // Just don't display people's profiles
+        bp_core_remove_nav_item( 'profile' );
         bp_core_remove_nav_item( 'activity' );
         bp_core_remove_nav_item( 'groups' );
         // Hide the "view" subtab. Ideally we'd hide the "profile" tab...
-        unset($bp->bp_options_nav['profile']['public']);
+        //unset($bp->bp_options_nav['profile']['public']);
     }
 }
 
@@ -305,7 +307,7 @@ function ccgn_not_logged_in_ui () {
 function ccgn_filter_role_groups ( $groups ) {
     $user = wp_get_current_user();
     // Admins can access everything
-    if ( $user->roles[0] === 'administrator' ) {
+    if ( in_array( 'administrator', $user->roles) ) {
         $accessible = $groups;
     } else {
         // Otherwise, users can access only what their level permits
@@ -321,6 +323,57 @@ function ccgn_filter_role_groups ( $groups ) {
         }
     }
     return $accessible;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Buddypress UI configuration for vouching level
+////////////////////////////////////////////////////////////////////////////////
+
+function _bp_remove_profile_options_if_unvouched () {
+    if ( ! ccgn_current_user_is_vouched() ) {
+        bp_core_remove_nav_item( 'activity' );
+        // Unvouched users need to be able to see other users profiles
+        //bp_core_remove_nav_item( 'profile' );
+        bp_core_remove_nav_item( 'groups' );
+        bp_core_remove_nav_item( 'forums' );
+        bp_core_remove_nav_item( 'notifications' );
+    }
+}
+
+function _bp_set_default_component () {
+    define ( 'BP_DEFAULT_COMPONENT', 'profile' );
+}
+
+// FIXME - need to hide correct elements
+
+function _bp_admin_bar_remove_some_menu_items () {
+    global $wp_admin_bar;
+    if ( ! ccgn_current_user_is_vouched() ) {
+        // Do not allow un-approved members to edit their WordPress profile
+        $wp_admin_bar->remove_menu( 'edit-profile', 'user-actions');
+        $wp_admin_bar->remove_node('my-account');
+    }
+}
+
+function ccgn_profile_access_control () {
+    //ccgn_testing_reset_applicant_state( 22 );
+    if ( ! ccgn_current_user_is_vouched() ) {
+        if( IS_PROFILE_PAGE === true ) {
+            wp_die( 'You will be able to edit your profile once your membership is approved' );
+        }
+        remove_menu_page( 'profile.php' );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Disallow user from changing settings.
+// Password and email are functions of CCID so they must not be changed.
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_remove_settings() {
+    bp_core_remove_nav_item( 'settings' );
+    //FIXME: Do this then restore other items
+    //bp_core_remove_subnav_item( 'settings', 'general' );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -395,63 +448,10 @@ function ccgn_user_level_register( $user_id ) {
     $userdata = get_userdata( $user_id );
     if ( $userdata ) {
         $email = $userdata->user_email;
-        if ( ccgn_vouching_should_autovouch( $email ) ) {
+        if ( ccgn_user_level_should_autovouch( $email ) ) {
             ccgn_vouching_user_level_set_autovouched ( $user_id );
         }
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Buddypress configuration for vouching level
-////////////////////////////////////////////////////////////////////////////////
-
-function _bp_remove_profile_options_if_unvouched () {
-    if ( ! ccgn_current_user_is_vouched() ) {
-        bp_core_remove_nav_item( 'activity' );
-        bp_core_remove_nav_item( 'profile' );
-        bp_core_remove_nav_item( 'groups' );
-        bp_core_remove_nav_item( 'forums' );
-        //        bp_core_remove_nav_item( 'notifications' );
-    }
-}
-
-function _bp_set_default_component () {
-    if ( ! ccgn_current_user_is_vouched() ) {
-        define ( 'BP_DEFAULT_COMPONENT', 'notifications' );
-    } else {
-        define ( 'BP_DEFAULT_COMPONENT', 'profile' );
-    }
-}
-
-// FIXME - need to hide correct elements
-
-function _bp_admin_bar_remove_some_menu_items () {
-    global $wp_admin_bar;
-    if ( ! ccgn_current_user_is_vouched() ) {
-        // Do not allow un-approved members to edit their WordPress profile
-        $wp_admin_bar->remove_menu( 'edit-profile', 'user-actions');
-        $wp_admin_bar->remove_node('my-account');
-    }
-}
-
-function ccgn_profile_access_control () {
-    if ( ! ccgn_current_user_is_vouched() ) {
-        if( IS_PROFILE_PAGE === true ) {
-            wp_die( 'You will be able to edit your profile once your membership is approved' );
-        }
-        remove_menu_page( 'profile.php' );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Disallow user from changing settings.
-// Password and email are functions of CCID so they must not be changed.
-////////////////////////////////////////////////////////////////////////////////
-
-function ccgn_remove_settings() {
-    bp_core_remove_nav_item( 'settings' );
-    //FIXME: Do this then restore other items
-    //bp_core_remove_subnav_item( 'settings', 'general' );
 }
 
 ////////////////////////////////////////////////////////////////////////////////

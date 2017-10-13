@@ -119,7 +119,7 @@ add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
 // Don't let unvouched users set their profiles
 
-//add_action( 'bp_ready', '_bp_remove_profile_options_if_unvouched' );
+add_action( 'bp_ready', '_bp_remove_profile_options_if_unvouched' );
 
 ////////////////////////////////////////////////////////////////////////////////
 // Registration Forms
@@ -173,7 +173,6 @@ add_shortcode(
 ////////////////////////////////////////////////////////////////////////////////
 // Admin pages and menus
 ////////////////////////////////////////////////////////////////////////////////
-
 
 //add_action( 'parse_request', 'ccgn_vouching_url_handler' );
 
