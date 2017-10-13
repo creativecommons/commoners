@@ -1,0 +1,31 @@
+################################################################################
+# Settings
+################################################################################
+
+export DELETEPAGES='1 2'
+export IMPORTPAGES='24,26,30,46'
+export WPFRONTPAGE='46'
+
+export WPXMLFILE='/tmp/commoners.wordpress.xml'
+export GFJSONFILE="/tmp/gravityforms-export-$(date -u +%Y-%m-%d).json"
+
+export GFARCHIVE='/tmp/gravityforms_2.2.5.7.zip'
+export GFORMSKEY=''
+
+export DBNAME=''
+export DBUSER=''
+export DBPASSWORD=''
+
+export SITEURL=''
+export SITENAME='CC Global Network'
+export ADMINNAME=''
+export ADMINPASSWORD=''
+export ADMINEMAIL=''
+
+export WPROOT='/var/www/html'
+export GITROOT='/var/www'
+
+export WEBUSER='www-data'
+export WEBGROUP='www-data'
+
+export WPCLI="sudo -u ${WEBUSER} wp"
