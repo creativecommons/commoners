@@ -110,15 +110,16 @@ add_action(
 );
 add_filter( 'bp_core_get_userid_from_nicename', '_bp_core_get_userid', 10, 2 );
 
-//FIXME: This hides them from the admin. So no.
-//add_filter( 'bp_xprofile_get_groups', 'ccgn_filter_role_groups' );
-
 add_action( 'bp_setup_nav', 'ccgn_not_logged_in_ui', 150 );
+
+//FIXME: This hides them from the admin. So no.
+add_filter( 'bp_xprofile_get_groups', 'ccgn_filter_role_groups' );
+
+add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
 // Don't let unvouched users set their profiles
 
-add_action( 'bp_ready', '_bp_remove_profile_options_if_unvouched' );
-add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
+//add_action( 'bp_ready', '_bp_remove_profile_options_if_unvouched' );
 
 ////////////////////////////////////////////////////////////////////////////////
 // Registration Forms
@@ -126,7 +127,9 @@ add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
 // Populate voucher selects
 
-add_action("gform_pre_render", "ccgn_set_vouchers_options");
+add_action( 'gform_pre_render', 'ccgn_set_vouchers_options' );
+
+add_filter( 'gform_validation', 'ccgn_choose_vouchers_validate' );
 
 // The shortcode to display the sign-up workflow forms.
 // The exact form (or other content) displayed depends on the user's

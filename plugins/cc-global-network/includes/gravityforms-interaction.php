@@ -69,7 +69,6 @@ define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_YES', 'Yes' );
 define( 'CCGN_GF_PRE_APPROVAL_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVED_YES', 'Yes' );
 
-
 define( 'CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE_YES', 'Yes' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS_MOU', 'MOU' );
 define(
@@ -388,6 +387,12 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
 
 function ccgn_create_profile_individual( $applicant_id ) {
     $details = ccgn_details_individual_form_entry ( $applicant_id );
+    /*    wp_update_user(
+        array(
+            'ID' => $applicant_id,
+            'display_name' => $details[ CCGN_GF_DETAILS_NAME ]
+        )
+        );*/
     xprofile_set_field_data(
         'Bio',
         $applicant_id,
@@ -447,7 +452,7 @@ function ccgn_registration_form_list_members ( $current_user_id ) {
     $members = array();
     foreach ( $individuals as $individual ){
         if ( ( $individual->ID != 1 ) // Exclude admin
-            && ( $individual->ID != $current_user_id ) ) { // Exclude applicant
+             && ( $individual->ID != $current_user_id ) ) { // Exclude applicant
             $members[] = array(
                 $individual->ID,
                 $individual->display_name
@@ -493,4 +498,30 @@ function ccgn_set_vouchers_options ( $form ) {
         <?php
     }
     return $form;
+}
+
+################################################################################
+# Voucher choice validation
+# This is here as it's shared between a couple of shortcodes
+################################################################################
+
+function ccgn_choose_vouchers_validate ( $validation_result ) {
+    $form = $validation_result['form'];
+    if( $form['title'] == CCGN_GF_CHOOSE_VOUCHERS ) {
+        $vouchers = [];
+        // Check for duplicate vouchers, mark as invalid if found
+        foreach( $form['fields'] as &$field ) {
+            if ( in_array( $field->id, CCGN_GF_VOUCH_VOUCHER_FIELDS ) ) {
+                $voucher = rgpost( "input_{$field['id']}" );
+                if ( $voucher && in_array( $voucher, $vouchers ) ) {
+                    $validation_result['is_valid'] = false;
+                    $field->failed_validation = true;
+                    $field->validation_message = 'The same member cannot vouch you more than once!';
+                }
+                $vouchers[] = $voucher;
+            }
+        }
+        $validation_result['form'] = $form;
+    }
+    return $validation_result;
 }
