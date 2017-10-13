@@ -15,7 +15,7 @@ function ccgn_registration_email_sub($key, $value, $text) {
 }
 
 function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
-                                                $voucher_name, $text) {
+                                           $voucher_name, $text) {
     $result = ccgn_registration_email_sub(
         'APPLICANT_NAME',
         $applicant_name,
@@ -31,12 +31,22 @@ function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
         $voucher_name,
         $result
     );
+    $result = ccgn_registration_email_sub(
+        'SITE_URL',
+        get_site_url(),
+        $result
+    );
+    $result = ccgn_registration_email_sub(
+        'APPLICANT_PROFILE_URL',
+        bp_core_get_userlink($applicant_id, $just_link=true),
+        $result
+    );
     return $result;
 }
 
 function ccgn_registration_email( $applicant_name, $applicant_id,
-                                       $voucher_name, $to_address,
-                                       $subject, $message ) {
+                                  $voucher_name, $to_address,
+                                  $subject, $message ) {
     $subject_substituted = ccgn_registration_email_sub_names(
         $applicant_name,
         $applicant_id,
@@ -57,7 +67,7 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
 }
 
 function ccgn_registration_email_to_applicant ( $applicant_id,
-                                                     $email_option ) {
+                                                $email_option ) {
     $applicant = get_user_by( 'ID', $applicant_id );
     $options = get_option( $email_option );
     $subject = $options[ 'subject' ];
@@ -73,8 +83,8 @@ function ccgn_registration_email_to_applicant ( $applicant_id,
 }
 
 function ccgn_registration_email_to_voucher ( $applicant_id,
-                                                   $voucher_id,
-                                                   $email_option ) {
+                                              $voucher_id,
+                                              $email_option ) {
     $applicant = get_user_by( 'ID', $applicant_id );
     $voucher = get_user_by( 'ID', $voucher_id );
     $options = get_option( $email_option );
@@ -112,7 +122,7 @@ function ccgn_registration_email_application_rejected ( $applicant_id ) {
 }
 
 function ccgn_registration_email_vouching_request ( $applicant_id,
-                                                         $voucher_id ) {
+                                                    $voucher_id ) {
     ccgn_registration_email_to_voucher(
         $applicant_id,
         $voucher_id,

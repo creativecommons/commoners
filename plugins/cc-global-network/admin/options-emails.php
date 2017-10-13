@@ -222,6 +222,8 @@ function ccgn_settings_emails_render () {
       </form>
     </div>
     <p>The following substitutions can be made (where appropriate):
-       *|APPLICANT_NAME|* *|VOUCHER_NAME|* *|APPLICANT_ID|* .</p>
+       *|APPLICANT_NAME|* *|VOUCHER_NAME|* *|APPLICANT_ID|*
+       *|APPLICANT_PROFILE_URL|* *|SITE_URL|* .</p>
+    <p><i>Note that SITE_URL does not have a terminating slash!</i></p>
     <?php
 }
