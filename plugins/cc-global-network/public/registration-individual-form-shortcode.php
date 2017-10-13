@@ -90,6 +90,7 @@ function ccgn_registration_individual_shortcode_render ( $atts ) {
         gravity_form( CCGN_GF_CHOOSE_VOUCHERS, false, false );
         break;
     case CCGN_APPLICATION_STATE_RECEIVED:
+    case CCGN_APPLICATION_STATE_VOUCHING:
         echo _( '<h2>Thank you for applying to join the Creative Commons Global Network</h2></p><p>Your application has been received.</p><p>It will take several days to be reviewed.</p><p>If you have any questions you can <a href="/contact/">contact us.</a></p>' );
         break;
     case CCGN_APPLICATION_STATE_REJECTED:
@@ -99,6 +100,7 @@ function ccgn_registration_individual_shortcode_render ( $atts ) {
         echo _( '<p>Your application has been accepted.</p>' );
         break;
     default:
+        error_log( 'Unrecognised application state: ' . $state );
         echo _( '<p>Unrecognised application state.</p>' );
     }
 }
