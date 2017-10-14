@@ -320,7 +320,7 @@ function ccgn_application_vouchers_users_ids ( $applicant_id ) {
     $vouchers_entry = ccgn_application_vouchers ( $applicant_id );
     $users = array();
     foreach ( CCGN_GF_VOUCH_VOUCHER_FIELDS as $field ) {
-        $voucher_id = trim( $vouchers_entry[ $field ] );
+        $voucher_id = $vouchers_entry[ $field ];
         if ( $voucher_id ) {
             $users[] = $voucher_id;
         }

@@ -47,12 +47,12 @@ function ccgn_application_users_page_vouchers ( $applicant_id ) {
     return $result . '</ol>';
 }
 
-function ccgn_registration_email_vouching_requests ( $applicant ) {
+function ccgn_registration_email_vouching_requests ( $applicant_id ) {
     $vouchers_ids = ccgn_application_vouchers_users_ids ( $applicant_id );
     foreach ( $vouchers_ids as $voucher_id ) {
         // TODO: Check for active user etc.
         ccgn_registration_email_vouching_request(
-            $applicant,
+            $applicant_id,
             $voucher_id
         );
     }
@@ -61,7 +61,7 @@ function ccgn_registration_email_vouching_requests ( $applicant ) {
 // Handle pre form results
 
 function ccgn_application_users_page_pre_form_submit_handler ( $entry,
-                                                                    $form ) {
+                                                               $form ) {
     if (! current_user_can( 'administrator' ) ) {
         echo 'Must be admin';
         exit;

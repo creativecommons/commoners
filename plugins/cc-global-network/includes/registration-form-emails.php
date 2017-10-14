@@ -38,7 +38,7 @@ function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
     );
     $result = ccgn_registration_email_sub(
         'APPLICANT_PROFILE_URL',
-        bp_core_get_userlink($applicant_id, $just_link=true),
+        bp_core_get_userlink($applicant_id, false, true),
         $result
     );
     return $result;

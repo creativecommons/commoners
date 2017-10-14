@@ -356,7 +356,6 @@ function _bp_admin_bar_remove_some_menu_items () {
 }
 
 function ccgn_profile_access_control () {
-    //ccgn_testing_reset_applicant_state( 22 );
     if ( ! ccgn_current_user_is_vouched() ) {
         if( IS_PROFILE_PAGE === true ) {
             wp_die( 'You will be able to edit your profile once your membership is approved' );
