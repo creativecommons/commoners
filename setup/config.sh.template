@@ -6,8 +6,10 @@ export DELETEPAGES='1 2'
 export IMPORTPAGES='24,26,30,46'
 export WPFRONTPAGE='46'
 
-export WPXMLFILE='/tmp/commoners.wordpress.xml'
-export GFJSONFILE="/tmp/gravityforms-export-$(date -u +%Y-%m-%d).json"
+export WPXMLFILE="$(dirname \"$0\")/commoners-wordpress.xml"
+export GFJSONFILE="$(dirname \"$0\")/gravityforms-export.json"
+export WPEMAILSFILE="$(dirname \"$0\")/commoners-emails.json"
+export NUMEMAILS=4
 
 export GFARCHIVE='/tmp/gravityforms_2.2.5.7.zip'
 export GFORMSKEY=''

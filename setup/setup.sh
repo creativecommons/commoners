@@ -4,18 +4,21 @@
 # BEFORE STARTING
 ################################################################################
 
+## ON SERVER
+# Copy $GFARCHIVE into position
+
+# Re-exporting content?
+
 # ON DEV
 ## wp export --post__in=${IMPORTPAGES} --stdout > "${WPXMLFILE}"
-## scp "${WPXMLFILE}" SERVER:${WPXMLFILE}
 
 ## ON DEV:
 ## wp plugin install gravityformscli --activate
 ## wp gf form export --dir=/tmp
-## scp "${GFJSONFILE}" SERVER:${GFJSONFILE}
+## cp "/tmp/gravityforms-export-$(date -u +%Y-%m-%d).json"  "${GFJSONFILE}"
 
-## ON SERVER
-# Copy $GFARCHIVE into position
-
+## ON DEV
+## wp option list --format=json --search=ccgn-email-* > "${WPEMAILSFILE}"
 
 ################################################################################
 # Config
@@ -105,9 +108,12 @@ ${WPCLI} rewrite structure '/%year%/%monthnum%/%day%/%postname%/'
 # Fetch and link our repos
 ################################################################################
 
-cd "${GITROOT}"
-sudo git clone https://github.com/creativecommons/commoners.git
-sudo chown -R "${WEBUSER}:${WEBGROUP}" commoners
+# Handle the repo already being present, for dev machines
+if [ ! -d "${GITROOT}/commoners" ]; then
+    cd "${GITROOT}"
+    sudo git clone https://github.com/creativecommons/commoners.git
+    sudo chown -R "${WEBUSER}:${WEBGROUP}" commoners
+fi
 cd "${WPROOT}/wp-content/plugins"
 ln -s "${GITROOT}/commoners/plugins/cas-maestro"
 ln -s "${GITROOT}/commoners/plugins/cc-global-network"
@@ -178,3 +184,14 @@ ${WPCLI} gf form import "${GFJSONFILE}"
 ${WPCLI} import --authors=skip "${WPXMLFILE}"
 
 ${WPCLI} option update page_on_front "${WPFRONTPAGE}"
+
+
+################################################################################
+# Copy in emails
+################################################################################
+
+for i in $(seq 0 $(expr ${NUMEMAILS} - 1)); do
+    key=$(jq .[$i].option_name "${WPEMAILSFILE}")
+    value=$(jq .[$i].option_value "${WPEMAILSFILE}")
+    echo wp option update "${key}" "${value}"
+done
