@@ -66,16 +66,22 @@ body {
 /* font-family: 'Open Sans', sans-serif;
 font-family: 'Roboto Condensed', sans-serif; */
 
-header {
+.site-header {
 	position: fixed;
 	width: 100%;
+    top: 0px;
 	height: 158px;
 	text-align: center;
 	z-index: 3;
 	background-color: #efbe01;
 }
 
-header::after {
+/* Play nice with .site-header themes */
+.admin-bar .site-header {
+  top: 32px;
+}
+
+.site-header::after {
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -87,6 +93,27 @@ header::after {
 	z-index: 1;
 	background: transparent;
 	box-shadow: 0px 4px 5px rgba(0,0,0,0.1);
+}
+
+.entry-header {
+	width: 100%;
+    padding: 12px 0px 18px 0px;
+	text-align: center;
+	background-color: #efbe01;
+}
+
+/* Play nice with .site-header themes */
+.admin-bar .entry-header {
+  /* 32px minus the 10px ::after for .site-header */
+  margin-top: -22px;
+}
+
+.entry-content {
+    padding: 12px;
+}
+
+.entry-content p {
+    padding: 8px 0px;
 }
 
 .logo {
