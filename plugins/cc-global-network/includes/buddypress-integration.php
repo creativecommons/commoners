@@ -79,8 +79,8 @@ function ccgn_current_user_is_vouched () {
 
 function ccgn_current_user_level () {
     if ( is_user_logged_in() ) {
-        $user = wp_get_current_user();
-        if ( ccgn_user_is_vouched( $user )) {
+        $user_id = get_current_user_id();
+        if ( ccgn_user_is_vouched( $user_id )) {
             $level = 'LOGGED_IN_AND_VOUCHED';
         }else {
             $level = 'LOGGED_IN';
