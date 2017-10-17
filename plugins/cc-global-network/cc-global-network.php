@@ -104,6 +104,13 @@ register_activation_hook(
     'ccgn_create_profile_fields_institution'
 );
 
+// Don't lock the admin out
+
+register_activation_hook(
+    __FILE__,
+    'ccgn_ensure_admin_access'
+);
+
 add_action(
     'bp_get_activity_action_pre_meta',
     '_bp_get_activity_action_pre_meta'

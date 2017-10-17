@@ -428,6 +428,14 @@ function ccgn_user_level_set_autovouched ( $user_id ) {
     update_user_meta( $user_id, CCGN_USER_IS_AUTOVOUCHED, true );
 }
 
+function ccgn_ensure_admin_access () {
+    $admin = 1;
+    ccgn_user_level_set_autovouched ( $admin );
+    //FIXME: Get and restore role around the autovouch
+    $user = get_user_by( 'ID', $admin );
+    $user->set_role( 'administrator' );
+}
+
 function ccgn_user_level_set_rejected ( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
     // Lock the account
