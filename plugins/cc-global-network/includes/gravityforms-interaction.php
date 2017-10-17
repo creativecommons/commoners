@@ -525,3 +525,26 @@ function ccgn_choose_vouchers_validate ( $validation_result ) {
     }
     return $validation_result;
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Entry deletion
+////////////////////////////////////////////////////////////////////////////////
+
+// This really does delete the user's form entries.
+
+function _ccgn_application_delete_entries ( $applicant_id ) {
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' =>  'created_by',
+            'value' => $applicant_id
+        );
+    $entries = GFAPI::get_entries(
+        0,
+        $search_criteria
+    );
+    foreach( $entries as $entry ) {
+        GFAPI::delete_entry( $entry->id );
+    }
+}

@@ -461,6 +461,18 @@ function ccgn_user_level_register( $user_id ) {
     }
 }
 
+// This is called in testing to reset a user's application
+// It really does wipe their application details, so be careful.
+
+function _ccgn_user_level_reset ( $user_id ) {
+    _ccgn_application_delete_entries( $user_id );
+    delete_user_meta( $user_id, CCGN_APPLICATION_STATE );
+    ccgn_user_level_set_applicant_new( $user_id );
+    bp_remove_member_type( $user_id, 'individual-member' );
+    bp_remove_member_type( $user_id, 'institutional-member' );
+    xprofile_delete_field_data( '', $user_id );
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // CCID 'global'(lowercased nickname) is used for user_nicename but is not
 // url-safe.
