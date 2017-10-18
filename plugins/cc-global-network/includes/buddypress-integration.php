@@ -3,29 +3,12 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 ////////////////////////////////////////////////////////////////////////////////
-// Autovouching
+// Vouching and voting
 ////////////////////////////////////////////////////////////////////////////////
 
 define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 2 );
 
 define( 'COMMONERS_USER_IS_AUTOVOUCHED', 'ccgn-user-autovouched' );
-
-define(
-    'CCGN_AUTOVOUCH_EMAIL_DOMAINS',
-    [
-        'creativecommons.org'
-    ]
-);
-
-function ccgn_user_level_should_autovouch( $email ) {
-    return
-        // Make sure the explode won't give an Undefined Offset error
-        (strpos( $email, '@') !== false)
-        && in_array(
-            explode( '@', $email )[1],
-            CCGN_AUTOVOUCH_EMAIL_DOMAINS
-        );
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // User Roles
@@ -300,7 +283,7 @@ function ccgn_not_logged_in_ui () {
         bp_core_remove_nav_item( 'profile' );
         bp_core_remove_nav_item( 'activity' );
         bp_core_remove_nav_item( 'groups' );
-        // Hide the "view" subtab. Ideally we'd hide the "profile" tab...
+        // Hide the "view" subtab. Ideally we would hide the "profile" tab...
         //unset($bp->bp_options_nav['profile']['public']);
     }
 }
@@ -422,6 +405,8 @@ function ccgn_user_level_set_approved ( $user_id ) {
     );
 }
 
+// For User #1 and for interim membership council members
+
 function ccgn_user_level_set_autovouched ( $user_id ) {
     ccgn_user_level_set_member_individual( $user_id );
     ccgn_registration_user_set_stage(
@@ -455,13 +440,6 @@ function ccgn_user_level_set_rejected ( $user_id ) {
 function ccgn_user_level_register( $user_id ) {
     // We could just set the default user type option...
     ccgn_user_level_set_applicant_new( $user_id );
-    $userdata = get_userdata( $user_id );
-    if ( $userdata ) {
-        $email = $userdata->user_email;
-        if ( ccgn_user_level_should_autovouch( $email ) ) {
-            ccgn_vouching_user_level_set_autovouched ( $user_id );
-        }
-    }
 }
 
 // This is called in testing to reset a user's application
