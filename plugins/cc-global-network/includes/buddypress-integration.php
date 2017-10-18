@@ -38,11 +38,14 @@ define( 'CCGN_USER_ROLE_NEW', 'new-user' );
 // Which Field Groups different levels of registration/vouching can see
 // Admin users are handled separately
 
+// We don't use Base, so filter out 'Base' by not listing it.
+// If we did use it, we'd have it at 'LOGGED_IN' and above.
+
 $ccgn_access_levels = [
     'PUBLIC' => [],
-    'LOGGED_IN' => [ 'Base' ],
-    'LOGGED_IN_AND_VOUCHED' => [ 'Base', 'Individual Member', 'Insititutional Member' ],
-    'ADMIN' => [ 'Base', 'Individual Member', 'Institutional Member' ]
+    'LOGGED_IN' => [],
+    'LOGGED_IN_AND_VOUCHED' => [ 'Individual Member', 'Insititutional Member' ],
+    'ADMIN' => [  'Individual Member', 'Institutional Member' ]
 ];
 
 function ccgn_add_roles_on_plugin_activation () {

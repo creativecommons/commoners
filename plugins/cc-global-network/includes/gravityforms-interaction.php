@@ -387,11 +387,17 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
 
 function ccgn_create_profile_individual( $applicant_id ) {
     $details = ccgn_details_individual_form_entry ( $applicant_id );
-    /*    wp_update_user(
+    wp_update_user(
         array(
             'ID' => $applicant_id,
+            'nickname' => $details[ CCGN_GF_DETAILS_NAME ],
             'display_name' => $details[ CCGN_GF_DETAILS_NAME ]
         )
+    );
+    /*xprofile_set_field_data(
+        'Base',
+        $applicant_id,
+        $details[ CCGN_GF_DETAILS_NAME ]
         );*/
     xprofile_set_field_data(
         'Bio',

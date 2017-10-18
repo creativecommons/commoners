@@ -4,7 +4,7 @@
   Plugin URI: http://github.com/creativecommons/commoners
   Description: Buddypress extensions for network.creativecommons.org .
   Author: Creative Commons Corporation
-  Version: 2.3
+  Version: 2.4
   Author URI: http://github.com/creativecommons/
   License: GPLv2 or later at your option.
 */
