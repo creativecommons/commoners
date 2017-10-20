@@ -25,7 +25,7 @@ define( 'CCGN_GF_VOUCH', 'Vouch For Applicant' );
 // Admin approval of applicant
 
 define( 'CCGN_GF_PRE_APPROVAL', 'Pre Approval' );
-define( 'CCGN_GF_VOTE', 'Vote on Application' );
+define( 'CCGN_GF_VOTE', 'Vote on Membership' );
 define( 'CCGN_GF_FINAL_APPROVAL', 'Final Approval' );
 
 // Individual fields in forms
@@ -65,10 +65,10 @@ define( 'CCGN_GF_VOTE_REASON', '3' );
 define( 'CCGN_GF_VOTE_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_VOTE_APPLICANT_ID', '4' );
 
-define( 'CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '2' );
-define( 'CCGN_GF_FINAL_APPROVAL_REASON', '3' );
+define( 'CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
+define( 'CCGN_GF_FINAL_APPROVAL_REASON', '2' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
-define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID', '4' );
+define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID', '3' );
 
 // Field values that we need to check
 
@@ -619,6 +619,34 @@ function ccgn_choose_vouchers_validate ( $validation_result ) {
         $validation_result['form'] = $form;
     }
     return $validation_result;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Final Approval
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_final_approval_entry_for ( $applicant_id ) {
+    $user_id = get_current_user_id();
+    $form_id = RGFormsModel::get_form_id( CCGN_GF_FINAL_APPROVAL );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' => CCGN_GF_FINAL_APPROVAL_APPLICANT_ID,
+            'value' => $applicant_id
+        );
+    $entries = GFAPI::get_entries(
+        $form_id,
+        $search_criteria,
+        array(
+            array(
+                'key' => 'date',
+                'direction' => 'ASC',
+                'is_numeric' => false
+            )
+        )
+    );
+    return $entries ? entries[0] : false;
 }
 
 

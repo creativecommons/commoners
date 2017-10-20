@@ -10,14 +10,14 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Application evaluation and finalization
 ////////////////////////////////////////////////////////////////////////////////
 
-function ccgn_can_activate_membership ( $applicant_id ) {
+function ccgn_must_decline_membership ( $applicant_id ) {
     $vouch_counts = ccgn_application_vouches_counts( $applicant_id );
     $vote_counts = ccgn_application_votes_counts( $applicant_id );
     return ( $vouch_counts[ 'no' ] > CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED )
         || ( $vote_counts[ 'no' ] > CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED );
 }
 
-function ccgn_must_decline_membership ( $applicant_id ) {
+function ccgn_can_activate_membership ( $applicant_id ) {
     $vouch_counts = ccgn_application_vouches_counts( $applicant_id );
     $vote_counts = ccgn_application_votes_counts( $applicant_id );
     return ( $vouch_counts[ 'yes' ] >= CCGN_NUMBER_OF_VOUCHES_NEEDED )
@@ -107,12 +107,12 @@ function ccgn_application_users_page_vouch_counts ( $applicant_id ) {
 // Format the list of members the applicant has asked to vouch for them
 
 function ccgn_application_users_page_vouchers ( $applicant_id ) {
-    $result = '<ol>';
+    $result = '';
     $vouchers = ccgn_application_vouchers_users ( $applicant_id );
     foreach ( $vouchers as $voucher ) {
-        $result .= '<li>' . $voucher->display_name  . '</li>';
+        $result .= '<p>' . $voucher->display_name  . '</p>';
     }
-    return $result . '</ol>';
+    return $result;
 }
 
 function ccgn_registration_email_vouching_requests ( $applicant_id ) {
@@ -205,7 +205,7 @@ function ccgn_application_users_page_vote_form ( $applicant_id ) {
             )
         );
     } else {
-        echo _('<h2>You have voted on this membership application</h2>');
+        echo _('<i>You have voted on this membership application</i>');
         $status = $entry[
             CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
         ];
@@ -219,8 +219,8 @@ function ccgn_application_users_page_vote_form ( $applicant_id ) {
 
 // Handle final approval form results
 
-function ccgn_application_users_final_approval_form_submit_handler ( $entry,
-                                                                     $form ) {
+function ccgn_application_users_page_final_form_submit_handler( $entry,
+                                                                $form ) {
     if (! ccgn_current_user_is_final_approver() ) {
         echo 'Must be Final Approver.';
         exit;
@@ -247,7 +247,7 @@ function ccgn_application_users_final_approval_form_submit_handler ( $entry,
 // Format the final approval form with any required pre-sets
 
 function ccgn_application_users_page_final_approval_form ( $applicant_id ) {
-    $entry = ccgn_application_vote_by_current_user ( $applicant_id );
+    $entry = ccgn_final_approval_entry_for ( $applicant_id );
     $can_approve = ccgn_must_decline_membership ( $applicant_id );
     if ( $entry === false ) {
         gravity_form(
@@ -258,30 +258,42 @@ function ccgn_application_users_page_final_approval_form ( $applicant_id ) {
             array(
                 CCGN_GF_FINAL_APPROVAL_APPLICANT_ID_PARAMETER
                 => $applicant_id
-            )
+            ),
+            false,
+            99 // Avoid tabindex clash if this is showing alongside Vote form
         );
         $approve = ccgn_can_activate_membership ( $applicant_id )
                  && ( ! ccgn_must_decline_membership ( $applicant_id ) );
-        $decline = true
-                 ?>
+        $decline = true;
+        ?>
         <script>
-        jQuery('document').ready(function () {
-            jQuery('input[value="Yes"]').attr('disabled',
-                                          <?php echo $approve; ?>);
-            jQuery('input[value="No"]').attr('disabled',
-                                          <?php echo $decline; ?>);
-            });
+          jQuery('document').ready(function () {
+        <?php
+        if ( ! $approve ) {
+        ?>
+            jQuery('.activate_membership input[value="Yes"]').attr('disabled',
+                                                                   true);
+        <?php
+        }
+        if ( ! $decline ) {
+        ?>
+            jQuery('.activate_membership input[value="No"]').attr('disabled',
+                                                                  true);
+        <?php
+        }
+        ?>
+          });
         </script>
-            <?php
+        <?php
     } else {
-        echo _('<h2>You have already finalised this application</h2>');
+        echo _('<i>This application has been finalised</i>');
         $status = $entry[
             CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION
         ];
         if ( $status == CCGN_GF_FINAL_APPROVAL_APPROVED_YES ) {
-            echo _('<p>You approved it.</p>');
+            echo _('<p>It was approved.</p>');
         } else {
-            echo _('<p>You rejected it.</p>');
+            echo _('<p>It was rejected.</p>');
         }
         echo '<b>Notes:</b> ' . $entry[ CCGN_GF_FINAL_APPROVAL_REASON ];
     }
@@ -348,9 +360,9 @@ function ccgn_application_users_page () {
             ccgn_application_users_page_final_approval_form( $applicant_id );
         }
     } else {
-        echo _('<h4>Application resolved.</h4>');
+        echo _('<h2>Application resolved.</h2>');
         echo '<p>Status: ' . $state . '</p>';
-        // TODO: show relevant pre/post form here for user rather than making
+        // TODO: show relevant pre/post form here for admin rather than making
         // them search for it manually.
     }
 }
