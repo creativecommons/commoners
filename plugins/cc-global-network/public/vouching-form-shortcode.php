@@ -119,3 +119,16 @@ function ccgn_vouching_form_post_validate ( $validation_result ) {
     }
     return $validation_result;
 }
+
+function ccgn_application_vouching_form_submit_handler ( $entry,
+                                                         $form ) {
+    if ( $form[ 'title' ] == CCGN_GF_VOUCH ) {
+        $applicant_id = $entry[ CCGN_GF_VOUCH_APPLICANT_ID ];
+        $stage = ccgn_registration_user_get_stage( $applicant_id);
+        if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
+            echo 'User not vouching.';
+            return;
+        }
+        ccgn_evaluate_and_maybe_finalize_application ( $applicant_id );
+    }
+}

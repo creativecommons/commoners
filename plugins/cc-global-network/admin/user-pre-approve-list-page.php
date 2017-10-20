@@ -63,11 +63,13 @@ their profile pages by clicking on the link to their username.</p>
 }
 
 function ccgn_application_pre_approval_menu () {
-    add_users_page(
-        'Global Network Pre-Approval',
-        'Global Network Pre-Approval',
-        'edit_users',
-        'global-network-pre-approval',
-        'ccgn_application_pre_approval_page'
-    );
+    if ( ccgn_current_user_is_membership_council() ) {
+        add_users_page(
+            'Global Network Pre-Approval',
+            'Global Network Pre-Approval',
+            'edit_users',
+            'global-network-pre-approval',
+            'ccgn_application_pre_approval_page'
+        );
+    }
 }

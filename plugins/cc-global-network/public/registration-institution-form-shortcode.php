@@ -55,11 +55,14 @@ function ccgn_registration_institution_form_submit_handler ( $entry,
 }
 
 function ccgn_registration_institution_shortcode_render ( $atts ) {
-    if ( ! is_user_logged_in() ) {
-        wp_redirect( 'https://login.creativecommons.org/login?service='
-                     . get_site_url()
-                     . '/sign-up/institution/' );
-        exit;
+    if( ! is_user_logged_in() ) {
+        echo '<h3>OK! Let&apos;s get started</h3>';
+        echo '<p>First you need to log in with your CCID.</p>';
+        echo '<a class="cc-btn" href="'
+            . 'https://login.creativecommons.org/login?service='
+            . get_permalink()
+            . '">Log in</a>';
+        return;
     }
     $user = wp_get_current_user();
     if ( ccgn_user_is_individual_applicant ( $user->ID ) ) {

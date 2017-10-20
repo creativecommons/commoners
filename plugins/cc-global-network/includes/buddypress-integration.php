@@ -6,8 +6,12 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Vouching and voting
 ////////////////////////////////////////////////////////////////////////////////
 
-define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 2 );
+define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 2 ); // 2
+define( 'CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED', 0 );
+define( 'CCGN_NUMBER_OF_VOTES_NEEDED', 5 ); // 5
+define( 'CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED', 0 );
 
+// The user has not been vouched by other members, but is considered vouched
 define( 'COMMONERS_USER_IS_AUTOVOUCHED', 'ccgn-user-autovouched' );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,6 +21,19 @@ define( 'COMMONERS_USER_IS_AUTOVOUCHED', 'ccgn-user-autovouched' );
 // Unvouched users cannot create a profile and can only see limited profiles
 
 define( 'CCGN_USER_ROLE_NEW', 'new-user' );
+
+// The user is a member of the membership council (in addition to being an
+// individual member
+
+define( 'CCGN_USER_ROLE_MEMBERSHIP_COUNCIL', 'membership-council-member' );
+
+// User can give final application approval from the membership council approval
+
+define( 'CCGN_USER_ROLE_FINAL_APPROVER', 'membership-final-approver' );
+
+// User is part of CC legal
+
+define( 'CCGN_USER_ROLE_CC_LEGAL', 'membership-cc-legal' );
 
 // Which Field Groups different levels of registration/vouching can see
 // Admin users are handled separately
@@ -39,6 +56,21 @@ function ccgn_add_roles_on_plugin_activation () {
             'read' => true,
             'level_0' => true
         )
+    );
+    add_role(
+        CCGN_USER_ROLE_MEMBERSHIP_COUNCIL,
+        'Membership Council',
+        array()
+    );
+    add_role(
+        CCGN_USER_ROLE_FINAL_APPROVER,
+        'Membership Final Approver',
+        array()
+    );
+    add_role(
+        CCGN_USER_ROLE_CC_LEGAL,
+        'CC Legal',
+        array()
     );
 }
 
@@ -76,6 +108,36 @@ function ccgn_current_user_level () {
         $level = 'PUBLIC';
     }
     return $level;
+}
+
+function ccgn_user_join_membership_council ( $user_id ) {
+    $user = new WP_User( $user_id );
+    $user->add_role( CCGN_USER_ROLE_MEMBERSHIP_COUNCIL );
+}
+
+function ccgn_user_leave_membership_council ( $user_id ) {
+    $user = new WP_User( $user_id );
+    $user->remove_role( CCGN_USER_ROLE_MEMBERSHIP_COUNCIL );
+}
+
+function ccgn_current_user_is_membership_council () {
+    $is = false;
+    if ( is_user_logged_in() ) {
+        $user_id = get_current_user_id();
+        $data = get_userdata( $user_id );
+        $is = in_array( CCGN_USER_ROLE_MEMBERSHIP_COUNCIL, $data->roles );
+    }
+    return $is;
+}
+
+function ccgn_current_user_is_final_approver () {
+    $is = false;
+    if ( is_user_logged_in() ) {
+        $user_id = get_current_user_id();
+        $data = get_userdata( $user_id );
+        $is = in_array( CCGN_USER_ROLE_FINAL_APPROVER, $data->roles );
+    }
+    return $is;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -416,12 +478,27 @@ function ccgn_user_level_set_autovouched ( $user_id ) {
     update_user_meta( $user_id, CCGN_USER_IS_AUTOVOUCHED, true );
 }
 
+function ccgn_user_is_autovouched( $user_id ) {
+    return get_user_meta( $user_id, CCGN_USER_IS_AUTOVOUCHED, true);
+}
+
+// Use this in wp-cli to bootstrap interim membership council
+
+function _ccgn_user_level_set_autouvouched_interim_membership_council(
+    $user_id
+) {
+    ccgn_user_level_set_autovouched( $user_id );
+    ccgn_user_join_membership_council( $user_id );
+}
+
 function ccgn_ensure_admin_access () {
     $admin = 1;
     ccgn_user_level_set_autovouched ( $admin );
     //FIXME: Get and restore role around the autovouch
     $user = get_user_by( 'ID', $admin );
     $user->set_role( 'administrator' );
+    // FOR TESTING
+    ccgn_user_join_membership_council( $admin );
 }
 
 function ccgn_user_level_set_rejected ( $user_id ) {

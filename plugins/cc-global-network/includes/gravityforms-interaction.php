@@ -25,6 +25,7 @@ define( 'CCGN_GF_VOUCH', 'Vouch For Applicant' );
 // Admin approval of applicant
 
 define( 'CCGN_GF_PRE_APPROVAL', 'Pre Approval' );
+define( 'CCGN_GF_VOTE', 'Vote on Application' );
 define( 'CCGN_GF_FINAL_APPROVAL', 'Final Approval' );
 
 // Individual fields in forms
@@ -59,7 +60,13 @@ define( 'CCGN_GF_PRE_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
 define( 'CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_PRE_APPROVAL_APPLICANT_ID', '4' );
 
+define( 'CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION', '2' );
+define( 'CCGN_GF_VOTE_REASON', '3' );
+define( 'CCGN_GF_VOTE_APPLICANT_ID_PARAMETER', 'applicant_id' );
+define( 'CCGN_GF_VOTE_APPLICANT_ID', '4' );
+
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '2' );
+define( 'CCGN_GF_FINAL_APPROVAL_REASON', '3' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID', '4' );
 
@@ -67,6 +74,7 @@ define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID', '4' );
 
 define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_YES', 'Yes' );
 define( 'CCGN_GF_PRE_APPROVAL_APPROVED_YES', 'Yes' );
+define( 'CCGN_GF_VOTE_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVED_YES', 'Yes' );
 
 define( 'CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE_YES', 'Yes' );
@@ -337,6 +345,10 @@ function ccgn_application_vouchers_users ( $applicant_id ) {
     return $users;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Vouching and voting
+////////////////////////////////////////////////////////////////////////////////
+
 // Get the list of submitted vouches for the user
 
 function ccgn_application_vouches ( $applicant_id ) {
@@ -344,7 +356,7 @@ function ccgn_application_vouches ( $applicant_id ) {
     $search_criteria = array();
     $search_criteria['field_filters'][]
         = array(
-            'key' =>  CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
+            'key' => CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
             'value' => $applicant_id
         );
     $entries = GFAPI::get_entries(
@@ -380,6 +392,83 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
         'no' => $no
     );
 }
+
+// Get the list of submitted votes for the user
+
+function ccgn_application_votes ( $applicant_id ) {
+    $form_id = RGFormsModel::get_form_id( CCGN_GF_VOTE );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' => CCGN_GF_VOTE_APPLICANT_ID,
+            'value' => $applicant_id
+        );
+    $entries = GFAPI::get_entries(
+        $form_id,
+        $search_criteria,
+        array(
+            array(
+                'key' => 'date',
+                'direction' => 'ASC',
+                'is_numeric' => false
+            )
+        )
+    );
+    return $entries;
+}
+
+// Count the number of votes received
+
+function ccgn_application_votes_counts ( $applicant_id ) {
+    $yes = 0;
+    $no = 0;
+    $votes = ccgn_application_votes( $applicant_id );
+    foreach ($votes as $vote) {
+        $did_they = $vote[
+            CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
+        ];
+        if ( $did_they == CCGN_GF_VOTE_APPROVED_YES ) {
+            $yes += 1;
+        } else  {
+            $no += 1;
+        }
+    }
+    return array(
+        'yes' => $yes,
+        'no' => $no
+    );
+}
+
+// Vote *by* current user
+
+function ccgn_application_vote_by_current_user ( $applicant_id ) {
+    $user_id = get_current_user_id();
+    $form_id = RGFormsModel::get_form_id( CCGN_GF_VOTE );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' => CCGN_GF_VOTE_APPLICANT_ID,
+            'value' => $applicant_id
+        );
+    $search_criteria['field_filters'][]
+        = array(
+            'key' => 'created_by',
+            'value' => $user_id
+        );
+    $entries = GFAPI::get_entries(
+        $form_id,
+        $search_criteria,
+        array(
+            array(
+                'key' => 'date',
+                'direction' => 'ASC',
+                'is_numeric' => false
+            )
+        )
+    );
+    return $entries ? entries[0] : false;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // User profile creation based on GravityForms information
@@ -506,10 +595,10 @@ function ccgn_set_vouchers_options ( $form ) {
     return $form;
 }
 
-################################################################################
-# Voucher choice validation
-# This is here as it's shared between a couple of shortcodes
-################################################################################
+////////////////////////////////////////////////////////////////////////////////
+// Voucher choice validation
+// This is here as it's shared between a couple of shortcodes
+////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_choose_vouchers_validate ( $validation_result ) {
     $form = $validation_result['form'];

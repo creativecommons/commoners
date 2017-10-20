@@ -149,6 +149,13 @@ add_shortcode(
 
 add_filter( 'gform_validation', 'ccgn_vouching_form_post_validate' );
 
+add_action(
+    'gform_after_submission',
+    'ccgn_application_vouching_form_submit_handler',
+    10,
+    2
+);
+
 // After each form in the Member sign-up process is submitted,
 // we update the user's application stage/state
 
@@ -203,11 +210,11 @@ if ( is_admin() ){
     add_action( 'admin_init', 'ccgn_profile_access_control' );
     add_action( 'admin_menu', 'ccgn_application_users_menu' );
     add_action( 'admin_menu', 'ccgn_hide_application_users_menu', 999 );
+    add_action( 'admin_menu', 'ccgn_settings_emails_register' );
     add_action( 'admin_menu', 'ccgn_application_pre_approval_menu' );
     add_action( 'admin_menu', 'ccgn_application_final_approval_menu' );
-    add_action( 'admin_menu', 'ccgn_settings_emails_register' );
     add_filter( 'user_row_actions', 'ccgn_application_user_link', 10, 2 );
-    // Filter applicant user page form approve/declines to hook in user profile
+    // Filter applicant user page form approve/declines to hook user profile
     // creation and notification email sending.
     add_action(
         'gform_after_submission',
