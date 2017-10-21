@@ -177,11 +177,11 @@ function ccgn_application_users_page_pre_form ( $applicant_id ) {
 
 function ccgn_application_users_page_vote_form_submit_handler ( $entry,
                                                                  $form ) {
-    if (! ccgn_current_user_is_membership_council() ) {
-        echo 'Must be Membership Council member.';
-        exit;
-    }
     if ( $form[ 'title' ] == CCGN_GF_VOTE ) {
+        if (! ccgn_current_user_is_membership_council() ) {
+            echo 'Must be Membership Council member.';
+            exit;
+        }
         $applicant_id = $entry[ CCGN_GF_VOTE_APPLICANT_ID ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
         if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
@@ -221,11 +221,11 @@ function ccgn_application_users_page_vote_form ( $applicant_id ) {
 
 function ccgn_application_users_page_final_form_submit_handler( $entry,
                                                                 $form ) {
-    if (! ccgn_current_user_is_final_approver() ) {
-        echo 'Must be Final Approver.';
-        exit;
-    }
     if ( $form[ 'title' ] == CCGN_GF_FINAL_APPROVAL ) {
+        if (! ccgn_current_user_is_final_approver() ) {
+            echo 'Must be Final Approver.';
+            exit;
+        }
         $applicant_id = $entry[ CCGN_GF_FINAL_APPROVAL_APPLICANT_ID ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
         if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
@@ -350,8 +350,8 @@ function ccgn_application_users_page () {
     echo _('<h3>Votes</h3>');
     echo ccgn_application_users_page_vote_responses ( $applicant_id );
     if ( $state == CCGN_APPLICATION_STATE_RECEIVED ) {
-        ccgn_application_users_page_pre_form ( $applicant_id );
         echo _('<h3>Pre-Approve</h3>');
+        ccgn_application_users_page_pre_form ( $applicant_id );
     } elseif ( $state == CCGN_APPLICATION_STATE_VOUCHING ) {
         echo _('<h3>Vote</h3>');
         ccgn_application_users_page_vote_form ( $applicant_id );
