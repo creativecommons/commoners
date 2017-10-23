@@ -450,15 +450,17 @@ function ccgn_user_level_set_applicant_new( $user_id ) {
 }
 
 function ccgn_user_level_set_member_individual( $user_id ) {
+    // This order seems to be important
+    bp_set_member_type( $user_id, 'individual-member' );
     $user = get_user_by( 'ID', $user_id );
     $user->set_role( 'subscriber' );
-    bp_set_member_type( $user_id, 'individual-member' );
 }
 
 function ccgn_user_level_set_member_institution( $user_id ) {
+    // This order seems to be important
+    bp_set_member_type( $user_id, 'institutional-member' );
     $user = get_user_by( 'ID', $user_id );
     $user->set_role( 'subscriber' );
-    bp_set_member_type( $user_id, 'institutional-member' );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -508,14 +510,6 @@ function _ccgn_user_level_set_autouvouched_interim_membership_council(
     ccgn_user_join_membership_council( $user_id );
 }
 
-function ccgn_ensure_admin_access () {
-    $admin = 1;
-    ccgn_user_level_set_autovouched ( $admin );
-    //FIXME: Get and restore role around the autovouch
-    $user = get_user_by( 'ID', $admin );
-    $user->set_role( 'administrator' );
-}
-
 function ccgn_user_level_set_rejected ( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
     // Lock the account
@@ -544,6 +538,35 @@ function _ccgn_user_level_reset ( $user_id ) {
     bp_remove_member_type( $user_id, 'individual-member' );
     bp_remove_member_type( $user_id, 'institutional-member' );
     xprofile_delete_field_data( '', $user_id );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Admin access hooks
+////////////////////////////////////////////////////////////////////////////////
+
+// Calling this from register_activation_hook doesn't set the user as an
+// individual-user. So we go through some contortions to call it when
+// bp_set_member_type() is happy.
+// I'd prefer to understand this better but it works for the moment. - RobM.
+
+function ccgn_ensure_admin_access () {
+    $admin = 1;
+    ccgn_user_level_set_autovouched ( $admin );
+    //FIXME: Get and restore role around the autovouch
+    $user = get_user_by( 'ID', $admin );
+    $user->set_role( 'administrator' );
+}
+
+function ccgn_ensure_admin_access_activation_callback () {
+  add_option( 'Activated_Plugin', 'ccgn-global-network' );
+}
+
+function ccgn_ensure_admin_access_load_plugin_callback () {
+    if ( is_admin()
+         && ( get_option( 'Activated_Plugin' ) == 'ccgn-global-network' ) ) {
+        delete_option( 'Activated_Plugin' );
+        ccgn_ensure_admin_access ();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -621,3 +644,4 @@ function _bp_get_activity_action_pre_meta($content){
     }
     return preg_replace('/href=\"(.*?)\"/is', 'href="'.bp_core_get_user_domain($user->ID, $fullname).'"', $content);
 }
+

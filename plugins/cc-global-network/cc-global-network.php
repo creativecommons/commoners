@@ -108,18 +108,17 @@ register_activation_hook(
 
 register_activation_hook(
     __FILE__,
-    'ccgn_ensure_admin_access'
+    'ccgn_ensure_admin_access_activation_callback'
 );
+add_action( 'admin_init', 'ccgn_ensure_admin_access_load_plugin_callback' );
 
 add_action(
     'bp_get_activity_action_pre_meta',
     '_bp_get_activity_action_pre_meta'
 );
 add_filter( 'bp_core_get_userid_from_nicename', '_bp_core_get_userid', 10, 2 );
-
 add_action( 'bp_setup_nav', 'ccgn_not_logged_in_ui', 150 );
 
-//FIXME: This hides them from the admin. So no.
 add_filter( 'bp_xprofile_get_groups', 'ccgn_filter_role_groups' );
 
 add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
