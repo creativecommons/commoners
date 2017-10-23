@@ -6,10 +6,24 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Vouching and voting
 ////////////////////////////////////////////////////////////////////////////////
 
-define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 2 ); // 2
-define( 'CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED', 0 );
-define( 'CCGN_NUMBER_OF_VOTES_NEEDED', 5 ); // 5
-define( 'CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED', 0 );
+if ( defined( CCGN_DEVELOPMENT ) ) {
+    define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 1 );
+    define( 'CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED', 1 );
+    define( 'CCGN_NUMBER_OF_VOTES_NEEDED', 1 );
+    define( 'CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED', 1 );
+
+} elseif ( defined( CCGN_TESTING ) ) {
+    define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 1 );
+    define( 'CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED', 0 );
+    define( 'CCGN_NUMBER_OF_VOTES_NEEDED', 2 );
+    define( 'CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED', 0 );
+
+} else {
+    define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 2 );
+    define( 'CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED', 0 );
+    define( 'CCGN_NUMBER_OF_VOTES_NEEDED', 5 );
+    define( 'CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED', 0 );
+}
 
 // The user has not been vouched by other members, but is considered vouched
 define( 'COMMONERS_USER_IS_AUTOVOUCHED', 'ccgn-user-autovouched' );
