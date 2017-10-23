@@ -375,12 +375,15 @@ function ccgn_filter_role_groups ( $groups ) {
         // Otherwise, users can access only what their level permits
         global $ccgn_access_levels;
         $level = ccgn_current_user_level();
-        $userGroups = $ccgn_access_levels[ $level ];
         $accessible = [];
-        // TODO: Cache group IDs and check these instead
-        foreach ( $groups as $group ) {
-            if ( in_array( $group->name, $userGroups)  ) {
-                $accessible[] = $group;
+        $userGroups = $ccgn_access_levels[ $level ];
+        // Otherwise wp plugin activate complains about the in_array below
+        if ( $userGroups ) {
+            // TODO: Cache group IDs and check these instead
+            foreach ( $groups as $group ) {
+                if ( in_array( $group->name, $userGroups)  ) {
+                    $accessible[] = $group;
+                }
             }
         }
     }
@@ -511,8 +514,6 @@ function ccgn_ensure_admin_access () {
     //FIXME: Get and restore role around the autovouch
     $user = get_user_by( 'ID', $admin );
     $user->set_role( 'administrator' );
-    // FOR TESTING
-    ccgn_user_join_membership_council( $admin );
 }
 
 function ccgn_user_level_set_rejected ( $user_id ) {
