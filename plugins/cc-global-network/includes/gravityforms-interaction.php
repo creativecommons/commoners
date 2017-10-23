@@ -600,22 +600,24 @@ function ccgn_set_vouchers_options ( $form ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_choose_vouchers_validate ( $validation_result ) {
-    $form = $validation_result['form'];
-    if( $form['title'] == CCGN_GF_CHOOSE_VOUCHERS ) {
-        $vouchers = [];
-        // Check for duplicate vouchers, mark as invalid if found
-        foreach( $form['fields'] as &$field ) {
-            if ( in_array( $field->id, CCGN_GF_VOUCH_VOUCHER_FIELDS ) ) {
-                $voucher = rgpost( "input_{$field['id']}" );
-                if ( $voucher && in_array( $voucher, $vouchers ) ) {
-                    $validation_result['is_valid'] = false;
-                    $field->failed_validation = true;
-                    $field->validation_message = 'The same member cannot vouch you more than once!';
+    if (!  defined( CCGN_DEVELOPMENT ) ) {
+        $form = $validation_result['form'];
+        if( $form['title'] == CCGN_GF_CHOOSE_VOUCHERS ) {
+            $vouchers = [];
+            // Check for duplicate vouchers, mark as invalid if found
+            foreach( $form['fields'] as &$field ) {
+                if ( in_array( $field->id, CCGN_GF_VOUCH_VOUCHER_FIELDS ) ) {
+                    $voucher = rgpost( "input_{$field['id']}" );
+                    if ( $voucher && in_array( $voucher, $vouchers ) ) {
+                        $validation_result['is_valid'] = false;
+                        $field->failed_validation = true;
+                        $field->validation_message = 'The same member cannot vouch you more than once!';
+                    }
+                    $vouchers[] = $voucher;
                 }
-                $vouchers[] = $voucher;
             }
+            $validation_result['form'] = $form;
         }
-        $validation_result['form'] = $form;
     }
     return $validation_result;
 }
