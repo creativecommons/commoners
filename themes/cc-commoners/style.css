@@ -4,7 +4,7 @@ Theme URI: https://github.com/creativecommons.org/commonser
 Author: Creative Commons Corporation
 Author URI: https://creativecommons.org/
 Description: The theme for commoners.creativecommons.org
-Version: 2.3.2
+Version: 2.3.7
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags:
@@ -102,10 +102,19 @@ font-family: 'Roboto Condensed', sans-serif; */
 	background-color: #efbe01;
 }
 
+.entry-title {
+	text-align: center !important;
+}
+
 /* Play nice with .site-header themes */
 .admin-bar .entry-header {
   /* 32px minus the 10px ::after for .site-header */
   margin-top: -22px;
+}
+
+.site-content {
+    width: 800px;
+    margin: auto;
 }
 
 .entry-content {
@@ -192,7 +201,7 @@ font-family: 'Roboto Condensed', sans-serif; */
 .page-body {
 	position: relative;
 	width: 100%;
-	max-width: 1280px;
+	/*max-width: 1280px;*/
 	padding-top: 158px;
 	margin: 0 auto;
 }
@@ -229,6 +238,10 @@ font-family: 'Roboto Condensed', sans-serif; */
 		max-width: 100%;
 	}
 	
+}
+
+.top-message p {
+    padding: 0;
 }
 
 .form-top-text {
@@ -385,6 +398,7 @@ font-family: 'Roboto Condensed', sans-serif; */
 }
 
 .block {
+    width: 33.4%;
 	position: relative;
 	display: table-cell;
 	padding: 20px 32px 55px 32px;
@@ -411,7 +425,7 @@ font-family: 'Roboto Condensed', sans-serif; */
 	background-color: #35bbd8;
 }
 
-.block:last-child {
+.block:nth-child(3) {
 	background-color: #27a635;
 }
 
@@ -431,7 +445,7 @@ font-family: 'Roboto Condensed', sans-serif; */
 .block-link {
 	display: inline-block;
 	position: absolute;
-	right: 32px;
+	right: 60px;
 	bottom: 20px;
 	text-decoration: none;
 	text-align: center;
@@ -494,7 +508,7 @@ font-family: 'Roboto Condensed', sans-serif; */
 
 footer {
 	position: relative;
-	width: 100%;
+	width: 100% !important;
 	height: 110px;
 	background-color: #efbe01;
 }
@@ -808,4 +822,30 @@ footer .logo span {
     word-spacing: 0px;
     writing-mode: horizontal-tb;
     -webkit-appearance: none;
+}
+
+.bp-user #item-header-content {
+    margin-top: -140px !important;
+    margin-left: 170px !important;
+}
+
+.site-content {
+    padding-top: 0 !important;
+}
+
+.admin-bar .site-content-contain {
+    /* 32px minus the 10px ::after for .site-header */
+    margin-top: -22px;
+}
+
+.entry-header {
+    margin: 0 !important;
+}
+
+#buddypress #item-header {
+    padding: 0 !important;
+}
+
+.bp-user .entry-title {
+    margin-bottom: 0px !important;
 }
