@@ -531,13 +531,12 @@ function ccgn_create_profile( $applicant_id ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_get_individual_ids () {
-    $query = new BP_User_Query(
+    // FIXME: Filter admin, council members, inactive members
+    return bp_core_get_users(
         array(
             'member_type' => 'individual-member'
         )
-    );
-    $users = $query->results;
-    return $users;
+    )["users"];
 }
 
 // This excludes the initial admin user (1) and the applicant from the list
