@@ -833,11 +833,6 @@ footer .logo span {
     padding-top: 0 !important;
 }
 
-.admin-bar .site-content-contain {
-    /* 32px minus the 10px ::after for .site-header */
-    margin-top: -22px;
-}
-
 .entry-header {
     margin: 0 !important;
 }
