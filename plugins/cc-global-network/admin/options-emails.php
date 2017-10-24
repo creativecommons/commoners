@@ -13,6 +13,25 @@ function ccgn_settings_emails_section_callback () {
     <?php
 }
 
+function ccgn_settings_emails_sender_name () {
+    $options = get_option( 'ccgn-email-sender' );
+    ?>
+    <input type="text" name="ccgn-email-sender[name]"
+      class="large-text"
+      value="<?php echo $options['name']; ?>" />
+    <?php
+}
+
+function ccgn_settings_emails_sender_address () {
+    $options = get_option( 'ccgn-email-sender' );
+    ?>
+    <input type="email" name="ccgn-email-sender[address]"
+      class="large-text"
+      value="<?php echo $options['address']; ?>" />
+    <?php
+}
+
+
 function ccgn_settings_emails_received_subject () {
     $options = get_option( 'ccgn-email-received' );
     ?>
@@ -92,6 +111,33 @@ function ccgn_settings_emails_register () {
         'manage_options',
         'global-network-emails',
         'ccgn_settings_emails_render'
+    );
+
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-sender'
+    );
+    add_settings_section(
+        'ccgn-email-sender',
+        'Email Sender',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'sender-name',
+        'Display Name',
+        ccgn_settings_emails_sender_name,
+        'global-network-emails',
+        'ccgn-email-sender'
+    );
+
+    add_settings_field(
+        'sender-address',
+        'Email Address',
+        ccgn_settings_emails_sender_address,
+        'global-network-emails',
+        'ccgn-email-sender'
     );
 
     register_setting(

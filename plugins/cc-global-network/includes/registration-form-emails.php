@@ -59,11 +59,15 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
         $voucher_name,
         $message
     );
+    add_filter( 'wp_mail_from', 'ccgn_mail_from' );
+    add_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
     $result = wp_mail(
         $to_address,
         $subject_substituted,
         $message_substituted
     );
+    remove_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
+    remove_filter( 'wp_mail_from', 'ccgn_mail_from' );
 }
 
 function ccgn_registration_email_to_applicant ( $applicant_id,
@@ -128,4 +132,19 @@ function ccgn_registration_email_vouching_request ( $applicant_id,
         $voucher_id,
         'ccgn-email-vouch-request'
     );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Use the name and address from our settings for emails
+////////////////////////////////////////////////////////////////////////////////
+
+//IMPLEMENTME: override only for scope of send above
+
+function ccgn_mail_from_address( $old ) {
+    return get_option( 'ccgn-email-sender' )[ 'address' ];
+}
+
+function ccgn_mail_from_name( $old ) {
+ return get_option( 'ccgn-email-sender' )[ 'name' ];
 }
