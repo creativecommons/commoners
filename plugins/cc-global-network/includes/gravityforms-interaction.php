@@ -709,7 +709,7 @@ function ccgn_legal_approval_entry_for ( $applicant_id ) {
 
 // This really does delete the user's form entries.
 
-function _ccgn_application_delete_entries ( $applicant_id ) {
+function _ccgn_application_delete_entries_created_by ( $applicant_id ) {
     $search_criteria = array();
     $search_criteria['field_filters'][]
         = array(
@@ -721,6 +721,29 @@ function _ccgn_application_delete_entries ( $applicant_id ) {
         $search_criteria
     );
     foreach( $entries as $entry ) {
-        GFAPI::delete_entry( $entry->id );
+        GFAPI::delete_entry( $entry[ 'id' ] );
+    }
+}
+
+// This really does delete them
+
+function _ccgn_application_delete_entries_applicant_id (
+    $form_name,
+    $field_id,
+    $applicant_id
+) {
+    $form_id = RGFormsModel::get_form_id( $form_name );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' =>  $field_id,
+            'value' => $applicant_id
+        );
+    $entries = GFAPI::get_entries(
+        $form_id,
+        $search_criteria
+    );
+    foreach( $entries as $entry ) {
+        GFAPI::delete_entry( $entry[ 'id' ] );
     }
 }

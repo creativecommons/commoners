@@ -522,7 +522,23 @@ function ccgn_user_level_register( $user_id ) {
 // It really does wipe their application details, so be careful.
 
 function _ccgn_user_level_reset ( $user_id ) {
-    _ccgn_application_delete_entries( $user_id );
+    _ccgn_application_delete_entries_created_by( $user_id );
+    // Delete approval forms but not vouches/votes
+    _ccgn_application_delete_entries_applicant_id (
+        CCGN_GF_PRE_APPROVAL,
+        CCGN_GF_PRE_APPROVAL_APPLICANT_ID,
+        $user_id
+    );
+    _ccgn_application_delete_entries_applicant_id (
+        CCGN_GF_FINAL_APPROVAL,
+        CCGN_GF_FINAL_APPROVAL_APPLICANT_ID,
+        $user_id
+    );
+    _ccgn_application_delete_entries_applicant_id (
+        CCGN_GF_LEGAL_APPROVAL,
+        CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID,
+        $user_id
+    );
     delete_user_meta( $user_id, CCGN_APPLICATION_TYPE );
     delete_user_meta( $user_id, CCGN_APPLICATION_STATE );
     ccgn_user_level_set_applicant_new( $user_id );
