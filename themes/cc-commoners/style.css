@@ -4,7 +4,7 @@ Theme URI: https://github.com/creativecommons.org/commonser
 Author: Creative Commons Corporation
 Author URI: https://creativecommons.org/
 Description: The theme for commoners.creativecommons.org
-Version: 2.3.7
+Version: 2.3.9
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags:
@@ -14,7 +14,7 @@ Template: twentyseventeen
 
 @import "assets/css/normalize.css";
 @import "assets/css/modernscale.css";
-@import "assets/css/forms.css";
+/*@import "assets/css/forms.css";*/
 
 .cf::after {
     position: relative;
@@ -243,7 +243,7 @@ font-family: 'Roboto Condensed', sans-serif; */
 .top-message p {
     padding: 0;
 }
-
+/*
 .form-top-text {
 	column-count: 2;
 	column-gap: 40px;
@@ -253,7 +253,7 @@ font-family: 'Roboto Condensed', sans-serif; */
 	color: #333;
 	text-decoration: none;
 }
-
+*/
 .top-message h2 {
 	width: 350px;
 	float: left;
@@ -578,7 +578,7 @@ footer .logo span {
 	}
 	
 }
-
+/*
 .signup-form-body {
 	position: relative;
 	max-width: 840px;
@@ -752,6 +752,7 @@ footer .logo span {
 	width: 200px;
 	margin: 30px auto 100px auto;
 }
+*/
 
 .cc-btn {
     /* From Bootstrap 4: https://v4-alpha.getbootstrap.com/ */
