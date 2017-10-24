@@ -6,18 +6,16 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Vouching and voting
 ////////////////////////////////////////////////////////////////////////////////
 
-if ( defined( CCGN_DEVELOPMENT ) ) {
+if ( defined( 'CCGN_DEVELOPMENT' ) ) {
     define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 1 );
     define( 'CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED', 1 );
     define( 'CCGN_NUMBER_OF_VOTES_NEEDED', 1 );
     define( 'CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED', 1 );
-
-} elseif ( defined( CCGN_TESTING ) ) {
+} elseif ( defined( 'CCGN_TESTING' ) ) {
     define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 1 );
     define( 'CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED', 0 );
     define( 'CCGN_NUMBER_OF_VOTES_NEEDED', 2 );
     define( 'CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED', 0 );
-
 } else {
     define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 2 );
     define( 'CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED', 0 );
@@ -47,7 +45,7 @@ define( 'CCGN_USER_ROLE_FINAL_APPROVER', 'membership-final-approver' );
 
 // User is part of CC legal
 
-define( 'CCGN_USER_ROLE_CC_LEGAL', 'membership-cc-legal' );
+define( 'CCGN_USER_ROLE_CC_LEGAL_TEAM', 'membership-cc-legal' );
 
 // Which Field Groups different levels of registration/vouching can see
 // Admin users are handled separately
@@ -82,8 +80,8 @@ function ccgn_add_roles_on_plugin_activation () {
         array()
     );
     add_role(
-        CCGN_USER_ROLE_CC_LEGAL,
-        'CC Legal',
+        CCGN_USER_ROLE_CC_LEGAL_TEAM,
+        'CC Legal Team',
         array()
     );
 }
@@ -150,6 +148,16 @@ function ccgn_current_user_is_final_approver () {
         $user_id = get_current_user_id();
         $data = get_userdata( $user_id );
         $is = in_array( CCGN_USER_ROLE_FINAL_APPROVER, $data->roles );
+    }
+    return $is;
+}
+
+function ccgn_current_user_is_legal_team () {
+    $is = false;
+    if ( is_user_logged_in() ) {
+        $user_id = get_current_user_id();
+        $data = get_userdata( $user_id );
+        $is = in_array( CCGN_USER_ROLE_CC_LEGAL_TEAM, $data->roles );
     }
     return $is;
 }
@@ -307,27 +315,9 @@ function ccgn_create_profile_fields_institution () {
     );
     ccgn_buddypress_member_field(
         $institution_id,
-        'About',
-        'A brief description of the organization',
-        2,
-        true,
-        'textbox',
-        'institutional-member'
-    );
-    ccgn_buddypress_member_field(
-        $institution_id,
         'Representative',
         'The person to contact at the organization about Creative Commons Global Network-related matters',
-        3,
-        true,
-        'textbox',
-        'institutional-member'
-    );
-    ccgn_buddypress_member_field(
-        $institution_id,
-        'Contact',
-        'An email address or other means of getting in touch with the organization\'s representative',
-        4,
+        2,
         true,
         'textbox',
         'institutional-member'
@@ -533,6 +523,7 @@ function ccgn_user_level_register( $user_id ) {
 
 function _ccgn_user_level_reset ( $user_id ) {
     _ccgn_application_delete_entries( $user_id );
+    delete_user_meta( $user_id, CCGN_APPLICATION_TYPE );
     delete_user_meta( $user_id, CCGN_APPLICATION_STATE );
     ccgn_user_level_set_applicant_new( $user_id );
     bp_remove_member_type( $user_id, 'individual-member' );

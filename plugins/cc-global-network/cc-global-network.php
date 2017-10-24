@@ -51,6 +51,7 @@ require_once(
 require_once(CCGN_PATH . 'admin/user-application-page.php');
 require_once(CCGN_PATH . 'admin/user-pre-approve-list-page.php');
 require_once(CCGN_PATH . 'admin/user-final-approval-list-page.php');
+require_once(CCGN_PATH . 'admin/user-legal-approval-list-page.php');
 
 // Vouching UI for existing members to vouch for new applicant
 
@@ -165,11 +166,25 @@ add_action(
     2
 );
 
+add_shortcode(
+    'ccgn-signup-institution-form',
+    'ccgn_registration_institution_shortcode_render'
+);
+
 add_action(
     'gform_after_submission',
     'ccgn_registration_institution_form_submit_handler',
     10,
     2
+);
+
+//FIXME: Handle redirects in form to /individual/ -> /institutional/.
+//Either go full multipage or show text & render form in shortcode.
+add_filter(
+    'gform_confirmation',
+    'ccgn_swizzle_form_url_for_institution',
+    10,
+    4
 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -212,6 +227,7 @@ if ( is_admin() ){
     add_action( 'admin_menu', 'ccgn_settings_emails_register' );
     add_action( 'admin_menu', 'ccgn_application_pre_approval_menu' );
     add_action( 'admin_menu', 'ccgn_application_final_approval_menu' );
+    add_action( 'admin_menu', 'ccgn_application_legal_approval_menu' );
     add_filter( 'user_row_actions', 'ccgn_application_user_link', 10, 2 );
     // Filter applicant user page form approve/declines to hook user profile
     // creation and notification email sending.
@@ -224,6 +240,12 @@ if ( is_admin() ){
     add_action(
         'gform_after_submission',
         'ccgn_application_users_page_final_form_submit_handler',
+        10,
+        2
+    );
+    add_action(
+        'gform_after_submission',
+         'ccgn_application_users_page_legal_approval_form_submit_handler',
         10,
         2
     );

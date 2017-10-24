@@ -28,6 +28,9 @@ define( 'CCGN_GF_PRE_APPROVAL', 'Pre Approval' );
 define( 'CCGN_GF_VOTE', 'Vote on Membership' );
 define( 'CCGN_GF_FINAL_APPROVAL', 'Final Approval' );
 
+// Legal team final approval of Institutional Members
+define( 'CCGN_GF_LEGAL_APPROVAL', 'Legal Approval' );
+
 // Individual fields in forms
 
 define( 'CCGN_GF_DETAILS_NAME', '1' );
@@ -70,12 +73,18 @@ define( 'CCGN_GF_FINAL_APPROVAL_REASON', '2' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID', '3' );
 
+define( 'CCGN_GF_LEGAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
+define( 'CCGN_GF_LEGAL_APPROVAL_REASON', '2' );
+define( 'CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
+define( 'CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID', '3' );
+
 // Field values that we need to check
 
 define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_YES', 'Yes' );
 define( 'CCGN_GF_PRE_APPROVAL_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_VOTE_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVED_YES', 'Yes' );
+define( 'CCGN_GF_LEGAL_APPROVAL_APPROVED_YES', 'Yes' );
 
 define( 'CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE_YES', 'Yes' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS_MOU', 'MOU' );
@@ -513,7 +522,24 @@ function ccgn_create_profile_individual( $applicant_id ) {
 }
 
 function ccgn_create_profile_institutional( $applicant_id ) {
-    //IMPLEMENTME
+    $details = ccgn_details_institution_form_entry ( $applicant_id );
+    wp_update_user(
+        array(
+            'ID' => $applicant_id,
+            'nickname' => $details[ CCGN_GF_INSTITUTION_DETAILS_NAME ],
+            'display_name' => $details[ CCGN_GF_INSTITUTION_DETAILS_NAME ]
+        )
+    );
+    xprofile_set_field_data(
+        'Website',
+        $applicant_id,
+        $details[ CCGN_GF_INSTITUTION_DETAILS_WEB_SITE ]
+    );
+    xprofile_set_field_data(
+        'Representative',
+        $applicant_id,
+        $details[ CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_NAME ]
+    );
 }
 
 function ccgn_create_profile( $applicant_id ) {
@@ -600,7 +626,7 @@ function ccgn_set_vouchers_options ( $form ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_choose_vouchers_validate ( $validation_result ) {
-    if (!  defined( CCGN_DEVELOPMENT ) ) {
+    if ( ! defined( 'CCGN_DEVELOPMENT' ) ) {
         $form = $validation_result['form'];
         if( $form['title'] == CCGN_GF_CHOOSE_VOUCHERS ) {
             $vouchers = [];
@@ -628,7 +654,6 @@ function ccgn_choose_vouchers_validate ( $validation_result ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_final_approval_entry_for ( $applicant_id ) {
-    $user_id = get_current_user_id();
     $form_id = RGFormsModel::get_form_id( CCGN_GF_FINAL_APPROVAL );
     $search_criteria = array();
     $search_criteria['field_filters'][]
@@ -647,7 +672,34 @@ function ccgn_final_approval_entry_for ( $applicant_id ) {
             )
         )
     );
-    return $entries ? entries[0] : false;
+    return $entries ? $entries[0] : false;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Legal Approval
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_legal_approval_entry_for ( $applicant_id ) {
+    $form_id = RGFormsModel::get_form_id( CCGN_GF_LEGAL_APPROVAL );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' => CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID,
+            'value' => $applicant_id
+        );
+    $entries = GFAPI::get_entries(
+        $form_id,
+        $search_criteria,
+        array(
+            array(
+                'key' => 'date',
+                'direction' => 'ASC',
+                'is_numeric' => false
+            )
+        )
+    );
+    return $entries ? $entries[0] : false;
 }
 
 

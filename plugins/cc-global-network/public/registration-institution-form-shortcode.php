@@ -32,13 +32,13 @@ function ccgn_registration_institution_form_submit_handler ( $entry,
     ) ) {
         return;
     }
-    /*    switch( $form[ 'title' ] ) {
+    switch( $form[ 'title' ] ) {
     case CCGN_GF_AGREE_TO_TERMS:
         ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_DETAILS
         );
         break;
-    case CCGN_GF_APPLICANT_DETAILS:
+    case CCGN_GF_INSTITUTION_DETAILS:
         ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_VOUCHERS
         );
@@ -49,9 +49,9 @@ function ccgn_registration_institution_form_submit_handler ( $entry,
         );
         // Move if this is no longer the last form the applicant completes in
         // the initial data entry stage!
-        ccgn_registration_post_last_form ();
+        ccgn_registration_institution_post_last_form ();
         break;
-        }*/
+    }
 }
 
 function ccgn_registration_institution_shortcode_render ( $atts ) {
@@ -102,4 +102,18 @@ function ccgn_registration_institution_shortcode_render ( $atts ) {
         error_log( 'Unrecognised application state: ' . $state );
         echo _( '<p>Unrecognised application state.</p>' );
     }
+}
+
+function ccgn_swizzle_form_url_for_institution(
+    $confirmation,
+    $form,
+    $lead,
+    $ajax
+){
+    if ( ccgn_user_is_institutional_applicant( $lead[ 'created_by' ] ) ) {
+        $url = $confirmation[ 'redirect' ];
+        $new_url = str_replace( '/individual/', '/institution/', $url );
+        $confirmation = array( 'redirect' => $new_url );
+    }
+    return $confirmation;
 }

@@ -78,8 +78,11 @@ define( 'CCGN_APPLICATION_STATE_DETAILS', 'details-form' );
 define( 'CCGN_APPLICATION_STATE_VOUCHERS', 'vouchers-form' );
 // The user has filled out all the forms and is waiting for pre-approval
 define( 'CCGN_APPLICATION_STATE_RECEIVED', 'received' );
-// The user has been pre-approved and is waiting for vouchers
+// The user has been pre-approved and is waiting for vouchers/votes
 define( 'CCGN_APPLICATION_STATE_VOUCHING', 'vouching' );
+// The institutional user has been vouched/voted and received final approval
+// and is waiting for final approval from the legal team
+define( 'CCGN_APPLICATION_STATE_LEGAL', 'legal' );
 // The user's application has been rejected in pre- or final approval
 define( 'CCGN_APPLICATION_STATE_REJECTED', 'rejected' );
 // The user's application has been accepted in final approval
@@ -89,6 +92,15 @@ define( 'CCGN_APPLICATION_STATE_ACCEPTED', 'accepted' );
 define(
     'CCGN_APPLICATION_STATE_PAST_APPROVAL',
     [
+        CCGN_APPLICATION_STATE_REJECTED,
+        CCGN_APPLICATION_STATE_ACCEPTED
+    ]
+);
+
+define(
+    'CCGN_APPLICATION_STATE_LEGAL_APPROVAL_STATE_AVAILABLE',
+    [
+        CCGN_APPLICATION_STATE_LEGAL,
         CCGN_APPLICATION_STATE_REJECTED,
         CCGN_APPLICATION_STATE_ACCEPTED
     ]

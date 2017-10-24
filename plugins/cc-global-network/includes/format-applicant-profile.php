@@ -95,7 +95,7 @@ function ccgn_user_page_institution_profile_text ( $applicant_id ) {
     return '<h3>Institutional Applicant</h3>'
         .ccgn_vouching_form_profile_format(
             ccgn_details_institution_form_entry ( $applicant_id ),
-            CCGN_GF_INSTITUTION_DETAILS_MAP
+            CCGN_GF_INSTITUTION_DETAILS_USER_PAGE_MAP
         );
 }
 

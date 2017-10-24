@@ -130,6 +130,7 @@ function ccgn_registration_email_vouching_requests ( $applicant_id ) {
 // Embedded form setup and handling
 ////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
 // Handle pre form results
 
 function ccgn_application_users_page_pre_form_submit_handler ( $entry,
@@ -173,6 +174,7 @@ function ccgn_application_users_page_pre_form ( $applicant_id ) {
         );
 }
 
+////////////////////////////////////////////////////////////////////////////////
 // Handle vote form results
 
 function ccgn_application_users_page_vote_form_submit_handler ( $entry,
@@ -217,6 +219,7 @@ function ccgn_application_users_page_vote_form ( $applicant_id ) {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
 // Handle final approval form results
 
 function ccgn_application_users_page_final_form_submit_handler( $entry,
@@ -237,7 +240,17 @@ function ccgn_application_users_page_final_form_submit_handler( $entry,
             CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION
         ];
         if ( $result == CCGN_GF_FINAL_APPROVAL_APPROVED_YES ) {
-            ccgn_activate_and_notify_member ( $applicant_id );
+            if ( ccgn_user_is_individual_applicant( $applicant_id ) ) {
+                ccgn_activate_and_notify_member( $applicant_id );
+            } elseif ( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
+                ccgn_registration_user_set_stage (
+                    $applicant_id,
+                    CCGN_APPLICATION_STATE_LEGAL
+                );
+            } else {
+                echo 'User is not individual or institution???';
+                return;
+            }
         } else {
             ccgn_decline_and_notify_applicant ( $applicant_id );
         }
@@ -298,6 +311,88 @@ function ccgn_application_users_page_final_approval_form ( $applicant_id ) {
         echo '<b>Notes:</b> ' . $entry[ CCGN_GF_FINAL_APPROVAL_REASON ];
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Institutional legal approval form
+
+function ccgn_application_users_page_legal_approval_form_submit_handler (
+    $entry,
+    $form
+) {
+    if ( $form[ 'title' ] == CCGN_GF_LEGAL_APPROVAL ) {
+        if (! ccgn_current_user_is_legal_team() ) {
+            echo 'Must be Legal Team Member.';
+            exit;
+        }
+        $applicant_id = $entry[ CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID ];
+        $stage = ccgn_registration_user_get_stage( $applicant_id);
+        if ( $stage != CCGN_APPLICATION_STATE_LEGAL ) {
+            echo 'User state is bad';
+            return;
+        }
+        $result = $entry[
+            CCGN_GF_LEGAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION
+        ];
+        if ( $result == CCGN_GF_LEGAL_APPROVAL_APPROVED_YES ) {
+            if ( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
+                ccgn_activate_and_notify_member ( $applicant_id );
+            } else {
+                echo 'User is not institution???';
+                return;
+            }
+        } else {
+            ccgn_decline_and_notify_applicant ( $applicant_id );
+        }
+    }
+}
+
+function ccgn_application_users_page_legal_approval_form ( $applicant_id ) {
+    $entry = ccgn_legal_approval_entry_for ( $applicant_id );
+    if ( $entry === false ) {
+        gravity_form(
+            CCGN_GF_LEGAL_APPROVAL,
+            false,
+            false,
+            false,
+            array(
+                CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID_PARAMETER
+                => $applicant_id
+            )
+        );
+    }
+}
+
+function ccgn_application_format_legal_approval ( $applicant_id, $state ) {
+    if(
+        ! in_array(
+            $state,
+            CCGN_APPLICATION_STATE_LEGAL_APPROVAL_STATE_AVAILABLE
+        )
+    ) {
+        return;
+    }
+    echo _('<h2>Legal Final Approval Of Institutional Application</h2>');
+    if ( $state === CCGN_APPLICATION_STATE_LEGAL) {
+        if ( ccgn_current_user_is_legal_team() ) {
+            ccgn_application_users_page_legal_approval_form ( $applicant_id );
+        } else {
+            echo _('<p>Legal final approval pending.</p>');
+        }
+    }
+    elseif ( in_array( $state, CCGN_APPLICATION_STATE_PAST_APPROVAL ) ) {
+        echo _('<i>Legal has resolved this membership application</i>');
+        $entry = ccgn_legal_approval_entry_for ( $applicant_id );
+        $status = $entry[
+            CCGN_GF_LEGAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION
+        ];
+        if ( $status == CCGN_GF_LEGAL_APPROVAL_APPROVED_YES ) {
+            echo _('<p>The Institution\'s application was resolved successfully.</p>');
+        } else {
+            echo _('<p>The Institution\'s application was <i>not</i> resolved successfully.</p>');
+        }
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Render the page
@@ -364,6 +459,9 @@ function ccgn_application_users_page () {
         echo '<p>Status: ' . $state . '</p>';
         // TODO: show relevant pre/post form here for admin rather than making
         // them search for it manually.
+    }
+    if ( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
+        ccgn_application_format_legal_approval( $applicant_id, $state );
     }
 }
 
