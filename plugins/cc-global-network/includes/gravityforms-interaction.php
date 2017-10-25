@@ -236,7 +236,7 @@ function ccgn_entries_referring_to_user (
             'key' =>  $field_id,
             'value' => $user_id
         );
-    $entries = GFAPI::get_entries(
+    return GFAPI::get_entries(
         $form_id,
         $search_criteria,
         array(

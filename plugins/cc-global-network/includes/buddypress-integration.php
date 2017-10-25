@@ -162,6 +162,12 @@ function ccgn_current_user_is_legal_team () {
     return $is;
 }
 
+function ccgn_current_user_can_see_user_application_page () {
+    return ccgn_current_user_is_membership_council ()
+        || ccgn_current_user_is_final_approver ()
+        || ccgn_current_user_is_legal_team ();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Buddypress member types
 ////////////////////////////////////////////////////////////////////////////////
@@ -652,3 +658,6 @@ function _bp_get_activity_action_pre_meta($content){
     return preg_replace('/href=\"(.*?)\"/is', 'href="'.bp_core_get_user_domain($user->ID, $fullname).'"', $content);
 }
 
+function _bp_remove_instant_messaging_if_unvouched () {
+    return ! ccgn_current_user_is_vouched ();
+}

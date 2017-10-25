@@ -128,6 +128,13 @@ add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
 add_action( 'bp_ready', '_bp_remove_profile_options_if_unvouched' );
 
+// Hide messaging from unvouched users
+
+add_filter(
+    'bp_get_send_public_message_button',
+    '_bp_remove_instant_messaging_if_unvouched'
+);
+
 ////////////////////////////////////////////////////////////////////////////////
 // Registration Forms
 ////////////////////////////////////////////////////////////////////////////////
