@@ -17,15 +17,43 @@ function ccgn_vp_clean_string( $string ) {
     );
 }
 
+function ccgn_field_values ( $entry, $id ) {
+    // Get an array of the keys that match "$id" or "$id.1" but not "$id1"
+    $keys = array_values(
+        preg_grep(
+            "/^($id|$id\.\d+)$/",
+            array_keys(
+                $entry
+            )
+        )
+    );
+    $results = array_values(
+        array_intersect_key(
+            $entry,
+            array_flip(
+                $keys
+            )
+        )
+    );
+    // This will be formatted to <br> by ccgn_vp_clean_string, which strips tags
+    return implode( "\r\n", $results ? $results : [] );
+}
+
 // Format up a field from the Applicant Details.
 
 function ccgn_vp_format_field ( $entry, $item ) {
     $html = '';
+    $value = ccgn_vp_clean_string(
+        ccgn_field_values(
+            $entry,
+            $item[ 1 ]
+        )
+    );
     // Make sure the entry has a value for this item
-    if( isset( $entry[ $item[ 1 ] ] ) ) {
+    if( $value ) {
         $html = '<p><strong>'
               . $item[ 0 ] . '</strong><br />'
-              . ccgn_vp_clean_string( $entry[ $item[ 1 ] ] )
+              . $value
               . '</p>';
     }
     return $html;

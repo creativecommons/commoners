@@ -53,6 +53,7 @@ define( 'CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE', '7' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS', '9' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_DOMAIN_NAME', '8' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_ADDITIONAL_INFO', '10' );
+define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_TRADEMARK', '11' );
 
 define( 'CCGN_GF_VOUCH_APPLICANT_ID', 'applicant_id' );
 define( 'CCGN_GF_VOUCH_APPLICANT_ID_FIELD', '7' );
@@ -133,10 +134,10 @@ define(
             'Representative Name',
             CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_NAME
         ],
-        [
+        /*[
             'Representative Email',
             CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_EMAIL
-        ],
+            ],*/
         [ 'Membership Statement', CCGN_GF_INSTITUTION_DETAILS_STATEMENT ],
         [
             'Additional Information',
@@ -159,7 +160,7 @@ define(
             CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_EMAIL
         ],
         [
-            'Existing Global Networm Members',
+            'Existing Global Network Members',
             CCGN_GF_INSTITUTION_DETAILS_EXISTING_MEMBERS
         ],
         [ 'Membership Statement', CCGN_GF_INSTITUTION_DETAILS_STATEMENT ],
@@ -169,7 +170,11 @@ define(
             CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS
         ],
         [
-            'Affiliate Domain Name',
+            'Affiliate Trademark(s)',
+            CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_TRADEMARK
+        ],
+        [
+            'Affiliate Domain Name(s)',
             CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_DOMAIN_NAME
         ],
         [
