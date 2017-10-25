@@ -28,11 +28,13 @@ function ccgn_activate_and_notify_member ( $applicant_id ) {
     ccgn_user_level_set_approved( $applicant_id );
     ccgn_create_profile( $applicant_id );
     ccgn_registration_email_application_approved( $applicant_id );
+    ccgn_erase_application_reasons ( $applicant_id );
 }
 
 function ccgn_decline_and_notify_applicant ( $applicant_id ) {
     ccgn_user_level_set_rejected( $applicant_id );
     ccgn_registration_email_application_rejected( $applicant_id );
+    ccgn_erase_application_reasons ( $applicant_id );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -400,8 +402,8 @@ function ccgn_application_format_legal_approval ( $applicant_id, $state ) {
 
 function ccgn_application_users_page () {
     echo _('<h1>Membership Application Details</h1>');
-    if ( ! ccgn_current_user_is_membership_council() ) {
-        echo _( '<br />This page is only visible to the Membership Council.' );
+    if ( ! ccgn_current_user_can_see_user_application_page () ) {
+        echo _( '<br />Sorry, you are not allowed to access this page.' );
         return;
     }
     if ( ! isset( $_GET[ 'user_id' ] ) ) {

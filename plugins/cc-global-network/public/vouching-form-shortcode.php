@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 function ccgn_vouching_request_exists ( $applicant_id,
                                              $voucher_id ) {
     $result = false;
-    $vouchers = ccgn_vouching_request_entry ( $applicant_id );
+    $vouchers = ccgn_application_vouchers ( $applicant_id );
     foreach( CCGN_GF_VOUCH_VOUCHER_FIELDS as $field_id ) {
         if ( $vouchers[ $field_id ] == $voucher_id ) {
             $result = true;

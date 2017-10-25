@@ -75,7 +75,7 @@ define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID', '3' );
 
 define( 'CCGN_GF_LEGAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
-define( 'CCGN_GF_LEGAL_APPROVAL_REASON', '2' );
+//define( 'CCGN_GF_LEGAL_APPROVAL_REASON', '2' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID', '3' );
 
@@ -191,22 +191,25 @@ define(
     [ '1', '2', '3', '4', '5' ]
 );
 
-
 ////////////////////////////////////////////////////////////////////////////////
-// Vouching form
+// Finding entries
 ////////////////////////////////////////////////////////////////////////////////
 
-// Find the applicant's choices of vouchers in Gravity Forms
+// Created by user id
 
-function ccgn_vouching_request_entry ( $applicant_id ) {
-    $form_id = RGFormsModel::get_form_id( CCGN_GF_CHOOSE_VOUCHERS );
+function ccgn_entries_created_by_user (
+    $user_id,
+    $form_name
+) {
+    // Form name is false? Use zero (every form)
+    $form_id = $form_name ? RGFormsModel::get_form_id( $form_name ) : 0;
     $search_criteria = array();
     $search_criteria['field_filters'][]
         = array(
-            'key' =>  'created_by',
-            'value' => $applicant_id
+            'key' => 'created_by',
+            'value' => $user_id
         );
-    $entries = GFAPI::get_entries(
+    return GFAPI::get_entries(
         $form_id,
         $search_criteria,
         array(
@@ -217,9 +220,39 @@ function ccgn_vouching_request_entry ( $applicant_id ) {
             )
         )
     );
-
-    return $entries[ 0 ];
 }
+
+// Mentioning the user id
+
+function ccgn_entries_referring_to_user (
+    $user_id,
+    $form_name,
+    $field_id
+) {
+    $form_id = RGFormsModel::get_form_id( $form_name );
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+            'key' =>  $field_id,
+            'value' => $user_id
+        );
+    $entries = GFAPI::get_entries(
+        $form_id,
+        $search_criteria,
+        array(
+            array(
+                'key' => 'date',
+                'direction' => 'ASC',
+                'is_numeric' => false
+            )
+        )
+    );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Vouching form
+////////////////////////////////////////////////////////////////////////////////
 
 // Has the voucher already responded to applicant's vouching request?
 
@@ -248,37 +281,17 @@ function ccgn_vouching_request_open ( $applicant_id, $voucher_id ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_details_individual_form_entry ( $applicant_id ) {
-    $form_id = RGFormsModel::get_form_id( CCGN_GF_INDIVIDUAL_DETAILS );
-    $entries = GFAPI::get_entries(
-        $form_id,
-        array(
-            'created_by' => $applicant_id,
-        ),
-        array(
-            array(
-                'key' => 'date',
-                'direction' => 'DESC',
-                'is_numeric' => false
-            )
-        )
+    $entries = ccgn_entries_created_by_user(
+        $applicant_id,
+        CCGN_GF_INDIVIDUAL_DETAILS
     );
     return $entries[ 0 ];
 }
 
 function ccgn_details_institution_form_entry ( $applicant_id ) {
-    $form_id = RGFormsModel::get_form_id( CCGN_GF_INSTITUTION_DETAILS );
-    $entries = GFAPI::get_entries(
-        $form_id,
-        array(
-            'created_by' => $applicant_id,
-        ),
-        array(
-            array(
-                'key' => 'date',
-                'direction' => 'DESC',
-                'is_numeric' => false
-            )
-        )
+    $entries = ccgn_entries_created_by_user(
+        $applicant_id,
+        CCGN_GF_INSTITUTION_DETAILS
     );
     return $entries[ 0 ];
 }
@@ -290,25 +303,10 @@ function ccgn_details_institution_form_entry ( $applicant_id ) {
 // Get the applicant details for the id
 
 function ccgn_application_details ( $applicant_id ) {
-    $form_id = RGFormsModel::get_form_id( CCGN_GF_APPLICANT_DETAILS );
-    $search_criteria = array();
-    $search_criteria['field_filters'][]
-        = array(
-            'key' =>  'created_by',
-            'value' => $applicant_id
-        );
-    $entries = GFAPI::get_entries(
-        $form_id,
-        $search_criteria,
-        array(
-            array(
-                'key' => 'date',
-                'direction' => 'DESC',
-                'is_numeric' => false
-            )
-        )
+    $entries = ccgn_entries_created_by_user(
+        $applicant_id,
+        CCGN_GF_APPLICANT_DETAILS
     );
-
     return $entries[0];
 }
 
@@ -316,25 +314,10 @@ function ccgn_application_details ( $applicant_id ) {
 // This is the applicant's voucher choices from the form.
 
 function ccgn_application_vouchers ( $applicant_id ) {
-    $form_id = RGFormsModel::get_form_id( CCGN_GF_CHOOSE_VOUCHERS );
-    $search_criteria = array();
-    $search_criteria['field_filters'][]
-        = array(
-            'key' =>  'created_by',
-            'value' => $applicant_id
-        );
-    $entries = GFAPI::get_entries(
-        $form_id,
-        $search_criteria,
-        array(
-            array(
-                'key' => 'date',
-                'direction' => 'DESC',
-                'is_numeric' => false
-            )
-        )
+    $entries = ccgn_entries_created_by_user(
+        $applicant_id,
+        CCGN_GF_CHOOSE_VOUCHERS
     );
-
     return $entries[0];
 }
 
@@ -366,25 +349,11 @@ function ccgn_application_vouchers_users ( $applicant_id ) {
 // Get the list of submitted vouches for the user
 
 function ccgn_application_vouches ( $applicant_id ) {
-    $form_id = RGFormsModel::get_form_id( CCGN_GF_VOUCH );
-    $search_criteria = array();
-    $search_criteria['field_filters'][]
-        = array(
-            'key' => CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
-            'value' => $applicant_id
-        );
-    $entries = GFAPI::get_entries(
-        $form_id,
-        $search_criteria,
-        array(
-            array(
-                'key' => 'date',
-                'direction' => 'ASC',
-                'is_numeric' => false
-            )
-        )
+    return ccgn_entries_referring_to_user (
+        $applicant_id,
+        CCGN_GF_VOUCH,
+        CCGN_GF_VOUCH_APPLICANT_ID_FIELD
     );
-    return $entries;
 }
 
 // Count the number of vouches received
@@ -410,25 +379,11 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
 // Get the list of submitted votes for the user
 
 function ccgn_application_votes ( $applicant_id ) {
-    $form_id = RGFormsModel::get_form_id( CCGN_GF_VOTE );
-    $search_criteria = array();
-    $search_criteria['field_filters'][]
-        = array(
-            'key' => CCGN_GF_VOTE_APPLICANT_ID,
-            'value' => $applicant_id
-        );
-    $entries = GFAPI::get_entries(
-        $form_id,
-        $search_criteria,
-        array(
-            array(
-                'key' => 'date',
-                'direction' => 'ASC',
-                'is_numeric' => false
-            )
-        )
+    return ccgn_entries_referring_to_user(
+        $applicant_id,
+        CCGN_GF_VOTE,
+        CCGN_GF_VOTE_APPLICANT_ID
     );
-    return $entries;
 }
 
 // Count the number of votes received
@@ -659,23 +614,10 @@ function ccgn_choose_vouchers_validate ( $validation_result ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_final_approval_entry_for ( $applicant_id ) {
-    $form_id = RGFormsModel::get_form_id( CCGN_GF_FINAL_APPROVAL );
-    $search_criteria = array();
-    $search_criteria['field_filters'][]
-        = array(
-            'key' => CCGN_GF_FINAL_APPROVAL_APPLICANT_ID,
-            'value' => $applicant_id
-        );
-    $entries = GFAPI::get_entries(
-        $form_id,
-        $search_criteria,
-        array(
-            array(
-                'key' => 'date',
-                'direction' => 'ASC',
-                'is_numeric' => false
-            )
-        )
+    $entries = ccgn_entries_referring_to_user(
+        $applicant_id,
+        CCGN_GF_FINAL_APPROVAL,
+        CCGN_GF_FINAL_APPROVAL_APPLICANT_ID
     );
     return $entries ? $entries[0] : false;
 }
@@ -686,44 +628,25 @@ function ccgn_final_approval_entry_for ( $applicant_id ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_legal_approval_entry_for ( $applicant_id ) {
-    $form_id = RGFormsModel::get_form_id( CCGN_GF_LEGAL_APPROVAL );
-    $search_criteria = array();
-    $search_criteria['field_filters'][]
-        = array(
-            'key' => CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID,
-            'value' => $applicant_id
-        );
-    $entries = GFAPI::get_entries(
-        $form_id,
-        $search_criteria,
-        array(
-            array(
-                'key' => 'date',
-                'direction' => 'ASC',
-                'is_numeric' => false
-            )
-        )
+    $entries = ccgn_entries_referring_to_user(
+        $applicant_id,
+        CCGN_GF_LEGAL_APPROVAL,
+        CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID
     );
     return $entries ? $entries[0] : false;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Entry deletion
+// Entry deletion and cleanup
 ////////////////////////////////////////////////////////////////////////////////
 
 // This really does delete the user's form entries.
 
 function _ccgn_application_delete_entries_created_by ( $applicant_id ) {
-    $search_criteria = array();
-    $search_criteria['field_filters'][]
-        = array(
-            'key' =>  'created_by',
-            'value' => $applicant_id
-        );
-    $entries = GFAPI::get_entries(
-        0,
-        $search_criteria
+    $entries = ccgn_entries_created_by_user(
+        $applicant_id,
+        false
     );
     foreach( $entries as $entry ) {
         GFAPI::delete_entry( $entry[ 'id' ] );
@@ -737,18 +660,70 @@ function _ccgn_application_delete_entries_applicant_id (
     $field_id,
     $applicant_id
 ) {
-    $form_id = RGFormsModel::get_form_id( $form_name );
-    $search_criteria = array();
-    $search_criteria['field_filters'][]
-        = array(
-            'key' =>  $field_id,
-            'value' => $applicant_id
-        );
-    $entries = GFAPI::get_entries(
-        $form_id,
-        $search_criteria
+    $entries = ccgn_entries_referring_to_user (
+        $applicant_id,
+        $form_name,
+        $field_id
     );
     foreach( $entries as $entry ) {
         GFAPI::delete_entry( $entry[ 'id' ] );
     }
+}
+
+// This removes the field content, not the entire entry
+// (No underscore as this is intended for production code.)
+
+function ccgn_application_erase_field_applicant_id (
+    $form_name,
+    $field_id_to_match_to_applicant_id,
+    $field_id_to_clear,
+    $applicant_id
+) {
+    $entries = ccgn_entries_referring_to_user (
+        $applicant_id,
+        $form_name,
+        $field_id_to_match_to_applicant_id
+    );
+    foreach( $entries as $entry ) {
+        GFAPI::update_entry_field(
+            $entry[ 'id' ],
+            $field_id_to_clear,
+            null
+            );
+    }
+}
+
+// Clear "reason" text on appliction resolution
+
+function ccgn_erase_application_reasons ( $applicant_id ) {
+    ccgn_application_erase_field_applicant_id (
+        CCGN_GF_VOUCH,
+        CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
+        CCGN_GF_VOUCH_REASON,
+        $applicant_id
+    );
+    ccgn_application_erase_field_applicant_id (
+        CCGN_GF_VOTE,
+        CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
+        CCGN_GF_VOUCH_REASON,
+        $applicant_id
+    );
+    ccgn_application_erase_field_applicant_id (
+        CCGN_GF_PRE_APPROVAL,
+        CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
+        CCGN_GF_VOUCH_REASON,
+        $applicant_id
+    );
+    ccgn_application_erase_field_applicant_id (
+        CCGN_GF_FINAL_APPROVAL,
+        CCGN_GF_FINAL_APPROVAL_APPLICANT_ID,
+        CCGN_GF_FINAL_APPROVAL_REASON,
+        $applicant_id
+    );
+    /*    ccgn_application_erase_field_applicant_id (
+        CCGN_GF_LEGAL_APPROVAL,
+        CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID,
+        CCGN_GF_LEGAL_APPROVAL_REASON,
+        $applicant_id
+        );*/
 }
