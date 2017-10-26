@@ -59,7 +59,7 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
         $voucher_name,
         $message
     );
-    add_filter( 'wp_mail_from', 'ccgn_mail_from' );
+    add_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
     add_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
     $result = wp_mail(
         $to_address,
@@ -67,7 +67,7 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
         $message_substituted
     );
     remove_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
-    remove_filter( 'wp_mail_from', 'ccgn_mail_from' );
+    remove_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
 }
 
 function ccgn_registration_email_to_applicant ( $applicant_id,
