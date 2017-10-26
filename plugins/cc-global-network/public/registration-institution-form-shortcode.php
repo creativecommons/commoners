@@ -110,7 +110,8 @@ function ccgn_swizzle_form_url_for_institution(
     $lead,
     $ajax
 ){
-    if ( ccgn_user_is_institutional_applicant( $lead[ 'created_by' ] ) ) {
+    if ( ccgn_user_is_institutional_applicant( $lead[ 'created_by' ] )
+         && isset( $confirmation[ 'redirect' ] ) ) {
         $url = $confirmation[ 'redirect' ];
         $new_url = str_replace( '/individual/', '/institution/', $url );
         $confirmation = array( 'redirect' => $new_url );

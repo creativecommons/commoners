@@ -554,6 +554,20 @@ function _ccgn_user_level_reset ( $user_id ) {
     xprofile_delete_field_data( '', $user_id );
 }
 
+function _ccgn_user_level_rollback_to_vouching ( $user_id ) {
+    update_user_meta(
+        $user_id,
+        CCGN_APPLICATION_STATE,
+        CCGN_APPLICATION_STATE_VOUCHING
+    );
+    _ccgn_application_delete_entries_applicant_id (
+        CCGN_GF_FINAL_APPROVAL,
+        CCGN_GF_FINAL_APPROVAL_APPLICANT_ID,
+        $user_id
+    );
+    //TODO: Delete vote by user calling this as a convenience.
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Admin access hooks
 ////////////////////////////////////////////////////////////////////////////////
