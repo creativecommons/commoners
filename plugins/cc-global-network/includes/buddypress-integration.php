@@ -547,6 +547,7 @@ function _ccgn_user_level_reset ( $user_id ) {
     );
     delete_user_meta( $user_id, CCGN_APPLICATION_TYPE );
     delete_user_meta( $user_id, CCGN_APPLICATION_STATE );
+    delete_user_meta( $user_id, CCGN_USER_IS_AUTOVOUCHED );
     ccgn_user_level_set_applicant_new( $user_id );
     bp_remove_member_type( $user_id, 'individual-member' );
     bp_remove_member_type( $user_id, 'institutional-member' );

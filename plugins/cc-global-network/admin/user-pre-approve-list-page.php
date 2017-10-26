@@ -63,7 +63,8 @@ their profile pages by clicking on the link to their username.</p>
 }
 
 function ccgn_application_pre_approval_menu () {
-    if ( ccgn_current_user_is_membership_council() ) {
+    if ( ccgn_current_user_is_membership_council()
+         || ccgn_current_user_is_final_approver() ) {
         add_users_page(
             'Global Network Pre-Approval',
             'Global Network Pre-Approval',

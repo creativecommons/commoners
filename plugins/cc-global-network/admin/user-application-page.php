@@ -137,7 +137,8 @@ function ccgn_registration_email_vouching_requests ( $applicant_id ) {
 
 function ccgn_application_users_page_pre_form_submit_handler ( $entry,
                                                                $form ) {
-    if (! ccgn_current_user_is_membership_council() ) {
+    if ( ! ( ccgn_current_user_is_membership_council()
+             || ccgn_current_user_is_final_approver() ) ) {
         echo 'Must be Membership Council member.';
         exit;
     }
@@ -182,7 +183,8 @@ function ccgn_application_users_page_pre_form ( $applicant_id ) {
 function ccgn_application_users_page_vote_form_submit_handler ( $entry,
                                                                  $form ) {
     if ( $form[ 'title' ] == CCGN_GF_VOTE ) {
-        if (! ccgn_current_user_is_membership_council() ) {
+        if (! ( ccgn_current_user_is_membership_council()
+             || ccgn_current_user_is_final_approver() ) ) {
             echo 'Must be Membership Council member.';
             exit;
         }
@@ -427,7 +429,6 @@ function ccgn_application_users_page () {
     //FIXME: Check to see if really autovouched, check if not and should be
     if ( ccgn_user_is_autovouched( $applicant_id ) ) {
         echo '<br><h4><i>User was autovouched, no application details.</i></h4>';
-        echo '<p>Autovouching is by CCID user email domain.</p>';
         return;
     }
     $state = ccgn_registration_user_get_stage ( $applicant_id );
@@ -479,7 +480,7 @@ function ccgn_application_user_application_page_url( $user_id ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_application_users_menu () {
-    if ( ccgn_current_user_is_membership_council() ) {
+    if ( ccgn_current_user_can_see_user_application_page() ) {
         add_users_page(
             'Global Network Membership',
             // No menu title, as we don't want to show up in the sidebar
@@ -500,7 +501,8 @@ function ccgn_hide_application_users_menu () {
 
 function ccgn_application_user_link( $actions, $user_object ) {
     // Only show this if the user is at the pre-approval or vouching stages
-    if ( ccgn_vouching_request_active( $user_object->ID ) ) {
+    if ( ccgn_current_user_can_see_user_application_page()
+         && ccgn_vouching_request_active( $user_object->ID ) ) {
         $actions['ccgn_application']
             = '<a href="'
             . ccgn_application_user_application_page_url(

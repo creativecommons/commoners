@@ -121,7 +121,8 @@ review their profile page by clicking on the link to their username.</p>
 }
 
 function ccgn_application_final_approval_menu () {
-    if ( ccgn_current_user_is_membership_council() ) {
+    if ( ccgn_current_user_is_membership_council()
+         || ccgn_current_user_is_final_approver() ) {
         add_users_page(
             'Global Network Final Approval',
             'Global Network Final Approval',
