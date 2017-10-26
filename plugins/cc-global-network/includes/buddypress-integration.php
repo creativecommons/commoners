@@ -349,7 +349,6 @@ function ccgn_remove_member_type_metabox() {
 // Hide core UI if the user is not logged in
 
 function ccgn_not_logged_in_ui () {
-    global $bp;
     if (! is_user_logged_in() ) {
         // Just don't display people's profiles
         bp_core_remove_nav_item( 'profile' );
@@ -644,7 +643,6 @@ function _bp_core_get_user_domain($domain, $user_id, $user_nicename = false, $us
 
 function _bp_core_get_userid($userid, $username){
     if(is_numeric($username)){
-        $aux = get_userdata( $username );
         if( get_userdata( $username ) ) {
             $userid = $username;
         }

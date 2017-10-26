@@ -104,7 +104,7 @@ function ccgn_settings_emails_rejected_message () {
     <?php
 }
 
-function ccgn_settings_emails_register () {
+function ccgn_settings_emails_options_page () {
     add_options_page(
         'Global Network Emails',
         'Global Network Emails',
@@ -112,11 +112,14 @@ function ccgn_settings_emails_register () {
         'global-network-emails',
         'ccgn_settings_emails_render'
     );
+}
 
+function ccgn_settings_emails_options_sender () {
     register_setting(
         'ccgn-emails',
         'ccgn-email-sender'
     );
+
     add_settings_section(
         'ccgn-email-sender',
         'Email Sender',
@@ -139,11 +142,14 @@ function ccgn_settings_emails_register () {
         'global-network-emails',
         'ccgn-email-sender'
     );
+}
 
+function ccgn_settings_emails_options_received () {
     register_setting(
         'ccgn-emails',
         'ccgn-email-received'
     );
+
     add_settings_section(
         'ccgn-email-received',
         'Application Received',
@@ -158,7 +164,6 @@ function ccgn_settings_emails_register () {
         'global-network-emails',
         'ccgn-email-received'
     );
-
     add_settings_field(
         'registration-message',
         'Message',
@@ -167,10 +172,14 @@ function ccgn_settings_emails_register () {
         'ccgn-email-received'
     );
 
+}
+
+function ccgn_settings_emails_options_vouching () {
     register_setting(
         'ccgn-emails',
         'ccgn-email-vouch-request'
     );
+
     add_settings_section(
         'ccgn-email-vouch-request',
         'Application Vouch Request',
@@ -193,7 +202,9 @@ function ccgn_settings_emails_register () {
         'global-network-emails',
         'ccgn-email-vouch-request'
     );
+}
 
+function ccgn_settings_emails_options_approved () {
     register_setting(
         'ccgn-emails',
         'ccgn-email-approved'
@@ -221,8 +232,10 @@ function ccgn_settings_emails_register () {
         'global-network-emails',
         'ccgn-email-approved'
     );
+}
 
-        register_setting(
+function ccgn_settings_emails_options_rejected () {
+    register_setting(
         'ccgn-emails',
         'ccgn-email-rejected'
     );
@@ -249,6 +262,15 @@ function ccgn_settings_emails_register () {
         'global-network-emails',
         'ccgn-email-rejected'
     );
+}
+
+function ccgn_settings_emails_register () {
+    ccgn_settings_emails_options_page();
+    ccgn_settings_emails_options_sender();
+    ccgn_settings_emails_options_received();
+    ccgn_settings_emails_options_vouching();
+    ccgn_settings_emails_options_approved();
+    ccgn_settings_emails_options_rejected();
 }
 
 function ccgn_settings_emails_print_info () {

@@ -267,7 +267,6 @@ function ccgn_application_users_page_final_form_submit_handler( $entry,
 
 function ccgn_application_users_page_final_approval_form ( $applicant_id ) {
     $entry = ccgn_final_approval_entry_for ( $applicant_id );
-    $can_approve = ccgn_must_decline_membership ( $applicant_id );
     if ( $entry === false ) {
         gravity_form(
             CCGN_GF_FINAL_APPROVAL,
@@ -404,51 +403,35 @@ function ccgn_application_format_legal_approval ( $applicant_id, $state ) {
 // Render the page
 ////////////////////////////////////////////////////////////////////////////////
 
-function ccgn_application_users_page () {
-    echo _('<h1>Membership Application Details</h1>');
-    if ( ! ccgn_current_user_can_see_user_application_page () ) {
-        echo _( '<br />Sorry, you are not allowed to access this page.' );
-        return;
-    }
-    if ( ! isset( $_GET[ 'user_id' ] ) ) {
-        echo _( '<br />No user id specified.' );
-        return;
-    }
-    $applicant_id = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
+function ccgn_application_users_page_applicant () {
+    $applicant_id = filter_input(
+        INPUT_GET,
+        'user_id',
+        FILTER_VALIDATE_INT | FILTER_NULL_ON_FAILURE
+    );
     if ( $applicant_id === false ) {
+        echo _( '<br />No user id specified.' );
+    } elseif ( $applicant_id === null ) {
         echo _( '<br />Invalid user id.' );
-        return;
-    }
-    if ( $applicant_id == get_current_user_id() ) {
+        $applicant_id = false;
+    } elseif ( $applicant_id == get_current_user_id() ) {
         echo _( '<br />You cannot edit your own application status' );
-        return;
+        $applicant_id = false;
+    } else {
+        $applicant = get_user_by( 'ID', $applicant_id );
+        if( $applicant === false ) {
+            echo _( '<br />Invalid user specified.' );
+            $applicant_id = false;
+            //FIXME: Check if really autovouched, check if not and should be
+        } elseif ( ccgn_user_is_autovouched( $applicant_id ) ) {
+            echo '<br><h4><i>User was autovouched, no application details.</i></h4>';
+            $applicant_id = false;
+        }
     }
-    $applicant = get_user_by( 'ID', $applicant_id );
-    if( $applicant === false ) {
-        echo _( '<br />Invalid user specified.' );
-        return;
-    }
-    //FIXME: Check to see if really autovouched, check if not and should be
-    if ( ccgn_user_is_autovouched( $applicant_id ) ) {
-        echo '<br><h4><i>User was autovouched, no application details.</i></h4>';
-        return;
-    }
-    $state = ccgn_registration_user_get_stage ( $applicant_id );
-    echo _('<h2>Details Provided By Applicant</h2>');
-    echo ccgn_user_page_applicant_profile_text( $applicant_id );
-    echo _('<h2>Vouchers Requested</h2>');
-    echo ccgn_application_users_page_vouchers( $applicant_id );
-    if ( $state != CCGN_APPLICATION_STATE_RECEIVED ) {
-        echo _('<h2>Vouches Received</h2>');
-        echo ccgn_application_users_page_vouch_counts ( $applicant_id );
-        echo _('<h2>Vouches</h2>');
-        echo ccgn_application_users_page_vouch_responses ( $applicant_id );
-    }
-    echo _('<h2>Global Council Approval</h2>');
-    echo _('<h3>Votes Received</h3>');
-    echo ccgn_application_users_page_vote_counts ( $applicant_id );
-    echo _('<h3>Votes</h3>');
-    echo ccgn_application_users_page_vote_responses ( $applicant_id );
+    return $applicant_id;
+}
+
+function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
     if ( $state == CCGN_APPLICATION_STATE_RECEIVED ) {
         echo _('<h3>Pre-Approve</h3>');
         ccgn_application_users_page_pre_form ( $applicant_id );
@@ -465,6 +448,38 @@ function ccgn_application_users_page () {
         // TODO: show relevant pre/post form here for admin rather than making
         // them search for it manually.
     }
+}
+
+function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
+    echo _('<h1>Membership Application Details</h1>');
+    echo _('<h2>Details Provided By Applicant</h2>');
+    echo ccgn_user_page_applicant_profile_text( $applicant_id );
+    echo _('<h2>Vouchers Requested</h2>');
+    echo ccgn_application_users_page_vouchers( $applicant_id );
+    if ( $state != CCGN_APPLICATION_STATE_RECEIVED ) {
+        echo _('<h2>Vouches Received</h2>');
+        echo ccgn_application_users_page_vouch_counts ( $applicant_id );
+        echo _('<h2>Vouches</h2>');
+        echo ccgn_application_users_page_vouch_responses ( $applicant_id );
+    }
+    echo _('<h2>Global Council Approval</h2>');
+    echo _('<h3>Votes Received</h3>');
+    echo ccgn_application_users_page_vote_counts ( $applicant_id );
+    echo _('<h3>Votes</h3>');
+    echo ccgn_application_users_page_vote_responses ( $applicant_id );
+}
+
+function ccgn_application_users_page () {
+    if ( ! ccgn_current_user_can_see_user_application_page () ) {
+        echo _( '<br />Sorry, you are not allowed to access this page.' );
+    }
+    $applicant_id = ccgn_application_users_page_applicant ();
+    if ( $applicant_id === false ) {
+        return;
+    }
+    $state = ccgn_registration_user_get_stage( $applicant_id );
+    ccgn_application_users_page_render_details( $applicant_id, $state );
+    ccgn_application_users_page_render_state( $appliant_id, $state );
     if ( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
         ccgn_application_format_legal_approval( $applicant_id, $state );
     }

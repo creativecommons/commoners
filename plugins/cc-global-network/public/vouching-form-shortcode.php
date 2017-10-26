@@ -45,16 +45,24 @@ function ccgn_vouching_shortcode_render ( $atts ) {
             . '">Log in</a>';
         return;
     }
-    // We need an applicant to vouch for
-    if ( ! isset( $_GET[ 'applicant_id' ] ) ) {
-        echo _( '<p>No applicant specified to vouch for.</p>' );
-        exit;
-    }
 
     // Get applicant and voucher identifiers
     //FIXME: Get voucher id and use that once the form contains it
-    $applicant_id = $_GET[ 'applicant_id' ];
-    $voucher = wp_get_current_user();
+    // We need an applicant to vouch for
+    $applicant_id = filter_input(
+        INPUT_GET,
+        'applicant_id',
+        FILTER_VALIDATE_INT | FILTER_NULL_ON_FAILURE
+    );
+    if ( $applicant_id === false ) {
+        echo _( '<p>No applicant specified to vouch for.</p>' );
+        return;
+    }
+    if ( $applicant_id === null ) {
+        echo _( '<br />Invalid user id.' );
+        return;
+    }
+
     $voucher_id = get_current_user_id();
 
     // Render correct UI for state of vouching
@@ -73,7 +81,7 @@ function ccgn_vouching_shortcode_render ( $atts ) {
         // So we make sure it will read well in both cases.
         echo _( "<p>Thank you for responding to this request!<p>" );
     } else {
-        if ( ccgn_user_is_institutional_applicant ( $user_id ) ) {
+        if ( ccgn_user_is_institutional_applicant ( $applicant_id ) ) {
             echo _( "<i>Note that this is an institution applying to join the Global Network. We still need you to vouch for this institution as you would for an individual that you know.</i>" );
         }
         // We were going to pass this as the content of an HTML field in the

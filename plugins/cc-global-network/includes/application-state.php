@@ -116,7 +116,7 @@ function ccgn_registration_user_get_stage ( $user_id ) {
 function ccgn_registration_user_set_stage ( $user_id, $stage ) {
     $current = ccgn_registration_user_get_stage( $user_id );
     if ( ! in_array( $current, CCGN_APPLICATION_STATE_PAST_APPROVAL ) ) {
-        $result = update_user_meta(
+        update_user_meta(
             $user_id,
             CCGN_APPLICATION_STATE,
             $stage

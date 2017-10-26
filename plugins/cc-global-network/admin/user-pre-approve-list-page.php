@@ -11,8 +11,6 @@ function ccgn_list_applications_for_pre_approval () {
         $user = get_user_by('ID', $user_id);
         // The last form the user filled out, so the time to use
         $vouchers_entry = ccgn_application_vouchers($user_id);
-        // The user entered a name here
-        $details_entry = ccgn_application_details($user_id);
         echo '<tr><td><a href="'
             . ccgn_application_user_application_page_url( $user_id )
             . '">'

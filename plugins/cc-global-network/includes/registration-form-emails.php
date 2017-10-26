@@ -61,7 +61,7 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
     );
     add_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
     add_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
-    $result = wp_mail(
+    wp_mail(
         $to_address,
         $subject_substituted,
         $message_substituted

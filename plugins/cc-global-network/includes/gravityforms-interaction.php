@@ -39,7 +39,6 @@ define( 'CCGN_GF_DETAILS_STATEMENT', '3' );
 define( 'CCGN_GF_DETAILS_AREAS_OF_INTEREST', '5' );
 define( 'CCGN_GF_DETAILS_LANGUAGES', '6' );
 define( 'CCGN_GF_DETAILS_LOCATION', '7' );
-define( 'CCGN_GF_DETAILS_NATIONALITY', '8' );
 define( 'CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS', '9' );
 define( 'CCGN_GF_DETAILS_AVATAR_FILE', '11' );
 
@@ -120,7 +119,6 @@ define(
         [ 'Areas of Interest', CCGN_GF_DETAILS_AREAS_OF_INTEREST ],
         [ 'Languages', CCGN_GF_DETAILS_LANGUAGES ],
         [ 'Location', CCGN_GF_DETAILS_LOCATION ],
-        [ 'Nationality', CCGN_GF_DETAILS_NATIONALITY ],
         [ 'Social Media / URLs', CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS ],
     ]
 );
@@ -351,10 +349,11 @@ function ccgn_application_details_avatar_filepath_o ( $img_url ) {
     );
 }
 
+//IMPLEMENTME IF NEEDED
 function ccgn_application_details_avatar_filepath_thumb ( $img_url ) {
     $upload_dir = wp_upload_dir();
     //CCGN_AVATAR_THUMBSIZE
-    $img_path = str_replace(
+    return str_replace(
         $upload_dir[ 'baseurl' ],
         $upload_dir[ 'basedir' ],
         $img_url

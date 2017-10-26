@@ -57,27 +57,7 @@ function ccgn_registration_individual_form_submit_handler ( $entry,
     }
 }
 
-function ccgn_registration_individual_shortcode_render ( $atts ) {
-    if( ! is_user_logged_in() ) {
-        echo '<h3>OK! Let&apos;s get started</h3>';
-        echo '<p>First you need to log in with your CCID.</p>';
-        echo '<a class="cc-btn" href="'
-            . 'https://login.creativecommons.org/login?service='
-            . get_permalink()
-            . '">Log in</a>';
-        return;
-    }
-    $user = wp_get_current_user();
-    if ( ccgn_user_is_institutional_applicant ( $user->ID ) ) {
-        echo _( '<p>You are already applying for membership on behalf of an Instituion.</p>' );
-        echo _( '<p>If this is an error, <a href="/contact/">contact us.</a></p>' );
-        return;
-    }
-    //FIXME: Model update code in the view
-    if ( ! ccgn_user_is_individual_applicant ( $user->ID ) ) {
-        ccgn_user_set_individual_applicant ( $user->ID );
-
-    }
+function ccgn_registration_individual_shortcode_render_view ( $user ) {
     $state = $user->get( CCGN_APPLICATION_STATE );
     switch ( $state ) {
     case '':
@@ -106,4 +86,27 @@ function ccgn_registration_individual_shortcode_render ( $atts ) {
         error_log( 'Unrecognised application state: ' . $state );
         echo _( '<p>Unrecognised application state.</p>' );
     }
+}
+
+function ccgn_registration_individual_shortcode_render ( $atts ) {
+    if( ! is_user_logged_in() ) {
+        echo '<h3>OK! Let&apos;s get started</h3>';
+        echo '<p>First you need to log in with your CCID.</p>';
+        echo '<a class="cc-btn" href="'
+            . 'https://login.creativecommons.org/login?service='
+            . get_permalink()
+            . '">Log in</a>';
+        return;
+    }
+    $user = wp_get_current_user();
+    if ( ccgn_user_is_institutional_applicant ( $user->ID ) ) {
+        echo _( '<p>You are already applying for membership on behalf of an Instituion.</p>' );
+        echo _( '<p>If this is an error, <a href="/contact/">contact us.</a></p>' );
+        return;
+    }
+    //FIXME: Model update code in the view
+    if ( ! ccgn_user_is_individual_applicant ( $user->ID ) ) {
+        ccgn_user_set_individual_applicant ( $user->ID );
+    }
+    ccgn_registration_individual_shortcode_render_view( $user );
 }

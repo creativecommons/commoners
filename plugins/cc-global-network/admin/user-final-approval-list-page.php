@@ -39,8 +39,6 @@ function ccgn_list_applications_for_final_approval () {
         $user = get_user_by('ID', $user_id);
         // The last form the user filled out, so the time to use
         $vouchers_entry = ccgn_application_vouchers($user_id);
-        // The user entered a name here
-        $details_entry = ccgn_application_details($user_id);
         // The actual count of vouches
         $vouch_counts = ccgn_application_vouches_counts( $user_id );
         if ( $vouch_counts[ 'no' ] > 0 ) {
