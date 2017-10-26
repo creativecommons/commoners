@@ -661,3 +661,12 @@ function _bp_get_activity_action_pre_meta($content){
 function _bp_remove_instant_messaging_if_unvouched () {
     return ! ccgn_current_user_is_vouched ();
 }
+
+function _bp_meta_member_type () {
+    $user_id = bp_displayed_user_id();
+    if ( ccgn_member_is_individual ( $user_id ) ) {
+        echo _('Individual Member');
+    } elseif ( ccgn_member_is_institution ( $user_id ) ) {
+        echo _('Institutional Member');
+    }
+}

@@ -124,6 +124,8 @@ add_filter( 'bp_xprofile_get_groups', 'ccgn_filter_role_groups' );
 
 add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
+add_action( 'bp_profile_header_meta', '_bp_meta_member_type', 10, 0 );
+
 // Don't let unvouched users set their profiles
 
 add_action( 'bp_ready', '_bp_remove_profile_options_if_unvouched' );
