@@ -99,8 +99,6 @@ function ccgn_application_final_approval_page () {
 members.</p>
 <p>Applicants need <b><?php echo CCGN_NUMBER_OF_VOUCHES_NEEDED; ?></b>
 vouches for them and <b>zero</b> against them.</p>
-<p>Applicants need <b><?php echo CCGN_NUMBER_OF_VOTES_NEEDED; ?></b>
-votes for them and <b>zero</b> against them.</p>
 <p>If you are part of the application review team, once they have enough
 vouches (or if their application should be refused for some reason), you should
 review their profile page by clicking on the link to their username.</p>
