@@ -252,9 +252,7 @@ function ccgn_entries_referring_to_user (
 // Vouching form
 ////////////////////////////////////////////////////////////////////////////////
 
-// Has the voucher already responded to applicant's vouching request?
-
-function ccgn_vouching_request_open ( $applicant_id, $voucher_id ) {
+function ccgn_vouches_for_applicant_by_voucher ( $applicant_id, $voucher_id ) {
     $form_id = RGFormsModel::get_form_id( CCGN_GF_VOUCH );
     $search_criteria = array();
     $search_criteria['field_filters'][]
@@ -267,9 +265,18 @@ function ccgn_vouching_request_open ( $applicant_id, $voucher_id ) {
             'key' =>  CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
             'value' => $applicant_id
         );
-    $entries = GFAPI::get_entries(
+    return GFAPI::get_entries(
         $form_id,
         $search_criteria
+    );
+}
+
+// Has the voucher already responded to applicant's vouching request?
+
+function ccgn_vouching_request_open ( $applicant_id, $voucher_id ) {
+    $entries = ccgn_vouches_for_applicant_by_voucher(
+        $applicant_id,
+        $voucher_id
     );
     return $entries == [];
 }
@@ -338,6 +345,15 @@ function ccgn_application_vouchers_users ( $applicant_id ) {
         $users[] = get_user_by('ID', $voucher_id);
     }
     return $users;
+}
+
+// BuddyPress looks for original avatar files with the "-bpfull" suffix
+// so we need to be able to make names that will match this.
+
+function ccgn_avatar_filename_bpfull ( $img_path ) {
+    $pathinfo = pathinfo( $img_path );
+    // Note the dot after the -bpfull suffix
+    return $pathinfo[ 'filename'  ] . '-bpfull.' . $pathinfo[ 'extension' ];
 }
 
 function ccgn_application_details_avatar_filepath_o ( $img_url ) {
@@ -426,10 +442,10 @@ function ccgn_application_votes_counts ( $applicant_id ) {
     );
 }
 
-// Vote *by* current user
-
-function ccgn_application_vote_by_current_user ( $applicant_id ) {
-    $user_id = get_current_user_id();
+function ccgn_application_votes_for_applicant_by_user (
+    $applicant_id,
+    $user_id
+) {
     $form_id = RGFormsModel::get_form_id( CCGN_GF_VOTE );
     $search_criteria = array();
     $search_criteria['field_filters'][]
@@ -442,7 +458,7 @@ function ccgn_application_vote_by_current_user ( $applicant_id ) {
             'key' => 'created_by',
             'value' => $user_id
         );
-    $entries = GFAPI::get_entries(
+     return GFAPI::get_entries(
         $form_id,
         $search_criteria,
         array(
@@ -452,6 +468,16 @@ function ccgn_application_vote_by_current_user ( $applicant_id ) {
                 'is_numeric' => false
             )
         )
+    );
+}
+
+// Vote *by* current user
+
+function ccgn_application_vote_by_current_user ( $applicant_id ) {
+    $user_id = get_current_user_id();
+    $entries = ccgn_application_votes_for_applicant_by_user (
+        $applicant_id,
+        $user_id
     );
     return $entries ? entries[0] : false;
 }
@@ -469,7 +495,8 @@ function ccgn_set_avatar ( $entry, $applicant_id ) {
                 . $applicant_id
                 . '/';
     mkdir( $avatar_dir, 0777, true );
-    copy( $img_path, $avatar_dir . '-bpfull' . basename( $img_path ) );
+    $bpfull = ccgn_avatar_filename_bpfull ( $img_path );
+    copy( $img_path, $avatar_dir . $bpfull );
 }
 
 function ccgn_create_profile_individual( $applicant_id ) {
@@ -572,11 +599,17 @@ function ccgn_get_individual_ids () {
 // This excludes the initial admin user (1) and the applicant from the list
 
 function ccgn_registration_form_list_members ( $current_user_id ) {
+    // For testing
+    $include_admin = defined( 'CCGN_DEVELOPMENT' )
+                   || defined( 'CCGN_TESTING' );
     $individuals = ccgn_get_individual_ids();
     $members = array();
     foreach ( $individuals as $individual ){
-        if ( ( $individual->ID != 1 ) // Exclude admin
-             && ( $individual->ID != $current_user_id ) ) { // Exclude applicant
+        if (
+            ( $individual->ID != $current_user_id ) // Exclude applicant
+            && ( $include_admin // Include admin if this is set
+                 || ( $individual->ID !== 1 ) ) // Otherwise exclude them
+        ) {
             $members[] = array(
                 $individual->ID,
                 // This is unique and not the user's email address
