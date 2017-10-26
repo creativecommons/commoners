@@ -478,7 +478,6 @@ function ccgn_create_profile_individual( $applicant_id ) {
         $details[ CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS ]
     );
     //FIXME: avatar - CCGN_GF_DETALS_AVATAR_FILE
-    //FIXME: user name?
 }
 
 function ccgn_unique_nicename ( $name ) {
@@ -551,7 +550,9 @@ function ccgn_registration_form_list_members ( $current_user_id ) {
              && ( $individual->ID != $current_user_id ) ) { // Exclude applicant
             $members[] = array(
                 $individual->ID,
-                $individual->display_name
+                // This is unique and not the user's email address
+                // (for CCID users).
+                $individual->user_nicename
             );
         }
     }
