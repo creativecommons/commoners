@@ -685,3 +685,21 @@ function _bp_meta_member_type () {
         echo _('Institutional Member');
     }
 }
+
+function _bp_not_signed_in_redirect () {
+    if ( bp_is_directory()
+         || bp_is_activity_component() || bp_is_groups_component()
+         || bp_is_group_forum() // || bp_is_page( BP_MEMBERS_SLUG )
+         || bp_is_profile_component() || bp_is_forums_component()
+         /*|| bbp_is_single_forum() || bbp_is_single_topic()*/
+    ) {
+        if( ! is_user_logged_in() ) {
+            wp_redirect(
+                'https://login.creativecommons.org/login?service='
+                . get_site_url()
+                // Doesn't work at this point . get_permalink()
+            );
+            exit();
+        }
+    }
+}

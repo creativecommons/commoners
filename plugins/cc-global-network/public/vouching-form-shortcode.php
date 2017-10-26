@@ -36,14 +36,15 @@ function ccgn_vouching_request_exists ( $applicant_id,
 // out there (we will validate the userid server-side on submission).
 
 function ccgn_vouching_shortcode_render ( $atts ) {
-    // Only logged-in users can vouch.
-    if ( ! is_user_logged_in() ) {
-        wp_redirect( 'https://login.creativecommons.org/login?service='
-                     . get_site_url()
-                     . '/vouch/' );
-        exit;
+    if( ! is_user_logged_in() ) {
+        echo '<h3>You must be logged in to Vouch</h3>';
+        echo '<p>You can log in with your CCID here:</p>';
+        echo '<a class="cc-btn" href="'
+            . 'https://login.creativecommons.org/login?service='
+            . get_permalink()
+            . '">Log in</a>';
+        return;
     }
-
     // We need an applicant to vouch for
     if ( ! isset( $_GET[ 'applicant_id' ] ) ) {
         echo _( '<p>No applicant specified to vouch for.</p>' );

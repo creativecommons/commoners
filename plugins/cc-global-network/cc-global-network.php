@@ -137,6 +137,9 @@ add_filter(
     '_bp_remove_instant_messaging_if_unvouched'
 );
 
+// Hide group/member directories etc. from users who are not logged in
+add_filter( 'get_header', '_bp_not_signed_in_redirect', 1 );
+
 ////////////////////////////////////////////////////////////////////////////////
 // Registration Forms
 ////////////////////////////////////////////////////////////////////////////////
