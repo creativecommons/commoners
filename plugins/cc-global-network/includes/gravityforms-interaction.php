@@ -481,7 +481,19 @@ function ccgn_create_profile_individual( $applicant_id ) {
     //FIXME: user name?
 }
 
-function ccgn_create_profile_institutional( $applicant_id ) {
+function ccgn_unique_nicename ( $name ) {
+    $nicename = $slug = sanitize_title_with_dashes( $name );
+    $uniqueness = 2;
+    // slug is nicename:
+    // https://developer.wordpress.org/reference/classes/wp_user/get_data_by/
+    while ( get_user_by( 'slug', $nicename ) !== false ) {
+        $nicename = $slug . '-' . $uniqueness;
+        $uniqueness++;
+    }
+    return $nicename;
+}
+
+function ccgn_create_profile_institutional ( $applicant_id ) {
     $details = ccgn_details_institution_form_entry ( $applicant_id );
     $institution_name = $details[ CCGN_GF_INSTITUTION_DETAILS_NAME ];
     wp_update_user(
@@ -489,7 +501,7 @@ function ccgn_create_profile_institutional( $applicant_id ) {
             'ID' => $applicant_id,
             // Overwrite user's CCID global, as this profile is for the org
             // not the CCID user per se.
-            'user_nicename' => sanitize_title_with_dashes( $institution_name ),
+            'user_nicename' => ccgn_unique_nicename( $institution_name ),
             'nickname' => $institution_name,
             'display_name' => $institution_name
         )
