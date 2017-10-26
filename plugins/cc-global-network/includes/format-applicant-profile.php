@@ -61,13 +61,14 @@ function ccgn_vp_format_field ( $entry, $item ) {
 
 // Format the avatar image from the Applicant Details as an html IMG tag.
 
-/*function ccgn_vp_format_avatar ( $entry ) {
-    global $ccgn_vp_map;
-    $img_path = $entry[ $ccgn_vp_map[ 'avatar' ] ];
-    $img_editor = wp_get_image_editor( $img_path );
-    $img_editor->resize( 300, 300, true );
-    return '<img src="' . $img_path . '">';
-    }*/
+function ccgn_vp_format_avatar ( $entry ) {
+    // If this has been removed
+    if ( ! isset( $entry[ CCGN_GF_DETAILS_AVATAR_FILE ] ) ) {
+        return '';
+    }
+    $img_url = $entry[ CCGN_GF_DETAILS_AVATAR_FILE ];
+    return '<strong>Applicant Image</strong><p><img style="max-height:300px; width:auto;" src="' . $img_url . '"></p>';
+}
 
 // Format the relevant fields from the Applicant Details form as html.
 
@@ -84,9 +85,11 @@ function ccgn_vouching_form_profile_format( $entry, $map ) {
 // formatted as html.
 
 function ccgn_vouching_form_individual_profile_text ( $applicant_id ) {
+    $entry = ccgn_details_individual_form_entry( $applicant_id );
     return '<h3>Individual Applicant</h3>'
+        . ccgn_vp_format_avatar( $entry )
         . ccgn_vouching_form_profile_format(
-            ccgn_details_individual_form_entry( $applicant_id ),
+            $entry,
             CCGN_GF_DETAILS_VOUCH_MAP
         );
 }
@@ -112,9 +115,11 @@ function ccgn_vouching_form_applicant_profile_text ( $applicant_id ) {
 }
 
 function ccgn_user_page_individual_profile_text ( $applicant_id ) {
+    $entry = ccgn_details_individual_form_entry( $applicant_id );
     return '<h3>Individual Applicant</h3>'
+        . ccgn_vp_format_avatar ( $entry )
         . ccgn_vouching_form_profile_format(
-            ccgn_details_individual_form_entry( $applicant_id ),
+            $entry,
             CCGN_GF_DETAILS_VOUCH_MAP
         );
 }

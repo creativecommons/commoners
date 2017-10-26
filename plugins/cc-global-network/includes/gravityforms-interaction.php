@@ -41,7 +41,7 @@ define( 'CCGN_GF_DETAILS_LANGUAGES', '6' );
 define( 'CCGN_GF_DETAILS_LOCATION', '7' );
 define( 'CCGN_GF_DETAILS_NATIONALITY', '8' );
 define( 'CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS', '9' );
-define( 'CCGN_GF_DETAILS_AVATAR_FILE', '10' );
+define( 'CCGN_GF_DETAILS_AVATAR_FILE', '11' );
 
 define( 'CCGN_GF_INSTITUTION_DETAILS_NAME', '1' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_WEB_SITE', '2' );
@@ -342,6 +342,25 @@ function ccgn_application_vouchers_users ( $applicant_id ) {
     return $users;
 }
 
+function ccgn_application_details_avatar_filepath_o ( $img_url ) {
+    $upload_dir = wp_upload_dir();
+    return str_replace(
+        $upload_dir[ 'baseurl' ],
+        $upload_dir[ 'basedir' ],
+        $img_url
+    );
+}
+
+function ccgn_application_details_avatar_filepath_thumb ( $img_url ) {
+    $upload_dir = wp_upload_dir();
+    //CCGN_AVATAR_THUMBSIZE
+    $img_path = str_replace(
+        $upload_dir[ 'baseurl' ],
+        $upload_dir[ 'basedir' ],
+        $img_url
+    );
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Vouching and voting
 ////////////////////////////////////////////////////////////////////////////////
@@ -443,6 +462,17 @@ function ccgn_application_vote_by_current_user ( $applicant_id ) {
 // User profile creation based on GravityForms information
 ////////////////////////////////////////////////////////////////////////////////
 
+function ccgn_set_avatar ( $entry, $applicant_id ) {
+    $img_url = $entry[ CCGN_GF_DETAILS_AVATAR_FILE ];
+    $img_path = ccgn_application_details_avatar_filepath_o ( $img_url );
+    $avatar_dir = BP_AVATAR_UPLOAD_PATH
+                . '/avatars/'
+                . $applicant_id
+                . '/';
+    mkdir( $avatar_dir, 0777, true );
+    copy( $img_path, $avatar_dir . '-bpfull' . basename( $img_path ) );
+}
+
 function ccgn_create_profile_individual( $applicant_id ) {
     $details = ccgn_details_individual_form_entry ( $applicant_id );
     wp_update_user(
@@ -477,7 +507,7 @@ function ccgn_create_profile_individual( $applicant_id ) {
         $applicant_id,
         $details[ CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS ]
     );
-    //FIXME: avatar - CCGN_GF_DETALS_AVATAR_FILE
+    ccgn_set_avatar( $details, $applicant_id );
 }
 
 function ccgn_unique_nicename ( $name ) {
@@ -707,6 +737,27 @@ function ccgn_application_erase_field_applicant_id (
             $field_id_to_clear,
             null
             );
+    }
+}
+
+// Remove the applicant's application avatar
+
+function ccgn_application_remove_avatar ( $applicant_id ) {
+    $entry = ccgn_details_individual_form_entry( $applicant_id );
+    if ( isset( $entry[ CCGN_GF_DETAILS_AVATAR_FILE ] ) ) {
+        $original = ccgn_application_details_avatar_filepath_o ( $avatar_url );
+        if ( file_exists( $original ) ) {
+            unlink( $original );
+        }
+        $thumb = ccgn_application_details_avatar_filepath_thumb ( $avatar_url );
+        if ( file_exists( $thumb ) ) {
+            unlink( $thumb );
+        }
+        GFAPI::update_entry_field(
+            $entry[ 'id' ],
+            CCGN_GF_DETAILS_AVATAR_FILE,
+            null
+        );
     }
 }
 
