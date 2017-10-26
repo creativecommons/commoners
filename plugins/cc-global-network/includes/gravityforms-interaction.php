@@ -483,11 +483,15 @@ function ccgn_create_profile_individual( $applicant_id ) {
 
 function ccgn_create_profile_institutional( $applicant_id ) {
     $details = ccgn_details_institution_form_entry ( $applicant_id );
+    $institution_name = $details[ CCGN_GF_INSTITUTION_DETAILS_NAME ];
     wp_update_user(
         array(
             'ID' => $applicant_id,
-            'nickname' => $details[ CCGN_GF_INSTITUTION_DETAILS_NAME ],
-            'display_name' => $details[ CCGN_GF_INSTITUTION_DETAILS_NAME ]
+            // Overwrite user's CCID global, as this profile is for the org
+            // not the CCID user per se.
+            'user_nicename' => sanitize_title_with_dashes( $institution_name ),
+            'nickname' => $institution_name,
+            'display_name' => $institution_name
         )
     );
     xprofile_set_field_data(
