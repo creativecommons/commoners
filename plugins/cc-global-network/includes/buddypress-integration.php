@@ -53,9 +53,11 @@ define( 'CCGN_USER_ROLE_CC_LEGAL_TEAM', 'membership-cc-legal' );
 // We don't use Base, so filter out 'Base' by not listing it.
 // If we did use it, we'd have it at 'LOGGED_IN' and above.
 
+// Make sure institutional profiles are always visible
+
 $ccgn_access_levels = [
-    'PUBLIC' => [],
-    'LOGGED_IN' => [],
+    'PUBLIC' => [ 'Insititutional Member' ],
+    'LOGGED_IN' => [ 'Insititutional Member' ],
     'LOGGED_IN_AND_VOUCHED' => [ 'Individual Member', 'Insititutional Member' ],
     'ADMIN' => [  'Individual Member', 'Institutional Member' ]
 ];
@@ -663,6 +665,8 @@ function _bp_not_signed_in_redirect () {
 ////////////////////////////////////////////////////////////////////////////////
 // Member directory filtering
 ////////////////////////////////////////////////////////////////////////////////
+
+// Not all users, just new users (who are not yet members)
 
 function ccgn_bp_directory_exclude_users ( $qs=false, $object=false ) {
     if ( $object != 'members' ) {
