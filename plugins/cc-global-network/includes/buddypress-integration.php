@@ -659,3 +659,27 @@ function _bp_not_signed_in_redirect () {
         }
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Member directory filtering
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_bp_directory_exclude_users ( $qs=false, $object=false ) {
+    if ( $object != 'members' ) {
+        return $qs;
+    }
+    $new_users = get_users(
+        array(
+            'role' => CCGN_USER_ROLE_NEW,
+            'fields' => array( 'ID' )
+        )
+    );
+    $args = wp_parse_args( $qs );
+    $exclude = $args[ 'exclude' ];
+    foreach ( $new_users as $user ) {
+        $exclude[] = $user->ID;
+    }
+    $args[ 'exclude' ] = join( ',', $exclude );
+    $qs = build_query( $args );
+    return $qs;
+}

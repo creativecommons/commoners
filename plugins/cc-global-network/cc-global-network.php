@@ -146,6 +146,9 @@ add_filter(
 // Hide group/member directories etc. from users who are not logged in
 add_filter( 'get_header', '_bp_not_signed_in_redirect', 1 );
 
+// Don't show unvouched users in member directory
+add_action( 'bp_ajax_querystring', 'ccgn_bp_directory_exclude_users', 20, 2 );
+
 ////////////////////////////////////////////////////////////////////////////////
 // Registration Forms
 ////////////////////////////////////////////////////////////////////////////////
