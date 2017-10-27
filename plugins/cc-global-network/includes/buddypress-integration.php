@@ -493,7 +493,7 @@ function ccgn_user_level_set_autovouched ( $user_id ) {
 }
 
 function ccgn_user_is_autovouched( $user_id ) {
-    return get_user_meta( $user_id, CCGN_USER_IS_AUTOVOUCHED, true);
+    return get_user_meta( $user_id, CCGN_USER_IS_AUTOVOUCHED, true) === true;
 }
 
 // Use this in wp-cli to bootstrap interim membership council
@@ -521,50 +521,6 @@ function ccgn_user_level_set_rejected ( $user_id ) {
 function ccgn_user_level_register( $user_id ) {
     // We could just set the default user type option...
     ccgn_user_level_set_applicant_new( $user_id );
-}
-
-// This is called in testing to reset a user's application
-// It really does wipe their application details, so be careful.
-
-function _ccgn_user_level_reset ( $user_id ) {
-    _ccgn_application_delete_entries_created_by( $user_id );
-    // Delete approval forms but not vouches/votes
-    _ccgn_application_delete_entries_applicant_id (
-        CCGN_GF_PRE_APPROVAL,
-        CCGN_GF_PRE_APPROVAL_APPLICANT_ID,
-        $user_id
-    );
-    _ccgn_application_delete_entries_applicant_id (
-        CCGN_GF_FINAL_APPROVAL,
-        CCGN_GF_FINAL_APPROVAL_APPLICANT_ID,
-        $user_id
-    );
-    _ccgn_application_delete_entries_applicant_id (
-        CCGN_GF_LEGAL_APPROVAL,
-        CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID,
-        $user_id
-    );
-    delete_user_meta( $user_id, CCGN_APPLICATION_TYPE );
-    delete_user_meta( $user_id, CCGN_APPLICATION_STATE );
-    delete_user_meta( $user_id, CCGN_USER_IS_AUTOVOUCHED );
-    ccgn_user_level_set_applicant_new( $user_id );
-    bp_remove_member_type( $user_id, 'individual-member' );
-    bp_remove_member_type( $user_id, 'institutional-member' );
-    xprofile_delete_field_data( '', $user_id );
-}
-
-function _ccgn_user_level_rollback_to_vouching ( $user_id ) {
-    update_user_meta(
-        $user_id,
-        CCGN_APPLICATION_STATE,
-        CCGN_APPLICATION_STATE_VOUCHING
-    );
-    _ccgn_application_delete_entries_applicant_id (
-        CCGN_GF_FINAL_APPROVAL,
-        CCGN_GF_FINAL_APPROVAL_APPLICANT_ID,
-        $user_id
-    );
-    //TODO: Delete vote by user calling this as a convenience.
 }
 
 ////////////////////////////////////////////////////////////////////////////////

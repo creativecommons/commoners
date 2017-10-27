@@ -57,6 +57,12 @@ require_once(CCGN_PATH . 'admin/user-legal-approval-list-page.php');
 
 require_once(CCGN_PATH . 'public/vouching-form-shortcode.php');
 
+// Testing support
+
+if ( defined( 'CCGN_DEVELOPMENT' ) || defined( 'CCGN_TESTING' ) ) {
+    require_once(CCGN_PATH . 'testing/reset-state.php');
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // CAS / WordPress registration
 ////////////////////////////////////////////////////////////////////////////////

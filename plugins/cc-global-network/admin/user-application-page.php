@@ -407,12 +407,12 @@ function ccgn_application_users_page_applicant () {
     $applicant_id = filter_input(
         INPUT_GET,
         'user_id',
-        FILTER_VALIDATE_INT | FILTER_NULL_ON_FAILURE
+        FILTER_VALIDATE_INT
     );
     if ( $applicant_id === false ) {
-        echo _( '<br />No user id specified.' );
-    } elseif ( $applicant_id === null ) {
         echo _( '<br />Invalid user id.' );
+    } elseif ( $applicant_id === null ) {
+        echo _( '<br />No user id specified.' );
         $applicant_id = false;
     } elseif ( $applicant_id == get_current_user_id() ) {
         echo _( '<br />You cannot edit your own application status' );
@@ -479,7 +479,7 @@ function ccgn_application_users_page () {
     }
     $state = ccgn_registration_user_get_stage( $applicant_id );
     ccgn_application_users_page_render_details( $applicant_id, $state );
-    ccgn_application_users_page_render_state( $appliant_id, $state );
+    ccgn_application_users_page_render_state( $applicant_id, $state );
     if ( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
         ccgn_application_format_legal_approval( $applicant_id, $state );
     }

@@ -22,7 +22,7 @@ define(
 );
 
 function ccgn_registration_user_get_application_type ( $user_id ) {
-    return get_user_meta( $user_id, CCGN_APPLICATION_TYPE )[0];
+    return get_user_meta( $user_id, CCGN_APPLICATION_TYPE, true );
 }
 
 function ccgn_registration_user_set_application_type ( $user_id, $type ) {
@@ -106,8 +106,18 @@ define(
     ]
 );
 
+define(
+    'CCGN_APPLICATION_STATE_PAST_APPLICATION',
+    [
+        CCGN_APPLICATION_STATE_LEGAL,
+        CCGN_APPLICATION_STATE_REJECTED,
+        CCGN_APPLICATION_STATE_ACCEPTED,
+        CCGN_APPLICATION_STATE_VOUCHING
+    ]
+);
+
 function ccgn_registration_user_get_stage ( $user_id ) {
-    return get_user_meta( $user_id, CCGN_APPLICATION_STATE )[0];
+    return get_user_meta( $user_id, CCGN_APPLICATION_STATE, true );
 }
 
 // Note that this isn't general-purpose: it will refuse to update if the user

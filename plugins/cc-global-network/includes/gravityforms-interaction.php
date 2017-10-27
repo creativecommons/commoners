@@ -231,7 +231,7 @@ function ccgn_entries_referring_to_user (
     $search_criteria = array();
     $search_criteria['field_filters'][]
         = array(
-            'key' =>  $field_id,
+            'key' =>   $field_id,
             'value' => $user_id
         );
     return GFAPI::get_entries(
@@ -689,15 +689,37 @@ function ccgn_choose_vouchers_validate ( $validation_result ) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// Pre Approval
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_pre_approval_entries_for ( $applicant_id ) {
+    return ccgn_entries_referring_to_user(
+        $applicant_id,
+        CCGN_GF_PRE_APPROVAL,
+        CCGN_GF_PRE_APPROVAL_APPLICANT_ID
+    );
+}
+
+function ccgn_pre_approval_entry_for ( $applicant_id ) {
+    $entries = ccgn_pre_approval_entries_for( $applicant_id );
+    return $entries ? $entries[0] : false;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 // Final Approval
 ////////////////////////////////////////////////////////////////////////////////
 
-function ccgn_final_approval_entry_for ( $applicant_id ) {
-    $entries = ccgn_entries_referring_to_user(
+function ccgn_final_approval_entries_for ( $applicant_id ) {
+    return ccgn_entries_referring_to_user(
         $applicant_id,
         CCGN_GF_FINAL_APPROVAL,
         CCGN_GF_FINAL_APPROVAL_APPLICANT_ID
     );
+}
+
+function ccgn_final_approval_entry_for ( $applicant_id ) {
+    $entries = ccgn_final_approval_entries_for( $applicant_id );
     return $entries ? $entries[0] : false;
 }
 
