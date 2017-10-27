@@ -107,18 +107,3 @@ function ccgn_registration_institution_shortcode_render ( $atts ) {
     }
     ccgn_registration_institution_shortcode_render_view( $user );
 }
-
-function ccgn_swizzle_form_url_for_institution(
-    $confirmation,
-    $form,
-    $lead,
-    $ajax
-){
-    if ( ccgn_user_is_institutional_applicant( $lead[ 'created_by' ] )
-         && isset( $confirmation[ 'redirect' ] ) ) {
-        $url = $confirmation[ 'redirect' ];
-        $new_url = str_replace( '/individual/', '/institution/', $url );
-        $confirmation = array( 'redirect' => $new_url );
-    }
-    return $confirmation;
-}

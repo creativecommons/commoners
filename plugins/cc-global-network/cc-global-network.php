@@ -199,15 +199,6 @@ add_action(
     2
 );
 
-//FIXME: Handle redirects in form to /individual/ -> /institutional/.
-//Either go full multipage or show text & render form in shortcode.
-add_filter(
-    'gform_confirmation',
-    'ccgn_swizzle_form_url_for_institution',
-    10,
-    4
-);
-
 ////////////////////////////////////////////////////////////////////////////////
 // Form for existing members vouching for new applicant
 ////////////////////////////////////////////////////////////////////////////////
