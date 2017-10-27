@@ -43,6 +43,8 @@ define( 'CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS', '9' );
 define( 'CCGN_GF_DETAILS_AVATAR_FILE', '11' );
 define( 'CCGN_GF_DETAILS_AVATAR_SOURCE', '12' );
 define( 'CCGN_GF_DETAILS_AVATAR_GRAVATAR', '13' );
+define( 'CCGN_GF_DETAILS_WAS_AFFILIATE', '15' );
+define( 'CCGN_GF_DETAILS_WAS_AFFILIATE_NAME', '16' );
 
 define( 'CCGN_GF_INSTITUTION_DETAILS_NAME', '1' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_WEB_SITE', '2' );
@@ -119,6 +121,8 @@ define(
     'CCGN_GF_DETAILS_USER_PAGE_MAP',
     [
         [ 'Applicant Name', CCGN_GF_DETAILS_NAME ],
+        [ 'Is/Was Part of Affiliate Group', CCGN_GF_DETAILS_WAS_AFFILIATE ],
+        [ 'Affiliate Group Name', CCGN_GF_DETAILS_WAS_AFFILIATE_NAME ],
         [ 'Brief Biography', CCGN_GF_DETAILS_BIO ],
         [ 'Membership Statement', CCGN_GF_DETAILS_STATEMENT ],
         [ 'Areas of Interest', CCGN_GF_DETAILS_AREAS_OF_INTEREST ],

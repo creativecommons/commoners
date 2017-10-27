@@ -129,7 +129,7 @@ function ccgn_user_page_individual_profile_text ( $applicant_id ) {
         . ccgn_vp_format_avatar ( $entry )
         . ccgn_vouching_form_profile_format(
             $entry,
-            CCGN_GF_DETAILS_VOUCH_MAP
+            CCGN_GF_DETAILS_USER_PAGE_MAP
         );
 }
 
