@@ -496,13 +496,15 @@ function ccgn_user_is_autovouched( $user_id ) {
     return get_user_meta( $user_id, CCGN_USER_IS_AUTOVOUCHED, true) === true;
 }
 
-// Use this in wp-cli to bootstrap interim membership council
+// Use this in wp-cli shell to bootstrap interim membership council
 
-function _ccgn_user_level_set_autouvouched_interim_membership_council(
-    $user_id
-) {
-    ccgn_user_level_set_autovouched( $user_id );
-    ccgn_user_join_membership_council( $user_id );
+if ( defined( 'INTERIM_MEMBERSHIP_COUNCIL' ) ) {
+    function _ccgn_user_level_set_autouvouched_interim_membership_council (
+        $user_id
+    ) {
+        ccgn_user_level_set_autovouched( $user_id );
+        ccgn_user_join_membership_council( $user_id );
+    }
 }
 
 function ccgn_user_level_set_rejected ( $user_id ) {
