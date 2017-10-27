@@ -64,6 +64,8 @@ function ccgn_registration_individual_shortcode_render_view ( $user ) {
         gravity_form( CCGN_GF_AGREE_TO_TERMS, false, false );
         break;
     case CCGN_APPLICATION_STATE_CHARTER:
+        $charter = get_page_by_path( 'charter', OBJECT, 'page' );
+        echo $charter->post_content;
         gravity_form( CCGN_GF_SIGN_CHARTER, false, false );
         break;
     case CCGN_APPLICATION_STATE_DETAILS:
