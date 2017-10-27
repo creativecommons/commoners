@@ -67,7 +67,7 @@ function ccgn_registration_individual_shortcode_render_view ( $user ) {
         gravity_form( CCGN_GF_SIGN_CHARTER, false, false );
         break;
     case CCGN_APPLICATION_STATE_DETAILS:
-        gravity_form( CCGN_GF_INDIVIDUAL_DETAILS, false, false );
+        ccgn_registration_individual_shortcode_render_details( $user );
         break;
     case CCGN_APPLICATION_STATE_VOUCHERS:
         gravity_form( CCGN_GF_CHOOSE_VOUCHERS, false, false );
@@ -86,6 +86,40 @@ function ccgn_registration_individual_shortcode_render_view ( $user ) {
         error_log( 'Unrecognised application state: ' . $state );
         echo _( '<p>Unrecognised application state.</p>' );
     }
+}
+
+function ccgn_registration_individual_shortcode_render_details ( $user ) {
+    gravity_form(
+        CCGN_GF_INDIVIDUAL_DETAILS,
+        false,
+        false,
+        array(
+            CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER
+            => $applicant_id
+        )
+    );
+    ?>
+    <script>
+    <?php
+    if ( ccgn_user_gravatar_exists ( $user->ID ) ) {
+    ?>
+      jQuery('.ccgn_applicant_details_gravatar')
+          .html('<?php echo ccgn_user_gravatar_img( $user->ID, 80 ); ?><div class="gfield_description">Your current Gravatar.</div>');
+    <?php
+    } else {
+    ?>
+      jQuery('.ccgn_avatar_source input[value="gravatar"]').attr("disabled",
+                                                                 true);
+      jQuery('.ccgn_avatar_source input[value="gravatar"]').hide();
+      jQuery('.ccgn_avatar_source input[value="gravatar"] + label').hide();
+      jQuery('.ccgn_avatar_source input[value="image"]').prop("checked",
+                                                              true);
+    <?php
+
+    }
+    ?>
+    </script>
+    <?php
 }
 
 function ccgn_registration_individual_shortcode_render ( $atts ) {

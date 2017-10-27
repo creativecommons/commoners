@@ -62,12 +62,21 @@ function ccgn_vp_format_field ( $entry, $item ) {
 // Format the avatar image from the Applicant Details as an html IMG tag.
 
 function ccgn_vp_format_avatar ( $entry ) {
-    // If this has been removed
-    if ( ! isset( $entry[ CCGN_GF_DETAILS_AVATAR_FILE ] ) ) {
-        return '';
+    $img = '';
+    $user_id = $entry[ 'created_by' ];
+    if ( ccgn_applicant_gravatar_selected ( $user_id ) ) {
+        $img = ccgn_user_gravatar_img ( $user_id, 300 );
+    } else {
+        // If this has been removed
+        if ( ! isset( $entry[ CCGN_GF_DETAILS_AVATAR_FILE ] ) ) {
+            //FIXME: get profile image url
+            $img = '';
+        } else {
+            $img_url = $entry[ CCGN_GF_DETAILS_AVATAR_FILE ];
+            $img = '<strong>Applicant Image</strong><p><img style="max-height:300px; width:auto;" src="' . $img_url . '"></p>';
+        }
     }
-    $img_url = $entry[ CCGN_GF_DETAILS_AVATAR_FILE ];
-    return '<strong>Applicant Image</strong><p><img style="max-height:300px; width:auto;" src="' . $img_url . '"></p>';
+    return $img;
 }
 
 // Format the relevant fields from the Applicant Details form as html.

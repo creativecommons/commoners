@@ -41,6 +41,8 @@ define( 'CCGN_GF_DETAILS_LANGUAGES', '6' );
 define( 'CCGN_GF_DETAILS_LOCATION', '7' );
 define( 'CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS', '9' );
 define( 'CCGN_GF_DETAILS_AVATAR_FILE', '11' );
+define( 'CCGN_GF_DETAILS_AVATAR_SOURCE', '12' );
+define( 'CCGN_GF_DETAILS_AVATAR_GRAVATAR', '13' );
 
 define( 'CCGN_GF_INSTITUTION_DETAILS_NAME', '1' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_WEB_SITE', '2' );
@@ -85,6 +87,9 @@ define( 'CCGN_GF_PRE_APPROVAL_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_VOTE_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPROVED_YES', 'Yes' );
+
+define( 'CCGN_GF_DETAILS_AVATAR_SOURCE_GRAVATAR', 'gravatar' );
+define( 'CCGN_GF_DETAILS_AVATAR_SOURCE_UPLOAD', 'image' );
 
 define( 'CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE_YES', 'Yes' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS_MOU', 'MOU' );
@@ -533,7 +538,9 @@ function ccgn_create_profile_individual( $applicant_id ) {
         $applicant_id,
         $details[ CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS ]
     );
-    ccgn_set_avatar( $details, $applicant_id );
+    if ( ! ccgn_applicant_gravatar_selected ( $applicant_id ) ) {
+        ccgn_set_avatar( $details, $applicant_id );
+    }
 }
 
 function ccgn_unique_nicename ( $name ) {
@@ -848,4 +855,36 @@ function ccgn_erase_application_reasons ( $applicant_id ) {
         CCGN_GF_LEGAL_APPROVAL_REASON,
         $applicant_id
         );*/
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Gravatar Checking
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_user_gravatar_url ( $user_id, $size="80", $default="404" ) {
+    $email = get_userdata( $user_id )->user_email;
+    return "https://www.gravatar.com/avatar/"
+        . md5( strtolower( trim( $email ) ) )
+        . "?d=" . urlencode( $default )
+        . "&s=" . $size;
+}
+
+// If the user does not have a gravatar, this will display the mystery person
+
+function ccgn_user_gravatar_img ( $user_id, $size ) {
+    return '<img src="' . ccgn_user_gravatar_url ( $user_id, $size, "mm" )
+                        . '" width="' . $size . '" height="' . $size . '"/>';
+}
+
+function ccgn_user_gravatar_exists ( $user_id ) {
+    $url = ccgn_user_gravatar_url ( $user_id, "1", "404" );
+    list($status) = get_headers( $url );
+    return strpos( $status, '404' ) === false;
+}
+
+function ccgn_applicant_gravatar_selected ( $applicant_id ) {
+    $details = ccgn_details_individual_form_entry ( $applicant_id );
+    $source = $details[ CCGN_GF_DETAILS_AVATAR_SOURCE ];
+    return $source == CCGN_GF_DETAILS_AVATAR_SOURCE_GRAVATAR;
 }
