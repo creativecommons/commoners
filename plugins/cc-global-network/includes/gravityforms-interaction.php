@@ -612,8 +612,8 @@ function ccgn_registration_form_list_members ( $current_user_id ) {
         ) {
             $members[] = array(
                 $individual->ID,
-                // This is unique and not the user's email address
-                // (for CCID users).
+                // Add nicename as it's unique and not the user's email address
+                $individual->display_name,
                 $individual->user_nicename
             );
         }
@@ -636,19 +636,19 @@ function ccgn_set_vouchers_options ( $form ) {
         jQuery(document).ready(function(){
             gform.addFilter('gform_chosen_options', function(options, element){
                 var new_options = ccgn_members.forEach(function(member){
-                    console.log(jQuery(element));
                     return jQuery("<option></option>")
                         .attr("value", member[0])
-                        .text(member[1]);
+                        .text(member[1] + " (" + member[2] + ")");
                 });
                 var select = jQuery(element);
                 //FIXME: We should remove everything except the first element
                 select.empty();
                 select.append(jQuery("<option disabled selected value>Select Voucher</option>"));
                 for (var i = 0; i < ccgn_members.length; i++) {
+                    var member = ccgn_members[i];
                     select.append(jQuery("<option></option>")
-                                  .attr("value", ccgn_members[i][0])
-                                  .text(ccgn_members[i][1]));
+                                  .attr("value", member[0])
+                                  .text(member[1] + " (" + member[2] + ")"));
                 }
                 return options;
             });
