@@ -27,7 +27,8 @@
                ) ); ?>
       </nav>
       <form method="post" action="/" class="header-search">
-        <input type="text"><i class="fa fa-search" aria-hidden="true"></i>
+        <input type="text" name="s">
+          <i class="fa fa-search" aria-hidden="true"></i>
       </form>
     </header><!-- #masthead -->
 
