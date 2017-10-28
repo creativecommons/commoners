@@ -67,3 +67,14 @@ function cc_commoners_theme_scripts () {
 }
 
 add_action( 'wp_enqueue_scripts', 'cc_commoners_theme_scripts', 100);
+
+function cc_commoners_replace_last_nav_item ( $items, $args ) {
+  return substr_replace(
+      $items,
+      '',
+      strrpos( $items, $args->after ),
+      strlen( $args->after )
+  );
+}
+
+add_filter( 'wp_nav_menu', 'cc_commoners_replace_last_nav_item', 100, 2 );
