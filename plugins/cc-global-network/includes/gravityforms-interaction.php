@@ -488,7 +488,7 @@ function ccgn_application_vote_by_current_user ( $applicant_id ) {
         $applicant_id,
         $user_id
     );
-    return $entries ? entries[0] : false;
+    return $entries ? $entries[0] : false;
 }
 
 
