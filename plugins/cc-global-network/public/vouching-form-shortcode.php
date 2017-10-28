@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // username until we cache the ids on save.
 
 function ccgn_vouching_request_exists ( $applicant_id,
-                                             $voucher_id ) {
+                                        $voucher_id ) {
     $result = false;
     $vouchers = ccgn_application_vouchers ( $applicant_id );
     foreach( CCGN_GF_VOUCH_VOUCHER_FIELDS as $field_id ) {
@@ -52,14 +52,14 @@ function ccgn_vouching_shortcode_render ( $atts ) {
     $applicant_id = filter_input(
         INPUT_GET,
         'applicant_id',
-        FILTER_VALIDATE_INT | FILTER_NULL_ON_FAILURE
+        FILTER_VALIDATE_INT
     );
     if ( $applicant_id === false ) {
-        echo _( '<p>No applicant specified to vouch for.</p>' );
+        echo _( '<br />Invalid user id.' );
         return;
     }
     if ( $applicant_id === null ) {
-        echo _( '<br />Invalid user id.' );
+        echo _( '<p>No applicant specified to vouch for.</p>' );
         return;
     }
 
