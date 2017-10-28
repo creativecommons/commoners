@@ -139,12 +139,12 @@ function ccgn_registration_email_vouching_requests ( $applicant_id ) {
 
 function ccgn_application_users_page_pre_form_submit_handler ( $entry,
                                                                $form ) {
-    if ( ! ( ccgn_current_user_is_membership_council()
-             || ccgn_current_user_is_final_approver() ) ) {
-        echo 'Must be Membership Council member.';
-        exit;
-    }
     if ( $form[ 'title' ] == CCGN_GF_PRE_APPROVAL ) {
+        if ( ! ( ccgn_current_user_is_membership_council()
+                 || ccgn_current_user_is_final_approver() ) ) {
+            echo 'Must be Membership Council member.';
+            exit;
+        }
         $applicant_id = $entry[ CCGN_GF_PRE_APPROVAL_APPLICANT_ID ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
         if ( $stage != CCGN_APPLICATION_STATE_RECEIVED ) {
@@ -442,6 +442,9 @@ function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
             echo _('<h3>Final Approval</h3>');
             ccgn_application_users_page_final_approval_form( $applicant_id );
         }
+    } elseif ( $state == '' ) {
+        echo _('<h2>New User.</h2>');
+        echo _("<p>They haven't completed an application yet.</p>");
     } else {
         echo _('<h2>Application resolved.</h2>');
         echo '<p>Status: ' . $state . '</p>';
