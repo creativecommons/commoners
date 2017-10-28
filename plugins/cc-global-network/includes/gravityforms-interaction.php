@@ -797,11 +797,8 @@ function ccgn_application_erase_field_applicant_id (
         $field_id_to_match_to_applicant_id
     );
     foreach( $entries as $entry ) {
-        GFAPI::update_entry_field(
-            $entry[ 'id' ],
-            $field_id_to_clear,
-            null
-            );
+        unset( $entry[ $field_id_to_clear ] );
+        GFAPI::update_entry( $entry );
     }
 }
 
