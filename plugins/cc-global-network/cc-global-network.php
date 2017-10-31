@@ -132,16 +132,9 @@ add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
 add_action( 'bp_profile_header_meta', '_bp_meta_member_type', 10, 0 );
 
-// Don't let unvouched users set their profiles
+// Remove unused modules
 
-add_action( 'bp_ready', '_bp_remove_profile_options_if_unvouched' );
-
-// Hide messaging from unvouched users
-
-add_filter(
-    'bp_get_send_public_message_button',
-    '_bp_remove_instant_messaging_if_unvouched'
-);
+add_filter( 'bp_is_active', '_bp_remove_components', 10, 2 );
 
 // Hide group/member directories etc. from users who are not logged in
 add_filter( 'get_header', '_bp_not_signed_in_redirect', 1 );

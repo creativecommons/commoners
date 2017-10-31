@@ -27,6 +27,32 @@ if ( defined( 'CCGN_DEVELOPMENT' ) ) {
 define( 'COMMONERS_USER_IS_AUTOVOUCHED', 'ccgn-user-autovouched' );
 
 ////////////////////////////////////////////////////////////////////////////////
+// Buddypress config
+////////////////////////////////////////////////////////////////////////////////
+
+define(
+    'CCGN_BP_DISABLED_MODULES_MEMBER',
+    array( 'activity', 'blogs', 'friends', 'groups', 'notifications', 'messages' )
+);
+
+define(
+    'CCGN_BP_DISABLED_MODULES_APPLICANT',
+    array_merge(
+        CCGN_BP_DISABLED_MODULES_MEMBER,
+        array( 'xprofile', 'settings' )
+    )
+);
+
+define(
+    'CCGN_BP_DISABLED_MODULES_NOT_LOGGED_IN',
+    array_merge(
+        CCGN_BP_DISABLED_MODULES_APPLICANT,
+        // Not members
+        array( /*'members'*/ )
+    )
+);
+
+////////////////////////////////////////////////////////////////////////////////
 // User Roles
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -93,6 +119,8 @@ function ccgn_user_is_new ( $user_id ) {
     return ($user->roles == null)
            || in_array( CCGN_USER_ROLE_NEW, $user->roles );
 }
+
+// DANGER - We use this to mean "is a member" here. This must be changed.
 
 function ccgn_user_is_vouched( $user_id ) {
     // To get past being new, you must be vouched
@@ -345,17 +373,31 @@ function ccgn_remove_member_type_metabox() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// BuddyPress UI display control by user level
+// BuddyPress UI display control
 ////////////////////////////////////////////////////////////////////////////////
+
+function _bp_remove_components( $enabled, $component ) {
+    $user_id = get_current_user_id();
+    if ( ccgn_user_is_vouched( $user_id ) ) {
+        $modules = CCGN_BP_DISABLED_MODULES_MEMBER;
+    } elseif( ccgn_user_is_new ( $user_id ) ) {
+        $modules = CCGN_BP_DISABLED_MODULES_APPLICANT;
+    } else {
+        $modules = CCGN_BP_DISABLED_MODULES_NOT_LOGGED_IN;
+    }
+    return ! in_array( $component, $modules );
+}
+
 
 // Hide core UI if the user is not logged in
 
 function ccgn_not_logged_in_ui () {
+    // Actually never show these
+    //    bp_core_remove_nav_item( 'activity' );
+    //bp_core_remove_nav_item( 'groups' );
     if (! is_user_logged_in() ) {
         // Just don't display people's profiles
         bp_core_remove_nav_item( 'profile' );
-        bp_core_remove_nav_item( 'activity' );
-        bp_core_remove_nav_item( 'groups' );
         // Hide the "view" subtab. Ideally we would hide the "profile" tab...
         //unset($bp->bp_options_nav['profile']['public']);
     }
@@ -390,17 +432,6 @@ function ccgn_filter_role_groups ( $groups ) {
 ////////////////////////////////////////////////////////////////////////////////
 // Buddypress UI configuration for vouching level
 ////////////////////////////////////////////////////////////////////////////////
-
-function _bp_remove_profile_options_if_unvouched () {
-    if ( ! ccgn_current_user_is_vouched() ) {
-        bp_core_remove_nav_item( 'activity' );
-        // Unvouched users need to be able to see other users profiles
-        //bp_core_remove_nav_item( 'profile' );
-        bp_core_remove_nav_item( 'groups' );
-        bp_core_remove_nav_item( 'forums' );
-        bp_core_remove_nav_item( 'notifications' );
-    }
-}
 
 function _bp_set_default_component () {
     define ( 'BP_DEFAULT_COMPONENT', 'profile' );
@@ -629,10 +660,6 @@ function _bp_get_activity_action_pre_meta($content){
         $user = get_user_by('slug', $fullname);
     }
     return preg_replace('/href=\"(.*?)\"/is', 'href="'.bp_core_get_user_domain($user->ID, $fullname).'"', $content);
-}
-
-function _bp_remove_instant_messaging_if_unvouched () {
-    return ! ccgn_current_user_is_vouched ();
 }
 
 function _bp_meta_member_type () {
