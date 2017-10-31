@@ -377,6 +377,11 @@ function ccgn_remove_member_type_metabox() {
 ////////////////////////////////////////////////////////////////////////////////
 
 function _bp_remove_components( $enabled, $component ) {
+    // If we are developing & in the CLI we need xprofile to reset applications
+    if ( defined( 'WP_CLI' )
+         && ( defined( 'CCGN_DEVELOPMENT' ) || defined( 'CCGN_TESTING' ) ) ) {
+        return true;
+    }
     $user_id = get_current_user_id();
     if ( ccgn_user_is_vouched( $user_id ) ) {
         $modules = CCGN_BP_DISABLED_MODULES_MEMBER;
