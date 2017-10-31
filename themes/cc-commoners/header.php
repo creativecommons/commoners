@@ -17,7 +17,7 @@
       <a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'twentyseventeen' ); ?></a>
 
     <header id="masthead" class="site-header" role="banner">
-      <div class="logo"><h1>CC Commoners</h1></div>
+      <a href="/"><div class="logo"><h1>CC Global Network</h1></div></a>
       <nav class="main-nav">
         <?php wp_nav_menu( array(
                      'depth'=>1,
