@@ -522,7 +522,7 @@ function ccgn_hide_application_users_menu () {
 function ccgn_application_user_link( $actions, $user_object ) {
     // Only show this if the user is at the pre-approval or vouching stages
     if ( ccgn_current_user_can_see_user_application_page()
-         && ccgn_vouching_request_active( $user_object->ID ) ) {
+         && ccgn_user_is_new( $user_object->ID ) ) {
         $actions['ccgn_application']
             = '<a href="'
             . ccgn_application_user_application_page_url(
