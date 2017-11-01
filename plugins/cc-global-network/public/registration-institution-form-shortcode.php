@@ -90,8 +90,7 @@ function ccgn_registration_institution_shortcode_render ( $atts ) {
         echo '<h3>OK! Let&apos;s get started</h3>';
         echo '<p>First you need to log in with your CCID.</p>';
         echo '<a class="cc-btn" href="'
-            . 'https://login.creativecommons.org/login?service='
-            . get_permalink()
+            . wp_login_url( get_permalink() )
             . '">Log in</a>';
         return;
     }
