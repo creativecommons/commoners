@@ -28,14 +28,12 @@ function ccgn_activate_and_notify_member ( $applicant_id ) {
     ccgn_user_level_set_approved( $applicant_id );
     ccgn_create_profile( $applicant_id );
     ccgn_registration_email_application_approved( $applicant_id );
-    ccgn_erase_application_reasons ( $applicant_id );
     ccgn_application_remove_avatar ( $applicant_id );
 }
 
 function ccgn_decline_and_notify_applicant ( $applicant_id ) {
     ccgn_user_level_set_rejected( $applicant_id );
     ccgn_registration_email_application_rejected( $applicant_id );
-    ccgn_erase_application_reasons ( $applicant_id );
     ccgn_application_remove_avatar ( $applicant_id );
 }
 
@@ -50,9 +48,6 @@ function ccgn_application_users_page_vote_responses ( $applicant_id ) {
     $votes = ccgn_application_votes ( $applicant_id );
     foreach ($votes as $vouch) {
         $voter = get_user_by('ID', $vouch['created_by']);
-        $reason = $vouch[ CCGN_GF_VOTE_REASON ]
-                ? $vouch[ CCGN_GF_VOTE_REASON ]
-                : '&mdash;';
         $result .=
                 '<h4>From: '
                 . $voter->display_name
@@ -60,8 +55,6 @@ function ccgn_application_users_page_vote_responses ( $applicant_id ) {
                 .  $vouch[
                     CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
                 ]
-                . '</p><p><strong>Reason:</strong> '
-                . $reason
                 . '</p>';
     }
     return $result;
@@ -313,7 +306,6 @@ function ccgn_application_users_page_final_approval_form ( $applicant_id ) {
         } else {
             echo _('<p>It was rejected.</p>');
         }
-        echo '<b>Notes:</b> ' . $entry[ CCGN_GF_FINAL_APPROVAL_REASON ];
     }
 }
 

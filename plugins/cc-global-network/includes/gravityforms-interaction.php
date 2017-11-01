@@ -68,17 +68,14 @@ define( 'CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_PRE_APPROVAL_APPLICANT_ID', '4' );
 
 define( 'CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION', '2' );
-define( 'CCGN_GF_VOTE_REASON', '3' );
 define( 'CCGN_GF_VOTE_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_VOTE_APPLICANT_ID', '4' );
 
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
-define( 'CCGN_GF_FINAL_APPROVAL_REASON', '2' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID', '3' );
 
 define( 'CCGN_GF_LEGAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
-//define( 'CCGN_GF_LEGAL_APPROVAL_REASON', '2' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID', '3' );
 
@@ -821,41 +818,6 @@ function ccgn_application_remove_avatar ( $applicant_id ) {
             null
         );
     }
-}
-
-// Clear "reason" text on appliction resolution
-
-function ccgn_erase_application_reasons ( $applicant_id ) {
-    ccgn_application_erase_field_applicant_id (
-        CCGN_GF_VOUCH,
-        CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
-        CCGN_GF_VOUCH_REASON,
-        $applicant_id
-    );
-    ccgn_application_erase_field_applicant_id (
-        CCGN_GF_VOTE,
-        CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
-        CCGN_GF_VOUCH_REASON,
-        $applicant_id
-    );
-    ccgn_application_erase_field_applicant_id (
-        CCGN_GF_PRE_APPROVAL,
-        CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
-        CCGN_GF_VOUCH_REASON,
-        $applicant_id
-    );
-    ccgn_application_erase_field_applicant_id (
-        CCGN_GF_FINAL_APPROVAL,
-        CCGN_GF_FINAL_APPROVAL_APPLICANT_ID,
-        CCGN_GF_FINAL_APPROVAL_REASON,
-        $applicant_id
-    );
-    /*    ccgn_application_erase_field_applicant_id (
-        CCGN_GF_LEGAL_APPROVAL,
-        CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID,
-        CCGN_GF_LEGAL_APPROVAL_REASON,
-        $applicant_id
-        );*/
 }
 
 
