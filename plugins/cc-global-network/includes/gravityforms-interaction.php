@@ -40,9 +40,9 @@ define( 'CCGN_GF_DETAILS_AREAS_OF_INTEREST', '5' );
 define( 'CCGN_GF_DETAILS_LANGUAGES', '6' );
 define( 'CCGN_GF_DETAILS_LOCATION', '7' );
 define( 'CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS', '9' );
-define( 'CCGN_GF_DETAILS_AVATAR_FILE', '11' );
+/*define( 'CCGN_GF_DETAILS_AVATAR_FILE', '11' );
 define( 'CCGN_GF_DETAILS_AVATAR_SOURCE', '12' );
-define( 'CCGN_GF_DETAILS_AVATAR_GRAVATAR', '13' );
+define( 'CCGN_GF_DETAILS_AVATAR_GRAVATAR', '13' );*/
 define( 'CCGN_GF_DETAILS_WAS_AFFILIATE', '15' );
 define( 'CCGN_GF_DETAILS_WAS_AFFILIATE_NAME', '16' );
 
@@ -87,8 +87,8 @@ define( 'CCGN_GF_VOTE_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPROVED_YES', 'Yes' );
 
-define( 'CCGN_GF_DETAILS_AVATAR_SOURCE_GRAVATAR', 'gravatar' );
-define( 'CCGN_GF_DETAILS_AVATAR_SOURCE_UPLOAD', 'image' );
+/*define( 'CCGN_GF_DETAILS_AVATAR_SOURCE_GRAVATAR', 'gravatar' );
+  define( 'CCGN_GF_DETAILS_AVATAR_SOURCE_UPLOAD', 'image' );*/
 
 define( 'CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE_YES', 'Yes' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS_MOU', 'MOU' );
@@ -539,9 +539,9 @@ function ccgn_create_profile_individual( $applicant_id ) {
         $applicant_id,
         $details[ CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS ]
     );
-    if ( ! ccgn_applicant_gravatar_selected ( $applicant_id ) ) {
+    /*if ( ! ccgn_applicant_gravatar_selected ( $applicant_id ) ) {
         ccgn_set_avatar( $details, $applicant_id );
-    }
+    }*/
 }
 
 function ccgn_unique_nicename ( $name ) {

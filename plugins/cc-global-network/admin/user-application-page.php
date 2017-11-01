@@ -28,13 +28,13 @@ function ccgn_activate_and_notify_member ( $applicant_id ) {
     ccgn_user_level_set_approved( $applicant_id );
     ccgn_create_profile( $applicant_id );
     ccgn_registration_email_application_approved( $applicant_id );
-    ccgn_application_remove_avatar ( $applicant_id );
+    //ccgn_application_remove_avatar ( $applicant_id );
 }
 
 function ccgn_decline_and_notify_applicant ( $applicant_id ) {
     ccgn_user_level_set_rejected( $applicant_id );
     ccgn_registration_email_application_rejected( $applicant_id );
-    ccgn_application_remove_avatar ( $applicant_id );
+    //ccgn_application_remove_avatar ( $applicant_id );
 }
 
 ////////////////////////////////////////////////////////////////////////////////

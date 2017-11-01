@@ -90,16 +90,7 @@ function ccgn_registration_individual_shortcode_render_view ( $user ) {
     }
 }
 
-function ccgn_registration_individual_shortcode_render_details ( $user ) {
-    gravity_form(
-        CCGN_GF_INDIVIDUAL_DETAILS,
-        false,
-        false,
-        array(
-            CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER
-            => $applicant_id
-        )
-    );
+function ccgn_registration_individual_shortcode_render_gravatar ( $user ) {
     ?>
     <script>
     <?php
@@ -122,6 +113,19 @@ function ccgn_registration_individual_shortcode_render_details ( $user ) {
     ?>
     </script>
     <?php
+}
+
+function ccgn_registration_individual_shortcode_render_details ( $user ) {
+    gravity_form(
+        CCGN_GF_INDIVIDUAL_DETAILS,
+        false,
+        false,
+        array(
+            CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER
+            => $applicant_id
+        )
+    );
+    //ccgn_registration_individual_shortcode_render_gravatar( $user );
 }
 
 function ccgn_registration_individual_shortcode_render ( $atts ) {

@@ -96,7 +96,7 @@ function ccgn_vouching_form_profile_format( $entry, $map ) {
 function ccgn_vouching_form_individual_profile_text ( $applicant_id ) {
     $entry = ccgn_details_individual_form_entry( $applicant_id );
     return '<h3>Individual Applicant</h3>'
-        . ccgn_vp_format_avatar( $entry )
+        //. ccgn_vp_format_avatar( $entry )
         . ccgn_vouching_form_profile_format(
             $entry,
             CCGN_GF_DETAILS_VOUCH_MAP
@@ -126,7 +126,7 @@ function ccgn_vouching_form_applicant_profile_text ( $applicant_id ) {
 function ccgn_user_page_individual_profile_text ( $applicant_id ) {
     $entry = ccgn_details_individual_form_entry( $applicant_id );
     return '<h3>Individual Applicant</h3>'
-        . ccgn_vp_format_avatar ( $entry )
+        //. ccgn_vp_format_avatar ( $entry )
         . ccgn_vouching_form_profile_format(
             $entry,
             CCGN_GF_DETAILS_USER_PAGE_MAP
