@@ -66,7 +66,7 @@ font-family: 'Roboto Condensed', sans-serif; */
 	position: fixed;
 	width: 100%;
     top: 0px;
-	height: 158px;
+	height: 118px;
 	text-align: center;
 	z-index: 3;
 	background-color: #efbe01;
@@ -74,7 +74,7 @@ font-family: 'Roboto Condensed', sans-serif; */
 
 /* Play nice with .site-header themes */
 .admin-bar .site-header {
-  top: 32px;
+  top: 22px;
 }
 
 .site-header::after {
@@ -140,9 +140,9 @@ font-family: 'Roboto Condensed', sans-serif; */
 	left: 0;
 	right: 0;
 	bottom: 0;
-	height: 70px;
+	height: 40px;
+	line-height: 40px;
 	width: 100%;
-	line-height: 70px;
 	background-color: #fff;
 }
 
@@ -198,8 +198,12 @@ font-family: 'Roboto Condensed', sans-serif; */
 	position: relative;
 	width: 100%;
 	/*max-width: 1280px;*/
-	padding-top: 158px;
+	padding-top: 119px;
 	margin: 0 auto;
+}
+
+.admin-bar .page-body {
+    padding-top: 100px;
 }
 
 @media all and (max-width: 600px) {
@@ -210,6 +214,71 @@ font-family: 'Roboto Condensed', sans-serif; */
 		overflow: hidden;
 	}
 	
+}
+
+@media screen and (max-width: 782px) {
+
+    .admin-bar .site-header {
+        padding-top: 46px;
+    }
+
+    .admin-bar .site-header {
+        top: 0px;
+    }
+
+    .admin-bar .logo {
+        margin: 10px auto 0 auto;
+    }
+
+    .admin-bar .header-search {
+        top: 69px;
+    }
+
+    .admin-bar .main-nav {
+        top: 118px;
+    }
+
+    .admin-bar .page-body {
+        padding-top: 90px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .admin-bar .site-header {
+        position: relative;
+        height: 60px;
+        padding: 5px;
+    }
+
+    .admin-bar .logo {
+        margin: 0 auto;
+   }
+
+    .admin-bar .header-search {
+        top: 16px;
+    }
+
+    .admin-bar .main-nav {
+        top: 60px;
+    }
+
+    .admin-bar .page-body {
+        padding-top: 40px;
+    }
+
+    .admin-bar .entry-content {
+        padding-top: 0px;
+    }
+}
+
+@media screen and (max-width: 275px) {
+    .header-search {
+        display: none;
+    }
+}
+
+body.page-template-full-width .entry-header {
+    display: none;
 }
 
 .container-top-message {
@@ -505,13 +574,13 @@ font-family: 'Roboto Condensed', sans-serif; */
 footer {
 	position: relative;
 	width: 100% !important;
-	height: 110px;
+	height: 80px;
 	background-color: #efbe01;
 }
 
 footer .logo {
 	float: left;
-	margin: 30px 0 0 90px;
+	margin: 17px 0 0 90px;
 }
 
 footer .logo span {
@@ -528,7 +597,7 @@ footer .logo span {
 
 .footer-text-block {
 	font-size: 0.9rem;
-	padding: 27px 28px 0 0;
+	padding: 14px 28px 0 0;
 	float: right;
 	text-align: right;
 }
