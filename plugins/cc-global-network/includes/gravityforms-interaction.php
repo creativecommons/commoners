@@ -196,6 +196,13 @@ define(
 );
 
 ////////////////////////////////////////////////////////////////////////////////
+// Form cleanup
+////////////////////////////////////////////////////////////////////////////////
+
+// The number of days to wait before cleaning up application records
+define( 'CCGN_CLEANUP_DAYS', 21 );
+
+////////////////////////////////////////////////////////////////////////////////
 // Finding entries
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -820,6 +827,28 @@ function ccgn_application_remove_avatar ( $applicant_id ) {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Cron
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_cleanup_old_records () {
+    $search_criteria = array();
+    $end_date = date( 'Y-m-d', strtotime( '-${CCGN_CLEANUP_DAYS} days' ) );
+    $entries = GFAPI::get_entries( CCGN_GF_FINAL_APPROVAL, $search_criteria );
+    foreach ( $entries as $entry ) {
+        $applicant_id = $entry[ CCGN_GF_FINAL_APPROVAL_APPLICANT_ID ];
+        // Scrub Application statement
+        // Scrub Vouch reasons
+    }
+}
+
+function ccgn_schedule_cleanup () {
+    wp_schedule_event( time(), 'daily', 'ccgn_cleanup_old_records' );
+}
+
+function ccgn_schedule_remove_cleanup () {
+   wp_clear_schedule_hook( 'ccgn_cleanup_old_records' );
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Gravatar Checking
