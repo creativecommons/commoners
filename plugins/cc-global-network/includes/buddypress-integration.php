@@ -712,10 +712,12 @@ function ccgn_bp_directory_exclude_users ( $qs=false, $object=false ) {
     );
     $args = wp_parse_args( $qs );
     $exclude = $args[ 'exclude' ];
-    foreach ( $new_users as $user ) {
-        $exclude[] = $user->ID;
+    if ( $exclude ) {
+        foreach ( $new_users as $user ) {
+            $exclude[] = $user->ID;
+        }
+        $args[ 'exclude' ] = join( ',', $exclude );
+        $qs = build_query( $args );
     }
-    $args[ 'exclude' ] = join( ',', $exclude );
-    $qs = build_query( $args );
     return $qs;
 }

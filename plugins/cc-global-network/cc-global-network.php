@@ -146,6 +146,10 @@ add_action( 'bp_ajax_querystring', 'ccgn_bp_directory_exclude_users', 20, 2 );
 // Registration Forms
 ////////////////////////////////////////////////////////////////////////////////
 
+// Make sure the applicant selects all the checkboxes
+
+add_action( 'gform_validation', 'ccgn_agree_to_terms_validate' );
+
 // Populate voucher selects
 
 add_action( 'gform_pre_render', 'ccgn_set_vouchers_options' );

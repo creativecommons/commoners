@@ -278,7 +278,7 @@ function ccgn_application_users_page_final_approval_form ( $applicant_id ) {
         $decline = true;
         ?>
         <script>
-          jQuery('document').ready(function () {
+             jQuery('document').ready(function () {
         <?php
         if ( ! $approve ) {
         ?>
@@ -293,7 +293,7 @@ function ccgn_application_users_page_final_approval_form ( $applicant_id ) {
         <?php
         }
         ?>
-          });
+            });
         </script>
         <?php
     } else {

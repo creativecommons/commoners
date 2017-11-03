@@ -33,6 +33,8 @@ define( 'CCGN_GF_LEGAL_APPROVAL', 'Legal Approval' );
 
 // Individual fields in forms
 
+define( 'CCGN_GF_DETAILS_PRIVACY_POLICY', '5' );
+
 define( 'CCGN_GF_DETAILS_NAME', '1' );
 define( 'CCGN_GF_DETAILS_BIO', '2' );
 define( 'CCGN_GF_DETAILS_STATEMENT', '3' );
@@ -675,8 +677,8 @@ function ccgn_set_vouchers_options ( $form ) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Voucher choice validation
-// This is here as it's shared between a couple of shortcodes
+// Validation
+// These are here as they're shared between a couple of shortcodes
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_choose_vouchers_validate ( $validation_result ) {
@@ -697,6 +699,35 @@ function ccgn_choose_vouchers_validate ( $validation_result ) {
                 }
             }
             $validation_result['form'] = $form;
+        }
+    }
+    return $validation_result;
+}
+
+function ccgn_agree_to_terms_validate ( $validation_result ) {
+    $form = $validation_result[ 'form' ];
+    if( $form['title'] == CCGN_GF_AGREE_TO_TERMS ) {
+        foreach( $form['fields'] as &$field ) {
+            // Find the privacy policy field by ID
+            if ( $field->id == CCGN_GF_DETAILS_PRIVACY_POLICY ) {
+                // Options the user must agree with to agree with all of them
+                $count_check = count( $field->choices );
+                $total = 0;
+                // Count submitted fields
+                for ( $i = 1; $i <= $count_check; $i++ ) {
+                    $selected = rgpost( "input_{$field['id']}_{$i}" );
+                    if ( $selected ) {
+                        $total++;
+                    }
+                }
+                // Check that the user agreed with all the options
+                if ( $total != $count_check ) {
+                    $validation_result['is_valid'] = false;
+                    $field->failed_validation = true;
+                    $field->validation_message = 'You must check all the checkboxes in this section to continue!';
+                    $validation_result[ 'form' ] = $form;
+                }
+            }
         }
     }
     return $validation_result;
@@ -838,6 +869,7 @@ function ccgn_cleanup_old_records () {
     foreach ( $entries as $entry ) {
         $applicant_id = $entry[ CCGN_GF_FINAL_APPROVAL_APPLICANT_ID ];
         // Scrub Application statement
+        // Do *not* scrub Application affiliate membership state/name
         // Scrub Vouch reasons
     }
 }
