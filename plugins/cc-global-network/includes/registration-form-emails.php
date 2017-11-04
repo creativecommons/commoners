@@ -61,11 +61,13 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
     );
     add_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
     add_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
+    add_filter( 'wp_mail_content_type', 'ccgn_html_mail_content_type' );
     wp_mail(
         $to_address,
         $subject_substituted,
         $message_substituted
     );
+    remove_filter( 'wp_mail_content_type', 'ccgn_html_mail_content_type' );
     remove_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
     remove_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
 }
@@ -147,4 +149,8 @@ function ccgn_mail_from_address( $old ) {
 
 function ccgn_mail_from_name( $old ) {
  return get_option( 'ccgn-email-sender' )[ 'name' ];
+}
+
+function ccgn_html_mail_content_type () {
+    return 'text/html';
 }
