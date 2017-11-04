@@ -862,15 +862,30 @@ function ccgn_application_remove_avatar ( $applicant_id ) {
 // Cron
 ////////////////////////////////////////////////////////////////////////////////
 
+function ccgn_cleanup_approved_user_records ( $applicant_id ) {
+    // Scrub Application details ***except*** affiliate membership state/name
+    // Scrub Vouch reasons
+}
+
+function ccgn_cleanup_declined_user_records ( $applicant_id ) {
+    // Delete user application form entries
+    // Delete vouch entries for user
+}
+
 function ccgn_cleanup_old_records () {
     $search_criteria = array();
     $end_date = date( 'Y-m-d', strtotime( '-${CCGN_CLEANUP_DAYS} days' ) );
     $entries = GFAPI::get_entries( CCGN_GF_FINAL_APPROVAL, $search_criteria );
     foreach ( $entries as $entry ) {
         $applicant_id = $entry[ CCGN_GF_FINAL_APPROVAL_APPLICANT_ID ];
-        // Scrub Application statement
-        // Do *not* scrub Application affiliate membership state/name
-        // Scrub Vouch reasons
+        $status = $entry[
+            CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION
+        ];
+        if ( $status == CCGN_GF_FINAL_APPROVAL_APPROVED_YES ) {
+            ccgn_cleanup_approved_user_records( $applicant_id );
+        } else {
+            ccgn_cleanup_declined_user_records( $applicant_id );
+        }
     }
 }
 
