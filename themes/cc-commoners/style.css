@@ -4,7 +4,7 @@ Theme URI: https://github.com/creativecommons.org/commonser
 Author: Creative Commons Corporation
 Author URI: https://creativecommons.org/
 Description: The theme for commoners.creativecommons.org
-Version: 2.4.2
+Version: 2.4.3
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags:
@@ -891,8 +891,20 @@ footer .logo span {
 }
 
 .bp-user #item-header-content {
-    margin-top: -140px !important;
+    margin-top: -80px !important;
     margin-left: 170px !important;
+}
+
+@media screen and (max-width: 782px) {
+    .bp-user #item-header-content {
+        margin-top: -58px !important;
+        margin-left: 0 !important;
+    }
+
+    .bp-user #item-header-content .activity {
+        display: block;
+        text-align: left;
+    }
 }
 
 .site-content {
