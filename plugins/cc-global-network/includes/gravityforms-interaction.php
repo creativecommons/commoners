@@ -863,8 +863,8 @@ function ccgn_application_remove_avatar ( $applicant_id ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_cleanup_approved_user_records ( $applicant_id ) {
-    // Scrub Application details ***except*** affiliate membership state/name
-    // Scrub Vouch reasons
+    // Keep application details
+    // Scrub Vouch *reasons*
 }
 
 function ccgn_cleanup_declined_user_records ( $applicant_id ) {
