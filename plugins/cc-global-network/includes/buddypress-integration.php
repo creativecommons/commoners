@@ -318,8 +318,17 @@ function ccgn_create_profile_fields_individual () {
     ccgn_buddypress_member_field(
         $individual_id,
         'Location',
-        'The country the member is based in',
+        'The country where the member is usually located',
         3,
+        false,
+        'textbox',
+        'individual-member'
+    );
+    ccgn_buddypress_member_field(
+        $individual_id,
+        'Preferred Country Chapter',
+        'The country chapter that the member is interested in',
+        4,
         false,
         'textbox',
         'individual-member'
@@ -328,7 +337,7 @@ function ccgn_create_profile_fields_individual () {
         $individual_id,
         'Links',
         'Links to the user\'s publicly shareable web sites, social media profiles etc.',
-        4,
+        5,
         false,
         'textbox',
         'individual-member'

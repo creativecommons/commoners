@@ -40,7 +40,8 @@ define( 'CCGN_GF_DETAILS_BIO', '2' );
 define( 'CCGN_GF_DETAILS_STATEMENT', '3' );
 define( 'CCGN_GF_DETAILS_AREAS_OF_INTEREST', '5' );
 define( 'CCGN_GF_DETAILS_LANGUAGES', '6' );
-define( 'CCGN_GF_DETAILS_LOCATION', '7' );
+define( 'CCGN_GF_DETAILS_LOCATION', '20' );
+define( 'CCGN_GF_DETAILS_CHAPTER_INTEREST', '7' );
 define( 'CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS', '9' );
 /*define( 'CCGN_GF_DETAILS_AVATAR_FILE', '11' );
 define( 'CCGN_GF_DETAILS_AVATAR_SOURCE', '12' );
@@ -112,6 +113,7 @@ define(
         [ 'Brief Biography', CCGN_GF_DETAILS_BIO ],
         [ 'Membership Statement', CCGN_GF_DETAILS_STATEMENT ],
         [ 'Location', CCGN_GF_DETAILS_LOCATION ],
+        [ 'Chapter of Interest', CCGN_GF_DETAILS_CHAPTER_INTEREST ],
         [ 'Social Media / URLs', CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS ],
     ]
 );
@@ -127,6 +129,7 @@ define(
         [ 'Areas of Interest', CCGN_GF_DETAILS_AREAS_OF_INTEREST ],
         [ 'Languages', CCGN_GF_DETAILS_LANGUAGES ],
         [ 'Location', CCGN_GF_DETAILS_LOCATION ],
+        [ 'Chapter of Interest', CCGN_GF_DETAILS_CHAPTER_INTEREST ],
         [ 'Social Media / URLs', CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS ],
     ]
 );
@@ -537,6 +540,11 @@ function ccgn_create_profile_individual( $applicant_id ) {
         'Location',
         $applicant_id,
         $details[ CCGN_GF_DETAILS_LOCATION ]
+    );
+    xprofile_set_field_data(
+        'Preferred Country Chapter',
+        $applicant_id,
+        $details[ CCGN_GF_DETAILS_CHAPTER_INTEREST ]
     );
     xprofile_set_field_data(
         'Languages',
