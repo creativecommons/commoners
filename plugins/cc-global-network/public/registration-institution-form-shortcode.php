@@ -35,15 +35,15 @@ function ccgn_registration_institution_form_submit_handler ( $entry,
     switch( $form[ 'title' ] ) {
     case CCGN_GF_AGREE_TO_TERMS:
         ccgn_registration_current_user_set_stage (
-            CCGN_APPLICATION_STATE_DETAILS
-        );
-        break;
-    case CCGN_GF_INSTITUTION_DETAILS:
-        ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_VOUCHERS
         );
         break;
     case CCGN_GF_CHOOSE_VOUCHERS:
+        ccgn_registration_current_user_set_stage (
+            CCGN_APPLICATION_STATE_DETAILS
+        );
+        break;
+    case CCGN_GF_INSTITUTION_DETAILS:
         ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_RECEIVED
         );

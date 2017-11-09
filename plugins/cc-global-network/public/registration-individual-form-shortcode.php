@@ -38,15 +38,15 @@ function ccgn_registration_individual_form_submit_handler ( $entry,
         break;
     case CCGN_GF_SIGN_CHARTER:
         ccgn_registration_current_user_set_stage (
-            CCGN_APPLICATION_STATE_DETAILS
-        );
-        break;
-    case CCGN_GF_INDIVIDUAL_DETAILS:
-        ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_VOUCHERS
         );
         break;
     case CCGN_GF_CHOOSE_VOUCHERS:
+        ccgn_registration_current_user_set_stage (
+            CCGN_APPLICATION_STATE_DETAILS
+        );
+        break;
+    case CCGN_GF_INDIVIDUAL_DETAILS:
         ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_RECEIVED
         );
