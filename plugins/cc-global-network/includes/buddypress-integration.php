@@ -417,9 +417,11 @@ function ccgn_not_logged_in_ui () {
     }
 }
 
-// Hide various field grous depending on the user's logged in / vouched status
+// Hide various field groups depending on the user's logged in / vouched status
+// We can't hide Base in edit, and shouldn't as it's the way the user changes
+// their name.
 
-function ccgn_filter_role_groups ( $groups ) {
+function ccgn_filter_role_groups ( $groups, $args ) {
     $user = wp_get_current_user();
     // Admins can access everything
     if ( in_array( 'administrator', $user->roles) ) {
@@ -428,19 +430,28 @@ function ccgn_filter_role_groups ( $groups ) {
         // Otherwise, users can access only what their level permits
         global $ccgn_access_levels;
         $level = ccgn_current_user_level();
-        $accessible = [];
         $userGroups = $ccgn_access_levels[ $level ];
+        $accessible = array();
         // Otherwise wp plugin activate complains about the in_array below
         if ( $userGroups ) {
             // TODO: Cache group IDs and check these instead
-            foreach ( $groups as $group ) {
+            $index = 0;
+            foreach ( $groups as $id => $group ) {
                 if ( in_array( $group->name, $userGroups)  ) {
-                    $accessible[] = $group;
+                    $accessible[$index] = $group;
+                    $index++;
                 }
             }
         }
     }
     return $accessible;
+}
+
+function _bp_hide_profile_field_group( $retval ) {
+    if ( !is_super_admin() ) {
+        $retval['exclude_groups'] = '1';
+    }
+    return $retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -458,8 +469,10 @@ function _bp_admin_bar_remove_some_menu_items () {
     if ( ! ccgn_current_user_is_vouched() ) {
         // Do not allow un-approved members to edit their WordPress profile
         $wp_admin_bar->remove_menu( 'edit-profile', 'user-actions');
-        $wp_admin_bar->remove_node('my-account');
+        $wp_admin_bar->remove_node( 'my-account' );
     }
+    $wp_admin_bar->remove_node( 'my-account-forums' );
+    $wp_admin_bar->remove_node( 'my-account-settings' );
 }
 
 function ccgn_profile_access_control () {
@@ -477,6 +490,7 @@ function ccgn_profile_access_control () {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_remove_settings() {
+    // We don't want people to be able to change their email, this breaks CCID
     bp_core_remove_nav_item( 'settings' );
     //FIXME: Do this then restore other items
     //bp_core_remove_subnav_item( 'settings', 'general' );

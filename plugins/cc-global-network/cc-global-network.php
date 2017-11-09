@@ -126,7 +126,9 @@ add_action(
 add_filter( 'bp_core_get_userid_from_nicename', '_bp_core_get_userid', 10, 2 );
 add_action( 'bp_setup_nav', 'ccgn_not_logged_in_ui', 150 );
 
-add_filter( 'bp_xprofile_get_groups', 'ccgn_filter_role_groups' );
+//add_filter( 'bp_xprofile_get_groups', 'ccgn_filter_role_groups', 999, 2 );
+add_filter( 'bp_after_has_profile_parse_args', '_bp_hide_profile_field_group' );
+
 
 add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
