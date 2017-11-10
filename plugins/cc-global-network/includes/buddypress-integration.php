@@ -14,7 +14,7 @@ if ( defined( 'CCGN_DEVELOPMENT' ) ) {
 } elseif ( defined( 'CCGN_TESTING' ) ) {
     define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 1 );
     define( 'CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED', 0 );
-    define( 'CCGN_NUMBER_OF_VOTES_NEEDED', 2 );
+    define( 'CCGN_NUMBER_OF_VOTES_NEEDED', 1 );
     define( 'CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED', 0 );
 } else {
     define( 'CCGN_NUMBER_OF_VOUCHES_NEEDED', 2 );
