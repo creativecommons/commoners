@@ -729,18 +729,31 @@ function ccgn_bp_directory_exclude_users ( $qs=false, $object=false ) {
     }
     $new_users = get_users(
         array(
-            'role' => CCGN_USER_ROLE_NEW,
+            // Exclude site admins and Applicants
+            'role__in' => array( 'administrator', CCGN_USER_ROLE_NEW ),
+            // But include site admins who are Members or part of the interim
+            // membership council
+            'role__not_in' => array(
+                'subscriber',
+                'membership-council-member'
+            ),
             'fields' => array( 'ID' )
         )
     );
     $args = wp_parse_args( $qs );
-    $exclude = $args[ 'exclude' ];
-    if ( $exclude ) {
-        foreach ( $new_users as $user ) {
-            $exclude[] = $user->ID;
-        }
-        $args[ 'exclude' ] = join( ',', $exclude );
-        $qs = build_query( $args );
+    if(!empty($args['user_id'])) {
+        return $qs;
     }
+    $exclude = array();
+    foreach ( $new_users as $user ) {
+        $exclude[] = $user->ID;
+    }
+    if( ! empty( $args[ 'exclude' ] ) ) {
+        $args[ 'exclude' ] = $args[ 'exclude' ] . ',' . $exclude;
+    } else {
+        $args[ 'exclude' ] = join( ',', $exclude );
+    }
+
+    $qs = build_query( $args );
     return $qs;
 }
