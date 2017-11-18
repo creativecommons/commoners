@@ -4,6 +4,8 @@
 # BEFORE STARTING
 ################################################################################
 
+sudo apt install php-gd
+
 ## ON SERVER
 # Copy $GFARCHIVE into position
 
@@ -15,7 +17,7 @@
 ## ON DEV:
 ## wp plugin install gravityformscli --activate
 ## wp gf form export --dir=/tmp
-## cp "/tmp/gravityforms-export-$(date -u +%Y-%m-%d).json"  "${GFJSONFILE}"
+## cp "/tmp/gravityforms-export-$(date -u +%Y-%m-%d).json" "${GFJSONFILE}"
 
 ## ON DEV
 ## wp option list --format=json --search=ccgn-email-* > "${WPEMAILSFILE}"
@@ -69,6 +71,9 @@ popd
 
 # FIX DOWNLOAD BUG AS OF 2017-10-12
 sudo wp cli update --nightly
+
+# To make the admin a member later
+wp package install buddypress/wp-cli-buddypress
 
 
 ################################################################################
@@ -134,8 +139,10 @@ sudo -u www-root unzip -d "${WPROOT}/wp-content/plugins/" "${GFARCHIVE}"
 
 cd "${WPROOT}"
 
-wp plugin delete hello
+${WPCLI} plugin delete hello
 
+${WPCLI} plugin install multiple-roles --activate
+${WPCLI} plugin install if-menu --activate
 ${WPCLI} plugin install akismet --activate
 ${WPCLI} plugin install buddypress --activate
 # For importing pages
@@ -152,6 +159,8 @@ ${WPCLI} option update wpCAS_settings \
    "server_hostname": "login.creativecommons.org",
    "server_port": "443",
    "server_path": ""}' --format=json
+
+${WPCLI} option update wpCAS_settings '{"cas_menu_location":"sidebar","new_user":"1","email_suffix":"","cas_version":"2.0","server_hostname":"login.creativecommons.org","server_port":"443","server_path":"","e-mail_registration":"2","global_sender":"rob@creativecommons.org","full_name":"","welcome_mail":{"send_user":true,"send_global":false,"subject":"","user_body":"","global_body":""},"wait_mail":{"send_user":true,"send_global":false,"subject":"","user_body":"","global_body":""},"ldap_protocol":"3","ldap_server":"","ldap_username_rdn":"","ldap_password":"","ldap_basedn":"","ldap_port":null}' --format=json
 
 ${WPCLI} option update rg_gforms_key "${GFORMSKEY}"
 

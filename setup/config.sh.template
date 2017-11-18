@@ -12,6 +12,7 @@ export WPEMAILSFILE="$(dirname \"$0\")/commoners-emails.json"
 export NUMEMAILS=4
 
 export GFARCHIVE='/tmp/gravityforms_2.2.5.7.zip'
+# As it appears in the database, not the raw version
 export GFORMSKEY=''
 
 export DBNAME=''
