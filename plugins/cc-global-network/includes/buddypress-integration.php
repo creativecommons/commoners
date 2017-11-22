@@ -116,8 +116,12 @@ function ccgn_add_roles_on_plugin_activation () {
 
 function ccgn_user_is_new ( $user_id ) {
     $user = get_user_by( 'ID', $user_id );
-    return ($user->roles == null)
-           || in_array( CCGN_USER_ROLE_NEW, $user->roles );
+    $new = true;
+    if ($user) {
+    $new = ($user->roles == null)
+         || in_array( CCGN_USER_ROLE_NEW, $user->roles );
+    }
+    return $new;
 }
 
 // DANGER - We use this to mean "is a member" here. This must be changed.
