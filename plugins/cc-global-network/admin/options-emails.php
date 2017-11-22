@@ -130,7 +130,7 @@ function ccgn_settings_emails_options_sender () {
     add_settings_field(
         'sender-name',
         'Display Name',
-        ccgn_settings_emails_sender_name,
+        'ccgn_settings_emails_sender_name',
         'global-network-emails',
         'ccgn-email-sender'
     );
@@ -138,7 +138,7 @@ function ccgn_settings_emails_options_sender () {
     add_settings_field(
         'sender-address',
         'Email Address',
-        ccgn_settings_emails_sender_address,
+        'ccgn_settings_emails_sender_address',
         'global-network-emails',
         'ccgn-email-sender'
     );
