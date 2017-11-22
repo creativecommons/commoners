@@ -160,14 +160,14 @@ function ccgn_settings_emails_options_received () {
     add_settings_field(
         'registration-subject',
         'Subject',
-        ccgn_settings_emails_received_subject,
+        'ccgn_settings_emails_received_subject',
         'global-network-emails',
         'ccgn-email-received'
     );
     add_settings_field(
         'registration-message',
         'Message',
-        ccgn_settings_emails_received_message,
+        'ccgn_settings_emails_received_message',
         'global-network-emails',
         'ccgn-email-received'
     );
@@ -190,7 +190,7 @@ function ccgn_settings_emails_options_vouching () {
     add_settings_field(
         'registration-subject',
         'Subject',
-        ccgn_settings_emails_vouch_request_subject,
+        'ccgn_settings_emails_vouch_request_subject',
         'global-network-emails',
         'ccgn-email-vouch-request'
     );
@@ -198,7 +198,7 @@ function ccgn_settings_emails_options_vouching () {
     add_settings_field(
         'registration-message',
         'Message',
-        ccgn_settings_emails_vouch_request_message,
+        'ccgn_settings_emails_vouch_request_message',
         'global-network-emails',
         'ccgn-email-vouch-request'
     );
@@ -220,7 +220,7 @@ function ccgn_settings_emails_options_approved () {
     add_settings_field(
         'registration-subject',
         'Subject',
-        ccgn_settings_emails_approved_subject,
+        'ccgn_settings_emails_approved_subject',
         'global-network-emails',
         'ccgn-email-approved'
     );
@@ -228,7 +228,7 @@ function ccgn_settings_emails_options_approved () {
     add_settings_field(
         'registration-message',
         'Message',
-        ccgn_settings_emails_approved_message,
+        'ccgn_settings_emails_approved_message',
         'global-network-emails',
         'ccgn-email-approved'
     );
@@ -250,7 +250,7 @@ function ccgn_settings_emails_options_rejected () {
     add_settings_field(
         'registration-subject',
         'Subject',
-        ccgn_settings_emails_rejected_subject,
+        'ccgn_settings_emails_rejected_subject',
         'global-network-emails',
         'ccgn-email-rejected'
     );
@@ -258,7 +258,7 @@ function ccgn_settings_emails_options_rejected () {
     add_settings_field(
         'registration-message',
         'Message',
-        ccgn_settings_emails_rejected_message,
+        'ccgn_settings_emails_rejected_message',
         'global-network-emails',
         'ccgn-email-rejected'
     );
