@@ -497,7 +497,7 @@ function ccgn_application_users_menu () {
             'Global Network Membership',
             // No menu title, as we don't want to show up in the sidebar
             '',
-            edit_users,
+            'edit_users',
             'global-network-membership',
             'ccgn_application_users_page'
         );
