@@ -1,6 +1,27 @@
-@import "normalize.css";
-@import "modernscale.css";
-@import "forms.css";
+/*
+Theme Name: CC Commoners
+Theme URI: https://github.com/creativecommons.org/commonser
+Author: Creative Commons Corporation
+Author URI: https://creativecommons.org/
+Description: The theme for commoners.creativecommons.org
+Version: 2.4.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags:
+Text Domain: cc-commoners
+Template: cc-commoners
+*/
+
+@import "assets/css/normalize.css";
+@import "assets/css/modernscale.css";
+@import "assets/css/forms.css";
+
+
+/* hide the admin bar */
+#wpadminbar {
+	display:none;
+}
+
 
 .cf::after {
     position: relative;
@@ -30,7 +51,16 @@ html {
 }
 
 h1, h2, h3, h4, h5 {
+	font-weight: 900;
+}
+
+a {
+	color: #f46b2c;
 	font-weight: bold;
+}
+
+a:visited {
+	color: #d94400;
 }
 
 img{
@@ -83,7 +113,7 @@ a.logo {
 	width: 230px;
 	height: 50px;
 	margin: 20px auto 0 auto;
-	background: url('../i/logo.png') no-repeat center top;
+	background: url('./assets/i/logo.png') no-repeat center top;
 	background-size: contain;
 }
 
@@ -154,9 +184,19 @@ a.logo {
 	position: relative;
 	width: 100%;
 	max-width: 1280px;
-	/*padding-top: 158px;*/
+	padding-top: 158px;
 	margin: 0 auto;
 }
+
+.push-page-body {
+	margin-top: 400px;
+}
+
+/*
+.admin-bar .page-body {
+    padding-top: 100px;
+}
+*/
 
 @media all and (max-width: 600px) {
 	
@@ -190,6 +230,10 @@ a.logo {
 		max-width: 100%;
 	}
 	
+}
+
+.top-message p {
+    padding: 0;
 }
 
 .form-top-text {
@@ -233,7 +277,7 @@ a.logo {
 	
 }
 
-.main-slideshow, .swiper-wrapper {
+.main-slideshow,.swiper-wrapper{
 	width: 100%;
 	position: relative;
 	z-index: 0;
@@ -260,6 +304,21 @@ a.logo {
 .caption-hub {
 	background-color: #f46b2c;
 	color: #fff;
+}
+
+.slide-caption-btn {
+	float: right;
+	margin-top: 5px;
+	display: inline-block;
+	text-decoration: none;
+	text-align: center;
+	line-height: 26px;
+	padding: 1px 5px;
+	font-weight: bold;
+	color: #fff !important;
+	font-size: 0.85rem;
+	background-color: #f46b2c;
+	overflow: hidden;
 }
 
 /*
@@ -393,13 +452,13 @@ footer::before {
 
 .block p {
 	font-size: 0.9rem;
-	margin-bottom: 15px;
+	margin-bottom: 20px;
 }
 
 .block-link {
 	display: inline-block;
 	position: absolute;
-	right: 32px;
+	right: 60px;
 	bottom: 20px;
 	text-decoration: none;
 	text-align: center;
@@ -492,7 +551,7 @@ footer .logo span {
 
 .footer-text-block {
 	font-size: 0.9rem;
-	padding: 27px 42px 0 0;
+	padding: 27px 28px 0 0;
 	float: right;
 	text-align: right;
 }
@@ -508,7 +567,7 @@ footer .logo span {
 	
 }
 
-.footer-text-block p {
+.footer-text-block p, .footer-text-block .textwidget.custom-html-widget {
 	margin-bottom: 10px;
 }
 
@@ -528,6 +587,11 @@ footer .logo span {
 	position: relative;
 	width: 100%;
 	overflow: hidden;
+}
+
+.signup-bg img {
+	width: 100%;
+	height: auto;
 }
 
 @media all and (max-width: 600px) {
@@ -591,11 +655,17 @@ footer .logo span {
 	width: 100%;
 }
 
-.signup-form-body h2 {
+.signup-form-body h2, .signup-form-body h1, .gform_wrapper h1 {
 	margin-bottom: 20px;
 	font-size: 2.2rem;
 	text-transform: uppercase;
 	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: bold !important;
+}
+
+hr {
+	color: #222 !important;
+	border: none;
 }
 
 .signup-form-body h3 {
@@ -628,16 +698,18 @@ footer .logo span {
 	color: #f46b2c;
 }
 
-.confirm-step-btn {
+.confirm-step-btn, a.cc-btn {
 	position: relative;
 	display: inline-block;
 	padding: 8px 15px;
 	text-decoration: none;
-	color: #fff;
-	margin-bottom: 10px;
+	color: #fff !important;
 	font-weight: bold;
 	text-transform: uppercase;
 	background-color: #27a635;
+	text-align: center !important;
+	float: none !important;
+	margin: 0 auto 10px auto !important;
 }
 
 .signup-form-body h5 {
@@ -714,9 +786,16 @@ footer .logo span {
 }
 
 
+#top-menu li {
+    display:inline;
+}
+
+#bottom-menu li {
+    display:inline;
+}
 
 
-/* Second stage screens */
+/* -------- Second stage screens -------- */
 
 .inner-section-title {
 	width: 100%;
@@ -812,7 +891,7 @@ aside {
 	box-sizing: border-box;
 	width: 30%;
 	float: right;
-	padding-top: 40px;
+	padding-top: 20px;
 	padding-bottom: 20px;
 	padding-right: 40px;
 	/*background: red;*/
@@ -995,6 +1074,7 @@ p.member-country {
 
 .hub-quote-block h2 {
 	font-size: 1.8em;
+	margin-bottom: 13px;
 	font-weight: bold;
 }
 
@@ -1130,3 +1210,65 @@ p.member-country {
 }
 
 
+.gform_button {
+	float: none !important;
+	margin: 0 auto !important;
+	text-align: center !important;
+}
+
+.gform_footer, .gform_button{
+	text-align: center !important;
+}
+
+
+
+.gform_wrapper label.gfield_label {
+	font-size: 1rem !important;
+}
+
+.gform_wrapper .gfield_description {
+	font-size: 80% !important;
+}
+
+.gform_wrapper .gfield_radio li label, .gform_wrapper .gfield_checkbox li label {
+	font-size: 0.8rem !important;
+}
+
+.gform_body input, .gform_body textarea {
+	width: 100% !important;
+	padding: 10px !important;
+	font-size: 1.4rem !important;
+}
+
+.gform_wrapper ul.gform_fields li.gfield {
+	margin-bottom: 20px !important;
+}
+
+.gform_wrapper .field_description_below .gfield_description {
+	padding-top: 5px !important;
+}
+
+.gform_wrapper .gform_footer input.button, .gform_wrapper .gform_footer input[type=submit] {
+	position: relative;
+	display: inline-block;
+	padding: 8px 15px;
+	text-decoration: none;
+	color: #fff !important;
+	font-weight: bold;
+	text-transform: uppercase;
+	background-color: #27a635;
+	text-align: center !important;
+	float: none !important;
+	margin: 0 auto 10px auto !important;
+	border-radius: 0 !important;
+}
+
+.gform_button {
+	float: none !important;
+	margin: 0 auto !important;
+	text-align: center !important;
+}
+
+.gform_footer, .gform_button{
+	text-align: center !important;
+}
