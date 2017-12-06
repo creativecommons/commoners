@@ -1,0 +1,139 @@
+/* ======================================================
+	  form Normalizer, http://www.gustavocatalan.com
+====================================================== */
+fieldset {
+	
+}
+
+legend {
+	
+}
+
+textarea {
+    
+}
+
+optgroup {
+	
+}
+
+select {
+    
+}
+	
+keygen {
+	
+}
+
+label {
+    
+}
+	
+input[type="range"] {
+	
+}
+
+input[type="number"] {
+	
+}
+
+datalist {
+	
+}
+
+output {
+	
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="file"], input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="week"], input[type="number"] {
+    color: #000;
+}
+
+input[type="submit"], input[type="button"], input[type="reset"], input[type="image"], button, button[type="button"], button[type="submit"], button[type="reset"] {
+    color: #000;
+}
+	
+input[type="checkbox"],input[type="radio"] {
+	
+}
+
+
+/* include margin and padding in the width calculation of input and textarea 
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="email"],
+input[type="url"],
+textarea {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-ms-box-sizing: border-box; ie8 only 
+	box-sizing: border-box;
+}
+*/
+
+textarea, input[type="text"],
+input[type="password"],
+input[type="file"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+select {
+	border: none;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="file"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus {
+	outline: none;
+	outline-color: transparent;
+	-webkit-appearance: none;
+	-webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+	box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+	background-color: #fafafa;
+}
+	
+/* Remove the dotted border on :focus and the extra padding in Firefox */
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner {
+	border-width: 0;
+	border-style: solid none;
+	border-color: transparent;
+	padding: 0;
+}
+
+input[type="submit"], input[type="button"], input[type="reset"], button, button[type="button"], button[type="submit"], button[type="reset"] {
+	display: inline-block;
+	border: none;
+	cursor: pointer;
+	margin: 0;
+	cursor: pointer;
+	border-width: 0;
+	border-style: solid;
+	-webkit-appearance: none;
+	white-space: nowrap;
+	color: #fff;
+	background: #333;
+}
+
+input[type="submit"]:hover, input[type="submit"]:focus, input[type="button"]:hover, input[type="button"]:focus, input[type="reset"]:hover, input[type="reset"]:focus, button[type="button"]:hover, button[type="button"]:focus, button[type="submit"]:hover, button:focus, button[type="submit"]:focus, button[type="reset"]:hover, button[type="reset"]:focus {
+	
+}
+
+input[type="submit"]:active, input[type="button"]:active, input[type="reset"]:active, button:active, button[type="button"]:active, button[type="submit"]:active, button[type="reset"]:active {
+	
+}
+
+
+
