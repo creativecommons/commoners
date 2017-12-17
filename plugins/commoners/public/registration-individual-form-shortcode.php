@@ -1,0 +1,151 @@
+<?php
+
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+
+////////////////////////////////////////////////////////////////////////////////
+// Registration form shortcode
+// Displays a form or other information depending on the user's application
+// stage/state.
+////////////////////////////////////////////////////////////////////////////////
+
+// Called by the last form.
+// This is its own function so we can move it if we change which form is last.
+
+function ccgn_registration_individual_post_last_form () {
+    $applicant_id = get_current_user_id();
+    // This shouldn't happen, but just in case
+    if ( $applicant_id == 0 ) {
+        echo 'User submitting registration form not logged in';
+        return;
+    }
+    ccgn_registration_email_application_received (
+        $applicant_id
+    );
+}
+
+// Perform post-submit actions for each form
+
+function ccgn_registration_individual_form_submit_handler ( $entry,
+                                                                 $form ) {
+    if ( ! ccgn_user_is_individual_applicant( $entry[ 'created_by' ] ) ) {
+        return;
+    }
+    switch( $form[ 'title' ] ) {
+    case CCGN_GF_AGREE_TO_TERMS:
+        ccgn_registration_current_user_set_stage (
+            CCGN_APPLICATION_STATE_CHARTER
+        );
+        break;
+    case CCGN_GF_SIGN_CHARTER:
+        ccgn_registration_current_user_set_stage (
+            CCGN_APPLICATION_STATE_VOUCHERS
+        );
+        break;
+    case CCGN_GF_CHOOSE_VOUCHERS:
+        ccgn_registration_current_user_set_stage (
+            CCGN_APPLICATION_STATE_DETAILS
+        );
+        break;
+    case CCGN_GF_INDIVIDUAL_DETAILS:
+        ccgn_registration_current_user_set_stage (
+            CCGN_APPLICATION_STATE_RECEIVED
+        );
+        // Move if this is no longer the last form the applicant completes in
+        // the initial data entry stage!
+        ccgn_registration_individual_post_last_form ();
+        break;
+    }
+}
+
+function ccgn_registration_individual_shortcode_render_view ( $user ) {
+    $state = $user->get( CCGN_APPLICATION_STATE );
+    switch ( $state ) {
+    case '':
+        gravity_form( CCGN_GF_AGREE_TO_TERMS, false, false );
+        break;
+    case CCGN_APPLICATION_STATE_CHARTER:
+        gravity_form( CCGN_GF_SIGN_CHARTER, false, false );
+        break;
+    case CCGN_APPLICATION_STATE_DETAILS:
+        ccgn_registration_individual_shortcode_render_details( $user );
+        break;
+    case CCGN_APPLICATION_STATE_VOUCHERS:
+        gravity_form( CCGN_GF_CHOOSE_VOUCHERS, false, false );
+        break;
+    case CCGN_APPLICATION_STATE_RECEIVED:
+    case CCGN_APPLICATION_STATE_VOUCHING:
+        echo _( '<h1>Thank you for applying to join the Creative Commons Global Network</h1></p><p>Your application has been received. It will take several days to be reviewed. If you have any questions you can <a href="/contact/">contact us.</a></p><p> <div class="success-last-step-icon">
+            <img src="/wp-content/themes/cc-commoners/assets/i/success-check.png">
+        </div> </p>' );
+        break;
+    case CCGN_APPLICATION_STATE_REJECTED:
+        echo _( '<p>Your application has been declined.</p><p>You may be able to re-apply after the public launch of the Gobal Network in April 2018.</p><p>If you have any questions you can <a href="/contact/">contact us</a>, but please note we cannot comment on the details of individual applications.</p>' );
+        break;
+    case CCGN_APPLICATION_STATE_ACCEPTED:
+        echo _( '<p>Your application has been accepted.</p>' );
+        break;
+    default:
+        error_log( 'Unrecognised application state: ' . $state );
+        echo _( '<p>Unrecognised application state.</p>' );
+    }
+}
+
+function ccgn_registration_individual_shortcode_render_gravatar ( $user ) {
+    ?>
+    <script>
+    <?php
+    if ( ccgn_user_gravatar_exists ( $user->ID ) ) {
+    ?>
+      jQuery('.ccgn_applicant_details_gravatar')
+          .html('<?php echo ccgn_user_gravatar_img( $user->ID, 80 ); ?><div class="gfield_description">Your current Gravatar.</div>');
+    <?php
+    } else {
+    ?>
+      jQuery('.ccgn_avatar_source input[value="gravatar"]').attr("disabled",
+                                                                 true);
+      jQuery('.ccgn_avatar_source input[value="gravatar"]').hide();
+      jQuery('.ccgn_avatar_source input[value="gravatar"] + label').hide();
+      jQuery('.ccgn_avatar_source input[value="image"]').prop("checked",
+                                                              true);
+    <?php
+
+    }
+    ?>
+    </script>
+    <?php
+}
+
+function ccgn_registration_individual_shortcode_render_details ( $user ) {
+    gravity_form(
+        CCGN_GF_INDIVIDUAL_DETAILS,
+        false,
+        false,
+        array(
+            CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER
+            => $applicant_id
+        )
+    );
+    //ccgn_registration_individual_shortcode_render_gravatar( $user );
+}
+
+function ccgn_registration_individual_shortcode_render ( $atts ) {
+    if( ! is_user_logged_in() ) {
+        echo '<h1>OK! Let&apos;s get started</h1>';
+        echo '<p>First you need to log in with your CCID.</p>';
+        echo '<a class="cc-btn" href="'
+            . wp_login_url( get_permalink() )
+            . '">Log in</a>';
+        return;
+    }
+    $user = wp_get_current_user();
+    if ( ccgn_user_is_institutional_applicant ( $user->ID ) ) {
+        echo _( '<p>You are already applying for membership on behalf of an Instituion.</p>' );
+        echo _( '<p>If this is an error, <a href="/contact/">contact us.</a></p>' );
+        return;
+    }
+    //FIXME: Model update code in the view
+    if ( ! ccgn_user_is_individual_applicant ( $user->ID ) ) {
+        ccgn_user_set_individual_applicant ( $user->ID );
+    }
+    ccgn_registration_individual_shortcode_render_view( $user );
+}

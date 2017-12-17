@@ -68,6 +68,12 @@ img{
 	height: auto;
 }
 
+.avatar-container img {
+	max-width: 100% !important;
+	width: 100% !important;
+	height: auto !important;
+}
+
 p {
 	line-height: 1.3rem;
 }
@@ -191,8 +197,12 @@ a.logo {
 	/*padding-top: 158px;*/
 }
 
-body.home .page-body, body.page-template-page-sidebar-php .page-body, body.page-template-hub-page-php .page-body {
+body.home .page-body, body.page-template-page-sidebar-php .page-body, body.page-template-hub-page-php .page-body, body.my-profile .page-body{
 	padding-top: 158px;
+}
+
+body.my-profile .page-body .signup-form-body {
+	margin-top: 0;
 }
 
 /*
@@ -363,7 +373,7 @@ body.home .page-body, body.page-template-page-sidebar-php .page-body, body.page-
 		right: 0;
 		bottom: 0;
 		width: 100%;
-		padding: 15px 35px;
+		padding: 15px 35px 50px 35px;
 	}
 	
 }
@@ -639,7 +649,7 @@ footer .logo span {
 	
 	.signup-form-body {
 		max-width: 100%;
-		margin: -20% auto 100px auto;
+		margin: -20% auto 0 auto;
 	}
 	
 }
@@ -1585,5 +1595,20 @@ p.member-country {
 	font-size: 1.8em;
 }
 
+#members-list {
+	margin-top: 20px;
+}
 
+#members-list article {
+	width: 50%;
+	float: left;
+	margin-bottom: 20px;
+}
 
+.item-acordion h2 {
+	cursor: pointer;
+}
+
+.item-content {
+	display: none;
+}

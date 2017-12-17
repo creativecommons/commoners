@@ -109,7 +109,13 @@ get_header(); ?>
 
 				<h3>Newest Members</h3>
 				
-				<article>
+				<?php //global $post; ?>
+				
+
+				<?php get_template_part( 'buddypress/members-loop' ); ?>
+
+
+				<!--<article>
 					<div class="avatar-container">
 						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
 					</div>
@@ -120,33 +126,9 @@ get_header(); ?>
 						<p>Last updated: May 2017</p>
 						<p>Job: Machine Learning</p>
 					</div>
-				</article>
+				</article>-->
 
-				<article>
-					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
-					</div>
 
-					<div class="member-info">
-						<h4><a href="#">Nabakanta Panighrahi</a></h4>
-						<p class="member-country">Chile</p>
-						<p>Last updated: May 2017</p>
-						<p>Job: Machine Learning</p>
-					</div>
-				</article>
-
-				<article>
-					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
-					</div>
-
-					<div class="member-info">
-						<h4><a href="#">Nabakanta Panighrahi</a></h4>
-						<p class="member-country">Chile</p>
-						<p>Last updated: May 2017</p>
-						<p>Job: Machine Learning</p>
-					</div>
-				</article>
 				
 			</div>
 		
