@@ -189,7 +189,7 @@ function commoners_buddypress_member_field ($group, $name, $desc, $order,
         $field = new BP_XProfile_field( $id );
         $field->set_member_types( $member_types );
     }
-    return $id
+    return $id;
 }
 
 function commoners_create_profile_fields_individual () {
