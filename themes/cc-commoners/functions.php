@@ -5,8 +5,6 @@ show_admin_bar(false);
 // disable the admin bar
 add_filter('show_admin_bar', '__return_false');
 
-
-
 function cc_commoners_theme_setup () {
     register_nav_menus(
         array(
@@ -38,7 +36,6 @@ add_action( 'widgets_init', 'cc_commoners_widgets', 11 );
 
 function cc_commoners_theme_scripts () {
 
-    
     wp_enqueue_script(
         'swiper',
         get_theme_file_uri( '/assets/js/swiper.js' ),
@@ -54,25 +51,23 @@ function cc_commoners_theme_scripts () {
         '1.0',
         true
     );
-     
-    
-    
+
     $parent_style = 'twentyseventeen-style';
 
     wp_enqueue_style(
         $parent_style,
         get_template_directory_uri() . '/style.css'
     );
-    
-    
+
+
     wp_enqueue_style(
         'cc-commoners-gf',
         get_stylesheet_directory_uri() . '/assets/css/swiper.css',
         array( $parent_style ),
         wp_get_theme()->get('Version')
     );
-    
-    
+
+
     /*
     wp_enqueue_style(
         'cc-commoners',
@@ -81,7 +76,7 @@ function cc_commoners_theme_scripts () {
         wp_get_theme()->get('Version')
     );
     */
-    
+
 
     /*
     wp_enqueue_style(
