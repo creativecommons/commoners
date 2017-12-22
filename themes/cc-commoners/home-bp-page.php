@@ -27,7 +27,7 @@ get_header(); ?>
 
 			<div class="swiper-slide">
 
-				<img src="<?php echo get_template_directory_uri(); ?>/assets/i/slide-hub-1.jpg" />
+				<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/slide-hub-1.jpg" />
 
 				<div class="slide-caption caption-bphome">
 					<h3>GIVE US YOUR BEST SMILE!</h3>
@@ -117,7 +117,7 @@ get_header(); ?>
 
 				<!--<article>
 					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/avatar-1.png">
 					</div>
 
 					<div class="member-info">

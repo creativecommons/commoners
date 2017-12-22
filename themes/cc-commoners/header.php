@@ -65,7 +65,7 @@
       -->
 
       <div class="signup-bg">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/i/bg-form-page.jpg">
+          <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/bg-form-page.jpg">
       </div>
 
     <?php } ?>

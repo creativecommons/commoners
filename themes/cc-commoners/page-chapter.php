@@ -11,7 +11,7 @@ get_header(); ?>
 
 
 		<div class="banner-wrapper">
-			<img src="<?php echo get_template_directory_uri(); ?>/assets/i/platforms-1.jpg" class="col-main-banner">
+			<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/platforms-1.jpg" class="col-main-banner">
 		</div>
 			
 
@@ -30,7 +30,7 @@ get_header(); ?>
 
 				<article>
 					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/avatar-1.png">
 					</div>
 
 					<div class="member-info">
@@ -43,7 +43,7 @@ get_header(); ?>
 
 				<article>
 					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/avatar-1.png">
 					</div>
 
 					<div class="member-info">
@@ -56,7 +56,7 @@ get_header(); ?>
 
 				<article>
 					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/avatar-1.png">
 					</div>
 
 					<div class="member-info">
@@ -69,7 +69,7 @@ get_header(); ?>
 
 				<article>
 					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/avatar-1.png">
 					</div>
 
 					<div class="member-info">
@@ -82,7 +82,7 @@ get_header(); ?>
 
 				<article>
 					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/avatar-1.png">
 					</div>
 
 					<div class="member-info">
@@ -140,7 +140,7 @@ get_header(); ?>
 				
 				<article>
 					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/avatar-1.png">
 					</div>
 
 					<div class="member-info">
@@ -150,7 +150,7 @@ get_header(); ?>
 
 				<article>
 					<div class="avatar-container">
-						<img src="<?php echo get_template_directory_uri(); ?>/assets/i/avatar-1.png">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/avatar-1.png">
 					</div>
 
 					<div class="member-info">

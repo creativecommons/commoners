@@ -56,6 +56,7 @@ function cc_commoners_theme_scripts () {
 
     wp_enqueue_style(
         $parent_style,
+        // We do want template_directory, as this is our parent theme's css
         get_template_directory_uri() . '/style.css'
     );
 
