@@ -556,6 +556,11 @@ function ccgn_create_profile_individual( $applicant_id ) {
         $applicant_id,
         $details[ CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS ]
     );
+    xprofile_set_field_data(
+        'Areas of Interest',
+        $applicant_id,
+        $details[ CCGN_GF_DETAILS_AREAS_OF_INTEREST ]
+    );
     /*if ( ! ccgn_applicant_gravatar_selected ( $applicant_id ) ) {
         ccgn_set_avatar( $details, $applicant_id );
     }*/
@@ -902,7 +907,13 @@ function ccgn_schedule_cleanup () {
 }
 
 function ccgn_schedule_remove_cleanup () {
-   wp_clear_schedule_hook( 'ccgn_cleanup_old_records' );
+    $timestamp = wp_next_scheduled( 'ccgn_cleanup_old_records' );
+    $original_args = array();
+    wp_unschedule_event(
+        $timestamp,
+        'ccgn_cleanup_old_records',
+        $original_args
+    );
 }
 
 ////////////////////////////////////////////////////////////////////////////////

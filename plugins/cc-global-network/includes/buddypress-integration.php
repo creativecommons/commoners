@@ -88,6 +88,19 @@ $ccgn_access_levels = [
     'ADMIN' => [  'Individual Member', 'Institutional Member' ]
 ];
 
+// Options for Interests
+// These MUST match the text in GravityForms PRECISELY
+
+define(
+    'CCGN_INDIVIDUAL_INTERESTS_OPTIONS',
+    array(
+        "Arts & Culture", "Community Development", "Education / OER",
+        "GLAM (Galleries, Libraries, Archives & Museums)", "Legal",
+        "Open Access", "Open Data", "Open Science",
+        "Policy / advocacy / copyright reform", "Technology",
+    )
+);
+
 function ccgn_add_roles_on_plugin_activation () {
     add_role(
         CCGN_USER_ROLE_NEW,
@@ -115,11 +128,11 @@ function ccgn_add_roles_on_plugin_activation () {
 }
 
 function ccgn_user_is_new ( $user_id ) {
-    $user = get_user_by( 'ID', $user_id );
     $new = true;
-    if ($user) {
-    $new = ($user->roles == null)
-         || in_array( CCGN_USER_ROLE_NEW, $user->roles );
+    $user = get_user_by( 'ID', $user_id );
+    if ( $user ) {
+        $new = ($user->roles == null)
+             || in_array( CCGN_USER_ROLE_NEW, $user->roles );
     }
     return $new;
 }
@@ -296,6 +309,39 @@ function ccgn_buddypress_member_field ($group, $name, $desc, $order,
     return $id;
 }
 
+// There is really no API for this. :-(
+
+function ccgn_buddypress_checkbox_options( $group_id, $checkbox_id, $options ) {
+    global $bp, $wpdb;
+
+    $is_default = false;
+    $counter = 1;
+    foreach ($options as $option_value) {
+        $exists = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM {$bp->profile->table_name_fields} WHERE group_id=%d AND parent_id=%d AND type='option' AND name=%s",
+                $group_id,
+                $checkbox_id,
+                $option_value
+            )
+        );
+        if ( $exists !== NULL ) {
+            continue;
+        }
+        $wpdb->query(
+            $wpdb->prepare(
+                "INSERT INTO {$bp->profile->table_name_fields} (group_id, parent_id, type, name, description, is_required, option_order, is_default_option) VALUES (%d, %d, 'option', %s, '', 0, %d, %d)",
+                $group_id,
+                $checkbox_id,
+                $option_value,
+                $counter,
+                $is_default
+            )
+        );
+        $counter++;
+    }
+}
+
 function ccgn_create_profile_fields_individual () {
     $individual_id = ccgn_ensure_profile_group(
         CCGN_PROFILE_FIELD_GROUP_INDIVIDUAL,
@@ -337,11 +383,26 @@ function ccgn_create_profile_fields_individual () {
         'textbox',
         'individual-member'
     );
+    $interests_id = ccgn_buddypress_member_field(
+        $individual_id,
+        'Areas of Interest',
+        'Areas the user is interested in.',
+        5,
+        false,
+        'checkbox',
+        'individual-member'
+    );
+    ccgn_buddypress_checkbox_options(
+        $individual_id,
+        $interests_id,
+        CCGN_INDIVIDUAL_INTERESTS_OPTIONS
+    );
+
     ccgn_buddypress_member_field(
         $individual_id,
         'Links',
         'Links to the user\'s publicly shareable web sites, social media profiles etc.',
-        5,
+        6,
         false,
         'textbox',
         'individual-member'
