@@ -1,15 +1,15 @@
 /*
 Theme Name: CC Commoners
-Theme URI: https://github.com/creativecommons.org/commoners
+Theme URI: https://github.com/creativecommons.org/commonser
 Author: Creative Commons Corporation
 Author URI: https://creativecommons.org/
 Description: The theme for commoners.creativecommons.org
-Version: 2.5.0
+Version: 2.4.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags:
 Text Domain: cc-commoners
-Template: twentyseventeen
+Template: cc-commoners
 */
 
 @import "assets/css/normalize.css";
@@ -561,7 +561,7 @@ footer {
 
 footer .logo {
 	float: left;
-	margin: 30px 0 0 18px;
+	margin: 30px 0 12px 18px;
 }
 
 footer .logo span {
@@ -569,6 +569,10 @@ footer .logo span {
 }
 
 @media all and (max-width: 600px) {
+
+	footer {
+		height: auto;
+	}
 	
 	footer .logo {
 		display: none;
@@ -582,17 +586,19 @@ footer .logo span {
 }
 
 .footer-text-block {
-	font-size: 0.9rem;
-	padding: 27px 28px 0 0;
+	font-size: 0.7rem;
+	padding: 10px 28px 0 0;
 	float: right;
 	text-align: right;
+	max-width: 500px;
 }
 
 @media all and (max-width: 600px) {
 	
 	.footer-text-block {
-		padding: 27px 0 0 0;
+		padding: 18px 0 0 0;
 		float: none;
+		max-width: auto;
 		width: 100%;
 		text-align: center;
 	}
@@ -600,7 +606,59 @@ footer .logo span {
 }
 
 .footer-text-block p, .footer-text-block .textwidget.custom-html-widget {
+	box-sizing: border-box;
+	margin-top: 2px;
 	margin-bottom: 10px;
+	width: 70%;
+	padding-left: 15px;
+	overflow: auto;
+}
+
+.license-icons {
+	width: 30%;
+	float: left;
+	color: #111;
+	font-size: 2rem;
+}
+
+@media all and (max-width: 600px) {
+
+	.footer-text-block p, .footer-text-block .textwidget.custom-html-widget {
+		width: auto;
+		padding-left: 15px;
+		display: block;
+		clear: both;
+		padding-right: 15px;
+	}
+	
+	.license-icons {
+		width: auto;
+		float: none;
+	}
+	
+}
+
+.license-icons a {
+	color: #000;
+	text-decoration: none;
+}
+
+.cc-icon-cc:before, .cc-icon-cc-by:before {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.bottom-nav {
+	clear: both;
+	font-size: 0.8rem;
+}
+
+@media all and (max-width: 600px) {
+
+	.bottom-nav {
+		padding-bottom: 18px;
+	}
+
 }
 
 .bottom-nav a {

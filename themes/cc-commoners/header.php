@@ -9,6 +9,8 @@
     <!--<link rel="pingback" href="<?php //bloginfo( 'pingback_url' ); ?>" />-->
     <?php //if ( is_singular() && get_option( 'thread_comments' ) ) wp_enqueue_script( 'comment-reply' ); ?>
     <?php wp_head(); ?>
+
+    <link rel='stylesheet' id='cc-fontello-css' href='https://d15omoko64skxi.cloudfront.net/wp-content/themes/cc/fonts/fontello/css/cc-fontello.css?ver=4.9.1' type='text/css' media='all' />
   </head>
 
   <body <?php body_class(); ?> >
@@ -65,7 +67,7 @@
       -->
 
       <div class="signup-bg">
-          <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/bg-form-page.jpg">
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/i/bg-form-page.jpg">
       </div>
 
     <?php } ?>
