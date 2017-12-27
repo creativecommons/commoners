@@ -1,15 +1,15 @@
 /*
 Theme Name: CC Commoners
-Theme URI: https://github.com/creativecommons.org/commonser
+Theme URI: https://github.com/creativecommons.org/commoners
 Author: Creative Commons Corporation
 Author URI: https://creativecommons.org/
 Description: The theme for commoners.creativecommons.org
-Version: 2.4.4
+Version: 2.5.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags:
 Text Domain: cc-commoners
-Template: cc-commoners
+Template: twentyseventeen
 */
 
 @import "assets/css/normalize.css";
