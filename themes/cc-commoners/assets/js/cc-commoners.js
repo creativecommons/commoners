@@ -46,7 +46,7 @@ var swiper = new Swiper('.swiper-container', {
 jQuery(document).ready(function($){
 
 
-    $(".item-acordion h2").toggleClickV2(function(e){
+    $("body.page-template-page-faqs .item-acordion h2").toggleClickV2(function(e){
 
         e.preventDefault();
 

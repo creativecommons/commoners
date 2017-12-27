@@ -21,7 +21,7 @@
         </a>
       </div>
 
-      <p>Except where otherwise noted, content on this site is licensed under a Creative Commons Attribution 4.0 International license. Icons by The Noun Project.</p>
+      <p>Except where otherwise <a href="https://creativecommons.org/policies#license">noted</a>, content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>. <a href="https://creativecommons.org/website-icons">Icons</a> by The Noun Project.</p>
 
       <nav class="bottom-nav">
         <?php wp_nav_menu( array(

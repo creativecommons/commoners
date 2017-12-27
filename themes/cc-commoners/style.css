@@ -1670,3 +1670,7 @@ p.member-country {
 .item-content {
 	display: none;
 }
+
+body:not(.page-template-page-faqs) .item-content {
+	display: block;
+}
