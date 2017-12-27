@@ -291,13 +291,15 @@ class CAS_Maestro {
 			}
 
 			$attr = phpCAS::getAttributes();
-			$globalnick = $attr['global'];
+			$ccid_global = $attr['global'];
+			$ccid_nickname = $attr['nickname'];
 			$user_info = array();
 			$user_info['user_pass'] = $password;
-			$user_info['user_nicename'] = $globalnick;
+			$user_info['user_nicename'] = $ccid_global;
 			$user_info['user_email'] = $user_email;
 			$user_info['user_login'] = $username;
-			$user_info['display_name'] = $user_realname;
+			$user_info['nickname'] = $ccid_nickname;
+			$user_info['display_name'] = $ccid_nickname; //$user_realname;
 			$user_info['first_name'] = $firstname;
 			$user_info['last_name'] = $lastname;
 			//Verify if we need to add user to a specified role

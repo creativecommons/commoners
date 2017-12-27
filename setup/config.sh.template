@@ -1,0 +1,34 @@
+################################################################################
+# Settings
+################################################################################
+
+export DELETEPAGES='1 2'
+export IMPORTPAGES='24,26,30,46'
+export WPFRONTPAGE='46'
+
+export WPXMLFILE="$(dirname \"$0\")/commoners-wordpress.xml"
+export GFJSONFILE="$(dirname \"$0\")/gravityforms-export.json"
+export WPEMAILSFILE="$(dirname \"$0\")/commoners-emails.json"
+export NUMEMAILS=4
+
+export GFARCHIVE='/tmp/gravityforms_2.2.5.7.zip'
+# As it appears in the database, not the raw version
+export GFORMSKEY=''
+
+export DBNAME=''
+export DBUSER=''
+export DBPASSWORD=''
+
+export SITEURL=''
+export SITENAME='CC Global Network'
+export ADMINNAME=''
+export ADMINPASSWORD=''
+export ADMINEMAIL=''
+
+export WPROOT='/var/www/html'
+export GITROOT='/var/www'
+
+export WEBUSER='www-data'
+export WEBGROUP='www-data'
+
+export WPCLI="sudo -u ${WEBUSER} wp"

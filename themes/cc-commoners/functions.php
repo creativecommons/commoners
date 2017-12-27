@@ -1,5 +1,10 @@
 <?php
 
+show_admin_bar(false);
+
+// disable the admin bar
+add_filter('show_admin_bar', '__return_false');
+
 function cc_commoners_theme_setup () {
     register_nav_menus(
         array(
@@ -30,6 +35,15 @@ function cc_commoners_widgets () {
 add_action( 'widgets_init', 'cc_commoners_widgets', 11 );
 
 function cc_commoners_theme_scripts () {
+
+    wp_enqueue_script(
+        'swiper',
+        get_theme_file_uri( '/assets/js/swiper.js' ),
+        array(),
+        '1.0',
+        true
+    );
+
     wp_enqueue_script(
         'cc-commoners',
         get_theme_file_uri( '/assets/js/cc-commoners.js' ),
@@ -37,15 +51,43 @@ function cc_commoners_theme_scripts () {
         '1.0',
         true
     );
-    // Theme stylesheet
+
+    $parent_style = 'twentyseventeen-style';
+
     wp_enqueue_style(
-        'parent-style',
+        $parent_style,
+        // We do want template_directory, as this is our parent theme's css
         get_template_directory_uri() . '/style.css'
     );
-    wp_dequeue_style( 'cc-commoners' );
-    wp_enqueue_style( 'cc-commoners-style-extra',
-                      get_theme_file_uri( '/assets/css/extra.css' )
+
+
+    wp_enqueue_style(
+        'cc-commoners-gf',
+        get_stylesheet_directory_uri() . '/assets/css/swiper.css',
+        array( $parent_style ),
+        wp_get_theme()->get('Version')
     );
+
+
+    /*
+    wp_enqueue_style(
+        'cc-commoners',
+        get_stylesheet_directory_uri() . '/style.css',
+        array( $parent_style ),
+        wp_get_theme()->get('Version')
+    );
+    */
+
+
+    /*
+    wp_enqueue_style(
+        'cc-commoners-style-extra',
+        get_theme_file_uri( '/assets/css/extra.css' ),
+        array( $parent_style ),
+        wp_get_theme()->get('Version')
+    );
+    */
+
     wp_enqueue_style(
         'load-font-awesome',
         'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'
@@ -56,4 +98,16 @@ function cc_commoners_theme_scripts () {
     );
 }
 
-add_action( 'wp_enqueue_scripts', 'cc_commoners_theme_scripts' );
+
+add_action( 'wp_enqueue_scripts', 'cc_commoners_theme_scripts', 100);
+
+function cc_commoners_replace_last_nav_item ( $items, $args ) {
+  return substr_replace(
+      $items,
+      '',
+      strrpos( $items, $args->after ),
+      strlen( $args->after )
+  );
+}
+
+add_filter( 'wp_nav_menu', 'cc_commoners_replace_last_nav_item', 100, 2 );

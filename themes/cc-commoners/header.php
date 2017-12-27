@@ -4,23 +4,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="<?php bloginfo( 'charset' ); ?>" />
     <title><?php wp_title(); ?></title>
-    <link rel="profile" href="http://gmpg.org/xfn/11" />
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i|Roboto+Condensed:400,400i,700,700i">
-    <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/css/font-awesome.min.css">
+    <!--<link rel="profile" href="http://gmpg.org/xfn/11" />-->
 
     <!--<link rel="pingback" href="<?php //bloginfo( 'pingback_url' ); ?>" />-->
-    <?php if ( is_singular() && get_option( 'thread_comments' ) ) wp_enqueue_script( 'comment-reply' ); ?>
+    <?php //if ( is_singular() && get_option( 'thread_comments' ) ) wp_enqueue_script( 'comment-reply' ); ?>
     <?php wp_head(); ?>
   </head>
 
   <body <?php body_class(); ?> >
 
-    <div id="page" class="site">
-      <a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'twentyseventeen' ); ?></a>
 
-    <header id="masthead" class="site-header" role="banner">
-      <div class="logo"><h1>CC Commoners</h1></div>
+    <header class="site-header" >
+      
+      <a href="/" class="logo"><h1>CC Network</h1></a>
+
       <nav class="main-nav">
         <?php wp_nav_menu( array(
                      'depth'=>1,
@@ -30,22 +27,63 @@
                ) ); ?>
       </nav>
       <form method="post" action="/" class="header-search">
-        <input type="text"><i class="fa fa-search" aria-hidden="true"></i>
+        <input type="text" name="s">
+          <i class="fa fa-search" aria-hidden="true"></i>
       </form>
-    </header><!-- #masthead -->
+    </header>
+
+
+    <?php if( is_page(array(26, 63, 65)) ) { ?>
+
+      <!--
+        <div class="container-top-message">
+          
+          <div class="top-message form-top-text">
+            
+            <p>If you would like to join the Creative Commons Global Network as an individual human being, here’s where you can do so.
+            <br>
+            <br>
+            To join the Creative Commons Global network you will need:
+            - A CCID login account. If you don’t have one don’t worry, it only takes a minute to <a href="#signup-now">sign up here</a>.
+            <br>
+            Two people who are already part of the network and know you well enough to vouch for you. You can find them on this site.
+            <br>
+            - A name that people know you by. This doesn’t have to be the name on your birth certificate but should be one that you are known by in the community.
+            <br>
+            Once you have completed the sign-up process:
+            <br>
+            <br>
+            You will have agreed to and be bound by the Global Network Code of Conduct and the usage policy for this site.
+            <br>
+            Your application will have been viewed by the people you have nominated to vouch for you, and by the Global Council.
+            <br>
+            Your photograph, username, and the social media account names you provide during sign-up will be published and publicly visible on this site.</p>
+            
+          </div>
+          
+        </div>
+      -->
+
+      <div class="signup-bg">
+          <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/bg-form-page.jpg">
+      </div>
+
+    <?php } ?>
+
+
+    <?php if( is_page( array(132, 134, 149, 136, 4) ) || is_page_template('page-platform.php') || is_page_template('page-chapter.php') ){ ?>
 
       <?php
-      /*
-       * If a regular post or page, and not the front page, show the featured image.
-       * Using get_queried_object_id() here since the $post global may not be set before a call to the_post().
-       */
-       if ( ( is_single() || ( is_page() && ! twentyseventeen_is_frontpage() ) ) && has_post_thumbnail( get_queried_object_id() ) ) :
-         echo '<div class="single-featured-image-header">';
-         echo get_the_post_thumbnail( get_queried_object_id(), 'twentyseventeen-featured-image' );
-         echo '</div><!-- .single-featured-image-header -->';
-       endif;
+
+      global $post
+
       ?>
 
-     <div class="page-body">
-       <div class="site-content-contain">
-         <div id="content" class="site-content">
+      <div class="inner-section-title">
+        <h1><?php echo get_the_title($post->ID); ?></h1>
+      </div>
+    <?php } ?>
+
+
+    <!-- this 'push-page-body' class will be remove when all templating structure will be defined  -->
+    <div class="page-body <?php if( is_front_page() || is_page( array(4, 104, 121, 124) ) ){ echo ' push-page-body'; } ?>">
