@@ -35,7 +35,7 @@
     </header>
 
 
-    <?php if( is_page(array(26, 63, 65)) ) { ?>
+    <?php if( is_page(array(24, 26, 63, 65)) ) { ?>
 
       <!--
         <div class="container-top-message">

@@ -197,7 +197,7 @@ a.logo {
 	/*padding-top: 158px;*/
 }
 
-body.home .page-body, body.page-template-page-sidebar-php .page-body, body.page-template-hub-page-php .page-body, body.my-profile .page-body{
+body.home .page-body, body.page-template-page-sidebar-php .page-body, body.page-template-hub-page-php .page-body, body.my-profile .page-body {
 	padding-top: 158px;
 }
 
@@ -675,6 +675,7 @@ footer .logo span {
 
 .signup-bg {
 	position: relative;
+	z-index: 0;
 	width: 100%;
 	overflow: hidden;
 }
@@ -685,10 +686,13 @@ footer .logo span {
 }
 
 @media all and (max-width: 600px) {
+
+	.signup-bg {
+		display: none;
+	}
 	
 	.signup-bg img {
 		position: relative;
-		margin-top: -10%;
 	}
 	
 }
@@ -707,7 +711,10 @@ footer .logo span {
 	
 	.signup-form-body {
 		max-width: 100%;
-		margin: -20% auto 0 auto;
+		position: relative;
+		z-index: 1;
+		margin: 0 auto 0 auto;
+		padding-top: 178px;
 	}
 	
 }
@@ -801,6 +808,19 @@ hr {
 	text-align: center !important;
 	float: none !important;
 	margin: 0 auto 10px auto !important;
+}
+
+a.cc-btn {
+	width: auto !important;
+}
+
+@media all and (max-width: 600px) {
+	
+	.confirm-step-btn, a.cc-btn {
+		max-width: 100% !important;
+		box-sizing: border-box;
+	}
+	
 }
 
 .signup-form-body h5 {
