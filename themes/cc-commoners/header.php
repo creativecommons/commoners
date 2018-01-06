@@ -73,7 +73,7 @@
     <?php } ?>
 
 
-    <?php if( is_page( array(132, 134, 149, 136, 4) ) || is_page_template('page-platform.php') || is_page_template('page-chapter.php') ){ ?>
+    <?php if( is_page( array(132, 134, 149, 136, 4) ) || is_page_template('page-platform.php') || is_page_template('page-chapter.php') || is_search() ){ ?>
 
       <?php
 
@@ -82,7 +82,13 @@
       ?>
 
       <div class="inner-section-title">
-        <h1><?php echo get_the_title($post->ID); ?></h1>
+        <h1><?php
+              if (is_search()) {
+                  echo 'Search Results';
+              } else {
+                  echo get_the_title($post->ID);
+              }
+        ?></h1>
       </div>
     <?php } ?>
 
