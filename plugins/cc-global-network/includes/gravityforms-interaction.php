@@ -559,7 +559,8 @@ function ccgn_create_profile_individual( $applicant_id ) {
     xprofile_set_field_data(
         'Areas of Interest',
         $applicant_id,
-        $details[ CCGN_GF_DETAILS_AREAS_OF_INTEREST ]
+        // The array is in a string of form "['a', 'b', 'c']" so parse it
+        json_decode($details[ CCGN_GF_DETAILS_AREAS_OF_INTEREST ])
     );
     /*if ( ! ccgn_applicant_gravatar_selected ( $applicant_id ) ) {
         ccgn_set_avatar( $details, $applicant_id );
