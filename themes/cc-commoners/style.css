@@ -4,7 +4,7 @@ Theme URI: https://github.com/creativecommons.org/commoners
 Author: Creative Commons Corporation
 Author URI: https://creativecommons.org/
 Description: The theme for commoners.creativecommons.org
-Version: 2.5.1
+Version: 2.5.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags:
@@ -1695,36 +1695,74 @@ body:not(.page-template-page-faqs) .item-content {
 	display: block;
 }
 
-.search-form .search-field{
-    height: 30px;
-    min-width: 90%;
-    border: 1px solid gray;
-    padding: 0px;
+/* Overwrites BP profile styles */
+#item-header-content {
+	margin-left: 160px !important;
 }
 
-.search-form .search-submit{
-    -webkit-box-flex:0;-webkit-flex-grow:0;-ms-flex-positive:0;flex-grow:0;position:relative;background:#049BCE;border-radius:0;color:#fff;
-    height:32px;
-    width:32px;
-    padding:0px;
-    vertical-align: bottom;
+.bp-user #buddypress #item-header {
+	padding: 0 !important;
 }
 
-.icon-search {
-    height:32px;
-    width:32px;
-
+.bp-user.page-two-column #buddypress #cover-image-container #item-header-cover-image #item-header-content {
+	margin-left: 170px !important;
+	margin-top: -130px !important;
+	font-size: 1rem;
 }
 
-.screen-reader-text {
-  border: 0;
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute !important;
-  width: 1px;
-  word-wrap: normal !important;
+#buddypress #item-header-cover-image #item-header-avatar img.avatar {
+	background: rgba( 255, 255, 255, 0.8 );
+	border: solid 8px #fff;
+}
+
+#buddypress input[type=submit] {
+	position: relative;
+	display: inline-block;
+	padding: 8px 15px;
+	text-decoration: none;
+	color: #fff !important;
+	font-weight: bold;
+	text-transform: uppercase;
+	background-color: #27a635;
+	text-align: center !important;
+	float: none !important;
+	border: none !important;
+	margin: 0 auto 10px auto !important;
+}
+
+#buddypress input[type=submit]:hover{
+	background: #27a635 !important;
+	color: #fff !important;
+}
+
+.bp-user #buddypress .profile #profile-edit-form ul.button-nav {
+	margin-bottom: 20px;
+}
+
+.bp-avatar-nav li.current a {
+	background: #fff;
+}
+
+#drag-drop-area {
+	border: 4px dashed #27a635 !important;
+}
+
+@media all and (max-width: 600px) {
+
+	#item-header-content {
+		display: none;
+	}
+
+	#buddypress #item-header-cover-image #item-header-avatar {
+		margin-top: 20px;
+	}
+
+	#buddypress #header-cover-image {
+		display: none;
+	}
+	
+	body.my-profile .page-body {
+		padding-top: 0;
+	}
+	
 }
