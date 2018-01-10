@@ -1,15 +1,12 @@
 <?php
 if (have_posts()):
-	while (have_posts()):
-        the_post(); ?>
+    while (have_posts()):
+        the_post();
 
-    	<?php //the_title() ?>
+        /*the_title()*/
 
-    	<?php the_content() ?>
-
-<?php endwhile; ?>
-
-<?php
+        the_content();
+    endwhile;
 else: // no posts found
 ?>
 <p>No posts found matching your criteria.</p>
