@@ -1766,3 +1766,69 @@ body:not(.page-template-page-faqs) .item-content {
 	}
 	
 }
+
+body.page-template .inner-section-left-col h2 {
+	font-weight: normal;
+	margin: 20px 0;
+}
+
+body.page-template .inner-section-left-col h3 {
+	font-size: 1.6em;
+	margin-bottom: 0.5em;
+	font-weight: normal;
+}
+
+body.page-template .inner-section-left-col h4 {
+	font-size: 1.3em;
+	margin-bottom: 0.5em;
+	font-weight: normal;
+}
+
+body.page-template .inner-section-left-col p {
+	margin-bottom: 15px;
+}
+
+body.page-template .inner-section-left-col ul, body.page-template .inner-section-left-col ol {
+	margin: 15px 0;
+	padding-left: 15px;
+	list-style-position: inside;
+}
+
+body.page-template .inner-section-left-col ul li, body.page-template .inner-section-left-col ol li {
+	list-style: none;
+	position: relative;
+	padding-left: 15px;
+}
+
+body.page-template .inner-section-left-col ul li::before, body.page-template .inner-section-left-col ol li::before {
+	display: block;
+	vertical-align: top;
+	content: "·";
+	font-size: 2rem;
+	color: #000;
+	position: absolute;
+	top: -0.6rem;
+	left: 0;
+}
+
+body.page-template .inner-section-left-col blockquote {
+	font-family: 'Arial', 'sans-serif';
+	display: inline-block;
+	font-size: 0.9rem;
+	padding: 0 15px 15px 15px;
+  	/*border-left: 10px solid #ccc;*/
+  	/*quotes: "\201C""\201D""\2018""\2019";*/
+}
+
+body.page-template .inner-section-left-col blockquote:before {
+	/*color: #ccc;
+	content: open-quote;
+	font-size: 4em;
+	line-height: 0.1em;
+	margin-right: 0.25em;
+	vertical-align: -0.4em;*/
+}
+
+body.page-template .inner-section-left-col blockquote p {
+	
+}
