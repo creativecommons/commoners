@@ -6,7 +6,7 @@ get_header();
 
 	<div class="block-area">
 
-		<div class="inner-section-left-col" style="width:100% !important;float:none !important;padding-top: 158px !important;">
+		<div class="inner-section-left-col fullwidth-col">
 
 			<?php
 			if (have_posts()):
@@ -27,10 +27,8 @@ get_header();
 			endif; // done checking for posts
 			?>
 
-
 		</div>
 
 	</div><!--/.block-area-->
-	
 
 <?php get_footer(); ?>
