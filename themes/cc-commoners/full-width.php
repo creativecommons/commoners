@@ -4,12 +4,9 @@ get_header();
 
 ?>
 
-
-
-
 	<div class="block-area">
 
-		<div class="inner-section-left-col" style="width:100% !important; float:none !important;">
+		<div class="inner-section-left-col" style="width:100% !important;float:none !important;padding-top: 158px !important;">
 
 			<?php
 			if (have_posts()):
