@@ -4,27 +4,36 @@ get_header();
 
 ?>
 
-waah
 
-<div class="wrap page-full-width">
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+
+
+	<div class="block-area">
+
+		<div class="inner-section-left-col" style="width:100% !important; float:none !important;">
 
 			<?php
-			while ( have_posts() ) : the_post();
+			if (have_posts()):
+				while (have_posts()):
+			        the_post(); ?>
 
-				get_template_part( 'template-parts/page/content', 'page' );
+				<h2><?php the_title(); ?></h2>
 
-				// If comments are open or we have at least one comment, load up the comment template.
-				if ( comments_open() || get_comments_number() ) :
-					comments_template();
-				endif;
+			    	<?php the_content(); ?>
 
-			endwhile; // End of the loop.
+			<?php endwhile; ?>
+
+			<?php
+			else: // no posts found
+			?>
+			<p>No posts found matching your criteria.</p>
+			<?php
+			endif; // done checking for posts
 			?>
 
-		</main><!-- #main -->
-	</div><!-- #primary -->
-</div><!-- .wrap -->
 
-<?php get_footer();
+		</div>
+
+	</div><!--/.block-area-->
+	
+
+<?php get_footer(); ?>
