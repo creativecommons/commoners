@@ -67,19 +67,19 @@ function ccgn_vouching_shortcode_render ( $atts ) {
 
     // Render correct UI for state of vouching
     if ( ! ccgn_user_is_vouched( $voucher_id ) ) {
-        echo _( "<p>You must be vouched before you can vouch for others.<p>" );
+        echo _( "<p>You must be vouched before you can vouch for others.</p>" );
     } elseif ( ! ccgn_vouching_request_exists( $applicant_id,
                                               $voucher_id ) ) {
-        echo _( "<p>Request couldn't be found.<p>" );
+        echo _( "<p>Request couldn't be found.</p>" );
     } elseif ( ! ccgn_vouching_request_active ( $applicant_id ) ) {
-        echo _( "<p>That person's application to become a Member of the Creative Commons Global Network has already been resolved.<p></p>Thank you!</p>" );
+        echo _( "<h2>Thank you!</h2><p>That person's application to become a Member of the Creative Commons Global Network has already been resolved.<p>" );
     } elseif( ! ccgn_vouching_request_open( $applicant_id,
                                                  $voucher_id ) ) {
         // This is a bit of a hack. It will be displayed when the page
         // refreshes after intially submitting the form AND if the user
         // re-visits it subsequently.
         // So we make sure it will read well in both cases.
-        echo _( "<p>Thank you for responding to this request!<p>" );
+        echo _( "<h2>Thank you!</h2><p>Thank you for responding to this request!<p>" );
     } else {
         if ( ccgn_user_is_institutional_applicant ( $applicant_id ) ) {
             echo _( "<i>Note that this is an institution applying to join the Global Network. We still need you to vouch for this institution as you would for an individual that you know.</i>" );
