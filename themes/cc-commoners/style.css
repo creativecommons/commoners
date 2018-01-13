@@ -4,7 +4,7 @@ Theme URI: https://github.com/creativecommons.org/commoners
 Author: Creative Commons Corporation
 Author URI: https://creativecommons.org/
 Description: The theme for commoners.creativecommons.org
-Version: 2.5.3
+Version: 2.5.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags:
@@ -700,8 +700,8 @@ footer .logo span {
 .signup-form-body {
 	position: relative;
 	max-width: 840px;
-	padding: 40px 40px 20px 40px;
-	margin: -27% auto 100px auto;
+	padding: 158px 40px 20px 40px;
+	/*margin: -27% auto 100px auto;*/
 	font-size: 1rem;
 	line-height: 1.6em;
 	background-color: #efbe01;
