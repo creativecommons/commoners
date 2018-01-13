@@ -68,16 +68,11 @@ function cc_commoners_theme_scripts () {
         wp_get_theme()->get('Version')
     );
 
-
-    /*
-    wp_enqueue_style(
-        'cc-commoners',
+    wp_enqueue_style( 'cc-commoners',
         get_stylesheet_directory_uri() . '/style.css',
         array( $parent_style ),
         wp_get_theme()->get('Version')
     );
-    */
-
 
     /*
     wp_enqueue_style(

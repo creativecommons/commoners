@@ -620,6 +620,7 @@ function ccgn_create_profile( $applicant_id ) {
 
 function ccgn_get_individual_ids () {
     // FIXME: Filter admin, council members, inactive members
+    // INITIAL PHASE: Council members can be asked to Vouch
     return bp_core_get_users(
         array(
             'member_type' => 'individual-member'
