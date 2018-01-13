@@ -701,7 +701,7 @@ footer .logo span {
 	position: relative;
 	max-width: 840px;
 	padding: 158px 40px 20px 40px;
-	/*margin: -27% auto 100px auto;*/
+	margin: 0 auto 100px auto;
 	font-size: 1rem;
 	line-height: 1.6em;
 	background-color: #efbe01;
