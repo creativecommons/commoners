@@ -176,7 +176,10 @@ function ccgn_applicants_with_state ( $state ) {
                     'value' => $state,
                     'compare' => '='
                 )
-            )
+            ),
+            // Ideally by application date but that isn't accessible here
+            'orderby' => 'ID',
+            'order' => 'ASC'
         )
     );
     return $users;

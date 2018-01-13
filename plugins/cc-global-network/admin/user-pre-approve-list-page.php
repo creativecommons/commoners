@@ -25,7 +25,7 @@ function ccgn_list_applications_for_pre_approval () {
 
 function ccgn_application_pre_approval_page () {
     ?>
-<h1>Applicants for Pre Approval</h1>
+<h1>Global Network Application Spam Check</h1>
 <table class="ccgn-approval-table">
   <thead>
     <tr>
@@ -39,9 +39,9 @@ function ccgn_application_pre_approval_page () {
   </tbody>
 </table>
 <p>This is the list of new applicants. They have not yet been sent to the
-Vouching stage.</p>
-<p>If you are part of the application review team, please review
-their profile pages by clicking on the link to their username.</p>
+Vouching/Approval stage.</p>
+<p>Please review their profile pages to ensure that the application is not spam before approving the application to move on to the Vouching/Approval stage by clicking on the link to the applicant&apos;s username.</p>
+<p>You can review the guidelines for reviewing applications here: <a href="https://github.com/creativecommons/global-network-strategy/blob/master/docs/Guide_for_approve_new_members.md">https://github.com/creativecommons/global-network-strategy/blob/master/docs/Guide_for_approve_new_members.md</a>.</p>
 <!-- move to stylesheet and queue -->
 <style>
 .ccgn-approval-table {
@@ -61,14 +61,13 @@ their profile pages by clicking on the link to their username.</p>
 }
 
 function ccgn_application_pre_approval_menu () {
-    if ( ccgn_current_user_is_membership_council()
-         || ccgn_current_user_is_final_approver() ) {
+    if ( ccgn_current_user_is_final_approver() ) {
         add_users_page(
-            'Global Network Pre-Approval',
-            'Global Network Pre-Approval',
+            'Global Network Application Spam Check',
+            'Global Network Application Spam Check',
             'edit_users',
-            'global-network-pre-approval',
-            'ccgn_application_pre_approval_page'
+            'global-network-application-spam-check',
+            'ccgn_application_spam_check_page'
         );
     }
 }

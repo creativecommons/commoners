@@ -74,7 +74,7 @@ function ccgn_list_applications_for_final_approval () {
 
 function ccgn_application_final_approval_page () {
     ?>
-<h1>Applicants for Final Approval</h1>
+<h1>Membership Applications for Approval</h1>
 <table class="ccgn-approval-table">
   <thead>
     <tr>
@@ -94,12 +94,10 @@ function ccgn_application_final_approval_page () {
   </tbody>
 </table>
 <p>This is the list of applicants currently being Vouched by existing
-members.</p>
+members and voted on by the Membership Council.</p>
 <p>Applicants need <b><?php echo CCGN_NUMBER_OF_VOUCHES_NEEDED; ?></b>
 vouches for them and <b>zero</b> against them.</p>
-<p>If you are part of the application review team, once they have enough
-vouches (or if their application should be refused for some reason), you should
-review their profile page by clicking on the link to their username.</p>
+<p>You can review the guidelines for reviewing applications here: <a href="https://github.com/creativecommons/global-network-strategy/blob/master/docs/Guide_for_approve_new_members.md">https://github.com/creativecommons/global-network-strategy/blob/master/docs/Guide_for_approve_new_members.md</a>.</p>
 <!-- move to stylesheet and queue -->
 <style>
 .ccgn-approval-table {
@@ -122,11 +120,11 @@ function ccgn_application_final_approval_menu () {
     if ( ccgn_current_user_is_membership_council()
          || ccgn_current_user_is_final_approver() ) {
         add_users_page(
-            'Global Network Final Approval',
-            'Global Network Final Approval',
+            'Global Network Application Approval',
+            'Global Network Application Approval',
             'edit_users',
-            'global-network-final-approval',
-            'ccgn_application_final_approval_page'
+            'global-network-application-approval',
+            'ccgn_application_application_approval_page'
         );
     }
 }
