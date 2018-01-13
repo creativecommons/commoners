@@ -81,6 +81,8 @@ function ccgn_vouching_shortcode_render ( $atts ) {
         // So we make sure it will read well in both cases.
         echo _( "<h2>Thank you!</h2><p>Thank you for responding to this request!<p>" );
     } else {
+        // REMOVE IF/WHEN DEFAULT PAGE TEMPLATE SHOWS TITLE.
+        echo "<h1>Vouching Request</h1>";
         if ( ccgn_user_is_institutional_applicant ( $applicant_id ) ) {
             echo _( "<i>Note that this is an institution applying to join the Global Network. We still need you to vouch for this institution as you would for an individual that you know.</i>" );
         }
