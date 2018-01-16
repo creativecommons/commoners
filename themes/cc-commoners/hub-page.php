@@ -31,7 +31,7 @@ get_header(); ?>
 
 				<div class="slide-caption caption-hub">
 					<h3>Get Involved</h3>
-					<p>Creative Commons empowers people to freely share their knowledge and creativity but at the same time relies on its supporters, contributors, activists and creators who make our work possible.
+					<p>Creative Commons empowers people to freely share their knowledge and creativity. The organization relies on its supporters, contributors, activists and creators who make our work possible.
 Learn how you can get involved and make an impact.</p>
 				</div>
 
@@ -46,9 +46,9 @@ Learn how you can get involved and make an impact.</p>
 
 		<div class="hub-quote-content">
 
-			<h2>"No tool is better than people."</h2>
+			<h2>"No tool is better than the people."</h2>
 
-			<p>Michael Mandiberg, Professor of Media Culture at the College of Staten Island/CUNY, Co-founder of the Art+Feminism Wikipedia <a href="https://creativecommons.org/2017/10/30/no-tool-better-people-cc-artists-conversation-collaboration-community-commons/">@CC Artists in Conversations</a>.</p>
+			<p>Caroline Woolard <a href="https://creativecommons.org/2017/10/30/no-tool-better-people-cc-artists-conversation-collaboration-community-commons/">@CC Artists in Conversations</a>.</p>
 
 		</div>
 
@@ -80,7 +80,7 @@ Learn how you can get involved and make an impact.</p>
 
 				<h3>Share Your Work</h3>
 				<p>Make something cool, license it under Creative Commons, and put it on one of our friendly partner platforms! <br>
-				Look for CC content for collaboration? Check out our new <a href="https://ccsearch.creativecommons.org/">CC Search!</a>. Wondering which license to use? Check out our useful <a href="https://creativecommons.org/choose/">Chooser</a>. Other questions? Find your answer via FAQ or <a href="https://creativecommons.org/about/contact/">contact us</a>.</p>
+				Looking for CC content for collaboration? Check out our new <a href="https://ccsearch.creativecommons.org/">CC Search!</a>. Wondering which license to use? Check out our useful <a href="https://creativecommons.org/choose/">Chooser</a>. Other questions? Find your answer via FAQ or <a href="https://creativecommons.org/about/contact/">contact us</a>.</p>
 				
 			</div>
 			
@@ -107,8 +107,8 @@ Learn how you can get involved and make an impact.</p>
 				</div>
 
 				<h3>Plan Events</h3>
-				<p>Interested in helping shape the future of CC events like Summit and CC Salons?. Receive notifications about upcoming events.<br>
-					Get in touch with us at events@creativecommons.org</p>
+				<p>Interested in helping shape the future of CC events like Summit and CC Salons? Receive notifications about upcoming events.<br>
+					Get in touch with us at <a href="mailto:events@creativecommons.org">events@creativecommons.org</a></p>
 				
 			</div>
 			
@@ -119,7 +119,7 @@ Learn how you can get involved and make an impact.</p>
 				</div>
 
 				<h3>Contribute Your skills</h3>
-				<p>Help us with <a href="https://wiki.creativecommons.org/wiki/Translate">translation</a> with your language skills. <br>
+				<p>Use your language skills and help us with <a href="https://wiki.creativecommons.org/wiki/Translate">translation</a>. <br>
 					Are you a developer?. Learn about how to <a href="https://wiki.creativecommons.org/wiki/Integrate">integrate CC license information</a>. Join our <a href="https://wiki.creativecommons.org/wiki/Developers">developer community</a>. Check out our page on <a href="https://github.com/creativecommons">github</a> and help us improve our tools.</p>
 				
 			</div>
@@ -131,7 +131,7 @@ Learn how you can get involved and make an impact.</p>
 				</div>
 
 				<h3>Show Your Support</h3>
-				<p>We produce a variety of swag for ages 0-100 and beyond as well as books, stickers, and pins! Show your CC pride by supporting our swag campaigns.</p>
+				<p>We produce a variety of swag for ages 0-100 (and beyond) as well as books, stickers, and pins! Show your CC pride by supporting our swag campaigns.</p>
 				
 			</div>
 		
