@@ -623,6 +623,8 @@ function ccgn_get_individual_ids () {
     // INITIAL PHASE: Council members can be asked to Vouch
     return bp_core_get_users(
         array(
+            'type' => 'alphabetical',
+            'per_page' => '9999999',
             'member_type' => 'individual-member'
         )
     )["users"];

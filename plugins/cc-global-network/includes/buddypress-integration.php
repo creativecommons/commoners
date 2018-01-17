@@ -820,8 +820,8 @@ function ccgn_bp_directory_query ( $qs=false, $object=false ) {
     }
 
     // Force alphabetic order
-    // Is the membership directory order wrong? This is the cause.
-    // See #members-order-select
+    // Is the /members/ membership directory order wrong? This is the cause.
+    // See also #members-order-select
     $args['type'] = 'alphabetical';
 
     $qs = build_query( $args );
