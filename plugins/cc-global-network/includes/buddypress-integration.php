@@ -788,7 +788,7 @@ function _bp_not_signed_in_redirect () {
 
 // Not all users, just new users (who are not yet members)
 
-function ccgn_bp_directory_exclude_users ( $qs=false, $object=false ) {
+function ccgn_bp_directory_query ( $qs=false, $object=false ) {
     if ( $object != 'members' ) {
         return $qs;
     }
@@ -818,6 +818,11 @@ function ccgn_bp_directory_exclude_users ( $qs=false, $object=false ) {
     } else {
         $args[ 'exclude' ] = join( ',', $exclude );
     }
+
+    // Force alphabetic order
+    // Is the membership directory order wrong? This is the cause.
+    // See #members-order-select
+    $args['type'] = 'alphabetical';
 
     $qs = build_query( $args );
     return $qs;

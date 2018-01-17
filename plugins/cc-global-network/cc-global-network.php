@@ -129,7 +129,6 @@ add_action( 'bp_setup_nav', 'ccgn_not_logged_in_ui', 150 );
 //add_filter( 'bp_xprofile_get_groups', 'ccgn_filter_role_groups', 999, 2 );
 add_filter( 'bp_after_has_profile_parse_args', '_bp_hide_profile_field_group' );
 
-
 add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
 add_action( 'bp_profile_header_meta', '_bp_meta_member_type', 10, 0 );
@@ -141,8 +140,8 @@ add_filter( 'bp_is_active', '_bp_remove_components', 10, 2 );
 // Hide group/member directories etc. from users who are not logged in
 add_filter( 'get_header', '_bp_not_signed_in_redirect', 1 );
 
-// Don't show unvouched users in member directory
-add_action( 'bp_ajax_querystring', 'ccgn_bp_directory_exclude_users', 20, 2 );
+// Don't show unvouched users in member directory, do list alphabetically
+add_action( 'bp_ajax_querystring', 'ccgn_bp_directory_query', 20, 2 );
 
 ////////////////////////////////////////////////////////////////////////////////
 // Registration Forms
