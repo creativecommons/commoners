@@ -41,6 +41,18 @@ function ccgn_list_applications_for_final_approval () {
         $vouchers_entry = ccgn_application_vouchers($user_id);
         // The actual count of vouches
         $vouch_counts = ccgn_application_vouches_counts( $user_id );
+        // If the user is not a Final Approver,
+        // and the applicant does not have enough positive votes,
+        // or they have enough Vouches against that they must be rejected
+        // do not show.
+        // The Final Approver needs to see applicants who have been Vouched
+        // against, or whose applications have stalled, in order to handle
+        // those cases.
+        if ( ( ( $vouch_counts['no'] > CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED )
+               || ( $vouch_counts['yes'] < CCGN_NUMBER_OF_VOUCHES_NEEDED) )
+            && ( ! ccgn_current_user_is_final_approver() ) ) {
+            continue;
+        }
         if ( $vouch_counts[ 'no' ] > 0 ) {
             $vouch_no_style = ' style="font-weight: bold"';
         }
@@ -54,14 +66,16 @@ function ccgn_list_applications_for_final_approval () {
             . $user->user_nicename
             . '</a></td><td>'
             . ccgn_applicant_type_desc( $user_id )
-            . '</td><td>'
-            . ccgn_final_approval_status_for_vouch_counts( $vouch_counts )
-            . '</td><td>'
-            . $vouch_counts[ 'yes' ]
-            . '</td><td' . $vouch_no_style . '>'
-            . $vouch_counts[ 'no' ]
-            . '</td><td>'
-            . ccgn_final_approval_status_for_vote_counts( $vote_counts )
+            . '</td><td>';
+        if ( ccgn_current_user_is_final_approver() ) {
+            echo ccgn_final_approval_status_for_vouch_counts( $vouch_counts )
+                . '</td><td>'
+                . $vouch_counts[ 'yes' ]
+                . '</td><td' . $vouch_no_style . '>'
+                . $vouch_counts[ 'no' ]
+                . '</td><td>';
+        }
+        echo ccgn_final_approval_status_for_vote_counts( $vote_counts )
             . '</td><td>'
             . $vote_counts[ 'yes']
             . '</td><td' . $vote_no_style . '>'
@@ -80,9 +94,11 @@ function ccgn_application_approval_page () {
     <tr>
       <th>User</th>
       <th>Type</th>
+<?php if ( ccgn_current_user_is_final_approver() ) { ?>
       <th>Vouching Status</th>
       <th>Vouches For</th>
       <th>Vouches Against</th>
+<?php } ?>
       <th>Voting Status</th>
       <th>Votes For</th>
       <th>Votes Against</th>

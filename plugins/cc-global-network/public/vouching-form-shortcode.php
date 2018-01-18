@@ -29,6 +29,53 @@ function ccgn_vouching_request_exists ( $applicant_id,
     return $result;
 }
 
+// Find vouching requests for the current user to respond to
+
+function ccgn_vouching_requests_for_me ( $voucher_id ) {
+    $results = array();
+    foreach( CCGN_GF_VOUCH_VOUCHER_FIELDS as $field_id ) {
+        $requests = ccgn_entries_referring_to_user (
+            $voucher_id,
+            CCGN_GF_CHOOSE_VOUCHERS,
+            $field_id
+        );
+        foreach( $requests as $request ) {
+            $applicant_id = $request[ 'created_by' ];
+            if ( ccgn_vouching_request_active ( $applicant_id )
+                 && ccgn_vouching_request_open(
+                     $applicant_id,
+                     $voucher_id
+                 ) ) {
+                $results[] = $request;
+            }
+        }
+    }
+    return $results;
+}
+
+function ccgn_vouching_requests_render ( $voucher_id ) {
+    $requests = ccgn_vouching_requests_for_me ( $voucher_id );
+    if ( $requests !== [] ) {
+        echo _( "<h2>Current Vouching Requests</h2><ul>" );
+        foreach ( $requests as $request ) {
+            $applicant_id = $request[ 'created_by' ];
+            $applicant = get_user_by( 'ID', $applicant_id );
+            echo '<li><a href="'
+                . get_site_url()
+                . '/vouch/?applicant_id='
+                . $applicant_id
+                . '">'
+                . $applicant->display_name
+                . ' ('
+                . $applicant->user_nicename
+                . ')</a></li>';
+        }
+        echo "</ul>";
+    } else {
+        echo _( "<h2>No Requests</h2><p>There are currently no Vouching requests waiting for you.</p>" );
+    }
+}
+
 // Render the form for User to vouch for Applicant.
 // Firstly we check that the user is logged in and that we should display the
 // form to this user.
@@ -58,18 +105,16 @@ function ccgn_vouching_shortcode_render ( $atts ) {
         echo _( '<br />Invalid user id.' );
         return;
     }
-    if ( $applicant_id === null ) {
-        echo _( '<p>No applicant specified to vouch for.</p>' );
-        return;
-    }
 
     $voucher_id = get_current_user_id();
 
     // REMOVE IF/WHEN DEFAULT PAGE TEMPLATE SHOWS TITLE.
     echo "<br/><h1>Vouching</h1>";
 
-    // Render correct UI for state of vouching
-    if ( ! ccgn_user_is_vouched( $voucher_id ) ) {
+    // If no applicant_id, show the list of vouch requests.
+    if ( $applicant_id === null ) {
+        ccgn_vouching_requests_render ( $voucher_id );
+    } elseif ( ! ccgn_user_is_vouched( $voucher_id ) ) {
         echo _( "<p>You must be vouched before you can vouch for others.</p>" );
     } elseif ( ! ccgn_vouching_request_exists( $applicant_id,
                                               $voucher_id ) ) {

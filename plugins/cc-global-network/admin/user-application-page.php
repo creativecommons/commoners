@@ -182,6 +182,13 @@ function ccgn_application_users_page_vote_form_submit_handler ( $entry,
              || ccgn_current_user_is_final_approver() ) ) {
             echo 'Must be Membership Council member.';
             exit;
+        } elseif ( ccgn_vouching_request_exists( $applicant_id,
+                                                 get_current_user_id() ) ) {
+            // The user is Membership Council or Final Approver, but is also
+            // a Voucher for the application and therefore should not also
+            // Vote on it.
+            echo 'Cannot Vote on Application you are a Voucher for.';
+            exit;
         }
         $applicant_id = $entry[ CCGN_GF_VOTE_APPLICANT_ID ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
@@ -205,6 +212,9 @@ function ccgn_application_users_page_vote_form ( $applicant_id ) {
                 => $applicant_id
             )
         );
+    } elseif ( ccgn_vouching_request_exists( $applicant_id,
+                                             get_current_user_id() ) ) {
+        echo _('<i>You have been asked to Vouch for this appliction, you therefore cannot Vote on it as well.</i>');
     } else {
         echo _('<i>You have voted on this membership application</i>');
         $status = $entry[
