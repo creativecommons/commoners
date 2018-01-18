@@ -48,9 +48,18 @@ function ccgn_list_applications_for_final_approval () {
         // The Final Approver needs to see applicants who have been Vouched
         // against, or whose applications have stalled, in order to handle
         // those cases.
-        if ( ( ( $vouch_counts['no'] > CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED )
-               || ( $vouch_counts['yes'] < CCGN_NUMBER_OF_VOUCHES_NEEDED) )
+        if( ( ( $vouch_counts['no'] > CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED )
+              || ( $vouch_counts['yes'] < CCGN_NUMBER_OF_VOUCHES_NEEDED) )
             && ( ! ccgn_current_user_is_final_approver() ) ) {
+            continue;
+        }
+        // If the user has been asked to Vouch for the applicant and they
+        // are not the Final Approver, they should not see the entry as they
+        // cannot Vote for them.
+        // Final Approvers cannot vote either, but they must be able to see
+        // the user.
+        if ( ccgn_vouching_request_exists( $user_id, get_current_user_id() )
+             && ( ! ccgn_current_user_is_final_approver() ) ) {
             continue;
         }
         if ( $vouch_counts[ 'no' ] > 0 ) {

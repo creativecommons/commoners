@@ -200,30 +200,32 @@ function ccgn_application_users_page_vote_form_submit_handler ( $entry,
 }
 
 function ccgn_application_users_page_vote_form ( $applicant_id ) {
-    $entry = ccgn_application_vote_by_current_user ( $applicant_id );
-    if ( $entry === false ) {
-        gravity_form(
-            CCGN_GF_VOTE,
-            false,
-            false,
-            false,
-            array(
-                CCGN_GF_VOTE_APPLICANT_ID_PARAMETER
-                => $applicant_id
-            )
-        );
-    } elseif ( ccgn_vouching_request_exists( $applicant_id,
-                                             get_current_user_id() ) ) {
-        echo _('<i>You have been asked to Vouch for this appliction, you therefore cannot Vote on it as well.</i>');
+    if ( ccgn_vouching_request_exists( $applicant_id,
+                                       get_current_user_id() ) ) {
+        echo _('<i>You have been asked to Vouch for this application, you therefore cannot Vote on it as well.</i>');
     } else {
-        echo _('<i>You have voted on this membership application</i>');
-        $status = $entry[
-            CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
-        ];
-        if ( $status == CCGN_GF_VOTE_APPROVED_YES ) {
-            echo _('<p>You voted yes.</p>');
+        $entry = ccgn_application_vote_by_current_user ( $applicant_id );
+        if ( $entry === false ) {
+            gravity_form(
+                CCGN_GF_VOTE,
+                false,
+                false,
+                false,
+                array(
+                    CCGN_GF_VOTE_APPLICANT_ID_PARAMETER
+                    => $applicant_id
+                )
+            );
         } else {
-            echo _( '<p>You voted no.</p>' );
+            echo _('<i>You have voted on this membership application</i>');
+            $status = $entry[
+                CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
+            ];
+            if ( $status == CCGN_GF_VOTE_APPROVED_YES ) {
+                echo _('<p>You voted yes.</p>');
+            } else {
+                echo _( '<p>You voted no.</p>' );
+            }
         }
     }
 }
