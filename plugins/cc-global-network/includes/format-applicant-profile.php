@@ -114,7 +114,7 @@ function ccgn_vouching_form_institution_profile_text ( $applicant_id ) {
 function ccgn_vouching_form_applicant_profile_text ( $applicant_id ) {
     if( ccgn_user_is_individual_applicant( $applicant_id ) ) {
         return ccgn_vouching_form_individual_profile_text( $applicant_id );
-    } elseif( ccgn_user_is_institution( $applicant_id ) ) {
+    } elseif( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
         return ccgn_vouching_form_institution_profile_text(
             $applicant_id
         );
