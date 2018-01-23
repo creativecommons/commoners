@@ -25,7 +25,7 @@ function ccgn_list_applications_for_pre_approval () {
 
 function ccgn_application_spam_check_page () {
     ?>
-<h1>Global Network Application Spam Check</h1>
+<h1>Applications Spam Check</h1>
 <table class="ccgn-approval-table">
   <thead>
     <tr>

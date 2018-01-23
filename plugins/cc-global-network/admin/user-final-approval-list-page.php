@@ -97,7 +97,7 @@ function ccgn_list_applications_for_final_approval () {
 
 function ccgn_application_approval_page () {
     ?>
-<h1>Membership Applications for Approval</h1>
+<h1>Applications for Approval</h1>
 <table class="ccgn-approval-table">
   <thead>
     <tr>
