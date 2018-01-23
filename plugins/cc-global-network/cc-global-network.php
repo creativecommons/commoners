@@ -226,11 +226,11 @@ if ( is_admin() ){
         'ccgn_remove_member_type_metabox'
     );
     add_action( 'admin_init', 'ccgn_profile_access_control' );
+    add_action( 'admin_menu', 'ccgn_application_final_approval_menu' );
     add_action( 'admin_menu', 'ccgn_application_users_menu' );
     add_action( 'admin_menu', 'ccgn_hide_application_users_menu', 999 );
     add_action( 'admin_menu', 'ccgn_settings_emails_register' );
     add_action( 'admin_menu', 'ccgn_application_pre_approval_menu' );
-    add_action( 'admin_menu', 'ccgn_application_final_approval_menu' );
     add_action( 'admin_menu', 'ccgn_application_legal_approval_menu' );
     add_filter( 'user_row_actions', 'ccgn_application_user_link', 10, 2 );
     // Filter applicant user page form approve/declines to hook user profile

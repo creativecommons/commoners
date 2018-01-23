@@ -60,13 +60,12 @@ their profile pages by clicking on the link to their username.</p>
 }
 
 function ccgn_application_legal_approval_menu () {
-    if ( ccgn_current_user_is_legal_team() ) {
-        add_users_page(
-            'Global Network Institution Legal Approval',
-            'Global Network Institution Legal Approval',
-            'edit_users',
-            'global-network-legal-approval',
-            'ccgn_application_legal_approval_page'
-        );
-    }
+    add_submenu_page(
+        'global-network-application-approval',
+        'Legal Approval',
+        'Legal Approval',
+        'ccgn_list_applications_legal',
+        'global-network-legal-approval',
+        'ccgn_application_legal_approval_page'
+    );
 }

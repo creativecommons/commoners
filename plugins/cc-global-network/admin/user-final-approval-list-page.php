@@ -142,14 +142,20 @@ vouches for them and <b>zero</b> against them.</p>
 }
 
 function ccgn_application_final_approval_menu () {
-    if ( ccgn_current_user_is_membership_council()
-         || ccgn_current_user_is_final_approver() ) {
-        add_users_page(
-            'Global Network Application Approval',
-            'Global Network Application Approval',
-            'edit_users',
-            'global-network-application-approval',
-            'ccgn_application_approval_page'
-        );
-    }
+    add_menu_page(
+        'Global Network',
+        'Global Network',
+        'ccgn_list_applications',
+        'global-network-application-approval',
+        'ccgn_application_approval_page'
+    );
+    // And as the first submenu item, with a more descriptive name
+    add_submenu_page(
+        'global-network-application-approval',
+        'Application Approval',
+        'Application Approval',
+        'ccgn_list_applications',
+        'global-network-application-approval',
+        'ccgn_application_approval_page'
+    );
 }

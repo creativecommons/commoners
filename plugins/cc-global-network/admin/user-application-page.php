@@ -494,7 +494,7 @@ function ccgn_application_users_page () {
 
 function ccgn_application_user_application_page_url( $user_id ) {
     return admin_url(
-        'users.php?page=global-network-membership&user_id='
+        'admin.php?page=global-network-application&user_id='
         . $user_id
     );
 }
@@ -504,20 +504,21 @@ function ccgn_application_user_application_page_url( $user_id ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_application_users_menu () {
-    if ( ccgn_current_user_can_see_user_application_page() ) {
-        add_users_page(
-            'Global Network Membership',
-            // No menu title, as we don't want to show up in the sidebar
-            '',
-            'edit_users',
-            'global-network-membership',
-            'ccgn_application_users_page'
-        );
-    }
+    add_submenu_page(
+        null,
+        'Global Network Membership',
+        'Global Network Membership',
+        'ccgn_view_applications',
+        'global-network-application',
+        'ccgn_application_users_page'
+    );
 }
 
 function ccgn_hide_application_users_menu () {
-    remove_submenu_page( 'users.php', 'ccgn-global-network-membership' );
+    remove_submenu_page(
+        'global-network-application-approval',
+        'ccgn-global-network-membership'
+    );
 }
 
 // If the user is at the vouching / approval stage, link to this page

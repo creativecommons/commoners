@@ -61,13 +61,12 @@ Vouching/Approval stage.</p>
 }
 
 function ccgn_application_pre_approval_menu () {
-    if ( ccgn_current_user_is_final_approver() ) {
-        add_users_page(
-            'Global Network Application Spam Check',
-            'Global Network Application Spam Check',
-            'edit_users',
-            'global-network-application-spam-check',
-            'ccgn_application_spam_check_page'
-        );
-    }
+    add_submenu_page(
+        'global-network-application-approval',
+        'Spam Check',
+        'Spam Check',
+        'ccgn_pre_approve',
+        'global-network-application-spam-check',
+        'ccgn_application_spam_check_page'
+    );
 }

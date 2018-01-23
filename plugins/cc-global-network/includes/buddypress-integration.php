@@ -125,6 +125,23 @@ function ccgn_add_roles_on_plugin_activation () {
         'CC Legal Team',
         array()
     );
+
+    $council = get_role( CCGN_USER_ROLE_MEMBERSHIP_COUNCIL );
+    $approver = get_role( CCGN_USER_ROLE_FINAL_APPROVER );
+    $legal = get_role( CCGN_USER_ROLE_CC_LEGAL_TEAM );
+
+    //FIXME: Declare these
+    $council->add_cap( 'ccgn_view_applications' );
+    $approver->add_cap( 'ccgn_view_applications' );
+    $legal->add_cap( 'ccgn_view_applications' );
+
+    $council->add_cap( 'ccgn_list_applications' );
+    $approver->add_cap( 'ccgn_list_applications' );
+    $legal->add_cap( 'ccgn_list_applications' );
+
+    $approver->add_cap( 'ccgn_pre_approve' );
+
+    $legal->add_cap( 'ccgn_list_applications_legal' );
 }
 
 function ccgn_user_is_new ( $user_id ) {
