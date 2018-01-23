@@ -147,7 +147,8 @@ function ccgn_application_final_approval_menu () {
         'Global Network',
         'ccgn_list_applications',
         'global-network-application-approval',
-        'ccgn_application_approval_page'
+        'ccgn_application_approval_page',
+        'dashicons-id-alt'
     );
     // And as the first submenu item, with a more descriptive name
     add_submenu_page(
