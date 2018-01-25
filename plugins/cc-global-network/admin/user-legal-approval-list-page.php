@@ -25,7 +25,7 @@ function ccgn_list_applications_for_legal_approval () {
 
 function ccgn_application_legal_approval_page () {
     ?>
-<h1>Applicants for Legal Approval</h1>
+<h1>Applicantions for Legal Approval</h1>
 <table class="ccgn-approval-table">
   <thead>
     <tr>
