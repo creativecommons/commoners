@@ -141,14 +141,22 @@ function ccgn_registration_email_vouching_request ( $applicant_id,
 // Use the name and address from our settings for emails
 ////////////////////////////////////////////////////////////////////////////////
 
-//IMPLEMENTME: override only for scope of send above
-
 function ccgn_mail_from_address( $old ) {
-    return get_option( 'ccgn-email-sender' )[ 'address' ];
+    $address = get_option( 'ccgn-email-sender' )[ 'address' ];
+    if ( ! $address) {
+        $address = bloginfo( 'admin_email' );
+    }
+    return $address;
 }
 
 function ccgn_mail_from_name( $old ) {
- return get_option( 'ccgn-email-sender' )[ 'name' ];
+ $name = get_option( 'ccgn-email-sender' )[ 'name' ];
+ if ( ! $name ) {
+     // As opposed to 'WordPress'
+     // 319: https://developer.wordpress.org/reference/functions/wp_mail/
+     $name = 'Creative Commons Global Network';
+ }
+ return $name;
 }
 
 function ccgn_html_mail_content_type () {
