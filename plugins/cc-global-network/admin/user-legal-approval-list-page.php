@@ -2,10 +2,17 @@
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
+function ccgn_legal_applications_cmp ($a, $b) {
+    //FIXME: This is very inefficient
+    return strtotime( ccgn_application_vouchers($a->ID)[ 'date_created' ] )
+        > strtotime( ccgn_application_vouchers($b->ID)[ 'date_created' ] );
+}
+
 function ccgn_list_applications_for_legal_approval () {
     $user_entries = ccgn_applicants_with_state(
         CCGN_APPLICATION_STATE_LEGAL
     );
+    usort($user_entries, "ccgn_legal_applications_cmp");
     foreach ($user_entries as $user_entry) {
         $user_id = $user_entry->ID;
         $user = get_user_by('ID', $user_id);

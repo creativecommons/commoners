@@ -30,10 +30,17 @@ function ccgn_final_approval_status_for_vote_counts( $counts ) {
     return $status;
 }
 
+function ccgn_final_applications_cmp ($a, $b) {
+    //FIXME: This is very inefficient
+    return strtotime( ccgn_application_vouchers($a->ID)[ 'date_created' ] )
+        > strtotime( ccgn_application_vouchers($b->ID)[ 'date_created' ] );
+}
+
 function ccgn_list_applications_for_final_approval () {
     $user_entries = ccgn_applicants_with_state(
         CCGN_APPLICATION_STATE_VOUCHING
     );
+    usort($user_entries, "ccgn_final_applications_cmp");
     foreach ($user_entries as $user_entry) {
         $user_id = $user_entry->ID;
         $user = get_user_by('ID', $user_id);
