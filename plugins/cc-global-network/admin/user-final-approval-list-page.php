@@ -114,11 +114,11 @@ function ccgn_application_approval_page () {
       <th>Type</th>
 <?php if ( ccgn_current_user_is_final_approver() ) { ?>
       <th>Vouching Status</th>
+      <th>Vouches Declined</th>
       <th>Vouches For</th>
       <th>Vouches Against</th>
 <?php } ?>
       <th>Voting Status</th>
-      <th>Votes Declined</th>
       <th>Votes For</th>
       <th>Votes Against</th>
       <th>Application date</th>
