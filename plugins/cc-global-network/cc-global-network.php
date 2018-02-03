@@ -155,6 +155,8 @@ add_action( 'gform_validation', 'ccgn_agree_to_terms_validate' );
 
 add_action( 'gform_pre_render', 'ccgn_set_vouchers_options' );
 
+add_action( "gform_pre_submission", "ccgn_choose_vouchers_pre_submission" );
+
 add_filter( 'gform_validation', 'ccgn_choose_vouchers_validate' );
 
 // The shortcode to display the sign-up workflow forms.

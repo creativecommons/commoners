@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 ////////////////////////////////////////////////////////////////////////////////
-//
+// Email all the reasons
 ////////////////////////////////////////////////////////////////////////////////
 
 function ccgn_registration_email_sub($key, $value, $text) {
@@ -88,6 +88,24 @@ function ccgn_registration_email_to_applicant ( $applicant_id,
     );
 }
 
+function ccgn_registration_email_to_applicant_about_voucher ( $applicant_id,
+                                                              $voucher_id,
+                                                              $email_option ) {
+    $applicant = get_user_by( 'ID', $applicant_id );
+    $voucher = get_user_by( 'ID', $voucher_id );
+    $options = get_option( $email_option );
+    $subject = $options[ 'subject' ];
+    $message = $options[ 'message' ];
+    ccgn_registration_email(
+        $applicant->user_nicename,
+        $applicant->ID,
+        $voucher->user_nicename,
+        $applicant->user_email,
+        $subject,
+        $message
+    );
+}
+
 function ccgn_registration_email_to_voucher ( $applicant_id,
                                               $voucher_id,
                                               $email_option ) {
@@ -133,6 +151,15 @@ function ccgn_registration_email_vouching_request ( $applicant_id,
         $applicant_id,
         $voucher_id,
         'ccgn-email-vouch-request'
+    );
+}
+
+function ccgn_registration_email_voucher_cannot ( $applicant_id,
+                                                  $voucher_id ) {
+    ccgn_registration_email_to_applicant_about_voucher(
+        $applicant_id,
+        $voucher_id,
+        'ccgn-email-voucher-cannot'
     );
 }
 

@@ -85,6 +85,8 @@ define( 'CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID', '3' );
 // Field values that we need to check
 
 define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_YES', 'Yes' );
+define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_NO', 'No' );
+define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT', 'Cannot' );
 define( 'CCGN_GF_PRE_APPROVAL_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_VOTE_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVED_YES', 'Yes' );
@@ -413,19 +415,58 @@ function ccgn_application_vouches ( $applicant_id ) {
 function ccgn_application_vouches_counts ( $applicant_id ) {
     $yes = 0;
     $no = 0;
+    $cannot = 0;
     $vouches = ccgn_application_vouches( $applicant_id );
     foreach ($vouches as $vouch) {
         $did_they = $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ];
         if ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_YES ) {
             $yes += 1;
-        } else  {
+        } elseif ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_YES ) {
             $no += 1;
+        } else {
+            $cannot += 1;
         }
     }
     return array(
         'yes' => $yes,
-        'no' => $no
+        'no' => $no,
+        'cannot' => $cannot
     );
+}
+
+// Does the user have any Vouchers who have declined to vouch
+
+function ccgn_application_vouches_has_cannots( $applicant_id ) {
+    return ccgn_application_vouches_counts ( $applicant_id )[ 'cannot' ] > 0;
+}
+
+// A predicate function for sorting. Is this Vouching result a 'Cannot' rather
+// than a 'Yes' or a 'No'?
+
+function ccgn_is_application_vouch_cannot ( $vouch ) {
+    return $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
+        == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT;
+}
+
+// The list of Vouches that selected the 'Cannot' state and that must therefore
+// be replaced.
+// Note that Vouchers cannot change their mind at this point.
+// The user id for each vouch is vouch[ 'created_by' ].
+
+function ccgn_application_vouches_cannots( $applicant_id ) {
+    return array_filter(
+        ccgn_application_vouches ( $applicant_id ),
+        'ccgn_is_application_vouch_cannot'
+    );
+}
+
+function ccgn_application_vouches_cannots_voucher_ids ( $applicant_id ) {
+    $ids = [];
+    $cannots = ccgn_application_vouches_cannots( $applicant_id );
+    for ($cannots as $cannot) {
+        $ids[] = $cannot[ 'created_by' ];
+    }
+    return $ids;
 }
 
 // Get the list of submitted votes for the user
@@ -636,7 +677,12 @@ function ccgn_registration_form_list_members ( $current_user_id ) {
     // For testing
     $include_admin = defined( 'CCGN_DEVELOPMENT' )
                    || defined( 'CCGN_TESTING' );
-    $individuals = ccgn_get_individual_ids();
+    $individuals = array_diff(
+        ccgn_get_individual_ids(),
+        // Remove users who have already declined to vouch for the application
+        //FIXME: Remove "No" votes as well when we allow re-voting
+        ccgn_application_vouches_cannots_voucher_ids ( $current_user_id )
+    );
     $members = array();
     foreach ( $individuals as $individual ){
         if (
@@ -686,6 +732,34 @@ function ccgn_set_vouchers_options ( $form ) {
                 }
                 return options;
             });
+            <?php
+            $voucher_form = ccgn_application_vouchers ( $current_member );
+            if ($voucher_form) {
+                $cannots = ccgn_application_vouches_cannots_voucher_ids(
+                    $current_member
+                );
+                $existing = [];
+                $locked = [];
+                foreach (CCGN_GF_VOUCH_VOUCHER_FIELD as $field) {
+                    $voucher_id = $voucher_form[ $field ];
+                    $voucher_cannot = in_array( $voucher_id, $cannots );
+                    // Remove Vouchers who have said they Cannot vouch
+                    if ($voucher_cannot) {
+                        $voucher_id = '';
+                    }
+                    $existing[] = $voucher_id;
+                    // The user can't update existing non-Cannot vouchers
+                    $locked[] = ! $voucher_cannot;
+                }
+            ?>
+            var existing_choices = <?php json_encode( $existing ) ?>;
+            var lock_selects = <?php json_encode( $locked ) ?>;
+            jQuery("select").each(function(i, select) {
+                select.val(existing_choices[i])
+                      .prop('disabled', lock_selects[i])
+                      .trigger("chosen:updated");
+            }
+            <?php } ?>
         });
         </script>
         <?php
@@ -949,4 +1023,77 @@ function ccgn_applicant_gravatar_selected ( $applicant_id ) {
     $details = ccgn_details_individual_form_entry ( $applicant_id );
     $source = $details[ CCGN_GF_DETAILS_AVATAR_SOURCE ];
     return $source == CCGN_GF_DETAILS_AVATAR_SOURCE_GRAVATAR;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// More Voucher handling
+// It's here because it needs to be shared between individual and institutional
+// application forms.
+////////////////////////////////////////////////////////////////////////////////
+
+// Handle vouch form updating (if one or more Vouchers said they Cannot vouch)
+
+function ccgn_user_exists_and_cannot_vouch_for_applicant ( $user_id,
+                                                           $applicant_id ) {
+    $result = false;
+    $user = get_user_by('ID', $user_id);
+    if ( ! empty( $user ) ) {
+        //FIXME: Look for record in db directly
+        $cannots = ccgn_application_vouches_cannots( $applicant_id );
+        for ($cannots as $cannot) {
+            if ( $cannot[ 'created_by' ] == $user_id ) {
+                $result = true;
+                break;
+            }
+        }
+    }
+    return $result;
+}
+
+function ccgn_choose_vouchers_maybe_update_voucher ( $editentry, $num ) {
+    $result = false;
+    $field = 'input_' . $num
+    $voucher = $_POST[ $field ];
+    $applicant = $editentry[ 'created_by' ];
+    if ( ccgn_user_exists_and_cannot_vouch ( $voucher, $applicant) ) {
+        $editentry[ $num ] = $voucher;
+        $result = true;
+    }
+    return $result;
+}
+
+function ccgn_choose_vouchers_pre_submission ( $form ) {
+    if ( $form[ 'name' ] == CCGN_GF_VOUCH ) {
+        $applicant_id = wp_get_current_user();
+        $existing = ccgn_application_vouchers ( $applicant_id );
+        if ( $existing ){
+            if ( ! ccgn_application_vouches_has_cannots( $applicant_id ) ) {
+                echo "Something went badly wrong.";
+            } else {
+                // Make changes to it from new values in $_POST
+                $should_update = false;
+                for (CCGN_GF_VOUCH_VOUCHER_FIELDS as $vf) {
+                    $should_update |= ccgn_vouching_maybe_update_voucher (
+                        $editentry,
+                        $vf
+                    );
+                }
+                if ($should_update) {
+                    // Update the entry
+                    $updateit = GFAPI::update_entry( $editentry );
+                    if ( is_wp_error( $updateit ) ) {
+                        echo "Something went badly wrong.";
+                    } else {
+                        //Success, so redirect
+                        header( "Location: " . get_permalink() );
+                    }
+                } else {
+                    // Try again
+                    header( "Location: " . get_permalink() );
+                }
+            }
+            //dont process and create new entry
+            die();
+        }
+    }
 }

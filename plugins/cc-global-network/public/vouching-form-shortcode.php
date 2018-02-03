@@ -182,10 +182,19 @@ function ccgn_application_vouching_form_submit_handler ( $entry,
     if ( $form[ 'title' ] == CCGN_GF_VOUCH ) {
         $applicant_id = $entry[ CCGN_GF_VOUCH_APPLICANT_ID ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
+        // Unlikely, but just in case
         if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
             echo 'User not vouching.';
             return;
         }
-        ccgn_evaluate_and_maybe_finalize_application ( $applicant_id );
+        $voucher_id = $entry[ 'created_by' ];
+        if ( $entry[ CCGN_GF_VOUCH_DO_YOU_VOUCH ] == ) {
+            ccgn_registration_email_voucher_cannot (
+                $applicant_id,
+                $voucher_id
+            );
+        } else {
+            ccgn_evaluate_and_maybe_finalize_application ( $applicant_id );
+        }
     }
 }

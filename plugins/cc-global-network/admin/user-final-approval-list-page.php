@@ -86,6 +86,8 @@ function ccgn_list_applications_for_final_approval () {
         if ( ccgn_current_user_is_final_approver() ) {
             echo ccgn_final_approval_status_for_vouch_counts( $vouch_counts )
                 . '</td><td>'
+                . $vouch_counts[ 'cannot' ]
+                . '</td><td>'
                 . $vouch_counts[ 'yes' ]
                 . '</td><td' . $vouch_no_style . '>'
                 . $vouch_counts[ 'no' ]
@@ -116,6 +118,7 @@ function ccgn_application_approval_page () {
       <th>Vouches Against</th>
 <?php } ?>
       <th>Voting Status</th>
+      <th>Votes Declined</th>
       <th>Votes For</th>
       <th>Votes Against</th>
       <th>Application date</th>
