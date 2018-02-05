@@ -46,13 +46,13 @@ function ccgn_decline_and_notify_applicant ( $applicant_id ) {
 function ccgn_application_users_page_vote_responses ( $applicant_id ) {
     $result = '';
     $votes = ccgn_application_votes ( $applicant_id );
-    foreach ($votes as $vouch) {
+    foreach ($votes as $vote) {
         $voter = get_user_by('ID', $vouch['created_by']);
         $result .=
                 '<h4>From: '
                 . $voter->display_name
                 . '</h4><p><strong>Voted:</strong> '
-                .  $vouch[
+                .  $vote[
                     CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
                 ]
                 . '</p>';
@@ -94,7 +94,9 @@ function ccgn_application_users_page_vouch_responses ( $applicant_id ) {
 
 function ccgn_application_users_page_vouch_counts ( $applicant_id ) {
     $counts = ccgn_application_vouches_counts( $applicant_id );
-    return '<p><strong>Yes: </strong>'
+    return '<p><strong>Cannot: </strong>'
+        . $counts['cannot']
+        . '<p><strong>Yes: </strong>'
         . $counts['yes']
         . '<p><strong>No: </strong>'
         . $counts['no']
