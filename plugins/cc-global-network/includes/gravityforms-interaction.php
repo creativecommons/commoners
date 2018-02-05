@@ -1052,7 +1052,7 @@ function ccgn_user_exists_and_cannot_vouch_for_applicant ( $user_id,
 
 function ccgn_choose_vouchers_maybe_update_voucher ( $editentry, $num ) {
     $result = false;
-    $field = 'input_' . $num
+    $field = 'input_' . $num;
     $voucher = $_POST[ $field ];
     $applicant = $editentry[ 'created_by' ];
     if ( ccgn_user_exists_and_cannot_vouch ( $voucher, $applicant) ) {
