@@ -463,7 +463,7 @@ function ccgn_application_vouches_cannots( $applicant_id ) {
 function ccgn_application_vouches_cannots_voucher_ids ( $applicant_id ) {
     $ids = [];
     $cannots = ccgn_application_vouches_cannots( $applicant_id );
-    for ($cannots as $cannot) {
+    foreach ($cannots as $cannot) {
         $ids[] = $cannot[ 'created_by' ];
     }
     return $ids;
@@ -1040,7 +1040,7 @@ function ccgn_user_exists_and_cannot_vouch_for_applicant ( $user_id,
     if ( ! empty( $user ) ) {
         //FIXME: Look for record in db directly
         $cannots = ccgn_application_vouches_cannots( $applicant_id );
-        for ($cannots as $cannot) {
+        foreach ($cannots as $cannot) {
             if ( $cannot[ 'created_by' ] == $user_id ) {
                 $result = true;
                 break;
@@ -1065,18 +1065,26 @@ function ccgn_choose_vouchers_maybe_update_voucher ( $editentry, $num ) {
 function ccgn_choose_vouchers_pre_submission ( $form ) {
     if ( $form[ 'name' ] == CCGN_GF_VOUCH ) {
         $applicant_id = wp_get_current_user();
+        // Check to see if the user is updating the form
         $existing = ccgn_application_vouchers ( $applicant_id );
         if ( $existing ){
+            // The user should only be updating the form if a Voucher(s)
+            // has said that they cannot vouch for this application.
             if ( ! ccgn_application_vouches_has_cannots( $applicant_id ) ) {
                 echo "Something went badly wrong.";
             } else {
-                // Make changes to it from new values in $_POST
                 $should_update = false;
-                for (CCGN_GF_VOUCH_VOUCHER_FIELDS as $vf) {
-                    $should_update |= ccgn_vouching_maybe_update_voucher (
+                $new_vouchers = [];
+                // Check if each field has updated, note which have
+                foreach (CCGN_GF_VOUCH_VOUCHER_FIELDS as $vf) {
+                    $voucher_changed |= ccgn_vouching_maybe_update_voucher (
                         $editentry,
                         $vf
                     );
+                    if ($voucher_changed) {
+                        $new_vouchers[] = $editentry[ $vf ];
+                    }
+                    $should_update |= $voucher_changed;
                 }
                 if ($should_update) {
                     // Update the entry
@@ -1084,6 +1092,13 @@ function ccgn_choose_vouchers_pre_submission ( $form ) {
                     if ( is_wp_error( $updateit ) ) {
                         echo "Something went badly wrong.";
                     } else {
+                        // Email any new Vouchers a Vouching Request
+                        foreach ($new_vouchers as $voucher_id) {
+                            ccgn_registration_email_vouching_request(
+                                $applicant_id,
+                                $voucher_id
+                            );
+                        }
                         //Success, so redirect
                         header( "Location: " . get_permalink() );
                     }
