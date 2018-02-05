@@ -188,7 +188,10 @@ function ccgn_application_vouching_form_submit_handler ( $entry,
             return;
         }
         $voucher_id = $entry[ 'created_by' ];
-        if ( $entry[ CCGN_GF_VOUCH_DO_YOU_VOUCH ] == ) {
+        if (
+            $entry[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
+             == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT
+        ) {
             ccgn_registration_email_voucher_cannot (
                 $applicant_id,
                 $voucher_id
