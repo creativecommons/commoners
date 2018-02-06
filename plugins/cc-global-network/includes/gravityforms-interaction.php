@@ -689,7 +689,7 @@ function ccgn_registration_form_list_members ( $current_user_id ) {
             ( $individual->ID != $current_user_id ) // Exclude applicant
             && ( $include_admin // Include admin if this is set
                  || ( $individual->ID !== 1 ) )
-            && ( ! in_array ( $individual->ID, $cannots_ids ) )
+            && ( ! in_array ( $individual->ID, $cannot_ids ) )
         ) {
             $members[] = array(
                 $individual->ID,
@@ -740,8 +740,7 @@ function ccgn_set_vouchers_options ( $form ) {
                     $current_member
                 );
                 $existing = [];
-                $locked = [];
-                foreach (CCGN_GF_VOUCH_VOUCHER_FIELD as $field) {
+                foreach (CCGN_GF_VOUCH_VOUCHER_FIELDS as $field) {
                     $voucher_id = $voucher_form[ $field ];
                     $voucher_cannot = in_array( $voucher_id, $cannots );
                     // Remove Vouchers who have said they Cannot vouch
@@ -749,17 +748,17 @@ function ccgn_set_vouchers_options ( $form ) {
                         $voucher_id = '';
                     }
                     $existing[] = $voucher_id;
-                    // The user can't update existing non-Cannot vouchers
-                    $locked[] = ! $voucher_cannot;
-                }
+            }
             ?>
             var existing_choices = <?php echo json_encode( $existing ) ?>;
-            var lock_selects = <?php echo json_encode( $locked ) ?>;
-            jQuery("select").each(function(i, select) {
-                select.val(existing_choices[i])
-                      .prop('disabled', lock_selects[i])
-                      .trigger("chosen:updated");
-            }
+            // We have to run this code next time around the event loop
+            setTimeout(function () {
+                jQuery("select").each(function(i) {
+                     jQuery(this).val(existing_choices[i])
+                          .prop('disabled', existing_choices[i] !== "")
+                          .trigger("chosen:updated");
+                })
+            }, 0);
             <?php } ?>
         });
         </script>
