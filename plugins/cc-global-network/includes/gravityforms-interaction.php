@@ -659,7 +659,7 @@ function ccgn_create_profile( $applicant_id ) {
 // Form field population
 ////////////////////////////////////////////////////////////////////////////////
 
-function ccgn_get_individual_ids () {
+function ccgn_get_individuals () {
     // FIXME: Filter admin, council members, inactive members
     // INITIAL PHASE: Council members can be asked to Vouch
     return bp_core_get_users(
@@ -677,18 +677,19 @@ function ccgn_registration_form_list_members ( $current_user_id ) {
     // For testing
     $include_admin = defined( 'CCGN_DEVELOPMENT' )
                    || defined( 'CCGN_TESTING' );
-    $individuals = array_diff(
-        ccgn_get_individual_ids(),
-        // Remove users who have already declined to vouch for the application
-        //FIXME: Remove "No" votes as well when we allow re-voting
-        ccgn_application_vouches_cannots_voucher_ids ( $current_user_id )
+    $individuals = ccgn_get_individuals();
+    // Remove users who have already declined to vouch for the application
+    //FIXME: Remove "No" votes as well when we allow re-voting
+    $cannot_ids = ccgn_application_vouches_cannots_voucher_ids (
+        $current_user_id
     );
     $members = array();
     foreach ( $individuals as $individual ){
         if (
             ( $individual->ID != $current_user_id ) // Exclude applicant
             && ( $include_admin // Include admin if this is set
-                 || ( $individual->ID !== 1 ) ) // Otherwise exclude them
+                 || ( $individual->ID !== 1 ) )
+            && ( ! in_array ( $individual->ID, $cannots_ids ) )
         ) {
             $members[] = array(
                 $individual->ID,
