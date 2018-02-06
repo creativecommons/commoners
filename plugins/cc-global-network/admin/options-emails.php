@@ -248,7 +248,7 @@ function ccgn_settings_emails_options_voucher_cannot () {
         'Message',
         'ccgn_settings_emails_voucher_cannot_message',
         'global-network-emails',
-        'ccgn-email-voucher_cannot'
+        'ccgn-email-voucher-cannot'
     );
 }
 
