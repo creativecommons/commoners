@@ -753,8 +753,8 @@ function ccgn_set_vouchers_options ( $form ) {
                     $locked[] = ! $voucher_cannot;
                 }
             ?>
-            var existing_choices = <?php json_encode( $existing ) ?>;
-            var lock_selects = <?php json_encode( $locked ) ?>;
+            var existing_choices = <?php echo json_encode( $existing ) ?>;
+            var lock_selects = <?php echo json_encode( $locked ) ?>;
             jQuery("select").each(function(i, select) {
                 select.val(existing_choices[i])
                       .prop('disabled', lock_selects[i])
