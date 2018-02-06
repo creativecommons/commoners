@@ -340,7 +340,7 @@ function ccgn_settings_emails_render () {
     </div>
     <p>The following substitutions can be made (where appropriate):
        *|APPLICANT_NAME|* *|VOUCHER_NAME|* *|APPLICANT_ID|*
-       *|APPLICANT_PROFILE_URL|* *|SITE_URL|* .</p>
+       *|APPLICANT_PROFILE_URL|* *|SITE_URL|* *|APPLICATION_FORM_URL|* .</p>
     <p><i>Note that SITE_URL does not have a terminating slash!</i></p>
     <?php
 }

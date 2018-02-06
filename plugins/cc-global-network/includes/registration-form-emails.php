@@ -41,6 +41,14 @@ function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
         bp_core_get_userlink($applicant_id, false, true),
         $result
     );
+    $applicant_type = 'individual';
+    if ( ccgn_user_is_institutional_applicant ( $applicant_id ) ) {
+        $applicant_type = 'institution';
+    }
+    $result = ccgn_registration_email_sub(
+        'APPLICATION_FORM_URL',
+        get_site_url() . '/sign-up/' . $applicant_type . '/form/',
+        $result);
     return $result;
 }
 
