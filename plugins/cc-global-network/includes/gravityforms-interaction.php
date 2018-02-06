@@ -434,7 +434,7 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
     );
 }
 
-// Does the user have any Vouchers who have declined to vouch
+// Does the user have any Vouchers who have declined to vouch?
 
 function ccgn_application_vouches_has_cannots( $applicant_id ) {
     return ccgn_application_vouches_counts ( $applicant_id )[ 'cannot' ] > 0;
