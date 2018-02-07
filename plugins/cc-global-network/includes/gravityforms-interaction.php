@@ -1081,7 +1081,7 @@ function ccgn_choose_vouchers_maybe_update_voucher ( $editentry, $num ) {
 }
 
 function ccgn_choose_vouchers_pre_submission ( $form ) {
-    if ( $form[ 'name' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
+    if ( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
         $applicant_id = wp_get_current_user();
         // Check to see if the user is updating the form
         $existing = ccgn_application_vouchers ( $applicant_id );
