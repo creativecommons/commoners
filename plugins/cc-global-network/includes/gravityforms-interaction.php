@@ -754,9 +754,18 @@ function ccgn_set_vouchers_options ( $form ) {
             // We have to run this code next time around the event loop
             setTimeout(function () {
                 jQuery("select").each(function(i) {
-                     jQuery(this).val(existing_choices[i])
-                          .prop('disabled', existing_choices[i] !== "")
-                          .trigger("chosen:updated");
+                     var doNotUpdate = existing_choices[i] !== '';
+                     var select = jQuery(this);
+                     select.val(existing_choices[i])
+                          .prop('disabled', doNotUpdate)
+                          .trigger('chosen:updated');
+                     // Not used on server but here to keep form happy
+                     if (doNotUpdate) {
+                         jQuery('<input type="hidden" name="'
+                                + select.attr('name') + '" value="'
+                                + existing_choices[i] + '">')
+                             .insertAfter(select);
+                     }
                 })
             }, 0);
             <?php } ?>
