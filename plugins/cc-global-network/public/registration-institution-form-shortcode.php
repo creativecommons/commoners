@@ -71,7 +71,7 @@ function ccgn_registration_institution_shortcode_render_view ( $user ) {
         break;
     case CCGN_APPLICATION_STATE_RECEIVED:
     case CCGN_APPLICATION_STATE_VOUCHING:
-        if ( ccgn_application_vouches_has_cannots( $user->ID ) ) {
+        if ( ccgn_application_choose_vouchers_form_has_cannots( $user->ID ) ) {
             gravity_form( CCGN_GF_CHOOSE_VOUCHERS, false, false );
         } else {
             echo _( '<h2>Thank you for applying to join the Creative Commons Global Network</h2></p><p>Your application has been received.</p><p>It will take several days to be reviewed.</p><p>If you have any questions you can <a href="/contact/">contact us.</a></p>' );

@@ -440,6 +440,15 @@ function ccgn_application_vouches_has_cannots( $applicant_id ) {
     return ccgn_application_vouches_counts ( $applicant_id )[ 'cannot' ] > 0;
 }
 
+// Does the current state of the Vouching request form contain any Vouchers
+// who have declined to vouch?
+
+function ccgn_application_choose_vouchers_form_has_cannots( $applicant_id ) {
+    $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
+    $cannots = ccgn_application_vouches_cannots_voucher_ids ( $applicant_id );
+    return array_intersect($vouchers, $cannots) != [];
+}
+
 // A predicate function for sorting. Is this Vouching result a 'Cannot' rather
 // than a 'Yes' or a 'No'?
 
