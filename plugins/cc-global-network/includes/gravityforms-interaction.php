@@ -1051,6 +1051,7 @@ function ccgn_applicant_gravatar_selected ( $applicant_id ) {
 
 // Handle vouch form updating (if one or more Vouchers said they Cannot vouch)
 
+
 function ccgn_user_exists_and_cannot_vouch_for_applicant ( $user_id,
                                                            $applicant_id ) {
     $result = false;
@@ -1073,12 +1074,17 @@ function ccgn_choose_vouchers_maybe_update_voucher ( $editentry, $num ) {
     $field = 'input_' . $num;
     $voucher = $_POST[ $field ];
     $applicant = $editentry[ 'created_by' ];
+// FIXME:
+// User must exist and not already have or be vouching
     if ( ! ccgn_user_exists_and_cannot_vouch_for_applicant (
         $voucher,
         $applicant
     ) ) {
-        $editentry[ $num ] = $voucher;
-        $result = true;
+        // Don't mark unchanged fields as updated
+        if ( ! $editentry[ $num ] == $voucher ) {
+            $editentry[ $num ] = $voucher;
+            $result = true;
+        }
     }
     return $result;
 }
@@ -1087,8 +1093,8 @@ function ccgn_choose_vouchers_pre_submission ( $form ) {
     if ( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
         $applicant_id = get_current_user_id();
         // Check to see if the user is updating the form
-        $editentries = ccgn_application_vouchers( $applicant_id );
-        if ( $editentries ) {
+        $editentry = ccgn_application_vouchers( $applicant_id );
+        if ( $editentry ) {
             // The user should only be updating the form if a Voucher(s)
             // has said that they cannot vouch for this application.
             if ( ! ccgn_application_choose_vouchers_form_has_cannots(
