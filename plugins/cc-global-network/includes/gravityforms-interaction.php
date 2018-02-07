@@ -1073,7 +1073,10 @@ function ccgn_choose_vouchers_maybe_update_voucher ( $editentry, $num ) {
     $field = 'input_' . $num;
     $voucher = $_POST[ $field ];
     $applicant = $editentry[ 'created_by' ];
-    if ( ccgn_user_exists_and_cannot_vouch ( $voucher, $applicant) ) {
+    if ( ccgn_user_exists_and_cannot_vouch_for_applicant (
+        $voucher,
+        $applicant
+    ) ) {
         $editentry[ $num ] = $voucher;
         $result = true;
     }
@@ -1082,7 +1085,7 @@ function ccgn_choose_vouchers_maybe_update_voucher ( $editentry, $num ) {
 
 function ccgn_choose_vouchers_pre_submission ( $form ) {
     if ( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
-        $applicant_id = wp_get_current_user();
+        $applicant_id = get_current_user_id();
         // Check to see if the user is updating the form
         $existing = ccgn_application_vouchers ( $applicant_id );
         if ( $existing ){
@@ -1095,10 +1098,11 @@ function ccgn_choose_vouchers_pre_submission ( $form ) {
                 $new_vouchers = [];
                 // Check if each field has updated, note which have
                 foreach (CCGN_GF_VOUCH_VOUCHER_FIELDS as $vf) {
-                    $voucher_changed |= ccgn_vouching_maybe_update_voucher (
-                        $editentry,
-                        $vf
-                    );
+                    $voucher_changed
+                        |=  ccgn_choose_vouchers_maybe_update_voucher (
+                            $editentry,
+                            $vf
+                        );
                     if ($voucher_changed) {
                         $new_vouchers[] = $editentry[ $vf ];
                     }
