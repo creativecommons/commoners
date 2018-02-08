@@ -370,7 +370,7 @@ function ccgn_create_profile_fields_individual () {
         'A brief biography for the member',
         1,
         false,
-        'textbox',
+        'texarea',
         'individual-member'
     );
     ccgn_buddypress_member_field(
@@ -421,7 +421,7 @@ function ccgn_create_profile_fields_individual () {
         'Links to the user\'s publicly shareable web sites, social media profiles etc.',
         6,
         false,
-        'textbox',
+        'textarea',
         'individual-member'
     );
 }
