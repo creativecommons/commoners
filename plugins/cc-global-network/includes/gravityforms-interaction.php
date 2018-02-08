@@ -417,14 +417,21 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
     $no = 0;
     $cannot = 0;
     $vouches = ccgn_application_vouches( $applicant_id );
+    // Make sure to only count one vouch for each Voucher
+    // this is to avoid any glitches in submission being counted
+    $vouchers = [];
     foreach ($vouches as $vouch) {
-        $did_they = $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ];
-        if ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_YES ) {
-            $yes += 1;
-        } elseif ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_YES ) {
-            $no += 1;
-        } else {
-            $cannot += 1;
+        $voucher = $vouch[ 'created_by' ];
+        if ( ! in_array( $voucher, $vouchers ) ) {
+            $did_they = $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ];
+            if ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_YES ) {
+                $yes += 1;
+            } elseif ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_YES ) {
+                $no += 1;
+            } else {
+                $cannot += 1;
+            }
+            $vouchers[] = $voucher;
         }
     }
     return array(
@@ -494,14 +501,21 @@ function ccgn_application_votes_counts ( $applicant_id ) {
     $yes = 0;
     $no = 0;
     $votes = ccgn_application_votes( $applicant_id );
+    // Make sure to only count one vote for each Voter
+    // this is to avoid any glitches in submission being counted
+    $voters = [];
     foreach ($votes as $vote) {
-        $did_they = $vote[
-            CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
-        ];
-        if ( $did_they == CCGN_GF_VOTE_APPROVED_YES ) {
-            $yes += 1;
-        } else  {
-            $no += 1;
+        $voter = $vote[ 'created_by' ];
+        if ( ! in_array( $voter, $voters ) ) {
+            $did_they = $vote[
+                CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
+            ];
+            if ( $did_they == CCGN_GF_VOTE_APPROVED_YES ) {
+                $yes += 1;
+            } else  {
+                $no += 1;
+            }
+            $voters[] = $voter;
         }
     }
     return array(
