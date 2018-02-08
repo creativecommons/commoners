@@ -530,8 +530,12 @@ function ccgn_filter_role_groups ( $groups, $args ) {
 }
 
 function _bp_hide_profile_field_group( $retval ) {
-    if ( !is_super_admin() ) {
-        $retval['exclude_groups'] = '1';
+    $retval['exclude_groups'] =  ccgn_profile_group_id_by_name (
+        CCGN_PROFILE_FIELD_GROUP_INSTITUTION
+    );
+    if ( ! is_super_admin() ) {
+        // Prepend 1 to value
+        $retval['exclude_groups'] = '1,' . $retval['exclude_groups'];
     }
     return $retval;
 }
