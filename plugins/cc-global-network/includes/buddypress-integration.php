@@ -530,13 +530,24 @@ function ccgn_filter_role_groups ( $groups, $args ) {
 }
 
 function _bp_hide_profile_field_group( $retval ) {
-    $retval['exclude_groups'] =  ccgn_profile_group_id_by_name (
-        CCGN_PROFILE_FIELD_GROUP_INSTITUTION
-    );
-    if ( ! is_super_admin() ) {
-        // Prepend 1 to value
-        $retval['exclude_groups'] = '1,' . $retval['exclude_groups'];
+    $exclude = [];
+    $member_id = get_current_user_id();
+    if ( ccgn_member_is_individual( $member_id ) ) {
+        $exclude[] = ccgn_profile_group_id_by_name (
+            CCGN_PROFILE_FIELD_GROUP_INSTITUTION
+        );
     }
+    if ( ccgn_member_is_institution( $member_id ) ) {
+        $exclude[] = ccgn_profile_group_id_by_name (
+            CCGN_PROFILE_FIELD_GROUP_INDIVIDUAL
+        );
+    }
+    if ( ! is_super_admin() ) {
+        $exclude[] = 1;
+        // Prepend 1 to value
+    }
+    sort( $exclude );
+    $retval['exclude_groups'] = implode( ',', $exclude );
     return $retval;
 }
 
