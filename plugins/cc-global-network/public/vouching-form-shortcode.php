@@ -72,7 +72,7 @@ function ccgn_vouching_requests_render ( $voucher_id ) {
         }
         echo "</ul>";
     } else {
-        echo _( "<h2>No Requests</h2><p>There are currently no Vouching requests waiting for you.</p>" );
+        echo _( "<h3>No Requests</h3><p>There are currently no Vouching requests waiting for you.</p>" );
     }
 }
 
@@ -181,23 +181,25 @@ function ccgn_application_vouching_form_submit_handler ( $entry,
                                                          $form ) {
     if ( $form[ 'title' ] == CCGN_GF_VOUCH ) {
         $applicant_id = $entry[ CCGN_GF_VOUCH_APPLICANT_ID ];
+        $voucher_id = $entry[ 'created_by' ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
-        // Unlikely, but just in case
+        // At this point in form processing we shouldn't disturb the submitter,
+        // but should log this and not do anything else based on it.
         if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
-            echo 'User not vouching.';
+            error_log(
+                "Vouch by " . $voucher_id . " for applicant " . $applicant_id
+                . " while at non-Vouching stage: " . $stage
+            );
             return;
         }
-        $voucher_id = $entry[ 'created_by' ];
         if (
             $entry[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
-             == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT
+            == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT
         ) {
             ccgn_registration_email_voucher_cannot (
                 $applicant_id,
                 $voucher_id
             );
-        } else {
-            ccgn_evaluate_and_maybe_finalize_application ( $applicant_id );
         }
     }
 }
