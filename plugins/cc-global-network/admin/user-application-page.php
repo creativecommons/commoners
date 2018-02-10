@@ -71,49 +71,6 @@ function ccgn_application_users_page_vote_counts ( $applicant_id ) {
         . '</p>';
 }
 
-// Format the list of vouches the member has received from their vouchers
-
-function ccgn_application_users_page_vouch_responses ( $applicant_id ) {
-    $result = '';
-    $vouches = ccgn_application_vouches ( $applicant_id );
-    foreach ($vouches as $vouch) {
-        $voucher = get_user_by('ID', $vouch['created_by']);
-        $result .=
-                '<h4>From: '
-                . $voucher->display_name
-                . '</h4><p><strong>Vouched:</strong> '
-                . $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
-                . '</p><p><strong>Reason:</strong> '
-                . $vouch[ CCGN_GF_VOUCH_REASON ]
-                . '</p>';
-    }
-    return $result;
-}
-
-// Format the count of vouches
-
-function ccgn_application_users_page_vouch_counts ( $applicant_id ) {
-    $counts = ccgn_application_vouches_counts( $applicant_id );
-    return '<p><strong>Cannot: </strong>'
-        . $counts['cannot']
-        . '<p><strong>Yes: </strong>'
-        . $counts['yes']
-        . '<p><strong>No: </strong>'
-        . $counts['no']
-        . '</p>';
-}
-
-// Format the list of members the applicant has asked to vouch for them
-
-function ccgn_application_users_page_vouchers ( $applicant_id ) {
-    $result = '';
-    $vouchers = ccgn_application_vouchers_users ( $applicant_id );
-    foreach ( $vouchers as $voucher ) {
-        $result .= '<p>' . $voucher->display_name  . '</p>';
-    }
-    return $result;
-}
-
 function ccgn_registration_email_vouching_requests ( $applicant_id ) {
     $vouchers_ids = ccgn_application_vouchers_users_ids ( $applicant_id );
     foreach ( $vouchers_ids as $voucher_id ) {
@@ -404,38 +361,9 @@ function ccgn_application_format_legal_approval ( $applicant_id, $state ) {
     }
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Render the page
 ////////////////////////////////////////////////////////////////////////////////
-
-function ccgn_application_users_page_applicant () {
-    $applicant_id = filter_input(
-        INPUT_GET,
-        'user_id',
-        FILTER_VALIDATE_INT
-    );
-    if ( $applicant_id === false ) {
-        echo _( '<br />Invalid user id.' );
-    } elseif ( $applicant_id === null ) {
-        echo _( '<br />No user id specified.' );
-        $applicant_id = false;
-    } elseif ( $applicant_id == get_current_user_id() ) {
-        echo _( '<br />You cannot edit your own application status' );
-        $applicant_id = false;
-    } else {
-        $applicant = get_user_by( 'ID', $applicant_id );
-        if( $applicant === false ) {
-            echo _( '<br />Invalid user specified.' );
-            $applicant_id = false;
-            //FIXME: Check if really autovouched, check if not and should be
-        } elseif ( ccgn_user_is_autovouched( $applicant_id ) ) {
-            echo '<br><h4><i>User was autovouched, no application details.</i></h4>';
-            $applicant_id = false;
-        }
-    }
-    return $applicant_id;
-}
 
 function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
     if ( $state == CCGN_APPLICATION_STATE_RECEIVED ) {
@@ -482,7 +410,7 @@ function ccgn_application_users_page () {
     if ( ! ccgn_current_user_can_see_user_application_page () ) {
         echo _( '<br />Sorry, you are not allowed to access this page.' );
     }
-    $applicant_id = ccgn_application_users_page_applicant ();
+    $applicant_id = ccgn_request_applicant_id ();
     if ( $applicant_id === false ) {
         return;
     }

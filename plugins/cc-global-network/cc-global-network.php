@@ -52,6 +52,7 @@ require_once(CCGN_PATH . 'admin/user-application-page.php');
 require_once(CCGN_PATH . 'admin/user-pre-approve-list-page.php');
 require_once(CCGN_PATH . 'admin/user-final-approval-list-page.php');
 require_once(CCGN_PATH . 'admin/user-legal-approval-list-page.php');
+require_once(CCGN_PATH . 'admin/user-vouchers-change-page.php');
 
 // Vouching UI for existing members to vouch for new applicant
 
@@ -154,6 +155,7 @@ add_action( 'gform_validation', 'ccgn_agree_to_terms_validate' );
 // Populate voucher selects
 
 add_action( 'gform_pre_render', 'ccgn_set_vouchers_options' );
+add_action( 'gform_pre_render', 'ccgn_set_vouchers_changeable' );
 
 add_action( "gform_pre_submission", "ccgn_choose_vouchers_pre_submission" );
 
@@ -200,6 +202,22 @@ add_action(
 );
 
 ////////////////////////////////////////////////////////////////////////////////
+// Admin forms
+////////////////////////////////////////////////////////////////////////////////
+
+add_filter(
+    'gform_validation',
+    'ccgn_application_change_vouchers_validate'
+);
+
+add_action(
+    'gform_after_submission',
+    'ccgn_application_change_vouchers_after_submission',
+    10,
+    2
+);
+
+////////////////////////////////////////////////////////////////////////////////
 // Form for existing members vouching for new applicant
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -234,6 +252,7 @@ if ( is_admin() ){
     add_action( 'admin_menu', 'ccgn_settings_emails_register' );
     add_action( 'admin_menu', 'ccgn_application_pre_approval_menu' );
     add_action( 'admin_menu', 'ccgn_application_legal_approval_menu' );
+    add_action( 'admin_menu', 'ccgn_application_change_vouchers_menu' );
     add_filter( 'user_row_actions', 'ccgn_application_user_link', 10, 2 );
     // Filter applicant user page form approve/declines to hook user profile
     // creation and notification email sending.

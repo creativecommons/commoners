@@ -200,6 +200,8 @@ function ccgn_application_vouching_form_submit_handler ( $entry,
                 $applicant_id,
                 $voucher_id
             );
+        } else {
+
         }
     }
 }

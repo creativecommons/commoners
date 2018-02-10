@@ -29,7 +29,12 @@ define( 'CCGN_GF_VOTE', 'Vote on Membership' );
 define( 'CCGN_GF_FINAL_APPROVAL', 'Final Approval' );
 
 // Legal team final approval of Institutional Members
+
 define( 'CCGN_GF_LEGAL_APPROVAL', 'Legal Approval' );
+
+// Admin updating Application details
+
+define( 'CCGN_GF_ADMIN_CHANGE_VOUCHERS', 'Administrator Change Vouchers' );
 
 // Individual fields in forms
 
@@ -81,6 +86,16 @@ define( 'CCGN_GF_FINAL_APPROVAL_APPLICANT_ID', '3' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID', '3' );
+
+define( 'CCGN_GF_ADMIN_CHANGE_VOUCHERS_VOUCHER_1', '1' );
+define( 'CCGN_GF_ADMIN_CHANGE_VOUCHERS_VOUCHER_2', '2' );
+define( 'CCGN_GF_ADMIN_CHANGE_VOUCHERS_ORIGINAL_VOUCHER_1', '3' );
+define( 'CCGN_GF_ADMIN_CHANGE_VOUCHERS_ORIGINAL_VOUCHER_2', '4' );
+define( 'CCGN_GF_ADMIN_CHANGE_VOUCHERS_APPLICANT_ID', '5' );
+define(
+    'CCGN_GF_ADMIN_CHANGE_VOUCHERS_APPLICANT_ID_PARAMETER',
+    'applicant_id'
+);
 
 // Field values that we need to check
 
@@ -725,15 +740,37 @@ function ccgn_registration_form_list_members ( $current_user_id ) {
     return $members;
 }
 
+function ccgn_change_vouchers_form_list_members( $current_member ) {
+    //TODO
+}
+
+function ccgn_set_vouchers_options_members ( $current_user, $form ) {
+    //    if( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
+        $members = ccgn_registration_form_list_members( $current_user );
+        //    } elseif( $form[ 'title' ] == CCGN_GF_ADMIN_CHANGE_VOUCHERS ) {
+        //        $members = ccgn_change_vouchers_form_list_members( $current_user );
+        //    }
+    return $members;
+}
+
 // Why do it like this? To save download space rather than send thousands
 // of options for each of several selects.
 // Search terms:
 // how do I dynamically populate a gravityforms select using javascript ?
 
+//FIXME: break out into a function that takes $members and wrap for each form
+
 function ccgn_set_vouchers_options ( $form ) {
-    if( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
-        $current_member = get_current_user_id();
-        $members = ccgn_registration_form_list_members( $current_member );
+    if( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS
+        || $form[ 'title' ] == CCGN_GF_ADMIN_CHANGE_VOUCHERS ) {
+        if ( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
+            $exclude_user = get_current_user_id();
+        } else {
+            $exclude_user = rgpost (
+                "input_" . CCGN_GF_ADMIN_CHANGE_VOUCHERS_APPLICANT_ID
+            );
+        }
+        $members = ccgn_set_vouchers_options_members ( $exclude_user, $form );
         ?>
         <script type="text/javascript">
         var ccgn_members = <?php echo json_encode( $members ); ?>;
@@ -756,45 +793,54 @@ function ccgn_set_vouchers_options ( $form ) {
                 }
                 return options;
             });
-            <?php
-            $voucher_form = ccgn_application_vouchers ( $current_member );
-            if ($voucher_form) {
-                $cannots = ccgn_application_vouches_cannots_voucher_ids(
-                    $current_member
-                );
-                $existing = [];
-                foreach (CCGN_GF_VOUCH_VOUCHER_FIELDS as $field) {
-                    $voucher_id = $voucher_form[ $field ];
-                    $voucher_cannot = in_array( $voucher_id, $cannots );
-                    // Remove Vouchers who have said they Cannot vouch
-                    if ($voucher_cannot) {
-                        $voucher_id = '';
-                    }
-                    $existing[] = $voucher_id;
-            }
-            ?>
-            var existing_choices = <?php echo json_encode( $existing ) ?>;
-            // We have to run this code next time around the event loop
-            setTimeout(function () {
-                jQuery("select").each(function(i) {
-                     var doNotUpdate = existing_choices[i] !== '';
-                     var select = jQuery(this);
-                     select.val(existing_choices[i])
-                          .prop('disabled', doNotUpdate)
-                          .trigger('chosen:updated');
-                     // Not used on server but here to keep form happy
-                     if (doNotUpdate) {
-                         jQuery('<input type="hidden" name="'
-                                + select.attr('name') + '" value="'
-                                + existing_choices[i] + '">')
-                             .insertAfter(select);
-                     }
-                })
-            }, 0);
-            <?php } ?>
         });
         </script>
         <?php
+    }
+    return $form;
+}
+
+function ccgn_set_vouchers_changeable ( $form ) {
+    if( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
+        $current_user = get_current_user_id();
+        $voucher_form = ccgn_application_vouchers ( $current_user );
+        if ($voucher_form) {
+            $cannots = ccgn_application_vouches_cannots_voucher_ids(
+                $current_user
+            );
+            $existing = [];
+            foreach(CCGN_GF_VOUCH_VOUCHER_FIELDS as $field) {
+                $voucher_id = $voucher_form[ $field ];
+                $voucher_cannot = in_array( $voucher_id, $cannots );
+                // Remove Vouchers who have said they Cannot vouch
+                if($voucher_cannot) {
+                    $voucher_id = '';
+                }
+                $existing[] = $voucher_id;
+            }
+        ?>
+        <script type="text/javascript">
+        var ccgn_existing_choices = <?php echo json_encode( $existing ) ?>;
+        jQuery(document).ready(function(){
+            // We have to run this code next time around the event loop
+            setTimeout(function (){
+                jQuery("select").each(function(i) {
+                    var doNotUpdate = (ccgn_existing_choices[i] !== '');
+                    var select = jQuery(this);
+                    select.val(existing_choices[i])
+                          .prop('disabled', doNotUpdate)
+                          .trigger('chosen:updated');
+                    // Not used on server but here to keep form validation happy
+                    if(doNotUpdate){
+                        jQuery('<input type="hidden" name="'
+                               + select.attr('name') + '" value="'
+                               + existing_choices[i] + '">')
+                            .insertAfter(select);
+                    }
+                })
+            }, 0);
+        });
+   <?php }
     }
     return $form;
 }
@@ -1069,6 +1115,7 @@ function ccgn_applicant_gravatar_selected ( $applicant_id ) {
 // they are updating their Voucher requests.
 // This does not check whether the Voucher is already in another field of the
 // form, we rely on GravityForms to detect that.
+// This is also used in admin/user-vouchers-change-page.php
 
 function ccgn_voucher_can_be_chosen_by_applicant( $voucher_id,
                                                   $applicant_id ) {
@@ -1167,4 +1214,94 @@ function ccgn_choose_vouchers_pre_submission ( $form ) {
             die();
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Vouch presentation
+////////////////////////////////////////////////////////////////////////////////
+
+// Format the list of vouches the member has received from their vouchers
+
+function ccgn_application_users_page_vouch_responses ( $applicant_id ) {
+    $result = '';
+    $vouches = ccgn_application_vouches ( $applicant_id );
+    foreach ($vouches as $vouch) {
+        $voucher = get_user_by('ID', $vouch['created_by']);
+        $result .=
+                '<h4>From: '
+                . $voucher->display_name
+                . '</h4><p><strong>Vouched:</strong> '
+                . $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
+                . '</p><p><strong>Reason:</strong> '
+                . $vouch[ CCGN_GF_VOUCH_REASON ]
+                . '</p>';
+    }
+    return $result;
+}
+
+// Format the count of vouches
+
+function ccgn_application_users_page_vouch_counts ( $applicant_id ) {
+    $counts = ccgn_application_vouches_counts( $applicant_id );
+    return '<p><strong>Cannot: </strong>'
+        . $counts['cannot']
+        . '<p><strong>Yes: </strong>'
+        . $counts['yes']
+        . '<p><strong>No: </strong>'
+        . $counts['no']
+        . '</p>';
+}
+
+// Format the list of members the applicant has asked to vouch for them
+
+function ccgn_application_users_page_vouchers ( $applicant_id ) {
+    $result = '';
+    $vouchers = ccgn_application_vouchers_users ( $applicant_id );
+    foreach ( $vouchers as $voucher ) {
+        $result .= '<p>' . $voucher->display_name  . '</p>';
+    }
+    return $result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Reporting
+////////////////////////////////////////////////////////////////////////////////
+
+// Date must be yyyy-mm-dd
+
+function ccgn_new_individual_members_since ( $start_date, $end_date ) {
+    $form_id = RGFormsModel::get_form_id( CCGN_GF_FINAL_APPROVAL );
+    $search_criteria = array (
+        'start_date' => $start_date,
+        'end_date' => $end_date,
+        'field_filters' => array (
+            array(
+                'key' => CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION,
+                'value' => CCGN_GF_FINAL_APPROVAL_APPROVED_YES
+            ),
+        )
+    );
+    return GFAPI::get_entries(
+        $form_id,
+        $search_criteria,
+        array(
+            array(
+                'key' => 'date',
+                'direction' => 'DESC',
+                'is_numeric' => false
+            )
+        ),
+        array( 'offset' => 0, 'page_size' => 1000000 )
+    );
+}
+
+function ccgn_new_individual_members_since_emails ( $start_date, $end_date ) {
+    $emails = [];
+    $members = ccgn_new_individual_members_since( $start_date, $end_date );
+    foreach ( $members as $member ) {
+        $member_id = $member [ CCGN_GF_FINAL_APPROVAL_APPLICANT_ID ];
+        $user = get_user_by ( 'ID', $member_id );
+        $emails[] = $user->user_email;
+    }
+    return $emails;
 }

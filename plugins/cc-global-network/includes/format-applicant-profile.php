@@ -3,6 +3,38 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 ////////////////////////////////////////////////////////////////////////////////
+// Get applicant details from request (if provided)
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_request_applicant_id () {
+    $applicant_id = filter_input(
+        INPUT_GET,
+        'user_id',
+        FILTER_VALIDATE_INT
+    );
+    if ( $applicant_id === false ) {
+        echo _( '<br />Invalid user id.' );
+    } elseif ( $applicant_id === null ) {
+        echo _( '<br />No user id specified.' );
+        $applicant_id = false;
+    } elseif ( $applicant_id == get_current_user_id() ) {
+        echo _( '<br />You cannot edit your own application status' );
+        $applicant_id = false;
+    } else {
+        $applicant = get_user_by( 'ID', $applicant_id );
+        if( $applicant === false ) {
+            echo _( '<br />Invalid user specified.' );
+            $applicant_id = false;
+            //FIXME: Check if really autovouched, check if not and should be
+        } elseif ( ccgn_user_is_autovouched( $applicant_id ) ) {
+            echo '<br><h4><i>User was autovouched, no application details.</i></h4>';
+            $applicant_id = false;
+        }
+    }
+    return $applicant_id;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // The details the user provided.
 ////////////////////////////////////////////////////////////////////////////////
 
