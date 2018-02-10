@@ -58,7 +58,7 @@ function ccgn_applicant_type_desc ( $user_id ) {
     if ( ccgn_user_is_individual_applicant( $user_id ) ) {
         $type = 'Individual';
     } elseif ( ccgn_user_is_institutional_applicant( $user_id ) ) {
-        $type = 'Insitutution';
+        $type = 'Institution';
     }
     return $type;
 }
