@@ -47,7 +47,7 @@ function ccgn_application_users_page_vote_responses ( $applicant_id ) {
     $result = '';
     $votes = ccgn_application_votes ( $applicant_id );
     foreach ($votes as $vote) {
-        $voter = get_user_by('ID', $vouch['created_by']);
+        $voter = get_user_by('ID', $vote['created_by']);
         $result .=
                 '<h4>From: '
                 . $voter->display_name
