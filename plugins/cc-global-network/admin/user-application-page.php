@@ -410,6 +410,10 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
     echo _('<h2>Vouchers Requested</h2>');
     echo ccgn_application_users_page_vouchers( $applicant_id );
     if ( $state != CCGN_APPLICATION_STATE_RECEIVED ) {
+        ccgn_application_user_page_render_change_vouchers (
+            $applicant_id,
+            $state
+        );
         echo _('<h2>Vouches Received</h2>');
         echo ccgn_application_users_page_vouch_counts ( $applicant_id );
         echo _('<h2>Vouches</h2>');
@@ -436,7 +440,6 @@ function ccgn_application_users_page () {
     if ( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
         ccgn_application_format_legal_approval( $applicant_id, $state );
     }
-    ccgn_application_user_page_render_change_vouchers ( $applicant_id, $state );
 }
 
 function ccgn_application_user_application_page_url( $user_id ) {

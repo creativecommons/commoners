@@ -167,7 +167,7 @@ function ccgn_application_change_vouchers_page_url( $user_id ) {
 function ccgn_application_vouches_link( $actions, $user_object ) {
     // Only show this if the user is at the pre-approval or vouching stages
     if ( current_user_can( 'ccgn_pre_approve' )
-         && ( ccgn_registration_user_get_stage( $applicant_id )
+         && ( ccgn_registration_user_get_stage( $user_object->ID )
               == CCGN_APPLICATION_STATE_VOUCHING) ) {
         $actions['ccgn_vouchers']
             = '<a href="'

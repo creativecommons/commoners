@@ -254,6 +254,7 @@ if ( is_admin() ){
     add_action( 'admin_menu', 'ccgn_application_legal_approval_menu' );
     add_action( 'admin_menu', 'ccgn_application_change_vouchers_menu' );
     add_filter( 'user_row_actions', 'ccgn_application_user_link', 10, 2 );
+    add_filter( 'user_row_actions', 'ccgn_application_vouches_link', 10, 2 );
     // Filter applicant user page form approve/declines to hook user profile
     // creation and notification email sending.
     add_action(
