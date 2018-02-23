@@ -118,6 +118,7 @@ function ccgn_application_change_vouchers_page () {
     }
     $applicant = get_user_by('ID', $applicant_id);
     echo '<h2>' . $applicant->display_name . '</h2>';
+    echo _('<b><i>Warning! Be very careful changing things here!</i></b>');
     echo _('</p>Note carefully which Members have already completed a Vouching request, do not choose those as replacement Vouchers.</p>');
     echo _('</p>If you choose a new Voucher here, the Applicant\'s Vouching Request form will be updated and the new Vouchers will be emailed a notification to Vouch for the Applicant..</p>');
     echo _('<h2>Vouches Received</h2>');
