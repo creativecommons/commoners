@@ -365,6 +365,22 @@ function ccgn_application_format_legal_approval ( $applicant_id, $state ) {
 // Render the page
 ////////////////////////////////////////////////////////////////////////////////
 
+function ccgn_application_user_page_render_change_vouchers ( $applicant_id,
+                                                             $state ) {
+    if ( current_user_can( 'ccgn_pre_approve' ) ) {
+        echo _('<h3>Change Vouch Requests</h3>');
+        if ( $state == CCGN_APPLICATION_STATE_VOUCHING ) {
+            echo '<p><a href="'
+                . ccgn_application_change_vouchers_page_url( $applicant_id )
+                . '">';
+            echo _('Change vouch requests for applicant.');
+            echo '</a></p>';
+        } else {
+            echo _('<p>Applicant is not currently being Vouched, cannot change Vouch Requests.</p>');
+        }
+    }
+}
+
 function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
     if ( $state == CCGN_APPLICATION_STATE_RECEIVED ) {
         echo _('<h3>Pre-Approve</h3>');
@@ -420,6 +436,7 @@ function ccgn_application_users_page () {
     if ( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
         ccgn_application_format_legal_approval( $applicant_id, $state );
     }
+    ccgn_application_user_page_render_change_vouchers ( $applicant_id, $state );
 }
 
 function ccgn_application_user_application_page_url( $user_id ) {
