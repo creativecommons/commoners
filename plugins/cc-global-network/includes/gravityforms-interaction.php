@@ -827,7 +827,7 @@ function ccgn_set_vouchers_changeable ( $form ) {
                 jQuery("select").each(function(i) {
                     var doNotUpdate = (ccgn_existing_choices[i] !== '');
                     var select = jQuery(this);
-                    select.val(existing_choices[i])
+                    select.val(ccgn_existing_choices[i])
                           .prop('disabled', doNotUpdate)
                           .trigger('chosen:updated');
                     // Not used on server but here to keep form validation happy
