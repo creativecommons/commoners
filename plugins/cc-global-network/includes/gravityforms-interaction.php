@@ -840,6 +840,7 @@ function ccgn_set_vouchers_changeable ( $form ) {
                 })
             }, 0);
         });
+      </script>
    <?php }
     }
     return $form;
