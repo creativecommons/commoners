@@ -87,8 +87,7 @@ function ccgn_vouching_shortcode_render ( $atts ) {
         echo '<h3>You must be logged in to Vouch</h3>';
         echo '<p>You can log in with your CCID here:</p>';
         echo '<a class="cc-btn" href="'
-            . 'https://login.creativecommons.org/login?service='
-            . get_permalink()
+            . wp_login_url( get_permalink() )
             . '">Log in</a>';
         return;
     }
