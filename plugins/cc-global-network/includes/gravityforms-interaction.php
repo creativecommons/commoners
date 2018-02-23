@@ -834,7 +834,7 @@ function ccgn_set_vouchers_changeable ( $form ) {
                     if(doNotUpdate){
                         jQuery('<input type="hidden" name="'
                                + select.attr('name') + '" value="'
-                               + existing_choices[i] + '">')
+                               + ccgn_existing_choices[i] + '">')
                             .insertAfter(select);
                     }
                 })
