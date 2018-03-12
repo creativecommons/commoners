@@ -182,3 +182,11 @@ function ccgn_user_page_applicant_profile_text ( $applicant_id ) {
         return "<p>Error: newbie.</p>";
     }
 }
+
+function ccgn_applicant_display_name ( $applicant_id ) {
+    if ( ccgn_user_is_individual_applicant ( $applicant_id ) ) {
+        return get_userdata('ID', $voucher_id)->display_name;
+    } else {
+        return ccgn_institutional_applicant_name ( $applicant_id );
+    }
+}

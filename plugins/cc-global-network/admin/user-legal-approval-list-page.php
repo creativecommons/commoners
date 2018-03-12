@@ -21,7 +21,7 @@ function ccgn_list_applications_for_legal_approval () {
         echo '<tr style="background: #FFCCE5;"><td><a href="'
             . ccgn_application_user_application_page_url( $user_id )
             . '">'
-            . $user->user_nicename
+            . ccgn_applicant_display_name ( $applicant_id )
             . '</a></td><td>'
             . ccgn_applicant_type_desc( $user_id )
             . '</td><td>'
