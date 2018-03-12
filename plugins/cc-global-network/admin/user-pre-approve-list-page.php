@@ -18,7 +18,11 @@ function ccgn_list_applications_for_pre_approval () {
         $user = get_user_by('ID', $user_id);
         // The last form the user filled out, so the time to use
         $vouchers_entry = ccgn_application_vouchers($user_id);
-        echo '<tr><td><a href="'
+        echo '<tr';
+        if ( ccgn_user_is_institutional_applicant ( $user_id ) ) {
+            echo ' style="background: #FFCCE5;"';
+        }
+        echo '><td><a href="'
             . ccgn_application_user_application_page_url( $user_id )
             . '">'
             . $user->user_nicename

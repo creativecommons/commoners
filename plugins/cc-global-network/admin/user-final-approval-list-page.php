@@ -76,7 +76,11 @@ function ccgn_list_applications_for_final_approval () {
         if ($vote_counts[ 'no' ] > 0) {
             $vote_no_style = ' style="font-weight: bold"';
         }
-        echo '<tr><td><a href="'
+        echo '<tr';
+        if ( ccgn_user_is_institutional_applicant ( $user_id ) ) {
+            echo ' style="background: #FFCCE5;"';
+        }
+        echo '><td><a href="'
             . ccgn_application_user_application_page_url( $user_id )
             . '">'
             . $user->user_nicename
