@@ -179,7 +179,7 @@ function ccgn_list_members_admin_page () {
           value="<?php echo $start_date; ?>" placeholder="YYYY-MM-DD" />
       </p>
       <p>
-        <label>End date</label>
+              <label>End date (leave blank for today's date)</label>
         <br />
         <input type="text" name="end_date" id="ccgn-list-members-date-from"
           value="<?php echo $end_date; ?>" placeholder="YYYY-MM-DD" />
