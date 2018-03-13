@@ -25,7 +25,7 @@ function ccgn_list_applications_for_pre_approval () {
         echo '><td><a href="'
             . ccgn_application_user_application_page_url( $user_id )
             . '">'
-            . ccgn_applicant_display_name ( $applicant_id )
+            . ccgn_applicant_display_name ( $user_id )
             . '</a></td><td>'
             . ccgn_applicant_type_desc( $user_id )
             . '</td><td>'
@@ -40,7 +40,7 @@ function ccgn_application_spam_check_page () {
 <table class="ccgn-approval-table">
   <thead>
     <tr>
-      <th>User</th>
+      <th>Applicant</th>
       <th>Type</th>
       <th>Application date</th>
     </tr>
