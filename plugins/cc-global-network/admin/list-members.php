@@ -165,6 +165,7 @@ function ccgn_list_members_admin_page () {
             FILTER_SANITIZE_STRING
         );
     }
+    ccgn_list_recent_members( $start_date, $end_date );
 ?>
   <form method="get" action="<?php
      echo esc_html( admin_url( 'admin.php?page=global-network-list-users' ) );
@@ -185,11 +186,10 @@ function ccgn_list_members_admin_page () {
       </p>
     </div>
 <?php
-    submit_button('Search');
+    submit_button('List');
 ?>
   </form>
 <?php
-    ccgn_list_recent_members( $start_date, $end_date );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -198,11 +198,11 @@ function ccgn_list_members_admin_page () {
 
 // This shouldn't really have "application" in it but it would look out of place
 
-function ccgn_application_list_users_menu () {
+function ccgn_application_list_members_menu () {
     add_submenu_page(
         'global-network-application-approval',
-        'List Users',
-        'List Users',
+        'List Members',
+        'List Members',
         'ccgn_pre_approve',
         'global-network-list-users',
         'ccgn_list_members_admin_page'
