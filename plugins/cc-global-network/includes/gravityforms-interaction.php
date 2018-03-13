@@ -664,7 +664,7 @@ function ccgn_unique_nicename ( $name ) {
 }
 
 function ccgn_create_profile_institutional ( $applicant_id ) {
-    $institution_name = ccgn_institutional_applicant_name ( $applicant_id )
+    $institution_name = ccgn_institutional_applicant_name ( $applicant_id );
     wp_update_user(
         array(
             'ID' => $applicant_id,
@@ -1274,7 +1274,10 @@ function ccgn_application_users_page_vouchers ( $applicant_id ) {
 
 // Date must be yyyy-mm-dd
 
-function ccgn_new_individual_members_since ( $start_date, $end_date ) {
+// Individual applications finish with final approval,
+// Institutional applications finish with legal approval.
+
+function ccgn_new_final_approvals_since ( $start_date, $end_date ) {
     $form_id = RGFormsModel::get_form_id( CCGN_GF_FINAL_APPROVAL );
     $search_criteria = array (
         'start_date' => $start_date,
@@ -1300,13 +1303,28 @@ function ccgn_new_individual_members_since ( $start_date, $end_date ) {
     );
 }
 
-function ccgn_new_individual_members_since_emails ( $start_date, $end_date ) {
-    $emails = [];
-    $members = ccgn_new_individual_members_since( $start_date, $end_date );
-    foreach ( $members as $member ) {
-        $member_id = $member [ CCGN_GF_FINAL_APPROVAL_APPLICANT_ID ];
-        $user = get_user_by ( 'ID', $member_id );
-        $emails[] = $user->user_email;
-    }
-    return $emails;
+function ccgn_new_legal_approvals_since ( $start_date, $end_date ) {
+    $form_id = RGFormsModel::get_form_id( CCGN_GF_LEGAL_APPROVAL );
+    $search_criteria = array (
+        'start_date' => $start_date,
+        'end_date' => $end_date,
+        'field_filters' => array (
+            array(
+                'key' => CCGN_GF_LEGAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION,
+                'value' => CCGN_GF_LEGAL_APPROVAL_APPROVED_YES
+            ),
+        )
+    );
+    return GFAPI::get_entries(
+        $form_id,
+        $search_criteria,
+        array(
+            array(
+                'key' => 'date',
+                'direction' => 'DESC',
+                'is_numeric' => false
+            )
+        ),
+        array( 'offset' => 0, 'page_size' => 1000000 )
+    );
 }

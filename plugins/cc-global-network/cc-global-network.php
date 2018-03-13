@@ -53,6 +53,7 @@ require_once(CCGN_PATH . 'admin/user-pre-approve-list-page.php');
 require_once(CCGN_PATH . 'admin/user-final-approval-list-page.php');
 require_once(CCGN_PATH . 'admin/user-legal-approval-list-page.php');
 require_once(CCGN_PATH . 'admin/user-vouchers-change-page.php');
+require_once(CCGN_PATH . 'admin/list-members.php');
 
 // Vouching UI for existing members to vouch for new applicant
 
@@ -252,6 +253,7 @@ if ( is_admin() ){
     add_action( 'admin_menu', 'ccgn_settings_emails_register' );
     add_action( 'admin_menu', 'ccgn_application_pre_approval_menu' );
     add_action( 'admin_menu', 'ccgn_application_legal_approval_menu' );
+    add_action( 'admin_menu', 'ccgn_application_list_users_menu' );
     add_action( 'admin_menu', 'ccgn_application_change_vouchers_menu' );
     add_filter( 'user_row_actions', 'ccgn_application_user_link', 10, 2 );
     add_filter( 'user_row_actions', 'ccgn_application_vouches_link', 10, 2 );
