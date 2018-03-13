@@ -12,11 +12,42 @@ function ccgn_list_render_individual_applicants ( $members ) {
                 . '</td><td>'
                 . $user->user_email
                 . '</td><td>'
+                . bp_get_profile_field_data(
+                    'field=Location&user_id=' . $member_id
+                )
+                . '</td><td>'
+                . bp_get_profile_field_data(
+                    'field=Preferred%20Country%20Chapter&user_id=' . $member_id
+                )
+                . '</td><td>'
+                . join( ', ',
+                        bp_get_profile_field_data(
+                            'field=Areas%20of%20Interest&user_id=' . $member_id
+                        )
+                )
+                . '</td><td>'
+                . ccgn_application_format_vouches_yes ( $member_id )
+                . '</td><td>'
                 . $member[ 'date_created' ]
                 . '</td></tr>';
         }
     }
     return $emails;
+}
+
+function ccgn_application_format_vouches_yes ( $applicant_id ) {
+    $vouchers = [];
+    foreach ( ccgn_application_vouches ( $applicant_id ) as $vouch ) {
+        if (
+            $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
+            == CCGN_GF_VOUCH_DO_YOU_VOUCH_YES
+        ) {
+            $voucher_id = $vouch[ 'created_by' ];
+            $vouchers[] = bp_core_get_userlink( $voucher_id );
+            $user = get_userdata( $voucher_id );
+        }
+    }
+    return join( ', ', $vouchers );
 }
 
 function ccgn_list_render_institutional_applicants ( $members ) {
@@ -57,11 +88,15 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
     <h2>New Individual Members</h2>
     <h3>Details</h3>
     <table id="ccgn-list-new-individuals" class="tablesorter">
-      <thead>
+      <thead align="left">
         <tr>
           <th>Name</th>
           <th>Email</th>
-          <th>Final Approval Date</th>
+          <th>Location</th>
+          <th><span style="white-space: nowrap">Chapter of Interest</span></th>
+          <th><span style="white-space: nowrap">Aread of Interest</span></th>
+          <th>Vouchers</th>
+          <th><span style="white-space: nowrap">Final Approval Date</span></th>
         </tr>
       </thead>
       <tbody>
@@ -86,7 +121,7 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
     <h2>New Institutional Members</h2>
     <h3>Details</h3>
     <table id="ccgn-list-new-institutions" class="tablesorter">
-      <thead>
+      <thead align="left">
         <tr>
           <th>Organization</th>
           <th>Contact Name</th>
