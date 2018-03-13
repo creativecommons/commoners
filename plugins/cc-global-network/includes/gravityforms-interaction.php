@@ -648,7 +648,7 @@ function ccgn_create_profile_individual( $applicant_id ) {
 
 function ccgn_institutional_applicant_name ( $applicant_id ) {
     $details = ccgn_details_institution_form_entry ( $applicant_id );
-    $institution_name = $details[ CCGN_GF_INSTITUTION_DETAILS_NAME ];
+    return $details[ CCGN_GF_INSTITUTION_DETAILS_NAME ];
 }
 
 function ccgn_unique_nicename ( $name ) {
