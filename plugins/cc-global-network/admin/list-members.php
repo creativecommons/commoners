@@ -56,7 +56,7 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
 ?>
     <h2>New Individual Members</h2>
     <h3>Details</h3>
-    <table class="tablesorter">
+    <table id="ccgn-list-new-individuals" class="tablesorter">
       <thead>
         <tr>
           <th>Name</th>
@@ -85,7 +85,7 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
 ?>
     <h2>New Institutional Members</h2>
     <h3>Details</h3>
-    <table class="tablesorter">
+    <table id="ccgn-list-new-institutions" class="tablesorter">
       <thead>
         <tr>
           <th>Organization</th>
