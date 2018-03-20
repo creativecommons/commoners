@@ -63,7 +63,7 @@ require_once(CCGN_PATH . 'public/vouching-form-shortcode.php');
 // WP CLI tools (some called from system cron)
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
-    require_once CCGN_PATH . 'wp-cli/email-vouch-request-reminders';
+    require_once CCGN_PATH . 'wp-cli/email-vouch-request-reminders.php';
 }
 
 // Testing support
