@@ -60,6 +60,12 @@ require_once(CCGN_PATH . 'admin/list-vouchers.php');
 
 require_once(CCGN_PATH . 'public/vouching-form-shortcode.php');
 
+// WP CLI tools (some called from system cron)
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+    require_once CCGN_PATH . 'wp-cli/email-vouch-request-reminders';
+}
+
 // Testing support
 
 if ( defined( 'CCGN_DEVELOPMENT' ) || defined( 'CCGN_TESTING' ) ) {

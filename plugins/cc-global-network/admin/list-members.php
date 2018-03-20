@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+
 function ccgn_list_render_individual_applicants ( $members ) {
     $emails = [];
     foreach ( $members as $member ) {

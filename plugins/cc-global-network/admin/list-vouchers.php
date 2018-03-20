@@ -1,36 +1,6 @@
 <?php
 
-// COMPUTATIONALLY EXPENSIVE
-
-function ccgn_members_with_most_open_vouch_requests () {
-    $open_requests = array();
-    // Get applicants in the vouching state
-    $applicants = ccgn_applicants_with_state(
-        CCGN_APPLICATION_STATE_VOUCHING
-    );
-    // Get vouch requests for each
-    foreach ( $applicants as $applicant ) {
-        $applicant_id = $applicant->ID;
-        $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
-        foreach ( $vouchers as $voucher_id ) {
-            $vouches = ccgn_vouches_for_applicant_by_voucher (
-                $applicant_id,
-                $voucher_id
-            );
-            // Check for existence of vouches
-            if ( $vouches == [] ) {
-                // No vouch? increment or start the count
-                if ( isset( $open_requests[ $voucher_id ] ) ) {
-                    $open_requests[ $voucher_id ]
-                        = $open_requests[ $voucher_id ] + 1;
-                } else {
-                    $open_requests[ $voucher_id ] = 1;
-                }
-            }
-        }
-    }
-    return $open_requests;
-}
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 function ccgn_list_vouchers_render_highest ( $cutoff ) {
 ?>
@@ -38,7 +8,8 @@ function ccgn_list_vouchers_render_highest ( $cutoff ) {
 <?php
     $vouchee_counts = ccgn_members_with_most_open_vouch_requests ();
     arsort( $vouchee_counts );
-    foreach ( $vouchee_counts as $voucher_id => $num_open_requests ) {
+    foreach ( $vouchee_counts as $voucher_id => $open_requests ) {
+        $num_open_requests = count( $open_requests );
         if ( $num_open_requests >= $cutoff ) {
             $user = get_user_by( 'ID', $voucher_id );
 ?>

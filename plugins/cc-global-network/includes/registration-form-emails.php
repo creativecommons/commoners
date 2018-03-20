@@ -162,6 +162,21 @@ function ccgn_registration_email_vouching_request ( $applicant_id,
     );
 }
 
+function ccgn_registration_email_vouching_request_reminder ( $voucher_id ) {
+    $voucher = get_user_by( 'ID', $voucher_id );
+    $options = get_option( 'ccgn-email-vouch-request-reminder' );
+    $subject = $options[ 'subject' ];
+    $message = $options[ 'message' ];
+    ccgn_registration_email(
+        '',
+        '',
+        $voucher->user_nicename,
+        $voucher->user_email,
+        $subject,
+        $message
+    );
+}
+
 function ccgn_registration_email_voucher_cannot ( $applicant_id,
                                                   $voucher_id ) {
     ccgn_registration_email_to_applicant_about_voucher(

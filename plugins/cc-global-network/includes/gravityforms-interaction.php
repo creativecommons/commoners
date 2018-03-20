@@ -1221,6 +1221,77 @@ function ccgn_choose_vouchers_pre_submission ( $form ) {
     }
 }
 
+// COMPUTATIONALLY EXPENSIVE
+
+function ccgn_members_with_most_open_vouch_requests () {
+    $open_requests = array();
+    // Get applicants in the vouching state
+    $applicants = ccgn_applicants_with_state(
+        CCGN_APPLICATION_STATE_VOUCHING
+    );
+    // Get vouch requests for each
+    foreach ( $applicants as $applicant ) {
+        $applicant_id = $applicant->ID;
+        $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
+        foreach ( $vouchers as $voucher_id ) {
+            $vouches = ccgn_vouches_for_applicant_by_voucher (
+                $applicant_id,
+                $voucher_id
+            );
+            // Check for existence of vouches
+            if ( $vouches == [] ) {
+                // No vouch? increment or start the count
+                if ( isset( $open_requests[ $voucher_id ] ) ) {
+                    $open_requests[ $voucher_id ][] = $applicant_id;
+                } else {
+                    $open_requests[ $voucher_id ][] = array( $applicant_id );
+                }
+            }
+        }
+    }
+    return $open_requests;
+}
+
+// COMPUTATIONALLY EXPENSIVE
+// Return an associative array of voucher user id => [vouchees]
+// where the voucher request was created more than $days ago
+
+function ccgn_members_with_voucher_requests_older_than ( $days ) {
+    $cutoff = strtotime($days . 'days ago');
+    $members_old_requests = array();
+    // Get applicants in the vouching state
+    $applicants = ccgn_applicants_with_state(
+        CCGN_APPLICATION_STATE_VOUCHING
+    );
+    // Get vouch requests for each applicant
+    foreach ( $applicants as $applicant ) {
+        $applicant_id = $applicant->ID;
+        $voucher_choices = ccgn_application_vouchers ( $applicant_id );
+        // If they are older than the cutoff, check for vouches
+        //FIXME: if the request is old but has been updated, this won't know
+        if ( $voucher_choices[ 'date_created' ] < $cutoff ) {
+            $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
+            foreach ( $vouchers as $voucher_id ) {
+                $vouches = ccgn_vouches_for_applicant_by_voucher (
+                    $applicant_id,
+                    $voucher_id
+                );
+                if ( $vouches == [] ) {
+                    // No vouch? increment or start the count
+                    if ( isset( $members_old_requests[ $voucher_id ] ) ) {
+                        $members_old_requests[ $voucher_id ][] = $applicant_id;
+                    } else {
+                        $members_old_requests[ $voucher_id ][] = array(
+                            $applicant_id
+                        );
+                    }
+                }
+            }
+        }
+    }
+    return $members_old_requests;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Vouch presentation
 ////////////////////////////////////////////////////////////////////////////////
