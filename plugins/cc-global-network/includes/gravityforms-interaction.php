@@ -121,6 +121,11 @@ define(
     'Domain Name'
 );
 
+define(
+    'CCGN_GF_DETAILS_CHAPTER_INTEREST_SAME_AS_LOCATION',
+    'Same as Primary Location'
+);
+
 // Fields to display in applicant/voucher profiles
 
 define(
@@ -615,15 +620,20 @@ function ccgn_create_profile_individual( $applicant_id ) {
         $applicant_id,
         $details[ CCGN_GF_DETAILS_BIO ]
     );
+    $location = $details[ CCGN_GF_DETAILS_LOCATION ];
     xprofile_set_field_data(
         'Location',
         $applicant_id,
-        $details[ CCGN_GF_DETAILS_LOCATION ]
+        $location
     );
+    $chapter = $details[ CCGN_GF_DETAILS_CHAPTER_INTEREST ];
+    if ( $chapter == CCGN_GF_DETAILS_CHAPTER_INTEREST_SAME_AS_LOCATION ) {
+        $chapter = $location;
+    }
     xprofile_set_field_data(
         'Preferred Country Chapter',
         $applicant_id,
-        $details[ CCGN_GF_DETAILS_CHAPTER_INTEREST ]
+        $chapter
     );
     xprofile_set_field_data(
         'Languages',
