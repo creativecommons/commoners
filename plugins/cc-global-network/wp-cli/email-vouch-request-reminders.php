@@ -6,7 +6,9 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
   A wp-cli command to send reminders to Vouchers who have not yet responded
   to Vouching requests after some time, for example ten days.
 
-  Call from cron. Make sure day run matches defined day to send reminders. e.g.:
+  Call *weekly* from cron. Make sure day run matches defined day to send
+  reminders. e.g.:
+
   0 0 * * MON /usr/local/bin/wp --path=/var/www/html commoners reminders
 
   The command makes sure it is being run on the correct day of the week and
