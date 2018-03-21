@@ -1257,7 +1257,7 @@ function ccgn_members_with_most_open_vouch_requests () {
 // where the voucher request was created more than $days ago
 
 function ccgn_members_with_voucher_requests_older_than ( $days ) {
-    $cutoff = strtotime($days . 'days ago');
+    $cutoff = date('Y-m-d h:m:s', strtotime($days . ' days ago'));
     $members_old_requests = array();
     // Get applicants in the vouching state
     $applicants = ccgn_applicants_with_state(
