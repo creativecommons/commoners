@@ -186,6 +186,12 @@ function ccgn_registration_email_voucher_cannot ( $applicant_id,
     );
 }
 
+function ccgn_registration_email_voucher_cannot_reminder ( $applicant_id ) {
+    ccgn_registration_email_to_applicant(
+        $applicant_id,
+        'ccgn-email-voucher-cannot-reminder'
+    );
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Use the name and address from our settings for emails

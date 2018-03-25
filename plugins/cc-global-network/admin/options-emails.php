@@ -104,6 +104,26 @@ function ccgn_settings_emails_voucher_cannot_subject () {
     <?php
 }
 
+
+
+function ccgn_settings_emails_voucher_cannot_reminder_message () {
+    $options = get_option( 'ccgn-email-voucher-cannot-reminder' );
+    ?>
+    <textarea name="ccgn-email-voucher-cannot-reminder[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+}
+
+function ccgn_settings_emails_voucher_cannot_reminder_subject () {
+    $options = get_option( 'ccgn-email-voucher-cannot-reminder' );
+    ?>
+    <input type="text" name="ccgn-email-voucher-cannot-reminder[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+}
+
 function ccgn_settings_emails_approved_subject () {
     $options = get_option( 'ccgn-email-approved' );
     ?>
@@ -300,6 +320,36 @@ function ccgn_settings_emails_options_voucher_cannot () {
     );
 }
 
+function ccgn_settings_emails_options_voucher_cannot_reminder () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-voucher-cannot-reminder'
+    );
+
+    add_settings_section(
+        'ccgn-email-voucher-cannot-reminder',
+        'Voucher Declined Reminder',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_voucher_cannot_reminder_subject',
+        'global-network-emails',
+        'ccgn-email-voucher-cannot-reminder'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message',
+        'ccgn_settings_emails_voucher_cannot_reminder_message',
+        'global-network-emails',
+        'ccgn-email-voucher-cannot-reminder'
+    );
+}
+
 function ccgn_settings_emails_options_approved () {
     register_setting(
         'ccgn-emails',
@@ -367,6 +417,7 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_vouching();
     ccgn_settings_emails_options_vouching_reminder();
     ccgn_settings_emails_options_voucher_cannot();
+    ccgn_settings_emails_options_voucher_cannot_reminder();
     ccgn_settings_emails_options_approved();
     ccgn_settings_emails_options_rejected();
 }

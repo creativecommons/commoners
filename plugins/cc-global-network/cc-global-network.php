@@ -60,11 +60,11 @@ require_once(CCGN_PATH . 'admin/list-vouchers.php');
 
 require_once(CCGN_PATH . 'public/vouching-form-shortcode.php');
 
-// WP CLI tools (some called from system cron)
+// Cron
 
-if ( defined( 'WP_CLI' ) && WP_CLI ) {
-    require_once CCGN_PATH . 'wp-cli/email-vouch-request-reminders.php';
-}
+require_once CCGN_PATH . 'cron/email-vouch-request-reminders.php';
+require_once CCGN_PATH . 'cron/email-update-vouchers-reminders.php';
+
 
 // Testing support
 
@@ -294,5 +294,22 @@ add_filter('bp_core_fetch_avatar_no_grav', '__return_true');
 ////////////////////////////////////////////////////////////////////////////////
 
 register_activation_hook( __FILE__, 'ccgn_schedule_cleanup' );
-
 register_deactivation_hook( __FILE__, 'ccgn_schedule_remove_cleanup' );
+
+register_activation_hook(
+    __FILE__,
+    'ccgn_schedule_email_vouch_request_reminders'
+);
+register_deactivation_hook(
+    __FILE__,
+    'ccgn_schedule_remove_email_vouch_request_reminders'
+);
+
+register_activation_hook(
+    __FILE__,
+    'ccgn_schedule_email_upate_vouchers_reminders'
+);
+register_deactivation_hook(
+    __FILE__,
+    'ccgn_schedule_remove_email_update_vouchers_reminders'
+);

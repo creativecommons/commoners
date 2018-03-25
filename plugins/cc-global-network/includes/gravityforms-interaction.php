@@ -1248,13 +1248,13 @@ function ccgn_members_with_most_open_vouch_requests () {
                 $applicant_id,
                 $voucher_id
             );
-            // Check for existence of vouches
+            // If the voucher has not vouched
             if ( $vouches == [] ) {
-                // No vouch? increment or start the count
+                // Increment or start the count
                 if ( isset( $open_requests[ $voucher_id ] ) ) {
                     $open_requests[ $voucher_id ][] = $applicant_id;
                 } else {
-                    $open_requests[ $voucher_id ][] = array( $applicant_id );
+                    $open_requests[ $voucher_id ] = array( $applicant_id );
                 }
             }
         }
@@ -1263,10 +1263,11 @@ function ccgn_members_with_most_open_vouch_requests () {
 }
 
 // COMPUTATIONALLY EXPENSIVE
-// Return an associative array of voucher user id => [vouchees]
+// Return an associative array of voucher user id =>
+// UNSORTED KEYS AND VALUES: [vouchee => date vouching request created]
 // where the voucher request was created more than $days ago
 
-function ccgn_members_with_voucher_requests_older_than ( $days ) {
+function ccgn_members_vouchers_with_requests_older_than ( $days ) {
     $cutoff = date('Y-m-d h:m:s', strtotime($days . ' days ago'));
     $members_old_requests = array();
     // Get applicants in the vouching state
@@ -1286,13 +1287,15 @@ function ccgn_members_with_voucher_requests_older_than ( $days ) {
                     $applicant_id,
                     $voucher_id
                 );
+                // If the voucher has not vouched
                 if ( $vouches == [] ) {
-                    // No vouch? increment or start the count
+                    // Create or add to the map of applicant dates
                     if ( isset( $members_old_requests[ $voucher_id ] ) ) {
-                        $members_old_requests[ $voucher_id ][] = $applicant_id;
+                        $members_old_requests[ $voucher_id ][$applicant_id]
+                            = $voucher_choices[ 'date_created' ];
                     } else {
-                        $members_old_requests[ $voucher_id ][] = array(
-                            $applicant_id
+                        $members_old_requests[ $voucher_id ] = array(
+                            $applicant_id => $voucher_choices[ 'date_created' ]
                         );
                     }
                 }
@@ -1300,6 +1303,52 @@ function ccgn_members_with_voucher_requests_older_than ( $days ) {
         }
     }
     return $members_old_requests;
+}
+
+// COMPUTATIONALLY EXPENSIVE
+// Return an associative array of applicant user id =>
+// UNSORTED KEYS AND VALUES: [unreplaced declined voucher => date declined]
+// where the voucher request was created more than $days ago
+
+function ccgn_applicant_with_cannot_vouches_older_than ( $days ) {
+    $cutoff = date('Y-m-d h:m:s', strtotime($days . ' days ago'));
+    $applicants_old_requests = array();
+    // Get applicants in the vouching state
+    $applicants = ccgn_applicants_with_state(
+        CCGN_APPLICATION_STATE_VOUCHING
+    );
+    // Get vouch requests for each applicant
+    foreach ( $applicants as $applicant ) {
+        $applicant_id = $applicant->ID;
+        $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
+        // Get vouches by each requested voucher
+        foreach ( $vouchers as $voucher_id ) {
+            $vouches = ccgn_vouches_for_applicant_by_voucher (
+                $applicant_id,
+                $voucher_id
+            );
+            // If there's a vouch
+            if ( $vouches != [] ) {
+                // Check if it's a 'cannot'
+                $vouch = $vouches[ 0 ];
+                if (
+                    $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
+                    == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT
+                ) {
+                    // Declined? Start or add to the id/date map
+                    if ( isset( $applicants_old_requests[ $applicant_id ] ) ) {
+                        $applicants_old_requests[ $applicant_id ][$voucher_id]
+                            = $vouch[ 'date_created' ];
+                    } else {
+                        $applicants_old_requests[ $applicant_id ] = array(
+                            $voucher_id => $vouch[ 'date_created' ]
+                        );
+                    }
+                }
+            }
+        }
+    }
+    return $applicants_old_requests;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
