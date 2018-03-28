@@ -142,6 +142,8 @@ function ccgn_add_roles_on_plugin_activation () {
     $approver->add_cap( 'ccgn_pre_approve' );
 
     $legal->add_cap( 'ccgn_list_applications_legal' );
+    // The Final Approver can list but not approve legal-stage applications
+    $approver->add_cap( 'ccgn_list_applications_legal' );
 }
 
 function ccgn_user_is_new ( $user_id ) {
