@@ -159,6 +159,7 @@ function ccgn_user_page_individual_profile_text ( $applicant_id ) {
     $entry = ccgn_details_individual_form_entry( $applicant_id );
     return '<h3>Individual Applicant</h3>'
         //. ccgn_vp_format_avatar ( $entry )
+        . ccgn_applicant_display_name_formatted ( $applicant_id )
         . ccgn_vouching_form_profile_format(
             $entry,
             CCGN_GF_DETAILS_USER_PAGE_MAP
@@ -167,6 +168,7 @@ function ccgn_user_page_individual_profile_text ( $applicant_id ) {
 
 function ccgn_user_page_institution_profile_text ( $applicant_id ) {
     return '<h3>Institutional Applicant</h3>'
+        . ccgn_applicant_display_name_formatted ( $applicant_id )
         .ccgn_vouching_form_profile_format(
             ccgn_details_institution_form_entry ( $applicant_id ),
             CCGN_GF_INSTITUTION_DETAILS_USER_PAGE_MAP
@@ -189,4 +191,17 @@ function ccgn_applicant_display_name ( $applicant_id ) {
     } else {
         return ccgn_institutional_applicant_name ( $applicant_id );
     }
+}
+
+function ccgn_applicant_display_name_formatted ( $applicant_id ) {
+    if ( ccgn_user_is_individual_applicant ( $applicant_id ) ) {
+        return '<p><strong>Applicant Name</strong>'
+            . get_user_by( 'ID', $applicant_id)->display_name
+            . '</p>';
+    } else {
+        return '<p><strong>Institution Name</strong>'
+            . ccgn_institutional_applicant_name ( $applicant_id )
+            . '</p>';
+    }
+    <p><strong>
 }

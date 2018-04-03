@@ -60,15 +60,21 @@ function ccgn_vouching_requests_render ( $voucher_id ) {
         foreach ( $requests as $request ) {
             $applicant_id = $request[ 'created_by' ];
             $applicant = get_user_by( 'ID', $applicant_id );
-            echo '<li><a href="'
-                . get_site_url()
-                . '/vouch/?applicant_id='
-                . $applicant_id
-                . '">'
-                . $applicant->display_name
-                . ' ('
-                . $applicant->user_nicename
-                . ')</a></li>';
+            $request_html = '<li><a href="'
+                          . get_site_url()
+                          . '/vouch/?applicant_id='
+                          . $applicant_id
+                          . '">'
+                          . ccgn_applicant_display_name (
+                              $applicant_id
+                          );
+            if ( ccgn_user_is_individual_applicant( $applicant_id ) ) {
+                $request_html .= ' ('
+                             . $applicant->user_nicename
+                             . ')';
+            }
+            $request_html .= '</a></li>';
+            echo $request_html;
         }
         echo "</ul>";
     } else {

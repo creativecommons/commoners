@@ -131,7 +131,6 @@ define(
 define(
     'CCGN_GF_DETAILS_VOUCH_MAP',
     [
-        [ 'Applicant Name', CCGN_GF_DETAILS_NAME ],
         [ 'Brief Biography', CCGN_GF_DETAILS_BIO ],
         [ 'Membership Statement', CCGN_GF_DETAILS_STATEMENT ],
         [ 'Location', CCGN_GF_DETAILS_LOCATION ],
@@ -143,7 +142,6 @@ define(
 define(
     'CCGN_GF_DETAILS_USER_PAGE_MAP',
     [
-        [ 'Applicant Name', CCGN_GF_DETAILS_NAME ],
         [ 'Is/Was Part of Affiliate Group', CCGN_GF_DETAILS_WAS_AFFILIATE ],
         [ 'Affiliate Group Name', CCGN_GF_DETAILS_WAS_AFFILIATE_NAME ],
         [ 'Brief Biography', CCGN_GF_DETAILS_BIO ],
@@ -159,7 +157,6 @@ define(
 define(
     'CCGN_GF_INSTITUTION_DETAILS_VOUCH_MAP',
     [
-        [ 'Institution Name', CCGN_GF_INSTITUTION_DETAILS_NAME ],
         [ 'Institution Web Site', CCGN_GF_INSTITUTION_DETAILS_WEB_SITE ],
         [
             'Representative Name',
@@ -180,7 +177,6 @@ define(
 define(
     'CCGN_GF_INSTITUTION_DETAILS_USER_PAGE_MAP',
     [
-        [ 'Institution Name', CCGN_GF_INSTITUTION_DETAILS_NAME ],
         [ 'Institution Web Site', CCGN_GF_INSTITUTION_DETAILS_WEB_SITE ],
         [
             'Representative Name',
