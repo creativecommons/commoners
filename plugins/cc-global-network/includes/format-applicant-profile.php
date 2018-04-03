@@ -203,5 +203,4 @@ function ccgn_applicant_display_name_formatted ( $applicant_id ) {
             . ccgn_institutional_applicant_name ( $applicant_id )
             . '</p>';
     }
-    <p><strong>
 }
