@@ -93,7 +93,10 @@ function ccgn_list_applications_for_final_approval () {
             . ccgn_applicant_type_desc( $user_id )
             . '</td><td>';
         if ( ccgn_current_user_is_final_approver() ) {
-            echo ccgn_final_approval_status_for_vouch_counts( $vouch_counts )
+            echo '<a href="mailto:'
+                . $user->user_email . '">' . $user->user_email
+                . '</a></td><td>'
+                . ccgn_final_approval_status_for_vouch_counts( $vouch_counts )
                 . '</td><td>'
                 . $vouch_counts[ 'cannot' ]
                 . '</td><td>'
@@ -122,6 +125,7 @@ function ccgn_application_approval_page () {
       <th>Applicant</th>
       <th>Type</th>
 <?php if ( ccgn_current_user_is_final_approver() ) { ?>
+      <th>Email</th>
       <th>Vouching Status</th>
       <th>Vouches Declined</th>
       <th>Vouches For</th>
