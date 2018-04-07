@@ -139,6 +139,13 @@ function ccgn_registration_email_application_received ( $applicant_id ) {
     );
 }
 
+function ccgn_registration_email_institution_legal ( $applicant_id ) {
+    ccgn_registration_email_to_applicant(
+        $applicant_id,
+        'ccgn-email-institution-legal'
+    );
+}
+
 function ccgn_registration_email_application_approved ( $applicant_id ) {
     ccgn_registration_email_to_applicant(
         $applicant_id,

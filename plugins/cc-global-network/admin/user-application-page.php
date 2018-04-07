@@ -213,6 +213,7 @@ function ccgn_application_users_page_final_form_submit_handler( $entry,
             if ( ccgn_user_is_individual_applicant( $applicant_id ) ) {
                 ccgn_activate_and_notify_member( $applicant_id );
             } elseif ( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
+                ccgn_registration_email_institution_legal ( $applicant_id );
                 ccgn_registration_user_set_stage (
                     $applicant_id,
                     CCGN_APPLICATION_STATE_LEGAL

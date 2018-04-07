@@ -8,6 +8,8 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 //   includes/registration-form-emails.php
 ////////////////////////////////////////////////////////////////////////////////
 
+// FIXME: Less repetition. Much less.
+
 function ccgn_settings_emails_section_callback () {
     ?>
     <?php
@@ -104,8 +106,6 @@ function ccgn_settings_emails_voucher_cannot_subject () {
     <?php
 }
 
-
-
 function ccgn_settings_emails_voucher_cannot_reminder_message () {
     $options = get_option( 'ccgn-email-voucher-cannot-reminder' );
     ?>
@@ -121,6 +121,24 @@ function ccgn_settings_emails_voucher_cannot_reminder_subject () {
     <input type="text" name="ccgn-email-voucher-cannot-reminder[subject]"
       class="large-text"
       value="<?php echo $options['subject']; ?>" />
+    <?php
+}
+
+function ccgn_settings_emails_institution_legal_subject () {
+    $options = get_option( 'ccgn-email-institution-legal' );
+    ?>
+    <input type="text" name="ccgn-email-institution-legal[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+}
+
+function ccgn_settings_emails_institution_legal_message () {
+    $options = get_option( 'ccgn-email-institution-legal' );
+    ?>
+    <textarea name="ccgn-email-institution-legal[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
     <?php
 }
 
@@ -350,6 +368,36 @@ function ccgn_settings_emails_options_voucher_cannot_reminder () {
     );
 }
 
+function ccgn_settings_emails_options_institution_legal () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-institution-legal'
+    );
+
+    add_settings_section(
+        'ccgn-email-institution-legal',
+        'Inform Institutional Applicant That Legal Will Be In Touch',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_institution_legal_subject',
+        'global-network-emails',
+        'ccgn-email-institution-legal'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message',
+        'ccgn_settings_emails_institution_legal_message',
+        'global-network-emails',
+        'ccgn-email-institution-legal'
+    );
+}
+
 function ccgn_settings_emails_options_approved () {
     register_setting(
         'ccgn-emails',
@@ -418,6 +466,7 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_vouching_reminder();
     ccgn_settings_emails_options_voucher_cannot();
     ccgn_settings_emails_options_voucher_cannot_reminder();
+    ccgn_settings_emails_options_institution_legal();
     ccgn_settings_emails_options_approved();
     ccgn_settings_emails_options_rejected();
 }
