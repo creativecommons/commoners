@@ -105,7 +105,10 @@ function ccgn_list_applications_for_final_approval () {
                 . $vouch_counts[ 'no' ]
                 . '</td><td>';
         }
-        echo ccgn_final_approval_status_for_vote_counts( $vote_counts )
+        echo ccgn_final_approval_status_for_vote_counts(
+            $vote_counts,
+            $vouch_counts
+        )
             . '</td><td>'
             . $vote_counts[ 'yes']
             . '</td><td' . $vote_no_style . '>'
