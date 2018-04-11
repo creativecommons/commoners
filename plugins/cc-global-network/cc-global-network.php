@@ -120,6 +120,8 @@ register_activation_hook(
     'ccgn_create_profile_fields_institution'
 );
 
+add_action( 'bp_profile_header_meta', 'ccgn_username_display' );
+
 // Don't lock the admin out
 
 register_activation_hook(

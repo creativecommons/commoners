@@ -861,3 +861,19 @@ function ccgn_bp_directory_query ( $qs=false, $object=false ) {
     $qs = build_query( $args );
     return $qs;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Profile Display
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_username_display () {
+    // Don't clash with the existing nicename
+    // If we enable the activity module we'll have to hook bp_displayed_user_id
+    if ( ! ( bp_is_active( 'activity' ) && bp_activity_do_mentions() ) ) {
+        $displayed_user = get_user_by( 'ID', bp_displayed_user_id() );
+        // h2 pushes the member type field below the avatar, which looks bad
+        echo '<p class="user-nicename">'
+            . $displayed_user->display_name
+            .'</p>';
+    }
+}
