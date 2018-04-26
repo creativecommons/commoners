@@ -195,11 +195,11 @@ function ccgn_applicant_display_name ( $applicant_id ) {
 
 function ccgn_applicant_display_name_formatted ( $applicant_id ) {
     if ( ccgn_user_is_individual_applicant ( $applicant_id ) ) {
-        return '<p><strong>Applicant Name</strong>'
+        return '<p><strong>Applicant Name</strong><br />'
             . get_user_by( 'ID', $applicant_id)->display_name
             . '</p>';
     } else {
-        return '<p><strong>Institution Name</strong>'
+        return '<p><strong>Institution Name</strong><br />'
             . ccgn_institutional_applicant_name ( $applicant_id )
             . '</p>';
     }
