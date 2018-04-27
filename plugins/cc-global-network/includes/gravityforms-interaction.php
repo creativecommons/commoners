@@ -1076,7 +1076,7 @@ function ccgn_schedule_cleanup () {
 }
 
 function ccgn_schedule_remove_cleanup () {
-    wp_clear_scheduled_hook( ( 'ccgn_cleanup_old_records_event' );
+    wp_clear_scheduled_hook( 'ccgn_cleanup_old_records_event' );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
