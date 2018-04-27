@@ -295,14 +295,14 @@ add_filter('bp_core_fetch_avatar_no_grav', '__return_true');
 // Cron
 ////////////////////////////////////////////////////////////////////////////////
 
-register_event(
+add_action(
     'ccgn_cleanup_old_records_event',
     'ccgn_cleanup_old_records'
 );
 register_activation_hook( __FILE__, 'ccgn_schedule_cleanup' );
 register_deactivation_hook( __FILE__, 'ccgn_schedule_remove_cleanup' );
 
-register_event(
+add_action(
     'ccgn_email_vouch_request_reminders_event',
     'ccgn_email_vouch_request_reminders'
 );
@@ -315,7 +315,7 @@ register_deactivation_hook(
     'ccgn_schedule_remove_email_vouch_request_reminders'
 );
 
-register_event(
+add_action(
     'ccgn_email_update_vouchers_reminders_event',
     'ccgn_email_update_vouchers_reminders'
 );
