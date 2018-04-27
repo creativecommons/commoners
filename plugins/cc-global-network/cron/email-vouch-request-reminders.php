@@ -43,15 +43,15 @@ function ccgn_email_vouch_request_reminders () {
 }
 
 function ccgn_schedule_email_vouch_request_reminders () {
-    if (! wp_next_scheduled ( 'ccgn_email_vouch_request_reminders' )) {
+    if (! wp_next_scheduled ( 'ccgn_email_vouch_request_reminders_event' ) ) {
         wp_schedule_event(
             time(),
             'daily',
-            'ccgn_email_vouch_request_reminders'
+            'ccgn_email_vouch_request_reminders_event'
         );
     }
 }
 
 function ccgn_schedule_remove_email_vouch_request_reminders () {
-    wp_clear_scheduled_hook( 'ccgn_email_vouch_request_reminders' );
+    wp_clear_scheduled_hook( 'ccgn_email_vouch_request_reminders_event' );
 }

@@ -1070,17 +1070,13 @@ function ccgn_cleanup_old_records () {
 }
 
 function ccgn_schedule_cleanup () {
-    wp_schedule_event( time(), 'daily', 'ccgn_cleanup_old_records' );
+    if (! wp_next_scheduled ( 'daily', 'ccgn_cleanup_old_records_event' ) ) {
+        wp_schedule_event( time(), 'daily', 'ccgn_cleanup_old_records_event' );
+    }
 }
 
 function ccgn_schedule_remove_cleanup () {
-    $timestamp = wp_next_scheduled( 'ccgn_cleanup_old_records' );
-    $original_args = array();
-    wp_unschedule_event(
-        $timestamp,
-        'ccgn_cleanup_old_records',
-        $original_args
-    );
+    wp_clear_scheduled_hook( ( 'ccgn_cleanup_old_records_event' );
 }
 
 ////////////////////////////////////////////////////////////////////////////////

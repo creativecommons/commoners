@@ -50,15 +50,15 @@ function ccgn_email_update_vouchers_reminders () {
 }
 
 function ccgn_schedule_email_upate_vouchers_reminders () {
-    if (! wp_next_scheduled ( 'ccgn_email_update_vouchers_reminders' )) {
+    if (! wp_next_scheduled ( 'ccgn_email_update_vouchers_reminders_event' )) {
         wp_schedule_event(
             time(),
             'daily',
-            'ccgn_email_update_vouchers_reminders'
+            'ccgn_email_update_vouchers_reminders_event'
         );
     }
 }
 
 function ccgn_schedule_remove_email_update_vouchers_reminders () {
-    wp_clear_scheduled_hook( 'ccgn_email_update_vouchers_reminders' );
+    wp_clear_scheduled_hook( 'ccgn_email_update_vouchers_reminders_event' );
 }
