@@ -33,6 +33,14 @@ function ccgn_settings_emails_sender_address () {
     <?php
 }
 
+function ccgn_settings_emails_legal_address () {
+    $options = get_option( 'ccgn-email-legal' );
+    ?>
+    <input type="email" name="ccgn-email-legal[address]"
+      class="large-text"
+      value="<?php echo $options['address']; ?>" />
+    <?php
+}
 
 function ccgn_settings_emails_received_subject () {
     $options = get_option( 'ccgn-email-received' );
@@ -178,6 +186,24 @@ function ccgn_settings_emails_rejected_message () {
     <?php
 }
 
+function ccgn_settings_emails_notify_legal_subject () {
+    $options = get_option( 'ccgn-email-notify-legal' );
+    ?>
+    <input type="text" name="ccgn-email-notify-legal[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+}
+
+function ccgn_settings_emails_notify_legal_message () {
+    $options = get_option( 'ccgn-email-notify-legal' );
+    ?>
+    <textarea name="ccgn-email-notify-legal[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+}
+
 function ccgn_settings_emails_options_page () {
     add_options_page(
         'Global Network Emails',
@@ -215,6 +241,28 @@ function ccgn_settings_emails_options_sender () {
         'ccgn_settings_emails_sender_address',
         'global-network-emails',
         'ccgn-email-sender'
+    );
+}
+
+function ccgn_settings_emails_options_legal_address () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-legal'
+    );
+
+    add_settings_section(
+        'ccgn-email-legal',
+        'CC Legal Team Email',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'sender-address',
+        'Email Address',
+        'ccgn_settings_emails_legal_address',
+        'global-network-emails',
+        'ccgn-email-legal'
     );
 }
 
@@ -458,9 +506,40 @@ function ccgn_settings_emails_options_rejected () {
     );
 }
 
+function ccgn_settings_emails_options_notify_legal () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-notify-legal'
+    );
+
+    add_settings_section(
+        'ccgn-email-notify-legal',
+        'Notify Legal of Institutional Applicant Approval',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_notify_legal_subject',
+        'global-network-emails',
+        'ccgn-email-notify-legal'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message',
+        'ccgn_settings_emails_notify_legal_message',
+        'global-network-emails',
+        'ccgn-email-notify-legal'
+    );
+}
+
 function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_page();
     ccgn_settings_emails_options_sender();
+    ccgn_settings_emails_options_legal_address();
     ccgn_settings_emails_options_received();
     ccgn_settings_emails_options_vouching();
     ccgn_settings_emails_options_vouching_reminder();
@@ -469,6 +548,7 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_institution_legal();
     ccgn_settings_emails_options_approved();
     ccgn_settings_emails_options_rejected();
+    ccgn_settings_emails_options_notify_legal();
 }
 
 function ccgn_settings_emails_print_info () {

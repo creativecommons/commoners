@@ -96,6 +96,23 @@ function ccgn_registration_email_to_applicant ( $applicant_id,
     );
 }
 
+function ccgn_registration_email_to_legal_about_applicant ( $applicant_id,
+                                                            $email_option ) {
+    $applicant = get_user_by( 'ID', $applicant_id );
+    $options = get_option( $email_option );
+    $subject = $options[ 'subject' ];
+    $message = $options[ 'message' ];
+    $legal_address = get_option( 'ccgn-email-legal' )[ 'address' ];
+    ccgn_registration_email(
+        $applicant->user_nicename,
+        $applicant->ID,
+        '',
+        $legal_address,
+        $subject,
+        $message
+    );
+}
+
 function ccgn_registration_email_to_applicant_about_voucher ( $applicant_id,
                                                               $voucher_id,
                                                               $email_option ) {
@@ -197,6 +214,15 @@ function ccgn_registration_email_voucher_cannot_reminder ( $applicant_id ) {
     ccgn_registration_email_to_applicant(
         $applicant_id,
         'ccgn-email-voucher-cannot-reminder'
+    );
+}
+
+function ccgn_registration_email_notify_legal_insititution_approved (
+    $applicant_id
+) {
+    ccgn_registration_email_to_legal_about_applicant(
+        $applicant_id,
+        'ccgn-email-notify-legal'
     );
 }
 
