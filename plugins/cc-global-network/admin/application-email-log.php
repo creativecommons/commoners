@@ -63,7 +63,7 @@ function ccgn_application_email_log_page () {
 
 function ccgn_application_email_log_menu () {
     add_submenu_page(
-        'global-network-emails',
+        'global-network-application-approval',
         'Email Log',
         'Email Log',
         'ccgn_pre_approve',
