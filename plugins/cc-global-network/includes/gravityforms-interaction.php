@@ -442,7 +442,7 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
             $did_they = $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ];
             if ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_YES ) {
                 $yes += 1;
-            } elseif ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_YES ) {
+            } elseif ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_NO ) {
                 $no += 1;
             } else {
                 $cannot += 1;
