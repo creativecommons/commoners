@@ -55,6 +55,7 @@ require_once(CCGN_PATH . 'admin/user-legal-approval-list-page.php');
 require_once(CCGN_PATH . 'admin/user-vouchers-change-page.php');
 require_once(CCGN_PATH . 'admin/list-members.php');
 require_once(CCGN_PATH . 'admin/list-vouchers.php');
+require_once(CCGN_PATH . 'admin/application-email-log.php');
 
 // Vouching UI for existing members to vouch for new applicant
 
@@ -265,6 +266,7 @@ if ( is_admin() ){
     add_action( 'admin_menu', 'ccgn_application_list_members_menu' );
     add_action( 'admin_menu', 'ccgn_application_list_vouchers_menu' );
     add_action( 'admin_menu', 'ccgn_application_change_vouchers_menu' );
+    add_action( 'admin_menu', 'ccgn_application_email_log_menu' );
     add_filter( 'user_row_actions', 'ccgn_application_user_link', 10, 2 );
     add_filter( 'user_row_actions', 'ccgn_application_vouches_link', 10, 2 );
     // Filter applicant user page form approve/declines to hook user profile

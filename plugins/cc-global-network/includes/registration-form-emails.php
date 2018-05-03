@@ -2,6 +2,50 @@
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
+///////////////////////////////////////////////////////////////////////////////
+// Log all the emails
+///////////////////////////////////////////////////////////////////////////////
+
+define( 'CCGN_EMAIL_LOG_REG_PROP', 'ccgn-email-registration-log' );
+define( 'CCGN_EMAIL_LOG_REG_TRUNCATE', 14 );
+
+function ccgn_registration_email_log_get () {
+    return get_option( CCGN_EMAIL_LOG_REG_PROP, array() );
+}
+
+function ccgn_registration_email_log_ensure ( $today ) {
+    $option = ccgn_registration_email_log_get ();
+    $days = array_keys( $option );
+    // Oldest to newest
+    sort( $days );
+    // No entry for today? Insert it
+    if ( $days[ count( $days ) - 1 ] != $today ) {
+        $option[ $today ] = array();
+    }
+    // Too many entries? Remove the oldest
+    if ( count( $option ) > CCGN_EMAIL_LOG_REG_TRUNCATE ) {
+        unset( $option[ $days[ 0 ] ] );
+    }
+    return $option;
+}
+
+function ccgn_registration_email_log_set ( $log_structure ) {
+    update_option( CCGN_EMAIL_LOG_REG_PROP, $log_structure );
+}
+
+function ccgn_registration_email_log_append ( $address, $type, $status ) {
+    $today = date( 'Y-m-d' );
+    $log = ccgn_registration_email_log_ensure( $today );
+    if ( ! isset ( $log[ $today ][ $type ] ) ) {
+        $log[ $today ][ $type ] = array();
+    }
+    $log[ $today ][ $type ][] = array(
+        'address' => $address,
+        'status' => $status
+    );
+    ccgn_registration_email_log_set ( $log );
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Email all the reasons
 ////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +98,10 @@ function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
 
 function ccgn_registration_email( $applicant_name, $applicant_id,
                                   $voucher_name, $to_address,
-                                  $subject, $message ) {
+                                  $email_option ) {
+    $options = get_option( $email_option );
+    $subject = $options[ 'subject' ];
+    $message = $options[ 'message' ];
     $subject_substituted = ccgn_registration_email_sub_names(
         $applicant_name,
         $applicant_id,
@@ -70,7 +117,7 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
     add_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
     add_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
     add_filter( 'wp_mail_content_type', 'ccgn_html_mail_content_type' );
-    wp_mail(
+    $result = wp_mail(
         $to_address,
         $subject_substituted,
         $message_substituted
@@ -78,38 +125,31 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
     remove_filter( 'wp_mail_content_type', 'ccgn_html_mail_content_type' );
     remove_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
     remove_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
+    ccgn_registration_email_log_append ( $to_address, $email_option, $result );
 }
 
 function ccgn_registration_email_to_applicant ( $applicant_id,
                                                 $email_option ) {
     $applicant = get_user_by( 'ID', $applicant_id );
-    $options = get_option( $email_option );
-    $subject = $options[ 'subject' ];
-    $message = $options[ 'message' ];
     ccgn_registration_email(
         $applicant->user_nicename,
         $applicant->ID,
         '',
         $applicant->user_email,
-        $subject,
-        $message
+        $email_option
     );
 }
 
 function ccgn_registration_email_to_legal_about_applicant ( $applicant_id,
                                                             $email_option ) {
     $applicant = get_user_by( 'ID', $applicant_id );
-    $options = get_option( $email_option );
-    $subject = $options[ 'subject' ];
-    $message = $options[ 'message' ];
     $legal_address = get_option( 'ccgn-email-legal' )[ 'address' ];
     ccgn_registration_email(
         $applicant->user_nicename,
         $applicant->ID,
         '',
         $legal_address,
-        $subject,
-        $message
+        $email_option
     );
 }
 
@@ -118,16 +158,12 @@ function ccgn_registration_email_to_applicant_about_voucher ( $applicant_id,
                                                               $email_option ) {
     $applicant = get_user_by( 'ID', $applicant_id );
     $voucher = get_user_by( 'ID', $voucher_id );
-    $options = get_option( $email_option );
-    $subject = $options[ 'subject' ];
-    $message = $options[ 'message' ];
     ccgn_registration_email(
         $applicant->user_nicename,
         $applicant->ID,
         $voucher->user_nicename,
         $applicant->user_email,
-        $subject,
-        $message
+        $email_option
     );
 }
 
@@ -136,16 +172,12 @@ function ccgn_registration_email_to_voucher ( $applicant_id,
                                               $email_option ) {
     $applicant = get_user_by( 'ID', $applicant_id );
     $voucher = get_user_by( 'ID', $voucher_id );
-    $options = get_option( $email_option );
-    $subject = $options[ 'subject' ];
-    $message = $options[ 'message' ];
     ccgn_registration_email(
         $applicant->user_nicename,
         $applicant->ID,
         $voucher->user_nicename,
         $voucher->user_email,
-        $subject,
-        $message
+        $email_option
     );
 }
 
