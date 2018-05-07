@@ -228,8 +228,7 @@ function ccgn_registration_email_vouching_request_reminder ( $voucher_id ) {
         '',
         $voucher->user_nicename,
         $voucher->user_email,
-        $subject,
-        $message
+        'ccgn-email-vouch-request-reminder'
     );
 }
 
