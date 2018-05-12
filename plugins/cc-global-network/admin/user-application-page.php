@@ -398,6 +398,9 @@ function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
             echo _('<h3>Final Approval</h3>');
             ccgn_application_users_page_final_approval_form( $applicant_id );
         }
+    } elseif ( $state == CCGN_APPLICATION_STATE_ON_HOLD ) {
+        echo _('<h3>On Hold</h3>');
+        echo _('<p>The application has been put on hold.</p>');
     } elseif ( $state == '' ) {
         echo _('<h2>New User.</h2>');
         echo _("<p>They haven't completed an application yet.</p>");

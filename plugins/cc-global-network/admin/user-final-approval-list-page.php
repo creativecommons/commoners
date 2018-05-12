@@ -17,20 +17,25 @@ function ccgn_final_approval_status_for_vouch_counts( $counts ) {
 }
 
 function ccgn_final_approval_status_for_vote_counts(
+    $user_id,
     $vote_counts,
     $vouch_counts
 ) {
-    $yes = $vote_counts['yes'];
-    $no = $vote_counts['no'];
-    if ( ( $no == 0 )
-         && ($yes >= CCGN_NUMBER_OF_VOTES_NEEDED ) ) {
-        $status = 'Approved';
-    } elseif ( $no > 0 ) {
-        $status = 'Declined';
-    } elseif ( $vouch_counts[ 'yes' ] >= CCGN_NUMBER_OF_VOUCHES_NEEDED ) {
-        $status = 'Voting';
+    if ( ccgn_application_on_hold ( $user_id ) ) {
+        $status = 'On Hold';
     } else {
-        $status = 'Unvouched';
+        $yes = $vote_counts['yes'];
+        $no = $vote_counts['no'];
+        if ( ( $no == 0 )
+             && ($yes >= CCGN_NUMBER_OF_VOTES_NEEDED ) ) {
+            $status = 'Approved';
+        } elseif ( $no > 0 ) {
+            $status = 'Declined';
+        } elseif ( $vouch_counts[ 'yes' ] >= CCGN_NUMBER_OF_VOUCHES_NEEDED ) {
+            $status = 'Voting';
+        } else {
+            $status = 'Unvouched';
+        }
     }
     return $status;
 }
@@ -106,6 +111,7 @@ function ccgn_list_applications_for_final_approval () {
                 . '</td><td>';
         }
         echo ccgn_final_approval_status_for_vote_counts(
+            $user_id,
             $vote_counts,
             $vouch_counts
         )

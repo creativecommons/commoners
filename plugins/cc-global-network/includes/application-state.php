@@ -87,6 +87,8 @@ define( 'CCGN_APPLICATION_STATE_LEGAL', 'legal' );
 define( 'CCGN_APPLICATION_STATE_REJECTED', 'rejected' );
 // The user's application has been accepted in final approval
 define( 'CCGN_APPLICATION_STATE_ACCEPTED', 'accepted' );
+// We have had to pause the application for some reason
+define('CCGN_APPLICATION_STATE_ON_HOLD', 'on-hold'  )
 
 // States that indicate that the user is past the final approval stage.
 define(
@@ -217,5 +219,23 @@ function ccgn_applicants_for_pre_approval () {
 function ccgn_applicants_for_final_approval () {
     return ccgn_applicants_with_state(
         CCGN_APPLICATION_STATE_VOUCHING
+    );
+}
+
+function ccgn_application_on_hold ( $user_id ) {
+    $current = ccgn_registration_user_get_stage( $user_id );
+    return $current == CCGN_APPLICATION_STATE_ON_HOLD;
+}
+
+function ccgn_application_put_on_hold ( $user_id ) {
+    error_log(
+        ((string)$user_id)
+        . 'was '
+        . ccgn_registration_user_get_stage ( $user_id )
+        . ' , now on hold.'
+    );
+    ccgn_registration_user_set_stage (
+        $user_id,
+        CCGN_APPLICATION_STATE_ON_HOLD
     );
 }
