@@ -801,7 +801,7 @@ function _bp_meta_member_type () {
 function _bp_not_signed_in_redirect () {
     if ( bp_is_directory()
          || bp_is_activity_component() || bp_is_groups_component()
-         || bp_is_group_forum() // || bp_is_page( BP_MEMBERS_SLUG )
+         // || bp_is_group_forum() // || bp_is_page( BP_MEMBERS_SLUG )
          || bp_is_profile_component() || bp_is_forums_component()
          /*|| bbp_is_single_forum() || bbp_is_single_topic()*/
     ) {
@@ -876,4 +876,59 @@ function ccgn_username_display () {
             . $displayed_user->display_name
             .'</p>';
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Search
+///////////////////////////////////////////////////////////////////////////////
+
+function ccgn_members_distinct_xprofile_values ( $field_name ) {
+    $field_id = xprofile_get_field_id_from_name( $field_name );
+    global $wpdb;
+    $query = $wpdb->prepare(
+        "SELECT DISTINCT value
+         FROM {$wpdb->prefix}bp_xprofile_data
+         WHERE field_id = %d",
+        $field_id
+    );
+    return $wpdb->get_col($query);
+}
+
+function ccgn_members_chapter_interest_countries () {
+    return ccgn_members_distinct_xprofile_values (
+        'Preferred Country Chapter'
+    );
+}
+
+// Do this with hacky SQL rather than inefficient PHP
+
+function ccgn_members_with_xprofile_value( $field, $value ) {
+    $field_id = xprofile_get_field_id_from_name( $field );
+    global $wpdb;
+    $query = $wpdb->prepare(
+        "SELECT user_id
+         FROM {$wpdb->prefix}bp_xprofile_data
+         WHERE field_id = %d
+         AND value = %s",
+        $field_id,
+        $value
+    );
+    $user_ids = $wpdb->get_col($query);
+    return get_users(
+        array(
+            'include' => $user_ids,
+            // This is redundant because only registered members have xprofiles
+            // But keep it in case that changes.
+            'role' => 'subscriber',
+            'orderby' => 'nicename',
+            'order' => 'ASC'
+        )
+    );
+}
+
+function ccgn_members_interested_in_chapter ( $chapter_country ) {
+    return ccgn_members_with_xprofile_value(
+        'Preferred Country Chapter',
+        $chapter_country
+    );
 }

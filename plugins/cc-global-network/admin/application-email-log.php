@@ -3,6 +3,10 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 ///////////////////////////////////////////////////////////////////////////////
+// Show email logs
+// These are not all for registration (e.g. chapter contact emails)
+// The name is strongly associated with these pages though,
+///////////////////////////////////////////////////////////////////////////////
 
 function ccgn_registration_email_log_html () {
     $log = ccgn_registration_email_log_get();
@@ -16,10 +20,11 @@ function ccgn_registration_email_log_html () {
                 <table>
           <thead>
             <tr>
-              <td><h4>Address</h4></td>
+              <td><h4>To</h4></td>
               <td><h4>Status</h4></td>
-              <td><h4>Subject</h4></td>
               <td><h4>Option</h4></td>
+              <td><h4>Subject</h4></td>
+              <td><h4>Content</h4></td>
             </tr>
           </thead>
           <tbody>
@@ -30,13 +35,15 @@ function ccgn_registration_email_log_html () {
             $type_subject = get_option( $type )[ 'subject' ];
             foreach ( $emails[ $type ] as $send ) {
                 echo '<tr><td style="padding-right: 32px;">'
-                    . $send[ 'address' ]
+                    . implode( ', ', $send[ 'address' ] )
                     . '</td><td style="padding-right: 32px;">'
                     . ($send[ 'status' ] ? 'Sent' : '<b>Not Sent</b>')
                     . '</td><td style="padding-right: 32px;">'
-                    . $type_subject
-                    . '</td><td style="padding-right: 32px;">'
                     . $type
+                    . '</td><td style="padding-right: 32px;">'
+                    . ($send[ 'subject' ] ? $send[ 'subject' ] : $type_subject)
+                    . '</td><td style="padding-right: 32px;">'
+                    . ($send[ 'body' ] ? $send[ 'body' ] : '')
                     . '</td></tr>';
             }
         }
@@ -46,7 +53,6 @@ function ccgn_registration_email_log_html () {
 <?php
     }
 }
-
 
 function ccgn_application_email_log_page () {
     ?>

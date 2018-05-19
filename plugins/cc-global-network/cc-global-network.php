@@ -46,6 +46,11 @@ require_once(
     CCGN_PATH . 'public/registration-institution-form-shortcode.php'
 );
 
+// Finding and emailing members
+
+require_once(CCGN_PATH . 'includes/contact-emails.php');
+require_once(CCGN_PATH . 'public/chapter-member-search-shortcode.php');
+
 // User page application interface for admins
 
 require_once(CCGN_PATH . 'admin/user-application-page.php');
@@ -229,7 +234,7 @@ add_action(
 );
 
 ////////////////////////////////////////////////////////////////////////////////
-// Form for existing members vouching for new applicant
+// Forms for existing members
 ////////////////////////////////////////////////////////////////////////////////
 
 // The shortcode to display the vouching form.
@@ -237,6 +242,13 @@ add_action(
 add_shortcode(
     'ccgn-vouching-form',
     'ccgn_vouching_shortcode_render'
+);
+
+// The shortcode for searching for members by chapter interest
+
+add_shortcode(
+    'ccgn-member-chapter-interest-search',
+    'ccgn_member_search_chapter_interest_shortcode_render'
 );
 
 ////////////////////////////////////////////////////////////////////////////////

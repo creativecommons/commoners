@@ -230,7 +230,7 @@ function ccgn_application_on_hold ( $user_id ) {
 function ccgn_application_put_on_hold ( $user_id ) {
     error_log(
         ((string)$user_id)
-        . 'was '
+        . ' was '
         . ccgn_registration_user_get_stage ( $user_id )
         . ' , now on hold.'
     );

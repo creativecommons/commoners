@@ -33,7 +33,10 @@ function ccgn_registration_email_log_set ( $log_structure ) {
     update_option( CCGN_EMAIL_LOG_REG_PROP, $log_structure );
 }
 
-function ccgn_registration_email_log_append ( $address, $type, $status ) {
+function ccgn_registration_email_log_append (
+    $address, $type, $status,
+    $subject=null, $body=null
+) {
     $today = date( 'Y-m-d' );
     $log = ccgn_registration_email_log_ensure( $today );
     if ( ! isset ( $log[ $today ][ $type ] ) ) {
@@ -41,7 +44,9 @@ function ccgn_registration_email_log_append ( $address, $type, $status ) {
     }
     $log[ $today ][ $type ][] = array(
         'address' => $address,
-        'status' => $status
+        'status' => $status,
+        'subject' => $subject,
+        'body' => $body
     );
     ccgn_registration_email_log_set ( $log );
 }
@@ -96,6 +101,26 @@ function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
     return $result;
 }
 
+function ccgn_email_send( $address,
+                          $subject,
+                          $message,
+                          $headers=[]
+) {
+    add_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
+    add_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
+    add_filter( 'wp_mail_content_type', 'ccgn_html_mail_content_type' );
+    $result = wp_mail(
+        $address,
+        $subject,
+        $message,
+        $headers
+    );
+    remove_filter( 'wp_mail_content_type', 'ccgn_html_mail_content_type' );
+    remove_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
+    remove_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
+    return $result;
+}
+
 function ccgn_registration_email( $applicant_name, $applicant_id,
                                   $voucher_name, $to_address,
                                   $email_option ) {
@@ -117,7 +142,7 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
     add_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
     add_filter( 'wp_mail_from_name', 'ccgn_mail_from_name' );
     add_filter( 'wp_mail_content_type', 'ccgn_html_mail_content_type' );
-    $result = wp_mail(
+    $result = ccgn_email_send(
         $to_address,
         $subject_substituted,
         $message_substituted

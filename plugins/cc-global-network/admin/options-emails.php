@@ -204,6 +204,24 @@ function ccgn_settings_emails_notify_legal_message () {
     <?php
 }
 
+function ccgn_settings_emails_chapter_contact_prefix () {
+    $options = get_option( 'ccgn-email-chapter-contact' );
+    ?>
+    <input type="text" name="ccgn-email-chapter-contact[prefix]"
+      class="large-text"
+      value="<?php echo $options['prefix']; ?>" />
+    <?php
+}
+
+function ccgn_settings_emails_chapter_contact_wrapper () {
+    $options = get_option( 'ccgn-email-chapter-contact' );
+    ?>
+    <textarea name="ccgn-email-chapter-contact[wrapper]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['wrapper']; ?></textarea>
+    <?php
+}
+
 function ccgn_settings_emails_options_page () {
     add_options_page(
         'Global Network Emails',
@@ -536,6 +554,36 @@ function ccgn_settings_emails_options_notify_legal () {
     );
 }
 
+function ccgn_settings_emails_options_chapter_contact () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-chapter-contact'
+    );
+
+    add_settings_section(
+        'ccgn-email-chapter-contact',
+        'Contact Members Interested In Chapter',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject Prefix',
+        'ccgn_settings_emails_chapter_contact_prefix',
+        'global-network-emails',
+        'ccgn-email-chapter-contact'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message Wrapper',
+        'ccgn_settings_emails_chapter_contact_wrapper',
+        'global-network-emails',
+        'ccgn-email-chapter-contact'
+    );
+}
+
 function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_page();
     ccgn_settings_emails_options_sender();
@@ -549,6 +597,7 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_approved();
     ccgn_settings_emails_options_rejected();
     ccgn_settings_emails_options_notify_legal();
+    ccgn_settings_emails_options_chapter_contact();
 }
 
 function ccgn_settings_emails_print_info () {
