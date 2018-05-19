@@ -117,7 +117,7 @@ function ccgn_member_search_chapter_interest_shortcode_render ( $atts ) {
         return;
     }
     // User is a member, and an individual member
-    if ( ccgn_member_is_individual ( get_current_user_id () ) ) {
+    if ( ! ccgn_member_is_individual ( get_current_user_id () ) ) {
         echo '<p><b>You must be registered as an individual member in to use this facility.</b></p>';
         return;
     }
