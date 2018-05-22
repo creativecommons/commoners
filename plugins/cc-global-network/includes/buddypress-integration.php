@@ -891,7 +891,9 @@ function ccgn_members_distinct_xprofile_values ( $field_name ) {
          WHERE field_id = %d",
         $field_id
     );
-    return $wpdb->get_col($query);
+    $values = $wpdb->get_col($query);
+    sort( $values );
+    return $values;
 }
 
 function ccgn_members_chapter_interest_countries () {
