@@ -92,8 +92,7 @@ function ccgn_send_member_chapter_email_form (
         <b><?php echo $country; ?></b></h3>
     <p><?php ccgn_print_members_list ( $users ); ?></p>
     <h3>Contact Form</h3>
-    <p>You can contact the Global Network Members listed above using this
-       form.<br />Fill out all the fields then select "Email Members".</p>
+    <p>Additionally, to contact Members directly by email, you can contact the Global Network Members listed above using this form. That will trigger an email sent by this website to you and the rest of the Members listed above.</p>
     <?php
       if ( ($subject || $message || $agreement)
            && ( ! ($subject && $message && $agreement) ) ) {
