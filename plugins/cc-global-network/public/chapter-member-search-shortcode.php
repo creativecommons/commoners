@@ -37,13 +37,45 @@ function ccgn_send_member_chapter_search_form () {
 
 // List member names with profile links
 
-function ccgn_print_members_list ( $members, $sep=', ' ) {
-    $to_print = [];
-    foreach ( $members as $member ) {
-        $to_print[] = '<a href="' . bp_core_get_user_domain( $member->ID )
-                    . '" target="_blank">' . $member->display_name . '</a>';
+function ccgn_print_members_list ( $members ) {
+    error_log(json_encode($members));
+    error_log(json_encode(array_map(
+                $members,
+                function( $a ) { return $a->ID; }
+            )));
+    $query = array(
+        //FIXME: Paginate in future
+        'per_page' => 999999,
+        'include' => implode(
+            ',',
+            array_map(
+                function( $a ) { return $a->ID; },
+                $members
+            )
+        )
+    );
+    if (! bp_has_members( $query ) ) {
+        return;
     }
-    print implode($sep, $to_print);
+    do_action( 'bp_before_directory_members_list' );
+    ?><table style="width:100%;">
+    <th><tr><td></td><td>Name</td><td>Email</td></tr></th>
+    <?php while ( bp_members() ) : bp_the_member(); ?>
+    <tr>
+      <td>
+           <a href="<?php bp_member_permalink(); ?>"><?php bp_member_avatar(); ?></a>
+      </td>
+      <td>
+            <a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
+      </td>
+      <td>
+            <a href="mailto:<?php bp_member_user_email(); ?>"><?php bp_member_user_email(); ?></a>
+      </td>
+    </tr>
+    <?php endwhile; ?>
+    </table>
+    <?php
+    do_action( 'bp_after_directory_members_list' );
 }
 
 // Display the email form
@@ -56,7 +88,8 @@ function ccgn_send_member_chapter_email_form (
 ) {
     $users = ccgn_members_interested_in_chapter ( $country );
     ?>
-    <h3>Members Interested In Joining The Chapter</h3>
+    <h3>Members Interested In Joining The Chapter for
+        <b><?php echo $country; ?></b></h3>
     <p><?php ccgn_print_members_list ( $users ); ?></p>
     <h3>Contact Form</h3>
     <p>You can contact the Global Network Members listed above using this
