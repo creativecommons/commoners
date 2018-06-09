@@ -3,17 +3,16 @@
 get_header();
 
 ?>
-
 	<div class="block-area">
-
 		<div class="inner-section-left-col fullwidth-col">
-
 			<?php
 			if (have_posts()):
 				while (have_posts()):
 			        the_post(); ?>
-
 				<h2><?php the_title(); ?></h2>
+        <?php if( is_page( 'members' ) ): ?>
+        <div style="float:left">You can search for (and contact) Members who have expressed interest in joining a Chapter <a href="/search-members-chapter-interest/">here</a>.</div>
+        <?php endif ?>
 
 			    	<?php the_content(); ?>
 
