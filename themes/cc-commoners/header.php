@@ -94,7 +94,7 @@
     <?php } ?>
 
 
-    <?php if( is_page( array(132, 134, 149, 136, 4) ) || is_page_template('page-platform.php') || is_page_template('page-chapter.php') || is_search() ){ ?>
+<?php if( is_page( array(132, 134, 149, 136, 4) ) || is_page_template('page-platform.php') || is_page_template('page-chapter.php') || is_page_template('page-faqs.php') || is_search() ){ ?>
 
       <?php
 
