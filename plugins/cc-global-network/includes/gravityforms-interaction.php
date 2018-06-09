@@ -1402,8 +1402,6 @@ function ccgn_application_users_page_vouchers ( $applicant_id ) {
 function ccgn_new_final_approvals_since ( $start_date, $end_date ) {
     $form_id = RGFormsModel::get_form_id( CCGN_GF_FINAL_APPROVAL );
     $search_criteria = array (
-        'start_date' => $start_date,
-        'end_date' => $end_date,
         'field_filters' => array (
             array(
                 'key' => CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION,
@@ -1411,6 +1409,12 @@ function ccgn_new_final_approvals_since ( $start_date, $end_date ) {
             ),
         )
     );
+    if( $start_date ) {
+        $search_criteria[ 'start_date' ] = $start_date;
+    }
+    if( $end_date ) {
+        $search_criteria[ 'end_date' ] = $end_date;
+    }
     return GFAPI::get_entries(
         $form_id,
         $search_criteria,
