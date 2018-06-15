@@ -10,6 +10,10 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // to handle that feature.
 ////////////////////////////////////////////////////////////////////////////////
 
+// The day before the first user was registered
+
+define( 'CCGN_SITE_EPOCH', '2017-10-15' );
+
 // Application initial application forms
 
 define( 'CCGN_GF_AGREE_TO_TERMS', 'Agree To Terms' );
@@ -1400,9 +1404,13 @@ function _ccgn_new_final_approval_entries_since (
     );
     if( $start_date ) {
         $search_criteria[ 'start_date' ] = $start_date;
+    } else {
+        $search_criteria[ 'start_date' ] = CCGN_SITE_EPOCH;
     }
     if( $end_date ) {
         $search_criteria[ 'end_date' ] = $end_date;
+    } else {
+        $search_criteria[ 'end_date' ] = date( 'Y-m-d', time() );
     }
     return GFAPI::get_entries(
         $form_id,
@@ -1451,9 +1459,13 @@ function _ccgn_new_legal_approval_entries_since (
     );
     if( $start_date ) {
         $search_criteria[ 'start_date' ] = $start_date;
+    } else {
+        $search_criteria[ 'start_date' ] = CCGN_SITE_EPOCH;
     }
     if( $end_date ) {
         $search_criteria[ 'end_date' ] = $end_date;
+    } else {
+        $search_criteria[ 'end_date' ] = date( 'Y-m-d', time() );
     }
     return GFAPI::get_entries(
         $form_id,
@@ -1476,7 +1488,6 @@ function ccgn_new_legal_approvals_since ( $start_date, $end_date ) {
         CCGN_GF_LEGAL_APPROVAL_APPROVED_YES
     );
 }
-
 
 function ccgn_new_legal_approvals_declined_since ( $start_date, $end_date ) {
     return _ccgn_new_legal_approval_entries_since (
