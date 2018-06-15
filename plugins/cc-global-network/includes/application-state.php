@@ -171,7 +171,7 @@ function _ccgn_wp_user_id ( $user ) {
 }
 
 function _ccgn_wp_users_ids ( $users ) {
-    array_map( "_ccgn_wp_user_id", $users);
+    return array_map( "_ccgn_wp_user_id", $users);
 }
 
 function ccgn_applicants_of_type ( $type ) {
