@@ -1485,7 +1485,7 @@ function _ccgn_new_legal_approval_entries_since (
 }
 
 function ccgn_new_legal_approvals_since ( $start_date, $end_date ) {
-    return ccgn_new_legal_approval_entries_since (
+    return _ccgn_new_legal_approval_entries_since (
         $start_date,
         $end_date,
         CCGN_GF_LEGAL_APPROVAL_APPROVED_YES
@@ -1494,7 +1494,7 @@ function ccgn_new_legal_approvals_since ( $start_date, $end_date ) {
 
 
 function ccgn_new_legal_approvals_declined_since ( $start_date, $end_date ) {
-    return ccgn_new_legal_approval_entries_since (
+    return _ccgn_new_legal_approval_entries_since (
         $start_date,
         $end_date,
         CCGN_GF_LEGAL_APPROVAL_APPROVED_NO
