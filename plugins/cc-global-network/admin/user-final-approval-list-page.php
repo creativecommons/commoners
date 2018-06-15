@@ -17,10 +17,12 @@ function _ccgn_all_subscriber_ids () {
 }
 
 function _ccgn_all_no_role_ids () {
-    $u = get_users(['role' => null]);
+    $u = get_users();
     $v = array();
     foreach ($u as $w) {
-        $v[] = $w->ID;
+        if($w->roles == []) {
+            $v[] = $w->ID;
+        }
     }
     sort($v);
     return $v;
