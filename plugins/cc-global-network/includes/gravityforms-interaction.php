@@ -1450,18 +1450,26 @@ function ccgn_new_final_approvals_declined_since ( $start_date, $end_date ) {
     );
 }
 
-function ccgn_new_legal_approvals_since ( $start_date, $end_date ) {
+_function ccgn_new_legal_approval_entries_since (
+    $start_date,
+    $end_date,
+    $approval
+) {
     $form_id = RGFormsModel::get_form_id( CCGN_GF_LEGAL_APPROVAL );
     $search_criteria = array (
-        'start_date' => $start_date,
-        'end_date' => $end_date,
         'field_filters' => array (
             array(
                 'key' => CCGN_GF_LEGAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION,
-                'value' => CCGN_GF_LEGAL_APPROVAL_APPROVED_YES
+                'value' => $approval
             ),
         )
     );
+    if( $start_date ) {
+        $search_criteria[ 'start_date' ] = $start_date;
+    }
+    if( $end_date ) {
+        $search_criteria[ 'end_date' ] = $end_date;
+    }
     return GFAPI::get_entries(
         $form_id,
         $search_criteria,
@@ -1473,5 +1481,22 @@ function ccgn_new_legal_approvals_since ( $start_date, $end_date ) {
             )
         ),
         array( 'offset' => 0, 'page_size' => 1000000 )
+    );
+}
+
+function ccgn_new_legal_approvals_since ( $start_date, $end_date ) {
+    return ccgn_new_legal_approval_entries_since (
+        $start_date,
+        $end_date,
+        CCGN_GF_LEGAL_APPROVAL_APPROVED_YES
+    );
+}
+
+
+function ccgn_new_legal_approvals_declined_since ( $start_date, $end_date ) {
+    return ccgn_new_legal_approval_entries_since (
+        $start_date,
+        $end_date,
+        CCGN_GF_LEGAL_APPROVAL_APPROVED_NO
     );
 }

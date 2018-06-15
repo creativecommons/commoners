@@ -4,6 +4,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 ////////////////////////////////////////////////////////////////////////////////
 // Self-consistency check utilities
+// COPYPASTA AND SINGLE LETTER VARIABLE NAMES WITH FOREACH LOOPS AHEAD.
 ////////////////////////////////////////////////////////////////////////////////
 
 function _ccgn_all_subscriber_ids () {
@@ -29,7 +30,7 @@ function _ccgn_all_no_role_ids () {
 }
 
 function _ccgn_all_final_approval_form_approved_applicant_ids () {
-    $a = ccgn_new_final_approvals_since ();
+    $a = ccgn_new_final_approvals_since (false, false);
     $d = array();
     foreach ($a as $b) {
         $d[] = intval($b[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID]);
@@ -39,7 +40,27 @@ function _ccgn_all_final_approval_form_approved_applicant_ids () {
 }
 
 function _ccgn_all_final_approval_form_declined_applicant_ids () {
-    $a = ccgn_new_final_approvals_declined_since ();
+    $a = ccgn_new_final_approvals_declined_since (false, false);
+    $d = array();
+    foreach ($a as $b) {
+        $d[] = intval($b[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID]);
+    }
+    sort($d);
+    return $d;
+}
+
+function _ccgn_all_legal_approval_form_approved_applicant_ids () {
+    $a = ccgn_new_legal_approvals_since (false, false);
+    $d = array();
+    foreach ($a as $b) {
+        $d[] = intval($b[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID]);
+    }
+    sort($d);
+    return $d;
+}
+
+function _ccgn_all_legal_approval_form_declined_applicant_ids () {
+    $a = ccgn_new_legal_approvals_since (false, false);
     $d = array();
     foreach ($a as $b) {
         $d[] = intval($b[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID]);
@@ -53,19 +74,42 @@ function _ccgn_approval_process_consistent () {
     $no_role = _ccgn_all_no_role_ids ();
     $approved = _ccgn_all_final_approval_form_approved_applicant_ids ();
     $declined = _ccgn_all_final_approval_form_declined_applicant_ids ();
+    $legal_approved = _ccgn_all_legal_approval_form_approved_applicant_ids ();
+    $legal_declined = _ccgn_all_legal_approval_form_declined_applicant_ids ();
     echo "All of the following should be empty lists.\n";
     echo "If not, something is inconsistent in the application process.\n";
-    echo "Approved members with no role: \n"
+    echo "Approved members with no role: "
         . implode( ', ', array_intersect ( $approved, $no_role ) )
         . "\n";
-    echo "Approved members who are not subscribers: \n"
+    echo "Approved members who are not subscribers: "
         . implode( ', ', array_diff ( $approved, $subscribers ) )
         . "\n";
-    echo "Declined members who are subscribers: \n"
+    echo "Declined members who are subscribers: "
         . implode( ', ', array_intersect ( $declined, $subscribers ) )
         . "\n";
-    echo "Declined members who do not have no role: \n"
+    echo "Declined members who do not have no role: "
         . implode( ', ', array_diff ( $declined, $no_role ) )
+        . "\n";
+    echo "Members who are both approved and declined: "
+        . implode( ', ', array_intersect ( $approved, $declined ) )
+        . "\n";
+    echo "Legal approved institutions with no role: "
+        . implode( ', ', array_intersect ( $legal_approved, $no_role ) )
+        . "\n";
+    echo "Legal approved institutions who are not subscribers: "
+        . implode( ', ', array_diff ( $legal_approved, $subscribers ) )
+        . "\n";
+    echo "Legal declined institutions who are subscribers: "
+        . implode( ', ', array_intersect ( $legal_declined, $subscribers ) )
+        . "\n";
+    echo "Legal declined institutions who do not have no role: "
+        . implode( ', ', array_diff ( $legal_declined, $no_role ) )
+        . "\n";
+    echo "Legal approved institutions that were not previously approved: "
+        . implode( ', ', array_diff ( $legal_approved, $approved ) )
+        . "\n";
+    echo "Institutions who are both approved and declined: "
+        . implode( ', ', array_intersect ( $legal_approved, $legal_declined ) )
         . "\n";
 }
 
