@@ -185,8 +185,8 @@ function ccgn_list_members_admin_page () {
     submit_button('List');
 ?>
   </form>
-    ccgn_list_recent_members( $start_date, $end_date );
 <?php
+    ccgn_list_recent_members( $start_date, $end_date );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
