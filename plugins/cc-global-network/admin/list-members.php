@@ -58,19 +58,14 @@ function ccgn_list_render_institutional_applicants ( $members ) {
         $member_id = $member [ CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID ];
         $user = get_user_by ( 'ID', $member_id );
         if ( ccgn_member_is_institution( $member_id ) ) {
-            $details = ccgn_details_institution_form_entry (
-                $applicant_id
+            $contact_name_to_use = bp_get_profile_field_data(
+                'field=Representative&user_id=' . $member_id
             );
-            $contact_name_to_use = $details[
-                CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_NAME
-            ];
-            $contact_email_to_use = $details[
-                CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_EMAIL
-            ];
+            //FIXME: Keep the email from the application form!!!
+            $contact_email_to_use = $user->user_email;
             $emails[] = $contact_email_to_use;
             echo '<tr><td>'
-                //FIXME: this won't work after scrubbing, use profile field
-                . ccgn_institutional_applicant_name ( $member_id )
+                . user->display_name
                 . '</td><td>'
                 . $contact_name_to_use
                 . '</td><td>'

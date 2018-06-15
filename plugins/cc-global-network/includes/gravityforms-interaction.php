@@ -1216,7 +1216,7 @@ function ccgn_choose_vouchers_pre_submission ( $form ) {
 function ccgn_members_with_most_open_vouch_requests () {
     $open_requests = array();
     // Get applicants in the vouching state
-    $applicants = ccgn_applicants_with_state(
+    $applicants = ccgn_applicant_ids_with_state(
         CCGN_APPLICATION_STATE_VOUCHING
     );
     // Get vouch requests for each
@@ -1250,7 +1250,7 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
     $cutoff = date('Y-m-d h:m:s', strtotime($days . ' days ago'));
     $members_old_requests = array();
     // Get applicants in the vouching state
-    $applicants = ccgn_applicants_with_state(
+    $applicants = ccgn_applicant_ids_with_state(
         CCGN_APPLICATION_STATE_VOUCHING
     );
     // Get vouch requests for each applicant
@@ -1292,7 +1292,7 @@ function ccgn_applicant_with_cannot_vouches_older_than ( $days ) {
     $cutoff = date('Y-m-d h:m:s', strtotime($days . ' days ago'));
     $applicants_old_requests = array();
     // Get applicants in the vouching state
-    $applicants = ccgn_applicants_with_state(
+    $applicants = ccgn_applicant_ids_with_state(
         CCGN_APPLICATION_STATE_VOUCHING
     );
     // Get vouch requests for each applicant

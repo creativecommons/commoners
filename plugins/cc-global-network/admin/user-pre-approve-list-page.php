@@ -9,12 +9,11 @@ function ccgn_pre_applications_cmp ($a, $b) {
 }
 
 function ccgn_list_applications_for_pre_approval () {
-    $user_entries = ccgn_applicants_with_state(
+    $user_entries = ccgn_applicant_ids_with_state(
         CCGN_APPLICATION_STATE_RECEIVED
     );
     usort($user_entries, "ccgn_pre_applications_cmp");
-    foreach ($user_entries as $user_entry) {
-        $user_id = $user_entry->ID;
+    foreach ($user_entries as $user_id) {
         $user = get_user_by('ID', $user_id);
         // The last form the user filled out, so the time to use
         $vouchers_entry = ccgn_application_vouchers($user_id);

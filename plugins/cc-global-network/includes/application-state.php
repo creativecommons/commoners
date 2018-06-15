@@ -170,6 +170,10 @@ function _ccgn_wp_user_id ( $user ) {
     return $user->ID;
 }
 
+function _ccgn_wp_users_ids ( $users ) {
+    array_map( "_ccgn_wp_user_id", $users);
+}
+
 function ccgn_applicants_of_type ( $type ) {
     $users = get_users(
         array(
@@ -185,7 +189,11 @@ function ccgn_applicants_of_type ( $type ) {
             )
         )
     );
-    return array_map( "_ccgn_wp_user_id", $users);
+    return $users;
+}
+
+function ccgn_applicant_ids_of_type ( $type ) {
+    return _ccgn_wp_users_ids ( ccgn_applicants_of_type ( $type ) );
 }
 
 function ccgn_applicants_with_state ( $state ) {
@@ -206,7 +214,11 @@ function ccgn_applicants_with_state ( $state ) {
             'order' => 'ASC'
         )
     );
-    return array_map( "_ccgn_wp_user_id", $users);
+    return $users;
+}
+
+function ccgn_applicant_ids_with_state ( $type ) {
+    return _ccgn_wp_users_ids ( ccgn_applicants_with_state ( $type ) );
 }
 
 function ccgn_applicants_of_type_with_state ( $state, $type ) {
@@ -229,7 +241,11 @@ function ccgn_applicants_of_type_with_state ( $state, $type ) {
             )
         )
     );
-    return array_map( "_ccgn_wp_user_id", $users);
+    return $users;
+}
+
+function ccgn_applicant_ids_of_type_with_state ( $type ) {
+    return _ccgn_wp_users_ids ( ccgn_applicants_of_type_with_state ( $type ) );
 }
 
 function ccgn_applicants_for_pre_approval () {

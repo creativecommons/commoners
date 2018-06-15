@@ -78,8 +78,10 @@ function _ccgn_approval_process_consistent () {
     $legal_declined = _ccgn_all_legal_approval_form_declined_applicant_ids ();
     $individuals = ccgn_members_individual_ids ();
     $institutions = ccgn_members_institutional_ids ();
-    $individual_apps = ccgn_applicants_of_type ( CCGN_APPLICATION_INDIVIDUAL );
-    $institutional_apps = ccgn_applicants_of_type (
+    $individual_apps = ccgn_applicant_ids_of_type (
+        CCGN_APPLICATION_INDIVIDUAL
+    );
+    $institutional_apps = ccgn_applicant_ids_of_type (
         CCGN_APPLICATION_INSTITUTIONAL
     );
     echo "All of the following should be empty lists.\n";
@@ -213,12 +215,11 @@ function ccgn_final_applications_cmp ($a, $b) {
 }
 
 function ccgn_list_applications_for_final_approval () {
-    $user_entries = ccgn_applicants_with_state(
+    $user_entries = ccgn_applicant_ids_with_state(
         CCGN_APPLICATION_STATE_VOUCHING
     );
     usort($user_entries, "ccgn_final_applications_cmp");
-    foreach ($user_entries as $user_entry) {
-        $user_id = $user_entry->ID;
+    foreach ($user_entries as $user_id) {
         $user = get_user_by('ID', $user_id);
         // The last form the user filled out, so the time to use
         $vouchers_entry = ccgn_application_vouchers($user_id);
