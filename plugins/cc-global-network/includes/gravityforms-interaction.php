@@ -707,25 +707,13 @@ function ccgn_create_profile( $applicant_id ) {
 // Form field population
 ////////////////////////////////////////////////////////////////////////////////
 
-function ccgn_get_individuals () {
-    // FIXME: Filter admin, council members, inactive members
-    // INITIAL PHASE: Council members can be asked to Vouch
-    return bp_core_get_users(
-        array(
-            'type' => 'alphabetical',
-            'per_page' => '9999999',
-            'member_type' => 'individual-member'
-        )
-    )["users"];
-}
-
 // This excludes the initial admin user (1) and the applicant from the list
 
 function ccgn_registration_form_list_members ( $current_user_id ) {
     // For testing
     $include_admin = defined( 'CCGN_DEVELOPMENT' )
                    || defined( 'CCGN_TESTING' );
-    $individuals = ccgn_get_individuals();
+    $individuals = ccgn_get_individual_members();
     // Remove users who have already declined to vouch for the application
     //FIXME: Remove "No" votes as well when we allow re-voting
     $cannot_ids = ccgn_application_vouches_cannots_voucher_ids (
@@ -1232,8 +1220,7 @@ function ccgn_members_with_most_open_vouch_requests () {
         CCGN_APPLICATION_STATE_VOUCHING
     );
     // Get vouch requests for each
-    foreach ( $applicants as $applicant ) {
-        $applicant_id = $applicant->ID;
+    foreach ( $applicants as $applicant_id ) {
         $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
         foreach ( $vouchers as $voucher_id ) {
             $vouches = ccgn_vouches_for_applicant_by_voucher (
@@ -1267,8 +1254,7 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
         CCGN_APPLICATION_STATE_VOUCHING
     );
     // Get vouch requests for each applicant
-    foreach ( $applicants as $applicant ) {
-        $applicant_id = $applicant->ID;
+    foreach ( $applicants as $applicant_id ) {
         $voucher_choices = ccgn_application_vouchers ( $applicant_id );
         // If they are older than the cutoff, check for vouches
         //FIXME: if the request is old but has been updated, this won't know
@@ -1310,8 +1296,7 @@ function ccgn_applicant_with_cannot_vouches_older_than ( $days ) {
         CCGN_APPLICATION_STATE_VOUCHING
     );
     // Get vouch requests for each applicant
-    foreach ( $applicants as $applicant ) {
-        $applicant_id = $applicant->ID;
+    foreach ( $applicants as $applicant_id ) {
         $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
         // Get vouches by each requested voucher
         foreach ( $vouchers as $voucher_id ) {
@@ -1499,21 +1484,4 @@ function ccgn_new_legal_approvals_declined_since ( $start_date, $end_date ) {
         $end_date,
         CCGN_GF_LEGAL_APPROVAL_APPROVED_NO
     );
-}
-
-function ccgn_new_individual_members_since ( $start_date, $end_date ) {
-    $finals = ccgn_new_final_approvals_since ( $start_date, $end_date );
-    return array_map( $finals, "ccgn_user_is_individual_applicant" );
-}
-
-function ccgn_institutional_applicants_awaiting_legal_since (
-    $start_date,
-    $end_date
-) {
-    $finals = ccgn_new_final_approvals_since ( $start_date, $end_date );
-    return array_map( $finals, "ccgn_user_is_institutional_applicant" );
-}
-
-function ccgn_new_institutional_members_since ( $start_date, $end_date ) {
-    ccgn_new_legal_approvals_since ( $start_date, $end_date );
 }

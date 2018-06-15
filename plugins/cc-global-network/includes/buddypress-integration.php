@@ -267,28 +267,38 @@ function ccgn_member_is_institution ( $user_id ) {
     return $type == 'institutional-member';
 }
 
+function ccgn_get_individual_members () {
+    // Beware altering this - see ccgn_registration_form_list_members
+    //                        in gravityforms-interaction.php
+    // FIXME: Filter admin, council members, inactive members
+    // INITIAL PHASE: Council members can be asked to Vouch
+    return bp_core_get_users(
+        array(
+            'type' => 'alphabetical',
+            'per_page' => '9999999',
+            'member_type' => 'individual-member'
+        )
+    )["users"];
+}
+
 function ccgn_members_individual_ids () {
-    $users = get_users();
-    $ids = array();
-    // There is SQL for this but I don't want to be reliant on table structure
-    foreach ( $users as $user ) {
-        if ( ccgn_member_is_individual ( $user->ID ) ) {
-            $ids[] = $user->ID;
-        }
-    }
-    return $ids;
+    return array_filter( ccgn_get_individual_members (), "_ccgn_wp_user_id");
+}
+
+function ccgn_get_institutional_members () {
+    // FIXME: Filter admin, council members, inactive members
+    // INITIAL PHASE: Council members can be asked to Vouch
+    return bp_core_get_users(
+        array(
+            'type' => 'alphabetical',
+            'per_page' => '9999999',
+            'member_type' => 'individual-member'
+        )
+    )["users"];
 }
 
 function ccgn_members_institutional_ids () {
-    $users = get_users();
-    $ids = array();
-    // There is SQL for this but I don't want to be reliant on table structure
-    foreach ( $users as $user ) {
-        if ( ccgn_member_is_institution ( $user->ID ) ) {
-            $ids[] = $user->ID;
-        }
-    }
-    return $ids;
+    return array_filter( ccgn_get_institutional_members (), "_ccgn_wp_user_id");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
