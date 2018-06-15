@@ -57,7 +57,7 @@ function ccgn_list_render_institutional_applicants ( $members ) {
     foreach ( $members as $member ) {
         $member_id = $member [ CCGN_GF_LEGAL_APPROVAL_APPLICANT_ID ];
         $user = get_user_by ( 'ID', $member_id );
-        if ( ccgn_member_is_institutional( $member_id ) ) {
+        if ( ccgn_member_is_institution( $member_id ) ) {
             $details = ccgn_details_institution_form_entry (
                 $applicant_id
             );
