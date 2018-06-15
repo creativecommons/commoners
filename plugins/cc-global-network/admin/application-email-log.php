@@ -35,7 +35,9 @@ function ccgn_registration_email_log_html () {
             $type_subject = get_option( $type )[ 'subject' ];
             foreach ( $emails[ $type ] as $send ) {
                 echo '<tr><td style="padding-right: 32px;">'
-                    . implode( ', ', $send[ 'address' ] )
+                    . (is_array( $send[ 'address' ] )
+                       ? implode( ', ', $send[ 'address' ] )
+                       : $send[ 'address' ])
                     . '</td><td style="padding-right: 32px;">'
                     . ($send[ 'status' ] ? 'Sent' : '<b>Not Sent</b>')
                     . '</td><td style="padding-right: 32px;">'
