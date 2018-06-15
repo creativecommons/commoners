@@ -279,7 +279,7 @@ function ccgn_members_individual_ids () {
     return $ids;
 }
 
-function ccgn_members_instituional_ids () {
+function ccgn_members_institutional_ids () {
     $users = get_users();
     $ids = array();
     // There is SQL for this but I don't want to be reliant on table structure
