@@ -267,6 +267,30 @@ function ccgn_member_is_institution ( $user_id ) {
     return $type == 'institutional-member';
 }
 
+function ccgn_members_individual_ids () {
+    $users = get_users();
+    $ids = array();
+    // There is SQL for this but I don't want to be reliant on table structure
+    foreach ( $users as $user ) {
+        if ( ccgn_member_is_individual ( $user->ID ) ) {
+            $ids[] = $user->ID;
+        }
+    }
+    return $ids;
+}
+
+function ccgn_members_instituional_ids () {
+    $users = get_users();
+    $ids = array();
+    // There is SQL for this but I don't want to be reliant on table structure
+    foreach ( $users as $user ) {
+        if ( ccgn_member_is_institution ( $user->ID ) ) {
+            $ids[] = $user->ID;
+        }
+    }
+    return $ids;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Buddypress fields for member type
 ////////////////////////////////////////////////////////////////////////////////

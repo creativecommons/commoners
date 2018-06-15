@@ -166,6 +166,24 @@ function ccgn_vouching_request_vouching ( $applicant_id ) {
 // List WordPress User IDs for pre-approval and post-approval
 ////////////////////////////////////////////////////////////////////////////////
 
+function ccgn_applicants_of_type ( $type ) {
+    $users = get_users(
+        array(
+            'fields' => array(
+                'ID'
+            ),
+            'meta_query' => array(
+                array(
+                    'key' => CCGN_APPLICATION_TYPE,
+                    'value' => $type,
+                    'compare' => '='
+                ),
+            )
+        )
+    );
+    return $users;
+}
+
 function ccgn_applicants_with_state ( $state ) {
     $users = get_users(
         array(

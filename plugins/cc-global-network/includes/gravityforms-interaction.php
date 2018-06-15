@@ -1500,3 +1500,20 @@ function ccgn_new_legal_approvals_declined_since ( $start_date, $end_date ) {
         CCGN_GF_LEGAL_APPROVAL_APPROVED_NO
     );
 }
+
+function ccgn_new_individual_members_since ( $start_date, $end_date ) {
+    $finals = ccgn_new_final_approvals_since ( $start_date, $end_date );
+    return array_map( $finals, "ccgn_user_is_individual_applicant" );
+}
+
+function ccgn_institutional_applicants_awaiting_legal_since (
+    $start_date,
+    $end_date
+) {
+    $finals = ccgn_new_final_approvals_since ( $start_date, $end_date );
+    return array_map( $finals, "ccgn_user_is_institutional_applicant" );
+}
+
+function ccgn_new_institutional_members_since ( $start_date, $end_date ) {
+    ccgn_new_legal_approvals_since ( $start_date, $end_date );
+}

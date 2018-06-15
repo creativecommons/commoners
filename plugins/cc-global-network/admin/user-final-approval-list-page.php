@@ -76,22 +76,38 @@ function _ccgn_approval_process_consistent () {
     $declined = _ccgn_all_final_approval_form_declined_applicant_ids ();
     $legal_approved = _ccgn_all_legal_approval_form_approved_applicant_ids ();
     $legal_declined = _ccgn_all_legal_approval_form_declined_applicant_ids ();
+    $individuals = ccgn_members_individual_ids ();
+    $institutions = ccgn_members_institutional_ids ();
+    $individual_apps = ccgn_applicants_of_type ( CCGN_APPLICATION_INDIVIDUAL );
+    $institutional_apps = ccgn_applicants_of_type (
+        CCGN_APPLICATION_INSTITUTIONAL
+    );
     echo "All of the following should be empty lists.\n";
     echo "If not, something is inconsistent in the application process.\n";
-    echo "Approved members with no role: "
+    echo "Approved applicants with no role: "
         . implode( ', ', array_intersect ( $approved, $no_role ) )
         . "\n";
-    echo "Approved members who are not subscribers: "
+    echo "Approved applicants who are not subscribers: "
         . implode( ', ', array_diff ( $approved, $subscribers ) )
         . "\n";
-    echo "Declined members who are subscribers: "
+    echo "Declined applicants who are subscribers: "
         . implode( ', ', array_intersect ( $declined, $subscribers ) )
         . "\n";
-    echo "Declined members who do not have no role: "
+    echo "Declined applicants who do not have no role: "
         . implode( ', ', array_diff ( $declined, $no_role ) )
         . "\n";
-    echo "Members who are both approved and declined: "
+    echo "Applicants who are both approved and declined: "
         . implode( ', ', array_intersect ( $approved, $declined ) )
+        . "\n";
+    echo "Approved individual applicants who are not individual members: "
+        . implode(
+            ', ',
+            array_diff( $individuals,
+                        array_intersect (
+                            $individual_apps,
+                            $approved
+                        )
+            )
         . "\n";
     echo "Legal approved institutions with no role: "
         . implode( ', ', array_intersect ( $legal_approved, $no_role ) )
@@ -105,11 +121,30 @@ function _ccgn_approval_process_consistent () {
     echo "Legal declined institutions who do not have no role: "
         . implode( ', ', array_diff ( $legal_declined, $no_role ) )
         . "\n";
-    echo "Legal approved institutions that were not previously approved: "
+    echo "Legal approved institutions that were not final approved: "
         . implode( ', ', array_diff ( $legal_approved, $approved ) )
         . "\n";
     echo "Institutions who are both approved and declined: "
         . implode( ', ', array_intersect ( $legal_approved, $legal_declined ) )
+        . "\n";
+    echo "Legal approved institutions who are not institutional members: "
+        . implode( ', ', array_diff ( $legal_approved, $institutions ) )
+        . "\n";
+    echo "Legal approved institutional applicants who are not institutional members: "
+        . implode(
+            ', ',
+            array_diff( $institutions,
+                        array_intersect (
+                            $institutional_apps,
+                            $approved
+                        )
+            )
+        . "\n";
+    echo "Legal declined institutions who are institutional members: "
+        . implode( ', ', array_intersect ( $legal_declined, $institutions ) )
+        . "\n";
+    echo "Members who are both individual and institutional: "
+        . implode( ', ', array_intersect ( $individuals, $institutions ) )
         . "\n";
 }
 
