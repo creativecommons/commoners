@@ -60,7 +60,7 @@ function _ccgn_all_legal_approval_form_approved_applicant_ids () {
 }
 
 function _ccgn_all_legal_approval_form_declined_applicant_ids () {
-    $a = ccgn_new_legal_approvals_since (false, false);
+    $a = ccgn_new_legal_approvals_declined_since (false, false);
     $d = array();
     foreach ($a as $b) {
         $d[] = intval($b[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID]);
