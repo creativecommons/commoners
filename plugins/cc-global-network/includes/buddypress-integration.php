@@ -292,7 +292,7 @@ function ccgn_get_institutional_members () {
         array(
             'type' => 'alphabetical',
             'per_page' => '9999999',
-            'member_type' => 'individual-member'
+            'member_type' => 'institutional-member'
         )
     )["users"];
 }

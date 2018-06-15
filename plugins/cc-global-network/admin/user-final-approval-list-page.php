@@ -99,14 +99,27 @@ function _ccgn_approval_process_consistent () {
     echo "Applicants who are both approved and declined: "
         . implode( ', ', array_intersect ( $approved, $declined ) )
         . "\n";
+    echo "Approved individual applicants who are not subscribers: "
+        . implode(
+            ', ',
+            array_diff(
+                array_intersect (
+                    $individual_apps,
+                    $approved
+                ),
+                $subscribers
+            )
+        )
+        . "\n";
     echo "Approved individual applicants who are not individual members: "
         . implode(
             ', ',
-            array_diff( $individuals,
-                        array_intersect (
-                            $individual_apps,
-                            $approved
-                        )
+            array_diff(
+                $individuals,
+                array_intersect (
+                    $individual_apps,
+                    $approved
+                )
             )
         )
         . "\n";
@@ -134,11 +147,12 @@ function _ccgn_approval_process_consistent () {
     echo "Legal approved institutional applicants who are not institutional members: "
         . implode(
             ', ',
-            array_diff( $institutions,
-                        array_intersect (
-                            $institutional_apps,
-                            $approved
-                        )
+            array_diff(
+                $institutions,
+                array_intersect (
+                    $institutional_apps,
+                    $approved
+                )
             )
         )
         . "\n";
