@@ -282,7 +282,7 @@ function ccgn_get_individual_members () {
 }
 
 function ccgn_members_individual_ids () {
-    return array_filter( ccgn_get_individual_members (), "_ccgn_wp_user_id");
+    return array_map( "_ccgn_wp_user_id", ccgn_get_individual_members () );
 }
 
 function ccgn_get_institutional_members () {
@@ -298,7 +298,7 @@ function ccgn_get_institutional_members () {
 }
 
 function ccgn_members_institutional_ids () {
-    return array_filter( ccgn_get_institutional_members (), "_ccgn_wp_user_id");
+    return array_map( "_ccgn_wp_user_id", ccgn_get_institutional_members () );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
