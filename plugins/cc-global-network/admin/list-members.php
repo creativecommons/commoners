@@ -104,7 +104,7 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
 ?>
       </tbody>
     </table>
-    <h3>Email List</h3>
+      <h3>Email List (Individual Members only, see below for Institutions)</h3>
 <?php
        echo join( ', ', $individual_emails );
     } else {
@@ -134,7 +134,7 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
 ?>
       </tbody>
     </table>
-    <h3>Email List</h3>
+    <h3>Email List (Institutional Members only, see above for Individuals )</h3>
 <?php
       echo join( ', ', $institution_emails );
     } else {
@@ -162,7 +162,6 @@ function ccgn_list_members_admin_page () {
             FILTER_SANITIZE_STRING
         );
     }
-    ccgn_list_recent_members( $start_date, $end_date );
 ?>
   <form method="get" action="<?php
      echo esc_html( admin_url( 'admin.php?page=global-network-list-users' ) );
@@ -170,13 +169,13 @@ function ccgn_list_members_admin_page () {
     <input type="hidden" name="page" value="global-network-list-users" />
     <div class="options">
       <p>
-        <label>Start date</label>
+        <label>Start date (leave blank for since registration began)</label>
         <br />
         <input type="text" name="start_date" id="ccgn-list-members-date-from"
           value="<?php echo $start_date; ?>" placeholder="YYYY-MM-DD" />
       </p>
       <p>
-              <label>End date (leave blank for today's date)</label>
+        <label>End date (leave blank for today's date)</label>
         <br />
         <input type="text" name="end_date" id="ccgn-list-members-date-from"
           value="<?php echo $end_date; ?>" placeholder="YYYY-MM-DD" />
@@ -186,6 +185,7 @@ function ccgn_list_members_admin_page () {
     submit_button('List');
 ?>
   </form>
+    ccgn_list_recent_members( $start_date, $end_date );
 <?php
 }
 
