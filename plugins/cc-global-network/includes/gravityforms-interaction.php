@@ -1399,13 +1399,17 @@ function ccgn_application_users_page_vouchers ( $applicant_id ) {
 // Individual applications finish with final approval,
 // Institutional applications finish with legal approval.
 
-function ccgn_new_final_approvals_since ( $start_date, $end_date ) {
+function _ccgn_new_final_approval_entries_since (
+    $start_date,
+    $end_date,
+    $approval
+) {
     $form_id = RGFormsModel::get_form_id( CCGN_GF_FINAL_APPROVAL );
     $search_criteria = array (
         'field_filters' => array (
             array(
                 'key' => CCGN_GF_FINAL_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION,
-                'value' => CCGN_GF_FINAL_APPROVAL_APPROVED_YES
+                'value' => $approval
             ),
         )
     );
@@ -1426,6 +1430,23 @@ function ccgn_new_final_approvals_since ( $start_date, $end_date ) {
             )
         ),
         array( 'offset' => 0, 'page_size' => 1000000 )
+    );
+
+}
+
+function ccgn_new_final_approvals_since ( $start_date, $end_date ) {
+    return _ccgn_new_final_approval_entries_since (
+        $start_date,
+        $end_date,
+        CCGN_GF_FINAL_APPROVAL_APPROVED_YES
+    );
+}
+
+function ccgn_new_final_approvals_declined_since ( $start_date, $end_date ) {
+    return _ccgn_new_final_approval_entries_since (
+        $start_date,
+        $end_date,
+        CCGN_GF_FINAL_APPROVAL_APPROVED_NO
     );
 }
 

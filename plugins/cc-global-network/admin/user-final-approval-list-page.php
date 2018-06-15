@@ -2,6 +2,75 @@
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
+////////////////////////////////////////////////////////////////////////////////
+// Self-consistency check utilities
+////////////////////////////////////////////////////////////////////////////////
+
+function _ccgn_all_subscriber_ids () {
+    $u = get_users('role=subscriber');
+    $v = array();
+    foreach ($u as $w) {
+        $v[] = $w->ID;
+    }
+    sort($v);
+    return $v;
+}
+
+function _ccgn_all_no_role_ids () {
+    $u = get_users('role=');
+    $v = array();
+    foreach ($u as $w) {
+        $v[] = $w->ID;
+    }
+    sort($v);
+    return $v;
+}
+
+function _ccgn_all_final_approval_form_approved_applicant_ids () {
+    $a = ccgn_new_final_approvals_since ();
+    $d = array();
+    foreach ($a as $b) {
+        $d[] = intval($b[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID]);
+    }
+    sort($d);
+    return $d;
+}
+
+function _ccgn_all_final_approval_form_declined_applicant_ids () {
+    $a = ccgn_new_final_approvals_since ();
+    $d = array();
+    foreach ($a as $b) {
+        $d[] = intval($b[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID]);
+    }
+    sort($d);
+    return $d;
+}
+
+function _ccgn_approval_process_consistent () {
+    $subscribers = _ccgn_all_subscriber_ids ();
+    $no_role = _ccgn_all_no_role_ids ();
+    $approved = _ccgn_all_final_approval_form_approved_applicant_ids ();
+    $declined = _ccgn_all_final_approval_form_declined_applicant_ids ();
+    echo "All of the following should be empty lists.\n";
+    echo "If not, something is inconsistent in the application process.\n";
+    echo "Approved members with no role: \n"
+        . implode( ', ', array_intersect ( $approved, $no_role ) )
+        . "\n";
+    echo "Approved members who are not subscribers: \n"
+        . implode( ', ', array_diff ( $approved, $subscribers ) )
+        . "\n";
+    echo "Declined members who are subscribers: \n"
+        . implode( ', ', array_intersect ( $declined, $subscribers ) )
+        . "\n";
+    echo "Declined members who do not have no role: \n"
+        . implode( ', ', array_diff ( $declined, $no_role ) )
+        . "\n";
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Actual operation
+////////////////////////////////////////////////////////////////////////////////
+
 function ccgn_final_approval_status_for_vouch_counts( $counts ) {
     $yes = $counts['yes'];
     $no = $counts['no'];
