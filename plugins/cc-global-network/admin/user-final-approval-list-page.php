@@ -210,8 +210,8 @@ function ccgn_final_approval_status_for_vote_counts(
 
 function ccgn_final_applications_cmp ($a, $b) {
     //FIXME: This is very inefficient
-    return strtotime( ccgn_application_vouchers($a->ID)[ 'date_created' ] )
-        > strtotime( ccgn_application_vouchers($b->ID)[ 'date_created' ] );
+    return strtotime( ccgn_application_vouchers($a)[ 'date_created' ] )
+        > strtotime( ccgn_application_vouchers($b)[ 'date_created' ] );
 }
 
 function ccgn_list_applications_for_final_approval () {
