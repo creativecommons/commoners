@@ -108,6 +108,7 @@ function _ccgn_approval_process_consistent () {
                             $approved
                         )
             )
+        )
         . "\n";
     echo "Legal approved institutions with no role: "
         . implode( ', ', array_intersect ( $legal_approved, $no_role ) )
@@ -139,6 +140,7 @@ function _ccgn_approval_process_consistent () {
                             $approved
                         )
             )
+        )
         . "\n";
     echo "Legal declined institutions who are institutional members: "
         . implode( ', ', array_intersect ( $legal_declined, $institutions ) )
