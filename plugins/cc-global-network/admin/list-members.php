@@ -65,7 +65,7 @@ function ccgn_list_render_institutional_applicants ( $members ) {
             $contact_email_to_use = $user->user_email;
             $emails[] = $contact_email_to_use;
             echo '<tr><td>'
-                . user->display_name
+                . $user->display_name
                 . '</td><td>'
                 . $contact_name_to_use
                 . '</td><td>'
