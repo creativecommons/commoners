@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 ////////////////////////////////////////////////////////////////////////////////
 
 function _ccgn_all_subscriber_ids () {
-    $u = get_users('role=subscriber');
+    $u = get_users(['role' => 'subscriber']);
     $v = array();
     foreach ($u as $w) {
         $v[] = $w->ID;
@@ -17,7 +17,7 @@ function _ccgn_all_subscriber_ids () {
 }
 
 function _ccgn_all_no_role_ids () {
-    $u = get_users('role=');
+    $u = get_users(['role' => null]);
     $v = array();
     foreach ($u as $w) {
         $v[] = $w->ID;
@@ -37,7 +37,7 @@ function _ccgn_all_final_approval_form_approved_applicant_ids () {
 }
 
 function _ccgn_all_final_approval_form_declined_applicant_ids () {
-    $a = ccgn_new_final_approvals_since ();
+    $a = ccgn_new_final_approvals_declined_since ();
     $d = array();
     foreach ($a as $b) {
         $d[] = intval($b[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID]);
