@@ -79,10 +79,14 @@ function ccgn_list_render_institutional_applicants ( $members ) {
 }
 
 function ccgn_list_recent_members ( $start_date, $end_date ) {
+    $date_spec_string = '';
+    if ( $start_date || $end_date ) {
+        $date_spec_string = " ( $start_date &mdash; $end_date )";
+    }
     $individuals = ccgn_new_final_approvals_since ( $start_date, $end_date );
     if ( $individuals ) {
 ?>
-    <h2>New Individual Members</h2>
+    <h2>New Individual Members<?php echo $date_spec_string; ?></h2>
     <h3>Details</h3>
     <table id="ccgn-list-new-individuals" class="tablesorter">
       <thead align="left">
@@ -115,7 +119,7 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
     $institutions = ccgn_new_legal_approvals_since ( $start_date, $end_date );
     if ( $institutions ) {
 ?>
-    <h2>New Institutional Members</h2>
+    <h2>New Institutional Members<?php echo $date_spec_string; ?></h2>
     <h3>Details</h3>
     <table id="ccgn-list-new-institutions" class="tablesorter">
       <thead align="left">
@@ -169,13 +173,13 @@ function ccgn_list_members_admin_page () {
     <input type="hidden" name="page" value="global-network-list-users" />
     <div class="options">
       <p>
-        <label>Start date (leave blank for since registration began)</label>
+        <label>Start date <i>(leave blank for since registration began)</i></label>
         <br />
         <input type="text" name="start_date" id="ccgn-list-members-date-from"
           value="<?php echo $start_date; ?>" placeholder="YYYY-MM-DD" />
       </p>
       <p>
-        <label>End date (leave blank for today's date)</label>
+        <label>End date <i>(leave blank for today's date)</i></label>
         <br />
         <input type="text" name="end_date" id="ccgn-list-members-date-from"
           value="<?php echo $end_date; ?>" placeholder="YYYY-MM-DD" />
