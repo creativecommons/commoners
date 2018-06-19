@@ -132,6 +132,24 @@ function ccgn_settings_emails_voucher_cannot_reminder_subject () {
     <?php
 }
 
+function ccgn_settings_emails_voucher_cannot_closed_message () {
+    $options = get_option( 'ccgn-email-voucher-cannot-closed' );
+    ?>
+    <textarea name="ccgn-email-voucher-cannot-closed[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+}
+
+function ccgn_settings_emails_voucher_cannot_closed_subject () {
+    $options = get_option( 'ccgn-email-voucher-cannot-closed' );
+    ?>
+    <input type="text" name="ccgn-email-voucher-cannot-closed[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+}
+
 function ccgn_settings_emails_institution_legal_subject () {
     $options = get_option( 'ccgn-email-institution-legal' );
     ?>
@@ -434,6 +452,36 @@ function ccgn_settings_emails_options_voucher_cannot_reminder () {
     );
 }
 
+function ccgn_settings_emails_options_voucher_cannot_closed () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-voucher-cannot-closed'
+    );
+
+    add_settings_section(
+        'ccgn-email-voucher-cannot-closed',
+        'User\'s Application Is Being Declined Because They Did Not Update Their Vouchers After One (or more) Coould Not Vouch',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_voucher_cannot_closed_subject',
+        'global-network-emails',
+        'ccgn-email-voucher-cannot-closed'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message',
+        'ccgn_settings_emails_voucher_cannot_closed_message',
+        'global-network-emails',
+        'ccgn-email-voucher-cannot-closed'
+    );
+}
+
 function ccgn_settings_emails_options_institution_legal () {
     register_setting(
         'ccgn-emails',
@@ -593,6 +641,7 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_vouching_reminder();
     ccgn_settings_emails_options_voucher_cannot();
     ccgn_settings_emails_options_voucher_cannot_reminder();
+    ccgn_settings_emails_options_voucher_cannot_closed();
     ccgn_settings_emails_options_institution_legal();
     ccgn_settings_emails_options_approved();
     ccgn_settings_emails_options_rejected();

@@ -86,7 +86,10 @@ function ccgn_registration_individual_shortcode_render_view ( $user ) {
         }
         break;
     case CCGN_APPLICATION_STATE_REJECTED:
-        echo _( '<p>Your application has been declined.</p><p>You may be able to re-apply after the public launch of the Gobal Network in April 2018.</p><p>If you have any questions you can <a href="/contact/">contact us</a>, but please note we cannot comment on the details of individual applications.</p>' );
+        echo _( '<p>Your application has been declined.</p><p>If you have any questions you can <a href="/contact/">contact us</a>, but please note we cannot comment on the details of individual applications.</p>' );
+        break;
+    case CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS:
+        echo _( '<p>Your application closed automatically because you did not update your Voucher choices.</p><p>If you have any questions you can <a href="/contact/">contact us</a>, but please note we cannot comment on the details of individual applications.</p>' );
         break;
     case CCGN_APPLICATION_STATE_ACCEPTED:
         echo _( '<p>Your application has been accepted.</p>' );

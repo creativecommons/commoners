@@ -712,6 +712,17 @@ function ccgn_user_level_set_rejected ( $user_id ) {
     );
 }
 
+function ccgn_user_level_set_didnt_update_vouchers ( $user_id ) {
+    $user = get_user_by( 'ID', $user_id );
+    // Lock the account
+    $user->set_role( '' );
+    $user->remove_all_caps();
+    ccgn_registration_user_set_stage(
+        $user_id,
+        CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS
+    );
+}
+
 // This is called by WordPress when the user signs up to the site
 
 function ccgn_user_level_register( $user_id ) {

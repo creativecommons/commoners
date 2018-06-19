@@ -89,13 +89,19 @@ define( 'CCGN_APPLICATION_STATE_REJECTED', 'rejected' );
 define( 'CCGN_APPLICATION_STATE_ACCEPTED', 'accepted' );
 // We have had to pause the application for some unspecified reason
 define('CCGN_APPLICATION_STATE_ON_HOLD', 'on-hold' );
+// The applicant did not update their vouchers and so has been rejected
+define(
+    'CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS',
+    'rejected-because-didnt-update-vouchers'
+);
 
 // States that indicate that the user is past the final approval stage.
 define(
     'CCGN_APPLICATION_STATE_PAST_APPROVAL',
     [
         CCGN_APPLICATION_STATE_REJECTED,
-        CCGN_APPLICATION_STATE_ACCEPTED
+        CCGN_APPLICATION_STATE_ACCEPTED,
+        CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS
     ]
 );
 
@@ -114,7 +120,8 @@ define(
         CCGN_APPLICATION_STATE_LEGAL,
         CCGN_APPLICATION_STATE_REJECTED,
         CCGN_APPLICATION_STATE_ACCEPTED,
-        CCGN_APPLICATION_STATE_VOUCHING
+        CCGN_APPLICATION_STATE_VOUCHING,
+        CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS
     ]
 );
 

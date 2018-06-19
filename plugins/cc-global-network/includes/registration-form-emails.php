@@ -273,6 +273,13 @@ function ccgn_registration_email_voucher_cannot_reminder ( $applicant_id ) {
     );
 }
 
+function ccgn_registration_email_voucher_cannot_closed ( $applicant_id ) {
+    ccgn_registration_email_to_applicant(
+        $applicant_id,
+        'ccgn-email-voucher-cannot-closed'
+    );
+}
+
 function ccgn_registration_email_notify_legal_insititution_approved (
     $applicant_id
 ) {

@@ -70,6 +70,7 @@ require_once(CCGN_PATH . 'public/vouching-form-shortcode.php');
 
 require_once CCGN_PATH . 'cron/email-vouch-request-reminders.php';
 require_once CCGN_PATH . 'cron/email-update-vouchers-reminders.php';
+require_once CCGN_PATH . 'cron/email-update-vouchers-closed.php';
 
 
 // Testing support
@@ -340,4 +341,17 @@ register_activation_hook(
 register_deactivation_hook(
     __FILE__,
     'ccgn_schedule_remove_email_update_vouchers_reminders'
+);
+
+add_action(
+    'ccgn_email_update_vouchers_closed_event',
+    'ccgn_email_update_vouchers_closed'
+);
+register_activation_hook(
+    __FILE__,
+    'ccgn_schedule_email_upate_vouchers_closed'
+);
+register_deactivation_hook(
+    __FILE__,
+    'ccgn_schedule_remove_email_update_vouchers_closed'
 );

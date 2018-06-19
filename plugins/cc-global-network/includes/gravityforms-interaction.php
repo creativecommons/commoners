@@ -1192,6 +1192,11 @@ function ccgn_choose_vouchers_maybe_update_voucher ( & $editentry, $num ) {
 function ccgn_choose_vouchers_pre_submission ( $form ) {
     if ( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
         $applicant_id = get_current_user_id();
+        // Make sure the user isn't spoofing a Voucher update
+        if ( ccgn_registration_user_get_stage( $applicant_id )
+             == CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS ) {
+            die();
+        }
         // Check to see if the user is updating the form
         $editentry = ccgn_application_vouchers( $applicant_id );
         if ( $editentry ) {
@@ -1320,10 +1325,12 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
 // UNSORTED KEYS AND VALUES: [unreplaced declined voucher => date declined]
 // where the voucher request was created more than $days ago
 
-function ccgn_applicant_with_cannot_vouches_older_than ( $days ) {
+function ccgn_applicants_with_cannot_vouches_older_than ( $days ) {
     $cutoff = date('Y-m-d h:m:s', strtotime($days . ' days ago'));
     $applicants_old_requests = array();
     // Get applicants in the vouching state
+    // This constraint is amazingly important, do not change this without
+    // looking at all callers of this function.
     $applicants = ccgn_applicant_ids_with_state(
         CCGN_APPLICATION_STATE_VOUCHING
     );
