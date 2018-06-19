@@ -10,6 +10,11 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Application evaluation and finalization
 ////////////////////////////////////////////////////////////////////////////////
 
+function ccgn_membership_council_voting_disabled_for ( $applicant_id ) {
+    $vote_counts = ccgn_application_votes_counts( $applicant_id );
+    return $vote_counts[ 'no' ] > CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED;
+}
+
 function ccgn_must_decline_membership ( $applicant_id ) {
     $vouch_counts = ccgn_application_vouches_counts( $applicant_id );
     $vote_counts = ccgn_application_votes_counts( $applicant_id );
@@ -398,6 +403,9 @@ function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
             echo _('<h3>Final Approval</h3>');
             ccgn_application_users_page_final_approval_form( $applicant_id );
         }
+    } elseif ( ccgn_membership_council_voting_disabled_for ( $applicant_id ) ) {
+        echo _('<h3>Voted Against</h3>');
+        echo _('<p>Membership Council Members voted against this application, so it cannot proceed.</p>');
     } elseif ( $state == CCGN_APPLICATION_STATE_ON_HOLD ) {
         echo _('<h3>On Hold</h3>');
         echo _('<p>The application has been put on hold.</p>');

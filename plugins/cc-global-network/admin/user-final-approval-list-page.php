@@ -197,8 +197,8 @@ function ccgn_final_approval_status_for_vote_counts(
         if ( ( $no == 0 )
              && ($yes >= CCGN_NUMBER_OF_VOTES_NEEDED ) ) {
             $status = 'Approved';
-        } elseif ( $no > 0 ) {
-            $status = 'Declined';
+        } elseif ( $no > CCGN_NUMBER_OF_VOTES_AGAINST_ALLOWED ) {
+            $status = '<b><i>Voted Against</i></b>';
         } elseif ( $vouch_counts[ 'yes' ] >= CCGN_NUMBER_OF_VOUCHES_NEEDED ) {
             $status = 'Voting';
         } else {

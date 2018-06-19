@@ -87,7 +87,7 @@ define( 'CCGN_APPLICATION_STATE_LEGAL', 'legal' );
 define( 'CCGN_APPLICATION_STATE_REJECTED', 'rejected' );
 // The user's application has been accepted in final approval
 define( 'CCGN_APPLICATION_STATE_ACCEPTED', 'accepted' );
-// We have had to pause the application for some reason
+// We have had to pause the application for some unspecified reason
 define('CCGN_APPLICATION_STATE_ON_HOLD', 'on-hold' );
 
 // States that indicate that the user is past the final approval stage.
