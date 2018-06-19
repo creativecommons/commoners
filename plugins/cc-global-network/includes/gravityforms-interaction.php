@@ -230,6 +230,34 @@ define(
 define( 'CCGN_CLEANUP_DAYS', 21 );
 
 ////////////////////////////////////////////////////////////////////////////////
+// Paged GravityForms entries fetching
+////////////////////////////////////////////////////////////////////////////////
+
+function ccgn_gf_get_paged_all ( $form_id, $search_criteria, $sorting ) {
+    $page_size = 100;
+    $results = array();
+    $paging = array( 'offset' => 0, 'page_size' => $page_size );
+    while ( true ) {
+        $entries = GFAPI::get_entries(
+            $form_id,
+            $search_criteria,
+            $sorting,
+            $paging
+        );
+        //FIXME: Weak logic. We should signal the caller
+        if ( is_wp_error( $entries ) ) {
+            break;
+        }
+        if ( $entries == [] ) {
+            break;
+        }
+        $results = array_merge( $results, $entries );
+        $paging[ 'offset' ] += $page_size;
+    }
+    return $results;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Finding entries
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1412,7 +1440,7 @@ function _ccgn_new_final_approval_entries_since (
     } else {
         $search_criteria[ 'end_date' ] = date( 'Y-m-d', time() );
     }
-    return GFAPI::get_entries(
+    return ccgn_gf_get_paged_all (
         $form_id,
         $search_criteria,
         array(
@@ -1421,10 +1449,8 @@ function _ccgn_new_final_approval_entries_since (
                 'direction' => 'DESC',
                 'is_numeric' => false
             )
-        ),
-        array( 'offset' => 0, 'page_size' => 1000000 )
+        )
     );
-
 }
 
 function ccgn_new_final_approvals_since ( $start_date, $end_date ) {
@@ -1467,7 +1493,7 @@ function _ccgn_new_legal_approval_entries_since (
     } else {
         $search_criteria[ 'end_date' ] = date( 'Y-m-d', time() );
     }
-    return GFAPI::get_entries(
+    return ccgn_gf_get_paged_all (
         $form_id,
         $search_criteria,
         array(
@@ -1476,8 +1502,7 @@ function _ccgn_new_legal_approval_entries_since (
                 'direction' => 'DESC',
                 'is_numeric' => false
             )
-        ),
-        array( 'offset' => 0, 'page_size' => 1000000 )
+        )
     );
 }
 

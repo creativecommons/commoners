@@ -152,19 +152,21 @@ function ccgn_list_members_admin_page () {
 ?>
     <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 <?php
-    $start_date = false;
     if ( isset( $_GET['start_date'] ) ) {
         $start_date = filter_var(
             $_GET[ 'start_date' ],
             FILTER_SANITIZE_STRING
         );
+    } else {
+        $start_date = date( 'Y-m-d', strtotime( '-1 week' ) );
     }
-    $end_date = false;
     if ( isset( $_GET['end_date'] ) ) {
         $end_date = filter_var(
             $_GET[ 'end_date' ],
             FILTER_SANITIZE_STRING
         );
+    } else {
+        $end_date = date( 'Y-m-d', time() );
     }
 ?>
   <form method="get" action="<?php
