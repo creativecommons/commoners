@@ -78,19 +78,75 @@ function ccgn_settings_emails_vouch_request_message () {
     <?php
 }
 
-function ccgn_settings_emails_vouch_request_reminder_subject () {
-    $options = get_option( 'ccgn-email-vouch-request-reminder' );
+function ccgn_settings_emails_vouch_request_first_reminder_subject () {
+    $options = get_option( 'ccgn-email-vouch-request-first_reminder' );
     ?>
-    <input type="text" name="ccgn-email-vouch-request-reminder[subject]"
+    <input type="text" name="ccgn-email-vouch-request-first-reminder[subject]"
       class="large-text"
       value="<?php echo $options['subject']; ?>" />
     <?php
 }
 
-function ccgn_settings_emails_vouch_request_reminder_message () {
-    $options = get_option( 'ccgn-email-vouch-request-reminder' );
+function ccgn_settings_emails_vouch_request_first_reminder_message () {
+    $options = get_option( 'ccgn-email-vouch-request-first-reminder' );
     ?>
-    <textarea name="ccgn-email-vouch-request-reminder[message]"
+    <textarea name="ccgn-email-vouch-request-first-reminder[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+}
+
+function ccgn_settings_emails_vouch_request_second_reminder_subject () {
+    $options = get_option( 'ccgn-email-vouch-request-second_reminder' );
+    ?>
+    <input type="text" name="ccgn-email-vouch-request-second-reminder[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+}
+
+function ccgn_settings_emails_vouch_request_second_reminder_message () {
+    $options = get_option( 'ccgn-email-vouch-request-second-reminder' );
+    ?>
+    <textarea name="ccgn-email-vouch-request-second-reminder[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+}
+
+function ccgn_settings_emails_vouch_request_final_reminder_subject () {
+    $options = get_option( 'ccgn-email-vouch-request-final_reminder' );
+    ?>
+    <input type="text" name="ccgn-email-vouch-request-final-reminder[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+}
+
+function ccgn_settings_emails_vouch_request_final_reminder_message () {
+    $options = get_option( 'ccgn-email-vouch-request-final-reminder' );
+    ?>
+    <textarea name="ccgn-email-vouch-request-final-reminder[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+}
+
+
+
+function ccgn_settings_emails_vouch_request_close_reminder_subject () {
+    $options = get_option( 'ccgn-email-vouch-request-close_reminder' );
+    ?>
+    <input type="text" name="ccgn-email-vouch-request-close-reminder[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+}
+
+function ccgn_settings_emails_vouch_request_close_reminder_message () {
+    $options = get_option( 'ccgn-email-vouch-request-close-reminder' );
+    ?>
+    <textarea name="ccgn-email-vouch-request-close-reminder[message]"
       rows="12" cols="64" class="large-text"
       ><?php echo $options['message']; ?></textarea>
     <?php
@@ -362,15 +418,15 @@ function ccgn_settings_emails_options_vouching () {
     );
 }
 
-function ccgn_settings_emails_options_vouching_reminder () {
+function ccgn_settings_emails_options_vouching_first_reminder () {
     register_setting(
         'ccgn-emails',
-        'ccgn-email-vouch-request-reminder'
+        'ccgn-email-vouch-request-first-reminder'
     );
 
     add_settings_section(
-        'ccgn-email-vouch-request-reminder',
-        'Application Vouch Request Reminder',
+        'ccgn-email-vouch-first-request-reminder',
+        'Voucher Request First Reminder',
         'ccgn_settings_emails_section_callback',
         'global-network-emails'
     );
@@ -378,17 +434,107 @@ function ccgn_settings_emails_options_vouching_reminder () {
     add_settings_field(
         'registration-subject',
         'Subject',
-        'ccgn_settings_emails_vouch_request_reminder_subject',
+        'ccgn_settings_emails_vouch_request_first_reminder_subject',
         'global-network-emails',
-        'ccgn-email-vouch-request-reminder'
+        'ccgn-email-vouch-request-first-reminder'
     );
 
     add_settings_field(
         'registration-message',
         'Message',
-        'ccgn_settings_emails_vouch_request_reminder_message',
+        'ccgn_settings_emails_vouch_request_first_reminder_message',
         'global-network-emails',
-        'ccgn-email-vouch-request-reminder'
+        'ccgn-email-vouch-request-first-reminder'
+    );
+}
+
+function ccgn_settings_emails_options_vouching_second_reminder () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-vouch-request-second-reminder'
+    );
+
+    add_settings_section(
+        'ccgn-email-vouch-second-request-reminder',
+        'Voucher Request Second Reminder',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_vouch_request_second_reminder_subject',
+        'global-network-emails',
+        'ccgn-email-vouch-request-second-reminder'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message',
+        'ccgn_settings_emails_vouch_request_second_reminder_message',
+        'global-network-emails',
+        'ccgn-email-vouch-request-second-reminder'
+    );
+}
+
+function ccgn_settings_emails_options_vouching_final_reminder () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-vouch-request-final-reminder'
+    );
+
+    add_settings_section(
+        'ccgn-email-vouch-final-request-reminder',
+        'Voucher Request Final Reminder',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_vouch_request_final_reminder_subject',
+        'global-network-emails',
+        'ccgn-email-vouch-request-final-reminder'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message',
+        'ccgn_settings_emails_vouch_request_final_reminder_message',
+        'global-network-emails',
+        'ccgn-email-vouch-request-final-reminder'
+    );
+}
+
+function ccgn_settings_emails_options_vouching_close_reminder () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-vouch-request-close-reminder'
+    );
+
+    add_settings_section(
+        'ccgn-email-vouch-close-request-reminder',
+        'Voucher Request Closing Automatically Due To Lack Of Response',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_vouch_request_close_reminder_subject',
+        'global-network-emails',
+        'ccgn-email-vouch-request-close-reminder'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message',
+        'ccgn_settings_emails_vouch_request_close_reminder_message',
+        'global-network-emails',
+        'ccgn-email-vouch-request-close-reminder'
     );
 }
 
@@ -638,7 +784,10 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_legal_address();
     ccgn_settings_emails_options_received();
     ccgn_settings_emails_options_vouching();
-    ccgn_settings_emails_options_vouching_reminder();
+    ccgn_settings_emails_options_vouching_first_reminder();
+    ccgn_settings_emails_options_vouching_second_reminder();
+    ccgn_settings_emails_options_vouching_final_reminder();
+    ccgn_settings_emails_options_vouching_close_reminder();
     ccgn_settings_emails_options_voucher_cannot();
     ccgn_settings_emails_options_voucher_cannot_reminder();
     ccgn_settings_emails_options_voucher_cannot_closed();

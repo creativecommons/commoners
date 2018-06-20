@@ -349,6 +349,21 @@ function ccgn_vouching_request_open ( $applicant_id, $voucher_id ) {
     return $entries == [];
 }
 
+// Spoof a "cannot" for an automatically closed Vouching request
+
+function ccgn_vouching_request_spoof_cannot ( $applicant_id, $voucher_id ) {
+    GFAPI::add_entry (
+        array(
+            'form_id' => RGFormsModel::get_form_id( CCGN_GF_VOUCH ),
+            'date_created' => date ( 'Y-m-d H:i:s' ),
+            'created_by' => $voucher_id,
+            CCGN_GF_VOUCH_DO_YOU_VOUCH => 'Cannot',
+            CCGN_GF_VOUCH_REASON => 'AUTOMATICALLY CLOSED: NO RESPONSE',
+            CCGN_GF_VOUCH_APPLICANT_ID_FIELD => $applicant_id
+        )
+    );
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Individual / Institution details forms
 ////////////////////////////////////////////////////////////////////////////////
@@ -1284,7 +1299,7 @@ function ccgn_members_with_most_open_vouch_requests () {
 // where the voucher request was created more than $days ago
 
 function ccgn_members_vouchers_with_requests_older_than ( $days ) {
-    $cutoff = date('Y-m-d h:m:s', strtotime($days . ' days ago'));
+    $cutoff = date('Y-m-d h:i:s', strtotime($days . ' days ago'));
     $members_old_requests = array();
     // Get applicants in the vouching state
     $applicants = ccgn_applicant_ids_with_state(
@@ -1326,7 +1341,7 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
 // where the voucher request was created more than $days ago
 
 function ccgn_applicants_with_cannot_vouches_older_than ( $days ) {
-    $cutoff = date('Y-m-d h:m:s', strtotime($days . ' days ago'));
+    $cutoff = date('Y-m-d h:i:s', strtotime($days . ' days ago'));
     $applicants_old_requests = array();
     // Get applicants in the vouching state
     // This constraint is amazingly important, do not change this without

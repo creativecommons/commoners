@@ -224,8 +224,8 @@ function ccgn_applicants_with_state ( $state ) {
     return $users;
 }
 
-function ccgn_applicant_ids_with_state ( $type ) {
-    return _ccgn_wp_users_ids ( ccgn_applicants_with_state ( $type ) );
+function ccgn_applicant_ids_with_state ( $state ) {
+    return _ccgn_wp_users_ids ( ccgn_applicants_with_state ( $state ) );
 }
 
 function ccgn_applicants_of_type_with_state ( $state, $type ) {
