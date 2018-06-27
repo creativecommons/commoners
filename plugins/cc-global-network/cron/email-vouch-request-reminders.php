@@ -25,12 +25,15 @@ function ccgn_email_vouch_request_reminder_send (
     $applicant_id,
     $day
 ) {
+    // If re-implementing this, make sure to send latest reminder first so
+    // that the user always gets only the latest reminder for a given time
+    // period.
     switch ( $day ) {
-    case CCGN_VOUCH_REQUEST_REMINDER_DAY_FIRST_REMINDER:
+    case CCGN_VOUCH_REQUEST_REMINDER_DAY_FINAL_REMINDER:
         ccgn_registration_email_to_voucher (
             $applicant_id,
             $voucher_id,
-            'ccgn-email-vouch-request-first-reminder'
+            'ccgn-email-vouch-request-final-reminder'
         );
         break;
     case CCGN_VOUCH_REQUEST_REMINDER_DAY_SECOND_REMINDER:
@@ -40,11 +43,11 @@ function ccgn_email_vouch_request_reminder_send (
             'ccgn-email-vouch-request-second-reminder'
         );
         break;
-    case CCGN_VOUCH_REQUEST_REMINDER_DAY_FINAL_REMINDER:
+    case CCGN_VOUCH_REQUEST_REMINDER_DAY_FIRST_REMINDER:
         ccgn_registration_email_to_voucher (
             $applicant_id,
             $voucher_id,
-            'ccgn-email-vouch-request-final-reminder'
+            'ccgn-email-vouch-request-first-reminder'
         );
         break;
     default:
