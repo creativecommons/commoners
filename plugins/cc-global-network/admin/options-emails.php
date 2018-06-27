@@ -79,7 +79,7 @@ function ccgn_settings_emails_vouch_request_message () {
 }
 
 function ccgn_settings_emails_vouch_request_first_reminder_subject () {
-    $options = get_option( 'ccgn-email-vouch-request-first_reminder' );
+    $options = get_option( 'ccgn-email-vouch-request-first-reminder' );
     ?>
     <input type="text" name="ccgn-email-vouch-request-first-reminder[subject]"
       class="large-text"
@@ -97,7 +97,7 @@ function ccgn_settings_emails_vouch_request_first_reminder_message () {
 }
 
 function ccgn_settings_emails_vouch_request_second_reminder_subject () {
-    $options = get_option( 'ccgn-email-vouch-request-second_reminder' );
+    $options = get_option( 'ccgn-email-vouch-request-second-reminder' );
     ?>
     <input type="text" name="ccgn-email-vouch-request-second-reminder[subject]"
       class="large-text"
@@ -115,7 +115,7 @@ function ccgn_settings_emails_vouch_request_second_reminder_message () {
 }
 
 function ccgn_settings_emails_vouch_request_final_reminder_subject () {
-    $options = get_option( 'ccgn-email-vouch-request-final_reminder' );
+    $options = get_option( 'ccgn-email-vouch-request-final-reminder' );
     ?>
     <input type="text" name="ccgn-email-vouch-request-final-reminder[subject]"
       class="large-text"
@@ -135,7 +135,7 @@ function ccgn_settings_emails_vouch_request_final_reminder_message () {
 
 
 function ccgn_settings_emails_vouch_request_close_reminder_subject () {
-    $options = get_option( 'ccgn-email-vouch-request-close_reminder' );
+    $options = get_option( 'ccgn-email-vouch-request-close-reminder' );
     ?>
     <input type="text" name="ccgn-email-vouch-request-close-reminder[subject]"
       class="large-text"
@@ -425,7 +425,7 @@ function ccgn_settings_emails_options_vouching_first_reminder () {
     );
 
     add_settings_section(
-        'ccgn-email-vouch-first-request-reminder',
+        'ccgn-email-vouch-request-first-reminder',
         'Voucher Request First Reminder',
         'ccgn_settings_emails_section_callback',
         'global-network-emails'
