@@ -132,8 +132,6 @@ function ccgn_settings_emails_vouch_request_final_reminder_message () {
     <?php
 }
 
-
-
 function ccgn_settings_emails_vouch_request_close_reminder_subject () {
     $options = get_option( 'ccgn-email-vouch-request-close-reminder' );
     ?>
@@ -515,7 +513,7 @@ function ccgn_settings_emails_options_vouching_close_reminder () {
     );
 
     add_settings_section(
-        'ccgn-email-vouch-close-request-close-reminder',
+        'ccgn-email-vouch-request-close-reminder',
         'Voucher Request Closing Automatically Due To Lack Of Response',
         'ccgn_settings_emails_section_callback',
         'global-network-emails'
