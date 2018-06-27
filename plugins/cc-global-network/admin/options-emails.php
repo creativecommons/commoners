@@ -455,7 +455,7 @@ function ccgn_settings_emails_options_vouching_second_reminder () {
     );
 
     add_settings_section(
-        'ccgn-email-vouch-second-request-reminder',
+        'ccgn-email-vouch-request-second-reminder',
         'Voucher Request Second Reminder',
         'ccgn_settings_emails_section_callback',
         'global-network-emails'
@@ -485,7 +485,7 @@ function ccgn_settings_emails_options_vouching_final_reminder () {
     );
 
     add_settings_section(
-        'ccgn-email-vouch-final-request-reminder',
+        'ccgn-email-vouch-request-final-reminder',
         'Voucher Request Final Reminder',
         'ccgn_settings_emails_section_callback',
         'global-network-emails'
@@ -515,7 +515,7 @@ function ccgn_settings_emails_options_vouching_close_reminder () {
     );
 
     add_settings_section(
-        'ccgn-email-vouch-close-request-reminder',
+        'ccgn-email-vouch-close-request-close-reminder',
         'Voucher Request Closing Automatically Due To Lack Of Response',
         'ccgn_settings_emails_section_callback',
         'global-network-emails'
