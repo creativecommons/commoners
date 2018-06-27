@@ -6,6 +6,8 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
   A WordPress cron task to email Applicants who have not yet updated their
   Vouching Requests after a previous Voucher declined to Vouch for them every
   CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS days.
+
+  These emails go *to* applicants about their voucher choices.
 */
 
 ////////////////////////////////////////////////////////////////////////////////

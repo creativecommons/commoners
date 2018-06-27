@@ -5,6 +5,8 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 /*
   A WordPress cron task to email Vouching Request reminders to Vouchers,
   and automatically close the requests if they do not eventually respond.
+
+  These emails go *to* vouchers *about* their pending requests.
 */
 
 ////////////////////////////////////////////////////////////////////////////////

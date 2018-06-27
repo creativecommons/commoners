@@ -8,6 +8,8 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
   notified to by ccgn_email_update_vouchers_reminders () and send them an email
   notification of this fact.
   NOTE: This code closes the application as well as sending the email!
+
+  These emails go *to* applicants about their application.
 */
 
 ////////////////////////////////////////////////////////////////////////////////
