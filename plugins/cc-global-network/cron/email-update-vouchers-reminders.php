@@ -14,9 +14,9 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Defines
 ////////////////////////////////////////////////////////////////////////////////
 
-// Be careful changing this, you may send a reminder sooner than expected
+// Be careful changing this value, you may send a reminder sooner than expected
 // Also beware any knock-on effect on CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS
-define( 'CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS', 10 );
+define( 'CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS', 7 );
 
 ////////////////////////////////////////////////////////////////////////////////
 // Checking and sending
@@ -32,7 +32,8 @@ function ccgn_should_remind_applicant_to_update_vouchers (
     # php 5.2.2 or later for DateTime comparisons....
     $num_days_elapsed = $today->diff($vouch_cannot_date)->days;
     return ( $num_days_elapsed > 0 )
-        && ( ( $num_days_elapsed % CCGN_REMIND_VOUCHER_AFTER_DAYS ) === 0 );
+        && ( ( $num_days_elapsed % CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS )
+             === 0 );
 }
 
 // Send reminders to those that need them

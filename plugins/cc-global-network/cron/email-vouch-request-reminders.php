@@ -6,7 +6,9 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
   A WordPress cron task to email Vouching Request reminders to Vouchers,
   and automatically close the requests if they do not eventually respond.
 
-  These emails go *to* vouchers *about* their pending requests.
+  These emails go *to* vouchers *about* their pending requests,
+  AND *to* applicants *when* the voucher gets the close email.
+
 */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +74,11 @@ function ccgn_email_vouch_request_reminder_maybe_close (
     if ( $day >= CCGN_VOUCH_REQUEST_REMINDER_DAY_CLOSE ) {
         // This function does take applicant/voucher in this order
         ccgn_vouching_request_spoof_cannot ( $applicant_id, $voucher_id );
+        // Notify the applicant that the voucher could not vouch for them.
+        ccgn_registration_email_voucher_cannot (
+            $applicant_id,
+            $voucher_id
+        );
     }
 }
 
