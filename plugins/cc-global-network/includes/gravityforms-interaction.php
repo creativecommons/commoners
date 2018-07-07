@@ -364,6 +364,46 @@ function ccgn_vouching_request_spoof_cannot ( $applicant_id, $voucher_id ) {
     );
 }
 
+function ccgn_vouching_request_remove_spoofed_cannot (
+    $applicant_id,
+    $voucher_id
+) {
+    // Make sure the user hasn't been replaced as a voucher
+    if ( ! in_array(
+        $voucher_id,
+        ccgn_application_vouchers_users_ids ( $applicant_id )
+    ) ) {
+        error_log( "Voucher is not currently in applicant's Voucher requests. Not resetting." );
+        return false;
+    }
+    // Get spoofed cannot for voucher and applicant
+    $spoofs = get_entries(
+        RGFormsModel::get_form_id( CCGN_GF_VOUCH ),
+        array(
+            'created_by' => $voucher_id,
+            CCGN_GF_VOUCH_DO_YOU_VOUCH => 'Cannot',
+            CCGN_GF_VOUCH_REASON => 'AUTOMATICALLY CLOSED: NO RESPONSE',
+            CCGN_GF_VOUCH_APPLICANT_ID_FIELD => $applicant_id
+        )
+    );
+    if ( ! is_wp_error( $spoofs ) ) {
+        // There should be only one, but just in case (this handles 0 as well)
+        foreach ( $spoofs as $spoof ) {
+            GFAPI::delete_entry( $spoof[ 'id' ] );
+        }
+    }
+    // The user can now vouch, so let them know
+    ccgn_registration_email_vouching_request(
+        $applicant_id,
+        $voucher_id
+    );
+    // The applicant now has one less "cannot" vouch. If it was the only one
+    // then the clock has reset on their update vouchers request.
+    // TODO:If the Applicant's application has timed out, we also need to reset
+    // the date on that.
+    return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Individual / Institution details forms
 ////////////////////////////////////////////////////////////////////////////////
