@@ -377,7 +377,7 @@ function ccgn_vouching_request_remove_spoofed_cannot (
         return false;
     }
     // Get spoofed cannot for voucher and applicant
-    $spoofs = get_entries(
+    $spoofs = GFAPI::get_entries(
         RGFormsModel::get_form_id( CCGN_GF_VOUCH ),
         array(
             'created_by' => $voucher_id,
