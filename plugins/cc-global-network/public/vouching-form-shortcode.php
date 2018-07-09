@@ -59,6 +59,12 @@ function ccgn_vouching_requests_render ( $voucher_id ) {
         echo _( "<h2>Current Vouching Requests</h2><ul>" );
         foreach ( $requests as $request ) {
             $applicant_id = $request[ 'created_by' ];
+            // Make sure the user has been Spam Checked, otherwise people
+            // cannot vouch for them despite them being requested to do so.
+            $stage = ccgn_registration_user_get_stage( $applicant_id);
+            if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
+                continue;
+            }
             $applicant = get_user_by( 'ID', $applicant_id );
             $request_html = '<li><a href="'
                           . get_site_url()
