@@ -191,16 +191,23 @@ function ccgn_vouching_form_post_validate ( $validation_result ) {
 function ccgn_application_vouching_form_submit_handler ( $entry,
                                                          $form ) {
     if ( $form[ 'title' ] == CCGN_GF_VOUCH ) {
-        $applicant_id = $entry[ CCGN_GF_VOUCH_APPLICANT_ID ];
+        //FIXME: This has to have been working but doesn't seem to be now,
+        //       so do this.
+        if (isset($entry[ CCGN_GF_VOUCH_APPLICANT_ID ])) {
+            $applicant_id = $entry[ CCGN_GF_VOUCH_APPLICANT_ID ];
+        } else {
+            $applicant_id = $entry[ CCGN_GF_VOUCH_APPLICANT_ID_FIELD ];
+        }
         $voucher_id = $entry[ 'created_by' ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
         // At this point in form processing we shouldn't disturb the submitter,
         // but should log this and not do anything else based on it.
         if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
-            error_log(
-                "Vouch by " . $voucher_id . " for applicant " . $applicant_id
-                . " while at non-Vouching stage: " . $stage
-            );
+            $error_message = "Vouch by " . $voucher_id . " for applicant "
+                           . $applicant_id . " while at non-Vouching stage: "
+                           . $stage;
+            error_log($error_message);
+            echo $error_message;
             return;
         }
         if (
