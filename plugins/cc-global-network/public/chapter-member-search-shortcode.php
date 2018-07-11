@@ -38,11 +38,6 @@ function ccgn_send_member_chapter_search_form () {
 // List member names with profile links
 
 function ccgn_print_members_list ( $members ) {
-    error_log(json_encode($members));
-    error_log(json_encode(array_map(
-                $members,
-                function( $a ) { return $a->ID; }
-            )));
     $query = array(
         //FIXME: Paginate in future
         'per_page' => 999999,
