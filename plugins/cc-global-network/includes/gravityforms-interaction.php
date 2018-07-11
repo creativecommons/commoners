@@ -1400,8 +1400,13 @@ function ccgn_applicants_with_cannot_vouches_older_than ( $days ) {
             );
             // If there's a vouch
             if ( $vouches != [] ) {
-                // Check if it's a 'cannot'
                 $vouch = $vouches[ 0 ];
+                // Ignore it if it's too new
+                $vouch_date = $vouch[ 'date_created' ];
+                if ( $voucher_date < $cutoff ) {
+                    continue;
+                }
+                // Check if it's a 'cannot'
                 if (
                     $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
                     == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT
@@ -1409,10 +1414,10 @@ function ccgn_applicants_with_cannot_vouches_older_than ( $days ) {
                     // Declined? Start or add to the id/date map
                     if ( isset( $applicants_old_requests[ $applicant_id ] ) ) {
                         $applicants_old_requests[ $applicant_id ][$voucher_id]
-                            = $vouch[ 'date_created' ];
+                            = $vouch_date;
                     } else {
                         $applicants_old_requests[ $applicant_id ] = array(
-                            $voucher_id => $vouch[ 'date_created' ]
+                            $voucher_id => $vouch_date
                         );
                     }
                 }

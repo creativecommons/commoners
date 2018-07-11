@@ -35,7 +35,7 @@ function ccgn_email_update_vouchers_closed () {
     $applicants = ccgn_applicants_with_cannot_vouches_older_than (
         CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS
     );
-    foreach ( $applicants as $applicant_id ) {
+    foreach ( array_keys( $applicants ) as $applicant_id ) {
         ccgn_user_level_set_didnt_update_vouchers ( $applicant_id );
         ccgn_registration_email_voucher_cannot_closed( $applicant_id );
     }
