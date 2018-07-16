@@ -1311,7 +1311,7 @@ function ccgn_members_with_most_open_vouch_requests () {
     $applicants = ccgn_applicant_ids_with_state(
         CCGN_APPLICATION_STATE_VOUCHING
     );
-    // Get vouch requests for each
+    // Get vouch requests for each applicant
     foreach ( $applicants as $applicant_id ) {
         $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
         foreach ( $vouchers as $voucher_id ) {
@@ -1321,12 +1321,10 @@ function ccgn_members_with_most_open_vouch_requests () {
             );
             // If the voucher has not vouched
             if ( $vouches == [] ) {
-                // Increment or start the count
-                if ( isset( $open_requests[ $voucher_id ] ) ) {
-                    $open_requests[ $voucher_id ][] = $applicant_id;
-                } else {
-                    $open_requests[ $voucher_id ] = array( $applicant_id );
+                if ( ! isset( $open_requests[ $voucher_id ] ) ) {
+                    $open_requests[ $voucher_id ] =  array();
                 }
+                $open_requests[ $voucher_id ][] = $applicant_id;
             }
         }
     }
@@ -1339,7 +1337,7 @@ function ccgn_members_with_most_open_vouch_requests () {
 // where the voucher request was created more than $days ago
 
 function ccgn_members_vouchers_with_requests_older_than ( $days ) {
-    $cutoff = date('Y-m-d h:i:s', strtotime($days . ' days ago'));
+    $cutoff = date('Y-m-d H:i:s', strtotime($days . ' days ago'));
     $members_old_requests = array();
     // Get applicants in the vouching state
     $applicants = ccgn_applicant_ids_with_state(
@@ -1380,8 +1378,59 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
 // UNSORTED KEYS AND VALUES: [unreplaced declined voucher => date declined]
 // where the voucher request was created more than $days ago
 
+function ccgn_vouch_is_old_cannot ( $vouch, $cutoff ) {
+    return ( $vouch[ 'date' ] < $cutoff )
+        && (
+            $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
+            == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT
+        );
+}
+
+function ccgn_applicant_append_old_cannots (
+    & $applicants_old_requests,
+    $applicant_id,
+    $vouch,
+    $cutoff
+)  {
+    if ( ccgn_vouch_is_old_cannot( $vouch, $cutoff ) ) {
+        $vouch_date = $vouch[ 'date_created' ];
+        // Declined? Start or add to the id/date map
+        if ( ! isset( $applicants_old_requests[ $applicant_id ] ) ) {
+            $applicants_old_requests[ $applicant_id ] = array();
+        }
+        $applicants_old_requests[ $applicant_id ][$voucher_id] = $vouch_date;
+    }
+}
+
+function ccgn_applicants_append_old_cannots (
+    & $applicants_old_requests,
+    $applicant_id,
+    $cutoff
+) {
+    $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
+    // Get vouches by each requested voucher
+    foreach ( $vouchers as $voucher_id ) {
+        $vouches = ccgn_vouches_for_applicant_by_voucher (
+            $applicant_id,
+            $voucher_id
+        );
+        // If there's a vouch
+        if ( $vouches != [] ) {
+            // There should only be one vouch for each request, but just in case
+            $vouch = $vouches[ 0 ];
+            // Append any old cannots
+            ccgn_applicant_append_old_cannots (
+                $applicants_old_requests,
+                $applicant_id,
+                $vouch,
+                $cutoff
+            );
+        }
+    }
+}
+
 function ccgn_applicants_with_cannot_vouches_older_than ( $days ) {
-    $cutoff = date('Y-m-d h:i:s', strtotime($days . ' days ago'));
+    $cutoff = date('Y-m-d H:i:s', strtotime($days . ' days ago'));
     $applicants_old_requests = array();
     // Get applicants in the vouching state
     // This constraint is amazingly important, do not change this without
@@ -1391,38 +1440,11 @@ function ccgn_applicants_with_cannot_vouches_older_than ( $days ) {
     );
     // Get vouch requests for each applicant
     foreach ( $applicants as $applicant_id ) {
-        $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
-        // Get vouches by each requested voucher
-        foreach ( $vouchers as $voucher_id ) {
-            $vouches = ccgn_vouches_for_applicant_by_voucher (
-                $applicant_id,
-                $voucher_id
-            );
-            // If there's a vouch
-            if ( $vouches != [] ) {
-                $vouch = $vouches[ 0 ];
-                // Ignore it if it's too new
-                $vouch_date = $vouch[ 'date_created' ];
-                if ( $voucher_date < $cutoff ) {
-                    continue;
-                }
-                // Check if it's a 'cannot'
-                if (
-                    $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
-                    == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT
-                ) {
-                    // Declined? Start or add to the id/date map
-                    if ( isset( $applicants_old_requests[ $applicant_id ] ) ) {
-                        $applicants_old_requests[ $applicant_id ][$voucher_id]
-                            = $vouch_date;
-                    } else {
-                        $applicants_old_requests[ $applicant_id ] = array(
-                            $voucher_id => $vouch_date
-                        );
-                    }
-                }
-            }
-        }
+        ccgn_applicants_append_old_cannots(
+            $applicants_old_requests,
+            $applicant_id,
+            $cutoff
+        );
     }
     return $applicants_old_requests;
 }
