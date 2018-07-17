@@ -62,7 +62,7 @@ function _ccgn_user_level_rollback_to_applicant ( $user_id ) {
 // It really does wipe their application details, so be careful.
 
 function _ccgn_user_level_total_reset ( $user_id ) {
-    assert( $applicant_id != 1 );
+    assert( $user_id != 1 );
     _ccgn_user_level_rollback_to_applicant( $user_id );
     _ccgn_user_level_rollback_to_pre_approval ( $user_id );
     // This will delete the application forms
