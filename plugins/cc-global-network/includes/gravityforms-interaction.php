@@ -364,6 +364,9 @@ function ccgn_vouching_request_spoof_cannot ( $applicant_id, $voucher_id ) {
     );
 }
 
+// NOTE: This resets the Applicant's Vouching timescale by modifying the
+//       creation date of their Choose Vouchers form entry. See FIXME comment.
+
 function ccgn_vouching_request_remove_spoofed_cannot (
     $applicant_id,
     $voucher_id
@@ -377,30 +380,51 @@ function ccgn_vouching_request_remove_spoofed_cannot (
         return false;
     }
     // Get spoofed cannot for voucher and applicant
+    $search_criteria = array();
+    $search_criteria['field_filters'][] = array(
+        'key' =>   'created_by',
+        'value' => $voucher_id
+    );
+    $search_criteria['field_filters'][] = array(
+        'key' =>   CCGN_GF_VOUCH_DO_YOU_VOUCH,
+        'value' => 'Cannot'
+    );
+    $search_criteria['field_filters'][] = array(
+        'key' =>   CCGN_GF_VOUCH_REASON,
+        'value' => 'AUTOMATICALLY CLOSED: NO RESPONSE'
+    );
+    $search_criteria['field_filters'][] = array(
+        'key' =>   CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
+        'value' => $applicant_id
+    );
+
     $spoofs = GFAPI::get_entries(
         RGFormsModel::get_form_id( CCGN_GF_VOUCH ),
-        array(
-            'created_by' => $voucher_id,
-            CCGN_GF_VOUCH_DO_YOU_VOUCH => 'Cannot',
-            CCGN_GF_VOUCH_REASON => 'AUTOMATICALLY CLOSED: NO RESPONSE',
-            CCGN_GF_VOUCH_APPLICANT_ID_FIELD => $applicant_id
-        )
+        $search_criteria
     );
     if ( ! is_wp_error( $spoofs ) ) {
         // There should be only one, but just in case (this handles 0 as well)
         foreach ( $spoofs as $spoof ) {
+            // Make sure $search_criteria worked. We don't want to delete the
+            // wrong entries.
+            assert($spoof['created_by'] == $voucher_id);
             GFAPI::delete_entry( $spoof[ 'id' ] );
         }
+        // Reset the Applicant's vouching timescale so that the vouch request
+        // does not time out before the Voucher responds.
+        $voucher_choices = ccgn_application_vouchers ( $applicant_id );
+        //FIXME: Cache this separately on the form rather than doing this.
+        //      This isn't when the form was created, but it is used to
+        //      determine the timeout, so we have to do this. Ugh.
+        $voucher_choices[ 'date_created' ] = date('Y-m-d H:i:s',
+                                                  strtotime('now'));
+        GFAPI::update_entry( $voucher_choices );
+        // The user can now vouch, so let them know
+        ccgn_registration_email_vouching_request(
+            $applicant_id,
+            $voucher_id
+        );
     }
-    // The user can now vouch, so let them know
-    ccgn_registration_email_vouching_request(
-        $applicant_id,
-        $voucher_id
-    );
-    // The applicant now has one less "cannot" vouch. If it was the only one
-    // then the clock has reset on their update vouchers request.
-    // TODO:If the Applicant's application has timed out, we also need to reset
-    // the date on that.
     return true;
 }
 
@@ -1041,6 +1065,7 @@ function ccgn_legal_approval_entry_for ( $applicant_id ) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Entry deletion and cleanup
+// WARNING: Be very careful using these.
 ////////////////////////////////////////////////////////////////////////////////
 
 // This really does delete the user's form entries.
@@ -1389,6 +1414,7 @@ function ccgn_vouch_is_old_cannot ( $vouch, $cutoff ) {
 function ccgn_applicant_append_old_cannots (
     & $applicants_old_requests,
     $applicant_id,
+    $voucher_id,
     $vouch,
     $cutoff
 )  {
@@ -1422,6 +1448,7 @@ function ccgn_applicants_append_old_cannots (
             ccgn_applicant_append_old_cannots (
                 $applicants_old_requests,
                 $applicant_id,
+                $voucher_id,
                 $vouch,
                 $cutoff
             );
