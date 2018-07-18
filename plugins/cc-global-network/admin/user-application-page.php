@@ -443,7 +443,10 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
         echo _('<h2>Vouches Received</h2>');
         echo ccgn_application_users_page_vouch_counts ( $applicant_id );
         echo _('<h2>Vouches</h2>');
-        echo ccgn_application_users_page_vouch_responses ( $applicant_id );
+        echo ccgn_application_users_page_vouch_responses (
+            $applicant_id,
+            true
+        );
     }
     echo _('<h2>Global Council Approval</h2>');
     echo _('<h3>Votes Received</h3>');

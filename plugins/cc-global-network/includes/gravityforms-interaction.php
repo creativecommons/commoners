@@ -1493,17 +1493,24 @@ function ccgn_applicants_with_cannot_vouches_older_than ( $days ) {
 
 // Format the list of vouches the member has received from their vouchers
 
-function ccgn_application_users_page_vouch_responses ( $applicant_id ) {
+function ccgn_application_users_page_vouch_responses (
+    $applicant_id,
+    $full_date = false
+) {
     $result = '';
     $vouches = ccgn_application_vouches ( $applicant_id );
     foreach ($vouches as $vouch) {
         $voucher = get_user_by('ID', $vouch['created_by']);
+        $vouch_date = ccgn_entry_created_or_updated( $vouch );
+        if ( ! $full_date ) {
+            $vouch_date = explode( ' ', $vouch_date )[ 0 ];
+        }
         $result .=
                 '<h4>From: '
                 . $voucher->display_name
                 . '</h4><p><strong>Date:</strong>'
                 // Just the date, not the time
-                . explode(' ', ccgn_entry_created_or_updated( $vouch ) )[ 0 ]
+                . $vouch_date
                 .'</p><p><strong>Vouched:</strong> '
                 . $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
                 . '</p><p><strong>Reason:</strong> '
