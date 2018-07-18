@@ -87,15 +87,19 @@ function ccgn_email_vouch_request_reminder_maybe_close (
 function ccgn_email_vouch_request_reminders () {
     $today = new DateTime( 'today' );
     // There may be a more efficient SQL query but I don't want to be
-    // debendent on database structure - RobM.
+    // dependent on database structure - RobM.
     $applicants = ccgn_applicant_ids_with_state(
         CCGN_APPLICATION_STATE_VOUCHING
     );
     foreach ( $applicants as $applicant_id ) {
         $vouchers_form = ccgn_application_vouchers ( $applicant_id );
-        $request_date = new DateTime($vouchers_form[ 'date_created' ]);
+        $request_date = new DateTime(
+            ccgn_entry_created_or_updated(
+                $vouchers_form
+            )
+        );
         # php 5.2.2 or later for DateTime comparisons....
-        $day = $today->diff($request_date)->days;
+        $day = ($today->diff($request_date))->days;
         $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
         foreach ( $vouchers as $voucher_id ) {
             if ( ccgn_vouching_request_open ( $applicant_id, $voucher_id ) ) {
@@ -127,4 +131,48 @@ function ccgn_schedule_email_vouch_request_reminders () {
 
 function ccgn_schedule_remove_email_vouch_request_reminders () {
     wp_clear_scheduled_hook( 'ccgn_email_vouch_request_reminders_event' );
+}
+
+// Debugging but it may be useful so leaving it in for now
+
+function _ccgn_check_autos () {
+    $autos = GFAPI::get_entries(
+        44,
+        array(
+            'field_filters' => array(
+                array(
+                    'key' => '4',
+                    'value' => 'AUTOMATICALLY CLOSED: NO RESPONSE'
+                )
+            )
+        ),
+        null,
+        array( 'offset' => 0, 'page_size' => 200 )
+    );
+
+    for($i = 0; $i < count($autos); $i++){
+        $search_criteria = array();
+        $search_criteria['field_filters'][]
+            = array(
+                'key' => 'created_by',
+                'value' => $autos[$i]['7']
+            );
+        $request = GFAPI::get_entries(41, $search_criteria)[0];
+        $a = new DateTime(ccgn_entry_created_or_updated($request));
+        $b = new DateTime(ccgn_entry_created_or_updated($autos[$i]));
+        $day = ($b->diff($a))->days;
+        echo $day . "\t";
+        //if( $day <= 1) {
+        //            echo json_encode($request);
+        echo $autos[$i]['id']
+            . ': '
+            . ccgn_entry_created_or_updated($autos[$i])
+            . ' - '
+            . $request['id']
+            . ': '
+            . ccgn_entry_created_or_updated($request)
+            . "\n";
+        //}
+        //            echo json_encode($autos[$i]) . "\n";
+    }
 }

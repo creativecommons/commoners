@@ -425,6 +425,15 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
     echo _('<h2>Details Provided By Applicant</h2>');
     echo ccgn_user_page_applicant_profile_text( $applicant_id );
     echo _('<h2>Vouchers Requested</h2>');
+    $voucher_choices = ccgn_application_vouchers ( $applicant_id );
+    echo '<p><b>Original request date:</b> '
+        . $voucher_choices['date_created']
+        . '</p>';
+    if (! is_null ( $voucher_choices[ 'date_updated' ]  ) ) {
+        echo '<p><b>Updated request date:</b> '
+            . $voucher_choices['date_updated']
+            . '</p>';
+    }
     echo ccgn_application_users_page_vouchers( $applicant_id );
     if ( $state != CCGN_APPLICATION_STATE_RECEIVED ) {
         ccgn_application_user_page_render_change_vouchers (

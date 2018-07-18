@@ -223,6 +223,21 @@ define(
 );
 
 ////////////////////////////////////////////////////////////////////////////////
+// Utilities
+////////////////////////////////////////////////////////////////////////////////
+
+// Use where we wish to measure a date from the most recent of either the date
+// of creation or the date on which the entry was updated.
+
+function ccgn_entry_created_or_updated ( $entry ) {
+    $date = $entry[ 'date_updated' ];
+    if ( is_null( $date ) ) {
+        $date = $entry[ 'date_created' ];
+    }
+    return $date;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Form cleanup
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -413,10 +428,7 @@ function ccgn_vouching_request_remove_spoofed_cannot (
         // Reset the Applicant's vouching timescale so that the vouch request
         // does not time out before the Voucher responds.
         $voucher_choices = ccgn_application_vouchers ( $applicant_id );
-        //FIXME: Cache this separately on the form rather than doing this.
-        //      This isn't when the form was created, but it is used to
-        //      determine the timeout, so we have to do this. Ugh.
-        $voucher_choices[ 'date_created' ] = date('Y-m-d H:i:s',
+        $voucher_choices[ 'date_updated' ] = date('Y-m-d H:i:s',
                                                   strtotime('now'));
         GFAPI::update_entry( $voucher_choices );
         // The user can now vouch, so let them know
@@ -1373,7 +1385,8 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
         $voucher_choices = ccgn_application_vouchers ( $applicant_id );
         // If they are older than the cutoff, check for vouches
         //FIXME: if the request is old but has been updated, this won't know
-        if ( $voucher_choices[ 'date_created' ] < $cutoff ) {
+        $choices_date = ccgn_entry_created_or_updated( $voucher_choices );
+        if ( $choices_date < $cutoff ) {
             $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
             foreach ( $vouchers as $voucher_id ) {
                 $vouches = ccgn_vouches_for_applicant_by_voucher (
@@ -1383,14 +1396,11 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
                 // If the voucher has not vouched
                 if ( $vouches == [] ) {
                     // Create or add to the map of applicant dates
-                    if ( isset( $members_old_requests[ $voucher_id ] ) ) {
-                        $members_old_requests[ $voucher_id ][$applicant_id]
-                            = $voucher_choices[ 'date_created' ];
-                    } else {
-                        $members_old_requests[ $voucher_id ] = array(
-                            $applicant_id => $voucher_choices[ 'date_created' ]
-                        );
+                    if (! isset( $members_old_requests[ $voucher_id ] ) ) {
+                        $members_old_requests[ $voucher_id ] = array();
                     }
+                    $members_old_requests[ $voucher_id ][$applicant_id]
+                        = $choices_date;
                 }
             }
         }
@@ -1419,7 +1429,7 @@ function ccgn_applicant_append_old_cannots (
     $cutoff
 )  {
     if ( ccgn_vouch_is_old_cannot( $vouch, $cutoff ) ) {
-        $vouch_date = $vouch[ 'date_created' ];
+        $vouch_date = ccgn_entry_created_or_updated($vouch);
         // Declined? Start or add to the id/date map
         if ( ! isset( $applicants_old_requests[ $applicant_id ] ) ) {
             $applicants_old_requests[ $applicant_id ] = array();
@@ -1490,7 +1500,10 @@ function ccgn_application_users_page_vouch_responses ( $applicant_id ) {
         $result .=
                 '<h4>From: '
                 . $voucher->display_name
-                . '</h4><p><strong>Vouched:</strong> '
+                . '</h4><p><strong>Date:</strong>'
+                // Just the date, not the time
+                . explode(' ', ccgn_entry_created_or_updated( $vouch ) )[ 0 ]
+                .'</p><p><strong>Vouched:</strong> '
                 . $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
                 . '</p><p><strong>Reason:</strong> '
                 . $vouch[ CCGN_GF_VOUCH_REASON ]
