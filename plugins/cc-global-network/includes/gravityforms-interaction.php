@@ -1383,8 +1383,8 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
     // Get vouch requests for each applicant
     foreach ( $applicants as $applicant_id ) {
         $voucher_choices = ccgn_application_vouchers ( $applicant_id );
-        // If they are older than the cutoff, check for vouches
-        //FIXME: if the request is old but has been updated, this won't know
+        // If the date on which they were created or updated is older than
+        // the cutoff, check for vouches
         $choices_date = ccgn_entry_created_or_updated( $voucher_choices );
         if ( $choices_date < $cutoff ) {
             $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
@@ -1414,6 +1414,7 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
 // where the voucher request was created more than $days ago
 
 function ccgn_vouch_is_old_cannot ( $vouch, $cutoff ) {
+    // This is simple string comparison but it is OK with the date format
     return ( $vouch[ 'date' ] < $cutoff )
         && (
             $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
