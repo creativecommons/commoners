@@ -2,6 +2,11 @@
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
+///////////////////////////////////////////////////////////////////////////////
+// NOTES:
+// We should use GFAPI::update_entry_field more often than we do.
+///////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////////
 // Constants and functions for interacting with GravityForms.
 // We handle forms, fields and entries here.
@@ -106,6 +111,8 @@ define(
 define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_YES', 'Yes' );
 define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_NO', 'No' );
 define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT', 'Cannot' );
+// This is added by the system, not users, but it is here for completeness
+define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED', 'REMOVED' );
 define( 'CCGN_GF_PRE_APPROVAL_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_VOTE_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVED_YES', 'Yes' );
@@ -235,6 +242,34 @@ function ccgn_entry_created_or_updated ( $entry ) {
         $date = $entry[ 'date_created' ];
     }
     return $date;
+}
+
+// This is hideous - RobM
+// Note that this takes the entry array, not entry id.
+//NOTE: BEWARE THIS BREAKING ON GRAVITYFORMS VERSION UPDATES
+
+function ccgn_set_entry_update_date ( $entry, $date ) {
+    global $wpdb;
+    return $wpdb->update(
+        "{$wpdb->prefix}gf_entry",
+        array( 'date_updated' => $date ),
+        array( 'id' => $entry['id'] )
+    );
+}
+
+// Append a note to the entry's notes.
+// Note that this takes the entry array, not entry id.
+
+function ccgn_entry_append_note ( $entry, $note ) {
+    // Will be user zero / username "" in cron tasks
+    $current_user = wp_get_current_user();
+    $username = $current_user->display_name ? $current_user->display_name : '[cron job or cli user]';
+    RGFormsModel::add_note(
+        $entry[ 'id' ],
+        $current_user->ID,
+        $username,
+        $note
+    );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -367,7 +402,15 @@ function ccgn_vouching_request_open ( $applicant_id, $voucher_id ) {
 // Spoof a "cannot" for an automatically closed Vouching request
 
 function ccgn_vouching_request_spoof_cannot ( $applicant_id, $voucher_id ) {
-    GFAPI::add_entry (
+    // Make sure the user hasn't been replaced as a voucher
+    if ( ! in_array(
+        $voucher_id,
+        ccgn_application_vouchers_users_ids ( $applicant_id )
+    ) ) {
+        error_log( "Voucher is not currently in applicant's Voucher requests. Not spoofing." );
+        return false;
+    }
+    $entry_id = GFAPI::add_entry (
         array(
             'form_id' => RGFormsModel::get_form_id( CCGN_GF_VOUCH ),
             'date_created' => date ( 'Y-m-d H:i:s' ),
@@ -377,12 +420,115 @@ function ccgn_vouching_request_spoof_cannot ( $applicant_id, $voucher_id ) {
             CCGN_GF_VOUCH_APPLICANT_ID_FIELD => $applicant_id
         )
     );
+    // Admin log
+    ccgn_entry_append_note (
+        array( 'id' =>  $entry_id ),
+        'SPOOFING "CANNOT" VOUCH ENTRY: this is due to the Voucher not responding in time.'
+    );
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Resetting application properties.
+///////////////////////////////////////////////////////////////////////////////
+
+// Roll back an application that was automatically closed because the applicant
+// did not update their Voucher Choices in response to a Member vouching
+// "Cannot" or an automatically closed vouching request (also appearing as a
+// "Cannot").
+
+function ccgn_reopen_application_auto_closed_because_cannots (
+    $applicant_id
+) {
+    $applicant_state = ccgn_registration_user_get_stage ( $applicant_id );
+    if( $applicant_state != CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS ) {
+        error_log( "Not re-opening Application for User ID "
+                   . $applicant_id
+                   . ": not in state CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS." );
+        return false;
+    }
+    if ( ! ccgn_application_vouches_has_cannots( $applicant_id ) ) {
+        error_log( "Not re-opening Application for User ID "
+                   . $applicant_id
+                   . ': it does not have any "Cannot" vouches.' );
+        return false;
+    }
+    $choose_vouchers_entry = ccgn_application_vouchers( $applicant_id );
+    // Update the date on the Choose Vouchers form, resetting the timescale
+    // for updating voucher choices
+    $update_date = date( 'Y-m-d H:i:s', strtotime( 'now' ) );
+    ccgn_set_entry_update_date( $choose_vouchers_entry, $update_date );
+    // Keep admin log
+    ccgn_entry_append_note(
+        $choose_vouchers_entry,
+        'RE-OPENING APPLICATION AUTO-CLOSED DUE TO "CANNOT" VOUCHES: Setting update date to '
+        . $update_date
+    );
+    // Set the application to be in the vouching stage, allowing the user to
+    // update their voucher choices and reminding them to do so by email
+    // during the next cron job run.
+    ccgn_registration_user_back_to_vouching( $applicant_id );
+    return true;
+}
+
+// Remove a mistaken vouching response and reset the applicant's vouching
+// timescale. This should only be called extraordinarily, in response to a
+// support request.
+// Note that this will remove *any* vouch for the applicant if requested,
+// this includes vouches from vouchers that the user has since removed from
+// their vouch requests. This is so that if the voucher wishes to change their
+// vouch and the user needs to change their vouchign requests to do so,
+// neither is waiting on the other.
+// Be careful calling this though.
+
+function ccgn_reset_vouch_request (
+    $applicant_id,
+    $voucher_id
+) {
+    $applicant_state = ccgn_registration_user_get_stage ( $applicant_id );
+    // See logic at end as well
+    assert( $applicant_state == CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS
+            || $applicant_state == CCGN_APPLICATION_STATE_VOUCHING );
+    $update_date = date( 'Y-m-d H:i:s', strtotime( 'now' ) );
+    // Mark the vouching request as not to be considered when counting vouches
+    $vouch = ccgn_vouches_for_applicant_by_voucher(
+        $applicant_id,
+        $voucher_id
+    )[ 0 ];
+    $original_vouch = $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH];
+    //FIXME: Check to see if $original_vouch = REMOVED?
+    $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH] = CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED;
+    GFAPI::update_entry( $vouch );
+    ccgn_set_entry_update_date( $vouch, $update_date );
+    // Keep an admin log.
+    ccgn_entry_append_note(
+        $vouch,
+        "RESETTING VOUCH REQUEST STATUS: So to make sure this Vouch doesn't affect that we are changing its Status from "
+        . $original_vouch . ' to '
+        . CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED . ' at ' . $update_date
+    );
+    // Update the date on the Choose Vouchers form, resetting the timescale
+    // for updating voucher choices
+    $choose_vouchers_entry = ccgn_application_vouchers( $applicant_id );
+    ccgn_set_entry_update_date( $choose_vouchers_entry, $update_date );
+    // Keep an admin log.
+    ccgn_entry_append_note(
+        $choose_vouchers_entry,
+        'RESETTING VOUCH REQUEST STATUS: To make sure the Applicant has time to update their Vouch Requests, we are updating the entry update date to ' . $update_date
+    );
+    // If the user isn't vouching, set them back to vouching, allowing them to
+    // update their voucher choices and reminding them to do so by email
+    // during the next cron job run.
+    if ( ccgn_registration_user_get_stage( $applicant_id )
+         == CCGN_APPLICATION_STATE_DIDNGT_UPDATE_VOUCHERS ) {
+        ccgn_registration_user_back_to_vouching( $applicant_id );
+    }
 }
 
 // NOTE: This resets the Applicant's Vouching timescale by modifying the
-//       creation date of their Choose Vouchers form entry. See FIXME comment.
+//       creation date of their Choose Vouchers form entry.
 
-function ccgn_vouching_request_remove_spoofed_cannot (
+function ccgn_vouch_request_remove_spoofed_cannot (
     $applicant_id,
     $voucher_id
 ) {
@@ -417,20 +563,30 @@ function ccgn_vouching_request_remove_spoofed_cannot (
         RGFormsModel::get_form_id( CCGN_GF_VOUCH ),
         $search_criteria
     );
-    if ( ! is_wp_error( $spoofs ) ) {
-        // There should be only one, but just in case (this handles 0 as well)
+    if ( ! is_wp_error( $spoofs )
+         && count($spoofs) > 0 ) {
+        // There should be only one, but just in case
         foreach ( $spoofs as $spoof ) {
             // Make sure $search_criteria worked. We don't want to delete the
             // wrong entries.
             assert($spoof['created_by'] == $voucher_id);
-            GFAPI::delete_entry( $spoof[ 'id' ] );
+            // Don't delete it, just remove it from the count
+            $spoof[CCGN_GF_VOUCH_DO_YOU_VOUCH]
+                = CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED;
+            GFAPI::update_entry( $spoof );
         }
         // Reset the Applicant's vouching timescale so that the vouch request
         // does not time out before the Voucher responds.
         $voucher_choices = ccgn_application_vouchers ( $applicant_id );
-        $voucher_choices[ 'date_updated' ] = date('Y-m-d H:i:s',
-                                                  strtotime('now'));
-        GFAPI::update_entry( $voucher_choices );
+        $update_date = date( 'Y-m-d H:i:s', strtotime( 'now' ) );
+        ccgn_set_entry_update_date( $voucher_choices, $update_date );
+        // Keep an admin log.
+        ccgn_entry_append_note(
+            $voucher_choices,
+            'REMOVING SPOOFED "CANNOT" VOUCH: To do this, we are setting its status to '
+            . CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED
+            . ' at ' . $update_date
+        );
         // The user can now vouch, so let them know
         ccgn_registration_email_vouching_request(
             $applicant_id,
@@ -567,7 +723,7 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
                 $yes += 1;
             } elseif ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_NO ) {
                 $no += 1;
-            } else {
+            } elseif ( $did_they == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT ) {
                 $cannot += 1;
             }
             $vouchers[] = $voucher;
@@ -1385,7 +1541,7 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
         $voucher_choices = ccgn_application_vouchers ( $applicant_id );
         // If the date on which they were created or updated is older than
         // the cutoff, check for vouches
-        $choices_date = ccgn_entry_created_or_updated( $voucher_choices );
+        $choices_date = ccgn_entry_created_or_updated ( $voucher_choices );
         if ( $choices_date < $cutoff ) {
             $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
             foreach ( $vouchers as $voucher_id ) {

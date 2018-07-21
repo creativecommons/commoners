@@ -140,6 +140,25 @@ function ccgn_registration_user_set_stage ( $user_id, $stage ) {
             CCGN_APPLICATION_STATE,
             $stage
         );
+    } else {
+        error_log( 'Attempt to set user ' . $user_id . ' to stage '
+                   . $stage . ' when user is past mutable application state.' );
+    }
+}
+
+// This one will roll you back to vouching but only if you should be able to
+
+function ccgn_registration_user_back_to_vouching ( $user_id ) {
+    $current = ccgn_registration_user_get_stage( $user_id );
+    if ($current == CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS ) {
+        update_user_meta(
+            $user_id,
+            CCGN_APPLICATION_STATE,
+            CCGN_APPLICATION_STATE_VOUCHING
+        );
+    } else {
+        error_log( 'Attempt to set user ' . $user_id
+                   . ' to stage CCGN_APPLICATION_STATE_VOUCHING when user is not in stage CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS.' );
     }
 }
 
