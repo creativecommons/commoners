@@ -465,9 +465,10 @@ function ccgn_reopen_application_auto_closed_because_cannots (
         . $update_date
     );
     // Set the application to be in the vouching stage, allowing the user to
-    // update their voucher choices and reminding them to do so by email
-    // during the next cron job run.
+    // update their voucher choices
     ccgn_registration_user_back_to_vouching( $applicant_id );
+    // Remind them to do so by email
+    ccgn_registration_email_voucher_cannot_reminder( $applicant_id );
     return true;
 }
 
