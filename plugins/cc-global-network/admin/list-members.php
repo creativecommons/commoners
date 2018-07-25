@@ -78,6 +78,25 @@ function ccgn_list_render_institutional_applicants ( $members ) {
     return $emails;
 }
 
+function ccgn_report_member_country_count() {
+    $countries = array();
+    $member_ids = ccgn_members_individual_ids();
+    foreach ( $member_ids as $member_id ) {
+        $country = bp_get_profile_field_data(
+            'field=Location&user_id=' . $member_id
+        );
+        if (! isset($countries[$country]) ) {
+            $countries[$country] = 0;
+        }
+        $countries[$country] += 1;
+    }
+    echo '<h1>Total Individual Members by Country (All-time)</h1><table><thead><tr><td>Country</td><td>Count</td></tr></thead><tbody>';
+    foreach ($countries as $country => $count) {
+        echo '<tr><td>' . $country . '</td><td>' . $count . '</td></tr>';
+    }
+    echo '</tbody></table>';
+}
+
 function ccgn_list_recent_members ( $start_date, $end_date ) {
     $date_spec_string = '';
     if ( $start_date || $end_date ) {
@@ -146,6 +165,7 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
     <h2>No Institutional Members matched the specified dates</h2>
 <?php
     }
+    ccgn_report_member_country_count();
 }
 
 function ccgn_list_members_admin_page () {
