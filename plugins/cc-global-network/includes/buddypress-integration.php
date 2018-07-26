@@ -871,26 +871,24 @@ function ccgn_bp_directory_query ( $qs=false, $object=false ) {
     if ( $object != 'members' ) {
         return $qs;
     }
-    $new_users = get_users(
-        array(
-            // Exclude site admins and Applicants
-            'role__in' => array( 'administrator', CCGN_USER_ROLE_NEW ),
-            // But include site admins who are Members or part of the interim
-            // membership council
-            'role__not_in' => array(
-                'subscriber',
-                'membership-council-member'
-            ),
-            'fields' => array( 'ID' )
-        )
-    );
     $args = wp_parse_args( $qs );
     if(!empty($args['user_id'])) {
         return $qs;
     }
+    $users = get_users();
     $exclude = array();
-    foreach ( $new_users as $user ) {
-        $exclude[] = $user->ID;
+    // Filter users manually so we can exclude those with no role (those that
+    // have had their application declined) and exclude institutions
+    foreach ( $users as $user ) {
+        if (
+            array_intersect(
+                $user->roles,
+                array( 'subscriber', 'membership-council-member' )
+            ) == array()
+             || ccgn_member_is_institution( $user->ID )
+        ) {
+            $exclude[] = $user->ID;
+        }
     }
     if( ! empty( $args[ 'exclude' ] ) ) {
         $args[ 'exclude' ] = $args[ 'exclude' ] . ',' . $exclude;

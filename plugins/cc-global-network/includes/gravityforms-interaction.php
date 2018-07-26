@@ -1587,7 +1587,7 @@ function ccgn_applicant_append_old_cannots (
     $cutoff
 )  {
     if ( ccgn_vouch_is_old_cannot( $vouch, $cutoff ) ) {
-        $vouch_date = ccgn_entry_created_or_updated($vouch);
+        $vouch_date = ccgn_entry_created_or_updated( $vouch );
         // Declined? Start or add to the id/date map
         if ( ! isset( $applicants_old_requests[ $applicant_id ] ) ) {
             $applicants_old_requests[ $applicant_id ] = array();
