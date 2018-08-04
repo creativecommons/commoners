@@ -330,7 +330,7 @@ function ccgn_entries_created_by_user (
         $search_criteria,
         array(
             array(
-                'key' => 'date',
+                'key' => 'date_created',
                 'direction' => 'DESC',
                 'is_numeric' => false
             )
@@ -357,7 +357,7 @@ function ccgn_entries_referring_to_user (
         $search_criteria,
         array(
             array(
-                'key' => 'date',
+                'key' => 'date_created',
                 'direction' => 'ASC',
                 'is_numeric' => false
             )
@@ -841,7 +841,7 @@ function ccgn_application_votes_for_applicant_by_user (
         $search_criteria,
         array(
             array(
-                'key' => 'date',
+                'key' => 'date_created',
                 'direction' => 'ASC',
                 'is_numeric' => false
             )
@@ -1572,7 +1572,7 @@ function ccgn_members_vouchers_with_requests_older_than ( $days ) {
 
 function ccgn_vouch_is_old_cannot ( $vouch, $cutoff ) {
     // This is simple string comparison but it is OK with the date format
-    return ( $vouch[ 'date' ] < $cutoff )
+    return ( ccgn_entry_created_or_updated( $vouch ) < $cutoff )
         && (
             $vouch[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
             == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT
@@ -1656,8 +1656,8 @@ function ccgn_application_users_page_vouch_responses (
 ) {
     $result = '';
     $vouches = ccgn_application_vouches ( $applicant_id );
-    foreach ($vouches as $vouch) {
-        $voucher = get_user_by('ID', $vouch['created_by']);
+    foreach ( $vouches as $vouch ) {
+        $voucher = get_user_by( 'ID', $vouch[ 'created_by' ] );
         $vouch_date = ccgn_entry_created_or_updated( $vouch );
         if ( ! $full_date ) {
             $vouch_date = explode( ' ', $vouch_date )[ 0 ];
@@ -1739,7 +1739,7 @@ function _ccgn_new_final_approval_entries_since (
         $search_criteria,
         array(
             array(
-                'key' => 'date',
+                'key' => 'date_created',
                 'direction' => 'DESC',
                 'is_numeric' => false
             )
@@ -1792,7 +1792,7 @@ function _ccgn_new_legal_approval_entries_since (
         $search_criteria,
         array(
             array(
-                'key' => 'date',
+                'key' => 'date_created',
                 'direction' => 'DESC',
                 'is_numeric' => false
             )
