@@ -425,12 +425,27 @@ function ccgn_vouching_request_spoof_cannot ( $applicant_id, $voucher_id ) {
         array( 'id' =>  $entry_id ),
         'SPOOFING "CANNOT" VOUCH ENTRY: this is due to the Voucher not responding in time.'
     );
+    // If applicant is vouching, they must now update vouchers
+    ccgn_registration_user_set_stage_update_vouchers( $application_id );
     return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Resetting application properties.
 ///////////////////////////////////////////////////////////////////////////////
+
+// This is here rather than in application-state.php so we don't try to
+// reference the vouch counting functions there.
+
+function ccgn_application_to_vouching_if_no_current_cannots ( $applicant_id ) {
+    $current_cannots = ccgn_application_vouches_cannots( $applicant_id );
+    if ( count( $current_cannots ) == 0 ) {
+        _ccgn_registration_user_set_stage(
+            $applicant_id,
+            CCGN_APPLICATION_STATE_VOUCHING
+        );
+    }
+}
 
 // Roll back an application that was automatically closed because the applicant
 // did not update their Voucher Choices in response to a Member vouching
@@ -447,7 +462,8 @@ function ccgn_reopen_application_auto_closed_because_cannots (
                    . ": not in state CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS." );
         return false;
     }
-    if ( ! ccgn_application_vouches_has_cannots( $applicant_id ) ) {
+    $current_cannots = ccgn_application_vouches_cannots( $applicant_id );
+    if ( count( $current_cannots ) == 0 ) {
         error_log( "Not re-opening Application for User ID "
                    . $applicant_id
                    . ': it does not have any "Cannot" vouches.' );
@@ -464,9 +480,8 @@ function ccgn_reopen_application_auto_closed_because_cannots (
         'RE-OPENING APPLICATION AUTO-CLOSED DUE TO "CANNOT" VOUCHES: Setting update date to '
         . $update_date
     );
-    // Set the application to be in the vouching stage, allowing the user to
-    // update their voucher choices
-    ccgn_registration_user_back_to_vouching( $applicant_id );
+    // Set the application to be in the update vouchers stage
+    ccgn_registration_user_set_stage_update_vouchers( $applicant_id );
     // Remind them to do so by email
     ccgn_registration_email_voucher_cannot_reminder( $applicant_id );
     return true;
@@ -520,10 +535,7 @@ function ccgn_reset_vouch_request (
     // If the user isn't vouching, set them back to vouching, allowing them to
     // update their voucher choices and reminding them to do so by email
     // during the next cron job run.
-    if ( ccgn_registration_user_get_stage( $applicant_id )
-         == CCGN_APPLICATION_STATE_DIDNGT_UPDATE_VOUCHERS ) {
-        ccgn_registration_user_back_to_vouching( $applicant_id );
-    }
+    ccgn_application_to_vouching_if_no_current_cannots( $applicant_id );
 }
 
 // NOTE: This resets the Applicant's Vouching timescale by modifying the
@@ -588,7 +600,14 @@ function ccgn_vouch_request_remove_spoofed_cannot (
             . CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED
             . ' at ' . $update_date
         );
+        // Set user back to vouching stage if they were at the update
+        // vouchers stage
+        ccgn_application_to_vouching_if_no_current_cannots(
+            $applicant_id
+        );
         // The user can now vouch, so let them know
+        //FIXME: Unless there were two declines. In which case we need to
+        // store a lot more state. So ignore this for now.
         ccgn_registration_email_vouching_request(
             $applicant_id,
             $voucher_id
@@ -715,6 +734,8 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
     $vouches = ccgn_application_vouches( $applicant_id );
     // Make sure to only count one vouch for each Voucher
     // this is to avoid any glitches in submission being counted
+    // If the user or an admin has updated the Voucher choices then there may
+    // be more vouches than Vouchers, particularly for Cannots.
     $vouchers = [];
     foreach ($vouches as $vouch) {
         $voucher = $vouch[ 'created_by' ];
@@ -737,21 +758,6 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
     );
 }
 
-// Does the user have any Vouchers who have declined to vouch?
-
-function ccgn_application_vouches_has_cannots( $applicant_id ) {
-    return ccgn_application_vouches_counts ( $applicant_id )[ 'cannot' ] > 0;
-}
-
-// Does the current state of the Vouching request form contain any Vouchers
-// who have declined to vouch?
-
-function ccgn_application_choose_vouchers_form_has_cannots( $applicant_id ) {
-    $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
-    $cannots = ccgn_application_vouches_cannots_voucher_ids ( $applicant_id );
-    return array_intersect($vouchers, $cannots) != [];
-}
-
 // A predicate function for sorting. Is this Vouching result a 'Cannot' rather
 // than a 'Yes' or a 'No'?
 
@@ -760,16 +766,30 @@ function ccgn_is_application_vouch_cannot ( $vouch ) {
         == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT;
 }
 
-// The list of Vouches that selected the 'Cannot' state and that must therefore
-// be replaced.
+// The list of CURRENT Vouches that selected the 'Cannot' state and that must
+// therefore be replaced.
 // Note that Vouchers cannot change their mind at this point.
 // The user id for each vouch is vouch[ 'created_by' ].
 
 function ccgn_application_vouches_cannots( $applicant_id ) {
-    return array_filter(
+    // Anyone who ever vouched Cannot
+    $all_cannots = array_filter(
         ccgn_application_vouches ( $applicant_id ),
         'ccgn_is_application_vouch_cannot'
     );
+    // Current vouchers
+    $current_voucher_ids = ccgn_application_vouchers_users_ids (
+        $applicant_id
+    );
+    // Current Cannot vouchers
+    $cannots = array();
+    foreach ($all_cannots as $cannot) {
+        if ( in_array( $cannot['created_by'], $current_voucher_ids )  ) {
+            $cannots[] = $cannot;
+        }
+    }
+    // FIXME: extra check that vouch time > vouch request form time
+    return $cannots;
 }
 
 function ccgn_application_vouches_cannots_voucher_ids ( $applicant_id ) {
@@ -996,6 +1016,11 @@ function ccgn_registration_form_list_members ( $current_user_id ) {
     $individuals = ccgn_get_individual_members();
     // Remove users who have already declined to vouch for the application
     //FIXME: Remove "No" votes as well when we allow re-voting
+    //NOTE: This will only list currently live Cannots, so if e.g. the
+    // Applicant has changed their Vouchers already this will not list previous
+    // Cannots and the Cannots can be re-chosen. This is an edge case and the
+    // existing code should not be modified to handle it, rather a new function
+    // should be created if we decide that this is undesirable behaviour.
     $cannot_ids = ccgn_application_vouches_cannots_voucher_ids (
         $current_user_id
     );
@@ -1441,19 +1466,16 @@ function ccgn_choose_vouchers_maybe_update_voucher ( & $editentry, $num ) {
 function ccgn_choose_vouchers_pre_submission ( $form ) {
     if ( $form[ 'title' ] == CCGN_GF_CHOOSE_VOUCHERS ) {
         $applicant_id = get_current_user_id();
+        $stage = ccgn_registration_user_get_stage( $applicant_id );
         // Make sure the user isn't spoofing a Voucher update
-        if ( ccgn_registration_user_get_stage( $applicant_id )
-             == CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS ) {
+        if ($stage == CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS ) {
             die();
         }
         // Check to see if the user is updating the form
         $editentry = ccgn_application_vouchers( $applicant_id );
         if ( $editentry ) {
-            // The user should only be updating the form if a Voucher(s)
-            // has said that they cannot vouch for this application.
-            if ( ! ccgn_application_choose_vouchers_form_has_cannots(
-                $applicant_id
-            ) ) {
+            // The user should only be updating the form in the correct state.
+            if ( $stage != CCGN_APPLICATION_STATE_UPDATE_VOUCHERS ) {
                 echo "Something went badly wrong.";
             } else {
                 $should_update = false;
@@ -1483,6 +1505,9 @@ function ccgn_choose_vouchers_pre_submission ( $form ) {
                                 $voucher_id
                             );
                         }
+                        ccgn_application_to_vouching_if_no_current_cannots(
+                            $applicant_id
+                        );
                         //Success, so redirect
                         header( "Location: " . get_permalink() );
                     }
@@ -1525,45 +1550,7 @@ function ccgn_members_with_most_open_vouch_requests () {
     return $open_requests;
 }
 
-// COMPUTATIONALLY EXPENSIVE
-// Return an associative array of voucher user id =>
-// UNSORTED KEYS AND VALUES: [vouchee => date vouching request created]
-// where the voucher request was created more than $days ago
-
-function ccgn_members_vouchers_with_requests_older_than ( $days ) {
-    $cutoff = date('Y-m-d H:i:s', strtotime($days . ' days ago'));
-    $members_old_requests = array();
-    // Get applicants in the vouching state
-    $applicants = ccgn_applicant_ids_with_state(
-        CCGN_APPLICATION_STATE_VOUCHING
-    );
-    // Get vouch requests for each applicant
-    foreach ( $applicants as $applicant_id ) {
-        $voucher_choices = ccgn_application_vouchers ( $applicant_id );
-        // If the date on which they were created or updated is older than
-        // the cutoff, check for vouches
-        $choices_date = ccgn_entry_created_or_updated ( $voucher_choices );
-        if ( $choices_date < $cutoff ) {
-            $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
-            foreach ( $vouchers as $voucher_id ) {
-                $vouches = ccgn_vouches_for_applicant_by_voucher (
-                    $applicant_id,
-                    $voucher_id
-                );
-                // If the voucher has not vouched
-                if ( $vouches == [] ) {
-                    // Create or add to the map of applicant dates
-                    if (! isset( $members_old_requests[ $voucher_id ] ) ) {
-                        $members_old_requests[ $voucher_id ] = array();
-                    }
-                    $members_old_requests[ $voucher_id ][$applicant_id]
-                        = $choices_date;
-                }
-            }
-        }
-    }
-    return $members_old_requests;
-}
+// BEGIN REMOVE AFTER UPDATE
 
 // COMPUTATIONALLY EXPENSIVE
 // Return an associative array of applicant user id =>
@@ -1601,9 +1588,13 @@ function ccgn_applicants_append_old_cannots (
     $applicant_id,
     $cutoff
 ) {
-    $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
+    // NOTE: this means we will only have live Cannots, meaning Cannots
+    // from currently selected vouchers. THIS IS WHAT WE WANT, and the code
+    // should not be changed without analysing and changing code that calls
+    // this but it does mean that historic Cannots are not included.
+    $vouchers_ids = ccgn_application_vouchers_users_ids ( $applicant_id );
     // Get vouches by each requested voucher
-    foreach ( $vouchers as $voucher_id ) {
+    foreach ( $vouchers_ids as $voucher_id ) {
         $vouches = ccgn_vouches_for_applicant_by_voucher (
             $applicant_id,
             $voucher_id
@@ -1624,7 +1615,7 @@ function ccgn_applicants_append_old_cannots (
     }
 }
 
-function ccgn_applicants_with_cannot_vouches_older_than ( $days ) {
+function ccgn_applicants_with_current_cannot_vouches_older_than ( $days ) {
     $cutoff = date('Y-m-d H:i:s', strtotime($days . ' days ago'));
     $applicants_old_requests = array();
     // Get applicants in the vouching state
@@ -1643,6 +1634,22 @@ function ccgn_applicants_with_cannot_vouches_older_than ( $days ) {
     }
     return $applicants_old_requests;
 }
+
+function _one_time_fix_for_cannot_vouch_state () {
+    // Get all users with old cannots but in vouching state_date
+    $applicants = ccgn_applicants_with_current_cannot_vouches_older_than ( CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS );
+    // set to update vouching IF currently vouching
+    foreach($applicants as $applicant_id => $vouches) {
+        $stage = ccgn_registration_user_get_stage( $applicant_id );
+        if ( $stage == CCGN_APPLICATION_STATE_VOUCHING ) {
+            ccgn_registration_user_set_stage(
+                $applicant_id,
+                CCGN_APPLICATION_STATE_UPDATE_VOUCHERS );
+        }
+    }
+}
+
+// END REMOVE AFTER UPDATE
 
 ////////////////////////////////////////////////////////////////////////////////
 // Vouch presentation

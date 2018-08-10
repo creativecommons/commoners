@@ -30,12 +30,11 @@ function ccgn_registration_individual_form_submit_handler ( $entry,
     if ( ! ccgn_user_is_individual_applicant( $entry[ 'created_by' ] ) ) {
         return;
     }
-    // User has already completed the application state changes below and
-    // is just updating their Voucher requests
-    if ( ccgn_application_vouches_has_cannots( get_current_user_id() ) ) {
-        return;
-    }
     switch( $form[ 'title' ] ) {
+    case CCGN_APPLICATION_STATE_UPDATE_VOUCHERS:
+        // User has already completed the application state changes below and
+        // is just updating their Voucher requests
+        break;
     case CCGN_GF_AGREE_TO_TERMS:
         ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_CHARTER
@@ -77,13 +76,12 @@ function ccgn_registration_individual_shortcode_render_view ( $user ) {
     case CCGN_APPLICATION_STATE_VOUCHERS:
         gravity_form( CCGN_GF_CHOOSE_VOUCHERS, false, false );
         break;
+    case CCGN_APPLICATION_STATE_UPDATE_VOUCHERS:
+        gravity_form( CCGN_GF_CHOOSE_VOUCHERS, false, false );
+        break;
     case CCGN_APPLICATION_STATE_RECEIVED:
     case CCGN_APPLICATION_STATE_VOUCHING:
-        if ( ccgn_application_choose_vouchers_form_has_cannots( $user->ID ) ) {
-            gravity_form( CCGN_GF_CHOOSE_VOUCHERS, false, false );
-        } else {
-            echo _( '<h2>Thank you for applying to join the Creative Commons Global Network</h2></p><p>Your application has been received.</p><p>It will take several days to be reviewed.</p><p>If you have any questions you can <a href="/contact/">contact us.</a></p>' );
-        }
+        echo _( '<h2>Thank you for applying to join the Creative Commons Global Network</h2></p><p>Your application has been received.</p><p>It will take several days to be reviewed.</p><p>If you have any questions you can <a href="/contact/">contact us.</a></p>' );
         break;
     case CCGN_APPLICATION_STATE_REJECTED:
         echo _( '<p>Your application has been declined.</p><p>If you have any questions you can <a href="/contact/">contact us</a>, but please note we cannot comment on the details of individual applications.</p>' );

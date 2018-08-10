@@ -69,6 +69,8 @@ function ccgn_applicant_type_desc ( $user_id ) {
 
 // The WordPress user metadata property that tracks application state
 define( 'CCGN_APPLICATION_STATE', 'ccgn-application-state' );
+// The WordPress user metadata property that tracks application state date
+define( 'CCGN_APPLICATION_STATE_DATE', 'ccgn-application-state-date' );
 
 // The user is agreeing with the Charter
 define( 'CCGN_APPLICATION_STATE_CHARTER', 'charter-form' );
@@ -89,6 +91,8 @@ define( 'CCGN_APPLICATION_STATE_REJECTED', 'rejected' );
 define( 'CCGN_APPLICATION_STATE_ACCEPTED', 'accepted' );
 // We have had to pause the application for some unspecified reason
 define('CCGN_APPLICATION_STATE_ON_HOLD', 'on-hold' );
+// The applicant must update their vouchers or else be rejected
+define( 'CCGN_APPLICATION_STATE_UPDATE_VOUCHERS', 'update-vouchers' );
 // The applicant did not update their vouchers and so has been rejected
 define(
     'CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS',
@@ -125,8 +129,39 @@ define(
     ]
 );
 
+define(
+    'CCGN_APPLICATION_STATE_VOUCHABLE',
+    [
+        CCGN_APPLICATION_STATE_VOUCHING,
+        CCGN_APPLICATION_STATE_UPDATE_VOUCHERS
+    ]
+);
+
 function ccgn_registration_user_get_stage ( $user_id ) {
     return get_user_meta( $user_id, CCGN_APPLICATION_STATE, true );
+}
+
+function ccgn_registration_user_get_stage_and_date ( $user_id ) {
+    $meta = get_user_meta( $user_id );
+    return array(
+        'stage' => $meta[CCGN_APPLICATION_STATE][0],
+        'date' => $meta[CCGN_APPLICATION_STATE_DATE][0]
+    );
+}
+
+function _ccgn_registration_user_set_stage( $user_id, $stage ) {
+    update_user_meta(
+        $user_id,
+        CCGN_APPLICATION_STATE,
+        $stage
+    );
+    // Keep track of when we updated the state (and thereby how long we have
+    // been in this state).
+    update_user_meta(
+        $user_id,
+        CCGN_APPLICATION_STATE_DATE,
+        date( 'Y-m-d H:i:s', strtotime( 'now' ) )
+    );
 }
 
 // Note that this isn't general-purpose: it will refuse to update if the user
@@ -135,30 +170,26 @@ function ccgn_registration_user_get_stage ( $user_id ) {
 function ccgn_registration_user_set_stage ( $user_id, $stage ) {
     $current = ccgn_registration_user_get_stage( $user_id );
     if ( ! in_array( $current, CCGN_APPLICATION_STATE_PAST_APPROVAL ) ) {
-        update_user_meta(
-            $user_id,
-            CCGN_APPLICATION_STATE,
-            $stage
-        );
+        _ccgn_registration_user_set_stage( $user_id, $stage );
     } else {
         error_log( 'Attempt to set user ' . $user_id . ' to stage '
                    . $stage . ' when user is past mutable application state.' );
     }
 }
 
-// This one will roll you back to vouching but only if you should be able to
+// This one will set user to update vouchers but only if you should be able to
 
-function ccgn_registration_user_back_to_vouching ( $user_id ) {
+function ccgn_registration_user_set_stage_update_vouchers ( $user_id ) {
     $current = ccgn_registration_user_get_stage( $user_id );
-    if ($current == CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS ) {
-        update_user_meta(
+    if ( ( $current == CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS )
+         || ( $current == CCGN_APPLICATION_STATE_VOUCHING ) ) {
+        _ccgn_registration_user_set_stage(
             $user_id,
-            CCGN_APPLICATION_STATE,
-            CCGN_APPLICATION_STATE_VOUCHING
+            CCGN_APPLICATION_STATE_UPDATE_VOUCHERS
         );
     } else {
         error_log( 'Attempt to set user ' . $user_id
-                   . ' to stage CCGN_APPLICATION_STATE_VOUCHING when user is not in stage CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS.' );
+                   . ' to stage CCGN_APPLICATION_STATE_UPDATE_VOUCHERS when user is not in stage CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS.' );
     }
 }
 
@@ -175,7 +206,7 @@ function ccgn_vouching_request_active ( $applicant_id ) {
     // Check registration-form-callbacks.php if this isn't happy
     return
         $state == CCGN_APPLICATION_STATE_RECEIVED
-        || $state == CCGN_APPLICATION_STATE_VOUCHING;
+        || ccgn_registration_user_get_stage ( $applicant_id );
 }
 
 // Is the user at the vouching stage?
@@ -183,9 +214,16 @@ function ccgn_vouching_request_active ( $applicant_id ) {
 // not have received final approval.
 
 function ccgn_vouching_request_vouching ( $applicant_id ) {
-    $state = ccgn_registration_user_get_stage ( $applicant_id );
     // Check registration-form-callbacks.php if this isn't happy
-    return $state == CCGN_APPLICATION_STATE_VOUCHING;
+    return ccgn_registration_user_is_vouchable ( $applicant_id );
+}
+
+
+function ccgn_registration_user_is_vouchable ( $user_id ) {
+    return in_array(
+        ccgn_registration_user_get_stage ( $user_id ),
+        CCGN_APPLICATION_STATE_VOUCHABLE
+    );
 }
 
 ////////////////////////////////////////////////////////////////////////////////

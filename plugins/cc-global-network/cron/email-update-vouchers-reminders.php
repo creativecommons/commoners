@@ -8,6 +8,8 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
   CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS days.
 
   These emails go *to* applicants about their voucher choices.
+
+  This code may close an application!
 */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -18,39 +20,39 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Also beware any knock-on effect on CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS
 define( 'CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS', 7 );
 
+define( 'CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS',
+        CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS + 3 );
+
 ////////////////////////////////////////////////////////////////////////////////
 // Checking and sending
 ////////////////////////////////////////////////////////////////////////////////
 
-// We only want to email applicants on the day, not every day after
-// (Originally this emailed every n days, but now we auto-close before then.)
+// Close overdue vouchers
 
-function ccgn_should_remind_applicant_to_update_vouchers (
-    $today,
-    $vouch_cannot_date
-) {
-    # php 5.2.2 or later for DateTime comparisons....
-    $num_days_elapsed = $today->diff($vouch_cannot_date)->days;
-    return ( $num_days_elapsed > 0 )
-        && ( ( $num_days_elapsed % CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS )
-             === 0 );
+function ccgn_close_vouchers ( $applicant_id ) {
+    ccgn_user_level_set_didnt_update_vouchers ( $applicant_id );
+    ccgn_registration_email_voucher_cannot_closed( $applicant_id );
+}
+
+function ccgn_days_in_state ( $applicant_id, $now ) {
+    $state = ccgn_registration_user_get_stage_and_date ( $applicant_id );
+    // Calculate days in the state
+    $state_date = new DateTime($state['date']);
+    return $state_date->diff($now)->days;
 }
 
 // Send reminders to those that need them
 
 function ccgn_email_update_vouchers_reminders () {
-    $applicants = ccgn_applicants_with_cannot_vouches_older_than (
-        CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS
+    $now = new DateTime('now');
+    $applicants = ccgn_applicant_ids_with_state (
+        CCGN_APPLICATION_STATE_UPDATE_VOUCHERS
     );
-    $today = new DateTime( 'today' );
-    foreach ( $applicants as $applicant_id => $dates ) {
-        // Dates are unsorted, so sort them
-        sort($dates);
-        $earliest_cannot = new DateTime( $dates[ 0 ] );
-        if ( ccgn_should_remind_applicant_to_update_vouchers (
-            $today,
-            $earliest_cannot
-        ) ) {
+    foreach ( $applicants as $applicant_id) {
+        $days_in_state = ccgn_days_in_state ( $applicant_id, $now );
+        if ( $days_in_state > CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS ) {
+            ccgn_close_vouchers ( $applicant_id );
+        } elseif ( $days_in_state > CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS ) {
             ccgn_registration_email_voucher_cannot_reminder( $applicant_id );
         }
     }

@@ -61,8 +61,7 @@ function ccgn_vouching_requests_render ( $voucher_id ) {
             $applicant_id = $request[ 'created_by' ];
             // Make sure the user has been Spam Checked, otherwise people
             // cannot vouch for them despite them being requested to do so.
-            $stage = ccgn_registration_user_get_stage( $applicant_id);
-            if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
+            if ( ! ccgn_registration_user_is_vouchable ( $applicant_id ) ) {
                 continue;
             }
             $applicant = get_user_by( 'ID', $applicant_id );
@@ -199,10 +198,9 @@ function ccgn_application_vouching_form_submit_handler ( $entry,
             $applicant_id = $entry[ CCGN_GF_VOUCH_APPLICANT_ID_FIELD ];
         }
         $voucher_id = $entry[ 'created_by' ];
-        $stage = ccgn_registration_user_get_stage( $applicant_id);
         // At this point in form processing we shouldn't disturb the submitter,
         // but should log this and not do anything else based on it.
-        if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
+        if ( ! ccgn_registration_user_is_vouchable ( $applicant_id ) ) {
             $error_message = "Vouch by " . $voucher_id . " for applicant "
                            . $applicant_id . " while at non-Vouching stage: "
                            . $stage;
@@ -214,6 +212,10 @@ function ccgn_application_vouching_form_submit_handler ( $entry,
             $entry[ CCGN_GF_VOUCH_DO_YOU_VOUCH ]
             == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT
         ) {
+            ccgn_registration_user_set_stage(
+                $applicant_id,
+                CCGN_APPLICATION_STATE_UPDATE_VOUCHERS
+            );
             ccgn_registration_email_voucher_cannot (
                 $applicant_id,
                 $voucher_id

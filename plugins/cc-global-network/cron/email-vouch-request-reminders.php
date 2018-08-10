@@ -29,7 +29,7 @@ function ccgn_email_vouch_request_reminder_send (
     $applicant_id,
     $day
 ) {
-    // If re-implementing this, make sure to send latest reminder first so
+    // If re-implementing this, make sure to check for latest reminder first so
     // that the user always gets only the latest reminder for a given time
     // period.
     switch ( $day ) {

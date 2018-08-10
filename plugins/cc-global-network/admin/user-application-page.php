@@ -157,7 +157,7 @@ function ccgn_application_users_page_vote_form_submit_handler ( $entry,
         $applicant_id = $entry[ CCGN_GF_VOTE_APPLICANT_ID ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
         if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
-            echo 'User already post-approved';
+            echo 'User already post-approved (or updating vouchers)';
             return;
         }
     }

@@ -103,6 +103,7 @@ function ccgn_application_change_vouchers_after_submission ( $entry, $form ) {
                     );
                 }
             }
+            ccgn_application_to_vouching_if_no_current_cannots( $applicant_id );
         }
     }
 }
@@ -113,7 +114,7 @@ function ccgn_application_change_vouchers_page () {
         return;
     }
     $state = ccgn_registration_user_get_stage( $applicant_id );
-    if ( $state != CCGN_APPLICATION_STATE_VOUCHING ) {
+    if ( ! ccgn_registration_user_is_vouchable( $applicant_id ) ) {
         echo _('<br /><h2>Application is not in the Vouching state.</h2>');
     }
     $applicant = get_user_by('ID', $applicant_id);
@@ -168,8 +169,7 @@ function ccgn_application_change_vouchers_page_url( $user_id ) {
 function ccgn_application_vouches_link( $actions, $user_object ) {
     // Only show this if the user is at the pre-approval or vouching stages
     if ( current_user_can( 'ccgn_pre_approve' )
-         && ( ccgn_registration_user_get_stage( $user_object->ID )
-              == CCGN_APPLICATION_STATE_VOUCHING) ) {
+         && ( ccgn_registration_user_is_vouchable ( $user_object->ID ) ) ) {
         $actions['ccgn_vouchers']
             = '<a href="'
             . ccgn_application_change_vouchers_page_url(
