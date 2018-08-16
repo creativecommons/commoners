@@ -85,18 +85,32 @@ define( 'CCGN_APPLICATION_STATE_VOUCHING', 'vouching' );
 // The institutional user has been vouched/voted and received final approval
 // and is waiting for final approval from the legal team
 define( 'CCGN_APPLICATION_STATE_LEGAL', 'legal' );
+
+// These cannot clash, as details are updated during the Spam Check stage
+// and vouchers are updated during the Vouching stage, which comes after.
+// The applicant must update their vouchers or else be rejected
+define( 'CCGN_APPLICATION_STATE_UPDATE_VOUCHERS', 'update-vouchers' );
+// The user must update their details form
+define( 'CCGN_APPLICATION_STATE_UPDATE_DETAILS', 'update-details' );
+
 // The user's application has been rejected in pre- or final approval
 define( 'CCGN_APPLICATION_STATE_REJECTED', 'rejected' );
 // The user's application has been accepted in final approval
 define( 'CCGN_APPLICATION_STATE_ACCEPTED', 'accepted' );
 // We have had to pause the application for some unspecified reason
 define('CCGN_APPLICATION_STATE_ON_HOLD', 'on-hold' );
-// The applicant must update their vouchers or else be rejected
-define( 'CCGN_APPLICATION_STATE_UPDATE_VOUCHERS', 'update-vouchers' );
 // The applicant did not update their vouchers and so has been rejected
 define(
     'CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS',
     'rejected-because-didnt-update-vouchers'
+);
+
+define(
+    'CCGN_APPLICATION_STATE_CAN_BE_PRE_APPROVED',
+    [
+        CCGN_APPLICATION_STATE_RECEIVED,
+        CCGN_APPLICATION_STATE_UPDATE_DETAILS
+    ]
 );
 
 // States that indicate that the user is past the final approval stage.

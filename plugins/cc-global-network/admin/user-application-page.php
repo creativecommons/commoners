@@ -94,6 +94,10 @@ function ccgn_registration_email_vouching_requests ( $applicant_id ) {
 ////////////////////////////////////////////////////////////////////////////////
 // Handle pre form results
 
+//NOTE: WE DON'T OVERWRITE THESE FORM ENTRIES, WE ADD NEW ONES EACH TIME.
+//      EVERYTHING SHOULD BE LIKE THIS BUT THAT WAS A BAD DESIGN DECISION.
+//      - RobM.
+
 function ccgn_application_users_page_pre_form_submit_handler ( $entry,
                                                                $form ) {
     if ( $form[ 'title' ] == CCGN_GF_PRE_APPROVAL ) {
@@ -104,7 +108,7 @@ function ccgn_application_users_page_pre_form_submit_handler ( $entry,
         }
         $applicant_id = $entry[ CCGN_GF_PRE_APPROVAL_APPLICANT_ID ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
-        if ( $stage != CCGN_APPLICATION_STATE_RECEIVED ) {
+        if ( ! in_array( $stage, CCGN_APPLICATION_STATE_CAN_BE_PRE_APPROVED )) {
             echo 'User already pre-approved';
             return;
         }
@@ -114,6 +118,24 @@ function ccgn_application_users_page_pre_form_submit_handler ( $entry,
         if ( $application_status == CCGN_GF_PRE_APPROVAL_APPROVED_YES ) {
             ccgn_user_level_set_pre_approved( $applicant_id );
             ccgn_registration_email_vouching_requests( $applicant_id );
+        } elseif (
+            $application_status
+            == CCGN_GF_PRE_APPROVAL_APPROVED_UPDATE_DETAILS
+        ) {
+            // Set state
+            ccgn_registration_user_set_stage(
+                $applicant_id,
+                CCGN_APPLICATION_STATE_UPDATE_DETAILS
+            );
+            // Notify user
+            $update_message = $entry[
+                CCGN_GF_PRE_APPROVAL_APPLICANT_MUST_UPDATE_DETAILS
+            ];
+            ccgn_registration_email_to_applicant (
+                $applicant_id,
+                'ccgn-email-update-details',
+                $update_message
+            );
         } else {
             ccgn_user_level_set_rejected( $applicant_id );
             ccgn_registration_email_application_rejected( $applicant_id );
@@ -124,16 +146,32 @@ function ccgn_application_users_page_pre_form_submit_handler ( $entry,
 // Format the pre approval form
 
 function ccgn_application_users_page_pre_form ( $applicant_id ) {
+    // Slightly naughty - [][0] works fine here when there is no previous entry
+    $existing_entry = ccgn_entries_referring_to_user (
+        $applicant_id,
+        CCGN_GF_PRE_APPROVAL,
+        CCGN_GF_PRE_APPROVAL_APPLICANT_ID
+    )[0];
     gravity_form(
-            CCGN_GF_PRE_APPROVAL,
-            false,
-            false,
-            false,
-            array(
-                CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER
-                    => $applicant_id
-            )
-        );
+        CCGN_GF_PRE_APPROVAL,
+        false,
+        false,
+        false,
+        array(
+            CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER
+            => $applicant_id,
+            // If the user is in the update details state, we show the
+            // information for this.
+            CCGN_GF_PRE_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION_PARAMETER
+            => $existing_entry[
+                CCGN_GF_PRE_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION
+            ],
+            CCGN_GF_PRE_APPROVAL_APPLICANT_MUST_UPDATE_DETAILS_PARAMETER
+            => $existing_entry[
+                CCGN_GF_PRE_APPROVAL_APPLICANT_MUST_UPDATE_DETAILS
+            ]
+        )
+    );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -393,7 +431,7 @@ function ccgn_application_user_page_render_change_vouchers ( $applicant_id,
 }
 
 function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
-    if ( $state == CCGN_APPLICATION_STATE_RECEIVED ) {
+    if ( in_array( $state, CCGN_APPLICATION_STATE_CAN_BE_PRE_APPROVED ) ) {
         echo _('<h3>Pre-Approve</h3>');
         ccgn_application_users_page_pre_form ( $applicant_id );
     } elseif ( $state == CCGN_APPLICATION_STATE_VOUCHING ) {

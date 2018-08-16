@@ -33,7 +33,7 @@ function ccgn_registration_individual_form_submit_handler ( $entry,
     switch( $form[ 'title' ] ) {
     case CCGN_APPLICATION_STATE_UPDATE_VOUCHERS:
         // User has already completed the application state changes below and
-        // is just updating their Voucher requests
+        // is just updating their application as requested.
         break;
     case CCGN_GF_AGREE_TO_TERMS:
         ccgn_registration_current_user_set_stage (
@@ -71,6 +71,7 @@ function ccgn_registration_individual_shortcode_render_view ( $user ) {
         gravity_form( CCGN_GF_SIGN_CHARTER, false, false );
         break;
     case CCGN_APPLICATION_STATE_DETAILS:
+    case CCGN_APPLICATION_STATE_UPDATE_DETAILS:
         ccgn_registration_individual_shortcode_render_details( $user );
         break;
     case CCGN_APPLICATION_STATE_VOUCHERS:

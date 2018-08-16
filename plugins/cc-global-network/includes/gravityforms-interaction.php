@@ -81,8 +81,17 @@ define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH', '3' );
 define( 'CCGN_GF_VOUCH_REASON', '4' );
 
 define( 'CCGN_GF_PRE_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
+define(
+    'CCGN_GF_PRE_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION_PARAMETER',
+    'pre_approval'
+);
 define( 'CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER', 'applicant_id' );
 define( 'CCGN_GF_PRE_APPROVAL_APPLICANT_ID', '4' );
+define(
+    'CCGN_GF_PRE_APPROVAL_APPLICANT_MUST_UPDATE_DETAILS_PARAMETER',
+    'must_update_details'
+);
+define( 'CCGN_GF_PRE_APPROVAL_APPLICANT_MUST_UPDATE_DETAILS', '5' );
 
 define( 'CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION', '2' );
 define( 'CCGN_GF_VOTE_APPLICANT_ID_PARAMETER', 'applicant_id' );
@@ -114,6 +123,7 @@ define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT', 'Cannot' );
 // This is added by the system, not users, but it is here for completeness
 define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED', 'REMOVED' );
 define( 'CCGN_GF_PRE_APPROVAL_APPROVED_YES', 'Yes' );
+define( 'CCGN_GF_PRE_APPROVAL_APPROVED_UPDATE_DETAILS', 'Update Details' );
 define( 'CCGN_GF_VOTE_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_FINAL_APPROVAL_APPROVED_YES', 'Yes' );
 define( 'CCGN_GF_LEGAL_APPROVAL_APPROVED_YES', 'Yes' );
@@ -635,6 +645,10 @@ function ccgn_details_institution_form_entry ( $applicant_id ) {
     );
     return $entries[ 0 ];
 }
+
+// Handle updated individual form submission
+
+// Handle updated institutional form submission
 
 ////////////////////////////////////////////////////////////////////////////////
 // Getting an applicant's various details
@@ -1636,10 +1650,11 @@ function ccgn_applicants_with_current_cannot_vouches_older_than ( $days ) {
 }
 
 function _one_time_fix_for_cannot_vouch_state () {
-    // Get all users with old cannots but in vouching state_date
-    $applicants = ccgn_applicants_with_current_cannot_vouches_older_than ( CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS );
+    // Get all users with old cannots but in vouching state
+    $applicants = ccgn_applicants_with_current_cannot_vouches_older_than ( 0 );
     // set to update vouching IF currently vouching
     foreach($applicants as $applicant_id => $vouches) {
+        error_log( $applicant_id );
         $stage = ccgn_registration_user_get_stage( $applicant_id );
         if ( $stage == CCGN_APPLICATION_STATE_VOUCHING ) {
             ccgn_registration_user_set_stage(

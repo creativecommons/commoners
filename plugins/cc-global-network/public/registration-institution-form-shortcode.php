@@ -64,6 +64,7 @@ function ccgn_registration_institution_shortcode_render_view ( $user ) {
         gravity_form( CCGN_GF_SIGN_CHARTER, false, false );
         break;
     case CCGN_APPLICATION_STATE_DETAILS:
+    case CCGN_APPLICATION_STATE_UPDATE_DETAILS:
         gravity_form( CCGN_GF_INSTITUTION_DETAILS, false, false );
         break;
     case CCGN_APPLICATION_STATE_VOUCHERS:

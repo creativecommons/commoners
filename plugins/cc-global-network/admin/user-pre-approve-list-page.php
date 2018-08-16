@@ -9,14 +9,22 @@ function ccgn_pre_applications_cmp ($a, $b) {
 }
 
 function ccgn_list_applications_for_pre_approval () {
-    $user_entries = ccgn_applicant_ids_with_state(
-        CCGN_APPLICATION_STATE_RECEIVED
+    $user_entries = array_merge(
+        ccgn_applicant_ids_with_state(
+            CCGN_APPLICATION_STATE_RECEIVED
+        ),
+        ccgn_applicant_ids_with_state(
+            CCGN_APPLICATION_STATE_UPDATE_DETAILS
+        )
     );
     usort($user_entries, "ccgn_pre_applications_cmp");
     foreach ($user_entries as $user_id) {
         $user = get_user_by('ID', $user_id);
+        $applicant_state = ccgn_registration_user_get_stage_and_date(
+            $user_id
+        );
         // The last form the user filled out, so the time to use
-        $vouchers_entry = ccgn_application_vouchers($user_id);
+        $vouchers_entry = ccgn_application_vouchers( $user_id );
         echo '<tr';
         if ( ccgn_user_is_institutional_applicant ( $user_id ) ) {
             echo ' style="background: #FFCCE5;"';
@@ -29,6 +37,10 @@ function ccgn_list_applications_for_pre_approval () {
             . ccgn_applicant_type_desc( $user_id )
             . '</td><td>'
             . $vouchers_entry[ 'date_created' ]
+            . '</td><td>'
+            . $applicant_state[ 'stage' ]
+            . '</td><td>'
+            . $applicant_state[ 'date' ]
             .'</td></tr>';
     }
 }
@@ -42,6 +54,8 @@ function ccgn_application_spam_check_page () {
       <th>Applicant</th>
       <th>Type</th>
       <th>Application date</th>
+      <th>Application state</th>
+      <th>Application state date</th>
     </tr>
   </thead>
   <tbody>

@@ -42,6 +42,24 @@ function ccgn_settings_emails_legal_address () {
     <?php
 }
 
+function ccgn_settings_emails_update_details_subject () {
+    $options = get_option( 'ccgn-email-update-details' );
+    ?>
+    <input type="text" name="ccgn-email-update-details[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+}
+
+function ccgn_settings_emails_update_details_message () {
+    $options = get_option( 'ccgn-email-update-details' );
+    ?>
+    <textarea name="ccgn-email-update-details[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+}
+
 function ccgn_settings_emails_received_subject () {
     $options = get_option( 'ccgn-email-received' );
     ?>
@@ -356,6 +374,35 @@ function ccgn_settings_emails_options_legal_address () {
     );
 }
 
+function ccgn_settings_emails_options_update_details () {
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-update-details'
+    );
+
+    add_settings_section(
+        'ccgn-email-update-details',
+        'Applicant Must Update Details',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'update-details-subject',
+        'Subject',
+        'ccgn_settings_emails_update_details_subject',
+        'global-network-emails',
+        'ccgn-email-update-details'
+    );
+    add_settings_field(
+        'registration-message',
+        'Message',
+        'ccgn_settings_emails_update_details_message',
+        'global-network-emails',
+        'ccgn-email-update-details'
+    );
+}
+
 function ccgn_settings_emails_options_received () {
     register_setting(
         'ccgn-emails',
@@ -383,7 +430,6 @@ function ccgn_settings_emails_options_received () {
         'global-network-emails',
         'ccgn-email-received'
     );
-
 }
 
 function ccgn_settings_emails_options_vouching () {
@@ -780,6 +826,7 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_page();
     ccgn_settings_emails_options_sender();
     ccgn_settings_emails_options_legal_address();
+    ccgn_settings_emails_options_update_details();
     ccgn_settings_emails_options_received();
     ccgn_settings_emails_options_vouching();
     ccgn_settings_emails_options_vouching_first_reminder();
@@ -814,7 +861,8 @@ function ccgn_settings_emails_render () {
     </div>
     <p>The following substitutions can be made (where appropriate):
        *|APPLICANT_NAME|* *|VOUCHER_NAME|* *|APPLICANT_ID|*
-       *|APPLICANT_PROFILE_URL|* *|SITE_URL|* *|APPLICATION_FORM_URL|* .</p>
-    <p><i>Note that SITE_URL does not have a terminating slash!</i></p>
+       *|APPLICANT_PROFILE_URL|* *|SITE_URL|* *|APPLICATION_FORM_URL|*
+       *|NOTE|* .</p>
+    <p><i>Be warned that SITE_URL does not have a terminating slash!</i></p>
     <?php
 }

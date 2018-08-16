@@ -64,7 +64,7 @@ function ccgn_registration_email_sub($key, $value, $text) {
 }
 
 function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
-                                           $voucher_name, $text) {
+                                           $voucher_name, $note, $text ) {
     $result = ccgn_registration_email_sub(
         'APPLICANT_NAME',
         $applicant_name,
@@ -98,6 +98,11 @@ function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
         'APPLICATION_FORM_URL',
         get_site_url() . '/sign-up/' . $applicant_type . '/form/',
         $result);
+    $result = ccgn_registration_email_sub(
+        'NOTE',
+        $note,
+        $result
+    );
     return $result;
 }
 
@@ -123,7 +128,7 @@ function ccgn_email_send( $address,
 
 function ccgn_registration_email( $applicant_name, $applicant_id,
                                   $voucher_name, $to_address,
-                                  $email_option ) {
+                                  $email_option, $note='' ) {
     $options = get_option( $email_option );
     $subject = $options[ 'subject' ];
     $message = $options[ 'message' ];
@@ -131,12 +136,14 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
         $applicant_name,
         $applicant_id,
         $voucher_name,
+        $note,
         $subject
     );
     $message_substituted = ccgn_registration_email_sub_names(
         $applicant_name,
         $applicant_id,
         $voucher_name,
+        $note,
         $message
     );
     add_filter( 'wp_mail_from', 'ccgn_mail_from_address' );
@@ -154,14 +161,16 @@ function ccgn_registration_email( $applicant_name, $applicant_id,
 }
 
 function ccgn_registration_email_to_applicant ( $applicant_id,
-                                                $email_option ) {
+                                                $email_option,
+                                                $note='') {
     $applicant = get_user_by( 'ID', $applicant_id );
     ccgn_registration_email(
         $applicant->user_nicename,
         $applicant->ID,
         '',
         $applicant->user_email,
-        $email_option
+        $email_option,
+        $note
     );
 }
 
