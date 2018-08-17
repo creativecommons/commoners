@@ -31,10 +31,6 @@ function ccgn_registration_individual_form_submit_handler ( $entry,
         return;
     }
     switch( $form[ 'title' ] ) {
-    case CCGN_APPLICATION_STATE_UPDATE_VOUCHERS:
-        // User has already completed the application state changes below and
-        // is just updating their application as requested.
-        break;
     case CCGN_GF_AGREE_TO_TERMS:
         ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_CHARTER
@@ -50,6 +46,9 @@ function ccgn_registration_individual_form_submit_handler ( $entry,
             CCGN_APPLICATION_STATE_DETAILS
         );
         break;
+        // Note that this is called both for initial creation and subsequent
+        // updates. This works well because in both cases we want to move the
+        // user to the RECEIVED state.
     case CCGN_GF_INDIVIDUAL_DETAILS:
         ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_RECEIVED
@@ -125,13 +124,41 @@ function ccgn_registration_individual_shortcode_render_gravatar ( $user ) {
 }
 
 function ccgn_registration_individual_shortcode_render_details ( $user ) {
+    // Slightly naughty - [][0] works fine here when there is no previous entry
+    $existing_entry = ccgn_entries_created_by_user (
+        $user->ID,
+        CCGN_GF_INDIVIDUAL_DETAILS
+    )[0];
     gravity_form(
         CCGN_GF_INDIVIDUAL_DETAILS,
         false,
         false,
+        false,
         array(
-            CCGN_GF_PRE_APPROVAL_APPLICANT_ID_PARAMETER
-            => $applicant_id
+            CCGN_GF_DETAILS_NAME_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_NAME ],
+            CCGN_GF_DETAILS_BIO_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_BIO ],
+            CCGN_GF_DETAILS_STATEMENT_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_STATEMENT ],
+            CCGN_GF_DETAILS_AREAS_OF_INTEREST_PARAMETER
+            => json_decode($existing_entry[
+                CCGN_GF_DETAILS_AREAS_OF_INTEREST
+            ]),
+            CCGN_GF_DETAILS_LANGUAGES_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_LANGUAGES ],
+            CCGN_GF_DETAILS_LOCATION_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_LOCATION ],
+            CCGN_GF_DETAILS_CHAPTER_INTEREST_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_CHAPTER_INTEREST ],
+            CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS ],
+            CCGN_GF_DETAILS_WAS_AFFILIATE_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_WAS_AFFILIATE ],
+            CCGN_GF_DETAILS_WAS_AFFILIATE_NAME_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_WAS_AFFILIATE_NAME ],
+            CCGN_GF_DETAILS_RECEIVE_EMAILS_PARAMETER
+            => $existing_entry[ CCGN_GF_DETAILS_RECEIVE_EMAILS ]
         )
     );
     //ccgn_registration_individual_shortcode_render_gravatar( $user );

@@ -49,6 +49,9 @@ define( 'CCGN_GF_ADMIN_CHANGE_VOUCHERS', 'Administrator Change Vouchers' );
 
 define( 'CCGN_GF_DETAILS_PRIVACY_POLICY', '5' );
 
+// Adding anything here? Check:
+// ccgn_registration_individual_shortcode_render_details
+
 define( 'CCGN_GF_DETAILS_NAME', '1' );
 define( 'CCGN_GF_DETAILS_BIO', '2' );
 define( 'CCGN_GF_DETAILS_STATEMENT', '3' );
@@ -62,6 +65,24 @@ define( 'CCGN_GF_DETAILS_AVATAR_SOURCE', '12' );
 define( 'CCGN_GF_DETAILS_AVATAR_GRAVATAR', '13' );*/
 define( 'CCGN_GF_DETAILS_WAS_AFFILIATE', '15' );
 define( 'CCGN_GF_DETAILS_WAS_AFFILIATE_NAME', '16' );
+define( 'CCGN_GF_DETAILS_RECEIVE_EMAILS', '18.1' );
+define( 'CCGN_GF_DETAILS_NAME_PARAMETER', 'your-name' );
+define( 'CCGN_GF_DETAILS_BIO_PARAMETER', 'brief-biography' );
+define( 'CCGN_GF_DETAILS_STATEMENT_PARAMETER', 'brief-statement' );
+define( 'CCGN_GF_DETAILS_AREAS_OF_INTEREST_PARAMETER', 'areas-of-interest' );
+define( 'CCGN_GF_DETAILS_LANGUAGES_PARAMETER', 'languages' );
+define( 'CCGN_GF_DETAILS_LOCATION_PARAMETER', 'primary-location' );
+define(
+    'CCGN_GF_DETAILS_CHAPTER_INTEREST_PARAMETER',
+    'preferred-country-chapter'
+);
+define( 'CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS_PARAMETER', 'social-media-urls' );
+define( 'CCGN_GF_DETAILS_WAS_AFFILIATE_PARAMETER', 'affiliate-status' );
+define( 'CCGN_GF_DETAILS_WAS_AFFILIATE_NAME_PARAMETER', 'affiliate-name' );
+define( 'CCGN_GF_DETAILS_RECEIVE_EMAILS_PARAMETER', 'receive-updates' );
+
+// Adding anything here? Check:
+// ccgn_registration_institution_shortcode_render_view
 
 define( 'CCGN_GF_INSTITUTION_DETAILS_NAME', '1' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_WEB_SITE', '2' );
@@ -74,6 +95,39 @@ define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS', '9' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_DOMAIN_NAME', '8' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_ADDITIONAL_INFO', '10' );
 define( 'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_TRADEMARK', '11' );
+define( 'CCGN_GF_INSTITUTION_DETAILS_NAME_PARAMETER', 'institution-name' );
+define( 'CCGN_GF_INSTITUTION_DETAILS_WEB_SITE_PARAMETER', 'website' );
+define(
+    'CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_NAME_PARAMETER',
+    'representative-name'
+);
+define(
+    'CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_EMAIL_PARAMETER',
+    'representative-email'
+);
+define(
+    'CCGN_GF_INSTITUTION_DETAILS_EXISTING_MEMBERS_PARAMETER',
+    'existing-members'
+);
+define( 'CCGN_GF_INSTITUTION_DETAILS_STATEMENT_PARAMETER', 'statement' );
+define( 'CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE_PARAMETER', 'is-affiliate' );
+define(
+    'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS_PARAMETER',
+    'affiliate-assets'
+);
+define(
+    'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_DOMAIN_NAME_PARAMETER',
+    'affiliate-domain-name'
+);
+define(
+    'CCGN_GF_INSTITUTION_DETAILS_ADDITIONAL_INFO_PARAMETER',
+    'additional-info'
+);
+define(
+    'CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_TRADEMARK_PARAMETER',
+    'affiliate-trademark'
+);
+
 
 define( 'CCGN_GF_VOUCH_APPLICANT_ID', 'applicant_id' );
 define( 'CCGN_GF_VOUCH_APPLICANT_ID_FIELD', '7' );

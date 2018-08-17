@@ -65,7 +65,56 @@ function ccgn_registration_institution_shortcode_render_view ( $user ) {
         break;
     case CCGN_APPLICATION_STATE_DETAILS:
     case CCGN_APPLICATION_STATE_UPDATE_DETAILS:
-        gravity_form( CCGN_GF_INSTITUTION_DETAILS, false, false );
+        // Slightly naughty - [][0] works fine here with no previous entry
+        $existing_entry = ccgn_entries_created_by_user (
+            $user->ID,
+            CCGN_GF_INSTITUTION_DETAILS
+        )[0];
+        // If updating we create a new entry rather than overwriting
+        gravity_form(
+            CCGN_GF_INSTITUTION_DETAILS,
+            false,
+            false,
+            false,
+            array(
+                CCGN_GF_INSTITUTION_DETAILS_NAME_PARAMETER
+                => $existing_entry[ CCGN_GF_INSTITUTION_DETAILS_NAME ],
+                CCGN_GF_INSTITUTION_DETAILS_WEB_SITE_PARAMETER
+                => $existing_entry[ CCGN_GF_INSTITUTION_DETAILS_WEB_SITE ],
+                CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_NAME_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_NAME
+                ],
+                CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_EMAIL_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_INSTITUTION_DETAILS_REPRESENTATIVE_EMAIL
+                ],
+                CCGN_GF_INSTITUTION_DETAILS_EXISTING_MEMBERS_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_INSTITUTION_DETAILS_EXISTING_MEMBERS
+                ],
+                CCGN_GF_INSTITUTION_DETAILS_STATEMENT_PARAMETER
+                => $existing_entry[ CCGN_GF_INSTITUTION_DETAILS_STATEMENT ],
+                CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE_PARAMETER
+                => $existing_entry[ CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE ],
+                CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS
+                ],
+                CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_DOMAIN_NAME_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_DOMAIN_NAME
+                ],
+                CCGN_GF_INSTITUTION_DETAILS_ADDITIONAL_INFO_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_INSTITUTION_DETAILS_ADDITIONAL_INFO
+                ],
+                CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_TRADEMARK_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_TRADEMARK
+                ]
+            )
+        );
         break;
     case CCGN_APPLICATION_STATE_VOUCHERS:
         gravity_form( CCGN_GF_CHOOSE_VOUCHERS, false, false );
