@@ -70,6 +70,10 @@ function ccgn_registration_institution_shortcode_render_view ( $user ) {
             $user->ID,
             CCGN_GF_INSTITUTION_DETAILS
         )[0];
+        $assets = array();
+        foreach ( CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS as $assid ) {
+            $assets[] = $existing_entry[ $assid ];
+        }
         // If updating we create a new entry rather than overwriting
         gravity_form(
             CCGN_GF_INSTITUTION_DETAILS,
@@ -97,10 +101,6 @@ function ccgn_registration_institution_shortcode_render_view ( $user ) {
                 => $existing_entry[ CCGN_GF_INSTITUTION_DETAILS_STATEMENT ],
                 CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE_PARAMETER
                 => $existing_entry[ CCGN_GF_INSTITUTION_DETAILS_IS_AFFILIATE ],
-                CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS_PARAMETER
-                => $existing_entry[
-                    CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS
-                ],
                 CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_DOMAIN_NAME_PARAMETER
                 => $existing_entry[
                     CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_DOMAIN_NAME
@@ -112,7 +112,9 @@ function ccgn_registration_institution_shortcode_render_view ( $user ) {
                 CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_TRADEMARK_PARAMETER
                 => $existing_entry[
                     CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_TRADEMARK
-                ]
+                ],
+                CCGN_GF_INSTITUTION_DETAILS_AFFILIATE_ASSETS_PARAMETER
+                => $assets
             )
         );
         break;
