@@ -92,10 +92,13 @@ function ccgn_email_vouch_request_reminders () {
         CCGN_APPLICATION_STATE_VOUCHING
     );
     foreach ( $applicants as $applicant_id ) {
+        // This may have been created some time ago, don't use the date on it
         $vouchers_form = ccgn_application_vouchers ( $applicant_id );
+        // The clock should instead start when the applicant is pre-approved
+        $pre_approval_form = ccgn_pre_approval_entry_for ( $applicant_id );
         $request_date = new DateTime(
             ccgn_entry_created_or_updated(
-                $vouchers_form
+                $pre_approval_form
             )
         );
         # php 5.2.2 or later for DateTime comparisons....

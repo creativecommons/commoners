@@ -96,6 +96,7 @@ function ccgn_registration_email_vouching_requests ( $applicant_id ) {
 
 //NOTE: WE DON'T OVERWRITE THESE FORM ENTRIES, WE ADD NEW ONES EACH TIME.
 //      EVERYTHING SHOULD BE LIKE THIS BUT THAT WAS A BAD DESIGN DECISION.
+//      Also note that this means we only have to check the creation date.
 //      - RobM.
 
 function ccgn_application_users_page_pre_form_submit_handler ( $entry,
