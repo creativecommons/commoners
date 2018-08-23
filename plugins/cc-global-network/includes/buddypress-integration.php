@@ -308,6 +308,22 @@ function ccgn_members_institutional_ids () {
 DEFINE( 'CCGN_PROFILE_FIELD_GROUP_INDIVIDUAL', 'Individual Member' );
 DEFINE( 'CCGN_PROFILE_FIELD_GROUP_INSTITUTION', 'Institutional Member' );
 
+//UGH!
+// Plugin activation fails in wp cli because BP_XProfile_group cannot be found.
+//FIXME: This is weird but work around it.
+if ( defined( 'WP_CLI' ) ) {
+    if ( ! class_exists( 'BP_XProfile_group' ) ) {
+        //FIXME: much smarter file locating is required here
+        require_once '../../buddypress/bp-xprofile/classes/class-bp-xprofile-group.php';
+    }
+    if ( ! class_exists( 'BP_XProfile_field' ) ) {
+        require_once '../../buddypress/bp-xprofile/classes/class-bp-xprofile-field.php';
+    }
+    if ( ! class_exists( 'BP_XProfile_Field_Type_Placeholder' ) ) {
+        require_once '../../buddypress/bp-xprofile/classes/class-bp-xprofile-field-type-placeholder.php';
+    }
+}
+
 function ccgn_profile_group_id_by_name ( $name ) {
     // Not cached, but bp_profile_get_field_groups fails for some reason
     $groups = bp_xprofile_get_groups();
