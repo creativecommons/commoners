@@ -406,7 +406,7 @@ function ccgn_create_profile_fields_individual () {
         'A brief biography for the member',
         1,
         false,
-        'texarea',
+        'textarea',
         'individual-member'
     );
     ccgn_buddypress_member_field(
@@ -504,7 +504,7 @@ function ccgn_remove_member_type_metabox() {
 ////////////////////////////////////////////////////////////////////////////////
 
 function _bp_remove_components( $enabled, $component ) {
-    // If we are in the CLI we need xprofile to activat ethe plugin
+    // If we are in the CLI we need xprofile to activate the plugin
     // or to reset applications
     if ( defined( 'WP_CLI' ) ) {
         return true;

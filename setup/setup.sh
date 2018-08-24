@@ -1,26 +1,43 @@
 #!/bin/bash
 
 ################################################################################
+# TO RE-EXPORT CONTENT FROM LIVE
+################################################################################
+
+# THIS CODE IS NOT MEANT TO BE RUN AS PART OF THIS SCRIPT!
+# COPY AND RUN THE CODE IN THE IF ON LIVE, NOT THE MACHINE TO INSTALL ON!
+# THEN COPY THE RESULTING FILES INTO PLACE HERE.
+: '
+
+    WPXMLFILE="/tmp/commoners-wordpress.xml"
+    GFJSONFILE="/tmp/gravityforms-export.json"
+    WPEMAILSFILE="/tmp/commoners-emails.json"
+
+    wp export --post_type=page --stdout > "${WPXMLFILE}"
+
+    wp plugin install gravityformscli --activate
+    wp gf form export --dir=/tmp
+    cp "/tmp/gravityforms-export-$(date -u +%Y-%m-%d).json" "${GFJSONFILE}"
+
+    wp option list --format=json --search=ccgn-email-* > "${WPEMAILSFILE}"
+
+'
+
+
+################################################################################
 # BEFORE STARTING
 ################################################################################
 
-sudo apt install php-gd
+: '
 
-## ON SERVER
-# Copy $GFARCHIVE into position
+    # INSTALL APACHE, MYSQL
 
-# Re-exporting content?
+    sudo apt install php-gd
 
-# ON DEV
-## wp export --post__in=${IMPORTPAGES} --stdout > "${WPXMLFILE}"
+    # CREATE WORDPRESS SITE CONFIG FOR THIS SITE
 
-## ON DEV:
-## wp plugin install gravityformscli --activate
-## wp gf form export --dir=/tmp
-## cp "/tmp/gravityforms-export-$(date -u +%Y-%m-%d).json" "${GFJSONFILE}"
+'
 
-## ON DEV
-## wp option list --format=json --search=ccgn-email-* > "${WPEMAILSFILE}"
 
 ################################################################################
 # Config
@@ -53,41 +70,24 @@ if [ ! -f ${GFJSONFILE} ]; then
     exit
 fi
 
-if [ ! -f ${GFARCHIVE} ]; then
-    echo "Cannot find ${GFARCHIVE}"
-    exit
-fi
 
 ################################################################################
 # Install wp-cli
 ################################################################################
 
-pushd /tmp
-wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-php wp-cli.phar --info
-chmod +x wp-cli.phar
-sudo mv wp-cli.phar /usr/local/bin/wp
-popd
+if [ ! $(which wp) ]; then
 
-# FIX DOWNLOAD BUG AS OF 2017-10-12
-sudo wp cli update --nightly
+    pushd /tmp
+    wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    php wp-cli.phar --info
+    chmod +x wp-cli.phar
+    sudo mv wp-cli.phar /usr/local/bin/wp
+    popd
 
-# To make the admin a member later
-wp package install buddypress/wp-cli-buddypress
+    # FIX DOWNLOAD BUG AS OF 2017-10-12
+    #sudo wp cli update --nightly
 
-
-################################################################################
-# Clean up ready for install
-################################################################################
-
-rm -rf "${WPROOT}/*"
-
-
-################################################################################
-# Create database
-################################################################################
-
-mysql -u root -p -e "create database ${DBNAME}; grant all on ${DBNAME}.* to '${DBUSER}' identified by '${DBPASSWORD}';"
+fi
 
 
 ################################################################################
@@ -98,12 +98,12 @@ cd "${WPROOT}"
 ${WPCLI} core download
 
 ${WPCLI} config create \
-    --dbname=${DBNAME} --dbuser=${DBUSER} --dbpass=${DBPASSWORD}
+    --dbname="${DBNAME}" --dbuser="${DBUSER}" --dbpass="${DBPASSWORD}"
 
 ${WPCLI} core install \
-    --url='${SITEURL}' --title='${SITENAME}' \
-    --admin_user='${ADMINNAME}' --admin_password='${ADMINPASSWORD}' \
-    --skip-email --admin_email='${ADMINEMAIL}'
+    --url="${SITEURL}" --title="${SITENAME}" \
+    --admin_user="${ADMINNAME}" --admin_password="${ADMINPASSWORD}" \
+    --skip-email --admin_email="${ADMINEMAIL}"
 
 # So BuddyPress activates
 ${WPCLI} rewrite structure '/%year%/%monthnum%/%day%/%postname%/'
@@ -120,17 +120,10 @@ if [ ! -d "${GITROOT}/commoners" ]; then
     sudo chown -R "${WEBUSER}:${WEBGROUP}" commoners
 fi
 cd "${WPROOT}/wp-content/plugins"
-ln -s "${GITROOT}/commoners/plugins/cas-maestro"
-ln -s "${GITROOT}/commoners/plugins/cc-global-network"
+sudo -u "${WEBUSER}" ln -s "${GITROOT}/commoners/plugins/cas-maestro"
+sudo -u "${WEBUSER}" ln -s "${GITROOT}/commoners/plugins/cc-global-network"
 cd "${WPROOT}/wp-content/themes"
-ln -s "{$GITROOT}/commoners/themes/cc-commoners"
-
-
-################################################################################
-# Install gravityforms
-################################################################################
-
-sudo -u www-root unzip -d "${WPROOT}/wp-content/plugins/" "${GFARCHIVE}"
+sudo -u "${WEBUSER}" ln -s "${GITROOT}/commoners/themes/cc-commoners"
 
 
 ################################################################################
@@ -141,18 +134,25 @@ cd "${WPROOT}"
 
 ${WPCLI} plugin delete hello
 
+# To make the admin a member later
+wp package install buddypress/wp-cli-buddypress
+
 ${WPCLI} plugin install multiple-roles --activate
 ${WPCLI} plugin install if-menu --activate
 ${WPCLI} plugin install akismet --activate
+
 ${WPCLI} plugin install buddypress --activate
+#${WPCLI} bp component deactivate activity
+#${WPCLI} bp component deactivate notifications
+#${WPCLI} bp component activate groups
+${WPCLI} bp component activate xprofile
+
 # For importing pages
 ${WPCLI} plugin install wordpress-importer --activate
 
-${WPCLI} plugin activate gravityforms
-
 ${WPCLI} plugin install gravityformscli --activate
-
-${WPCLI} plugin activate cc-global-network
+${WPCLI} gf install --key="${GFORMSKEY}"
+${WPCLI} plugin activate gravityforms
 
 ${WPCLI} option update wpCAS_settings \
    '{"cas_version": "1.0",
@@ -160,9 +160,13 @@ ${WPCLI} option update wpCAS_settings \
    "server_port": "443",
    "server_path": ""}' --format=json
 
-${WPCLI} option update wpCAS_settings '{"cas_menu_location":"sidebar","new_user":"1","email_suffix":"","cas_version":"2.0","server_hostname":"login.creativecommons.org","server_port":"443","server_path":"","e-mail_registration":"2","global_sender":"rob@creativecommons.org","full_name":"","welcome_mail":{"send_user":true,"send_global":false,"subject":"","user_body":"","global_body":""},"wait_mail":{"send_user":true,"send_global":false,"subject":"","user_body":"","global_body":""},"ldap_protocol":"3","ldap_server":"","ldap_username_rdn":"","ldap_password":"","ldap_basedn":"","ldap_port":null}' --format=json
+${WPCLI} option update wpCAS_settings '{"cas_menu_location":"sidebar","new_user":"1","email_suffix":"","cas_version":"2.0","server_hostname":"login.creativecommons.org","server_port":"443","server_path":"","e-mail_registration":"2","global_sender":"info@creativecommons.org","full_name":"","welcome_mail":{"send_user":true,"send_global":false,"subject":"","user_body":"","global_body":""},"wait_mail":{"send_user":true,"send_global":false,"subject":"","user_body":"","global_body":""},"ldap_protocol":"3","ldap_server":"","ldap_username_rdn":"","ldap_password":"","ldap_basedn":"","ldap_port":null}' --format=json
 
-${WPCLI} option update rg_gforms_key "${GFORMSKEY}"
+#${WPCLI} plugin activate cas-maestro
+
+#${WPCLI} option update rg_gforms_key "${GFORMSKEY}"
+
+${WPCLI} plugin activate cc-global-network
 
 
 ################################################################################
@@ -192,6 +196,7 @@ ${WPCLI} gf form import "${GFJSONFILE}"
 
 ${WPCLI} import --authors=skip "${WPXMLFILE}"
 
+${WPCLI} option update show_on_front "page"
 ${WPCLI} option update page_on_front "${WPFRONTPAGE}"
 
 
@@ -199,8 +204,8 @@ ${WPCLI} option update page_on_front "${WPFRONTPAGE}"
 # Copy in emails
 ################################################################################
 
-for i in $(seq 0 $(expr ${NUMEMAILS} - 1)); do
+for i in $(seq 0 $(expr $(jq '. | length' "${WPEMAILSFILE}") - 1)); do
     key=$(jq .[$i].option_name "${WPEMAILSFILE}")
     value=$(jq .[$i].option_value "${WPEMAILSFILE}")
-    echo wp option update "${key}" "${value}"
+    wp option update "${key}" "${value}"
 done

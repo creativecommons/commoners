@@ -3,30 +3,28 @@
 ################################################################################
 
 export DELETEPAGES='1 2'
-export IMPORTPAGES='24,26,30,46'
 export WPFRONTPAGE='46'
 
-export WPXMLFILE="$(dirname \"$0\")/commoners-wordpress.xml"
-export GFJSONFILE="$(dirname \"$0\")/gravityforms-export.json"
-export WPEMAILSFILE="$(dirname \"$0\")/commoners-emails.json"
-export NUMEMAILS=4
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-export GFARCHIVE='/tmp/gravityforms_2.2.5.7.zip'
-# As it appears in the database, not the raw version
+export WPXMLFILE="$SRCDIR/commoners-wordpress.xml"
+export GFJSONFILE="$SRCDIR/gravityforms-export.json"
+export WPEMAILSFILE="$SRCDIR/commoners-emails.json"
+
 export GFORMSKEY=''
 
-export DBNAME=''
-export DBUSER=''
-export DBPASSWORD=''
+export DBNAME='commonerstest'
+export DBUSER='commonerstest'
+export DBPASSWORD='commonerstestpassword'
 
-export SITEURL=''
+export SITEURL='commonerstest.localhost'
 export SITENAME='CC Global Network'
-export ADMINNAME=''
-export ADMINPASSWORD=''
+export ADMINNAME='admin'
+export ADMINPASSWORD='password'
 export ADMINEMAIL=''
 
-export WPROOT='/var/www/html'
-export GITROOT='/var/www'
+export WPROOT='/var/www/commonerstest/html'
+export GITROOT='/var/www/commonerstest'
 
 export WEBUSER='www-data'
 export WEBGROUP='www-data'
