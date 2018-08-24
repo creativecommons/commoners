@@ -54,12 +54,16 @@ function createIndividualMember {
     echo "${ID}"
 }
 
+echo "Creating Individual Members"
+
 # These are ID numbers
 
 IM1=$(createIndividualMember 1)
 IM2=$(createIndividualMember 2)
 IM3=$(createIndividualMember 3)
 IM4=$(createIndividualMember 4)
+
+echo "Creating Membership Council Members"
 
 IMC1=$(createIMCMember 1)
 IMC2=$(createIMCMember 2)
@@ -69,6 +73,8 @@ IMC4=$(createIMCMember 4)
 # Create the final approver role
 
 wp user add-role "${IMC1}" 'membership-final-approver'
+
+echo "Creating Legal Team"
 
 L1=$(createLegal 1)
 L2=$(createLegal 2)
@@ -156,6 +162,8 @@ function createIndividualApplicant {
     echo "${ID}"
 }
 
+echo "Creating Individual Applicants"
+
 INDIVIDUALAPPLICANT1=$(createIndividualApplicant 1 \
                                                  "Canada" "English" \
                                                  "${IM1}" "${IM2}")
@@ -189,13 +197,13 @@ function gfSpamCheck {
                   "\"1\": \"${status}\", \"4\": \"${applicant_id}\", \"5\": \"${note}\""
     if [ "${status}" = "Yes" ]; then
         echo "ccgn_user_level_set_pre_approved( ${applicant_id} ); exit;" \
-            | wp shell
+            | wp shell  > /dev/null
     elif [ "${status}" = "Update Details" ]; then
         echo "ccgn_registration_user_set_stage( ${applicant_id}, CCGN_APPLICATION_STATE_UPDATE_DETAILS); exit;" \
-            | wp shell
+            | wp shell > /dev/null
     elif [ "${status}" = "No" ]; then
         echo "ccgn_user_level_set_rejected( ${applicant_id} ); exit;" \
-            | wp shell
+            | wp shell > /dev/null
     fi
 }
 
@@ -207,6 +215,8 @@ gfSpamCheck "${INDIVIDUALAPPLICANT5}" "Update Details" \
             "Please add more detail to your bio."
 gfSpamCheck "${INDIVIDUALAPPLICANT6}" "No" ""
 
+echo "Spam Check for Individual Applicants"
+
 function gfVote {
     local applicant_id=$1
     local voter=$2
@@ -216,6 +226,8 @@ function gfVote {
                   "\"2\": \"${status}\", \"4\": \"${applicant_id}\""
 
 }
+
+echo "Voting on Individual Applicants"
 
 gfVote "${INDIVIDUALAPPLICANT1}" "${IMC1}" "Yes"
 gfVote "${INDIVIDUALAPPLICANT2}" "${IMC1}" "Yes"
@@ -238,9 +250,11 @@ function gfVouch {
                   "\"3\": \"${status}\", \"4\": \"${note}\", \"7\": \"${applicant_id}\", \"8\": \"Yes\""
     if [ "${status}" = "Cannot" ]; then
         echo "ccgn_registration_user_set_stage( ${applicant_id}, CCGN_APPLICATION_STATE_UPDATE_VOUCHERS ); exit;" \
-            | wp shell
+            | wp shell > /dev/null
     fi
 }
+
+echo "Vouching for Individual Applicants"
 
 gfVouch "${INDIVIDUALAPPLICANT1}" "${IM1}" "Yes" "They are awesome."
 gfVouch "${INDIVIDUALAPPLICANT1}" "${IM2}" "Yes" "They are really awesome."
@@ -258,13 +272,17 @@ function gfFinalApproval {
                   "${GFFINAL}" \
                   "\"1\": \"${status}\", \"3\": \"${applicant_id}\""
     if [ "${status}" = "Yes" ]; then
-        echo "ccgn_user_level_set_approved( ${applicant_id} ); ccgn_create_profile( ${applicant_id} ); exit;" \
-             | wp shell
+        echo "ccgn_user_level_set_approved( ${applicant_id} ); exit;" \
+            | wp shell > /dev/null
+        echo "ccgn_create_profile( ${applicant_id} ); exit;" \
+             | wp shell > /dev/null
     else
         echo "ccgn_user_level_set_rejected( ${applicant_id} ); exit;" \
-             | wp shell
+             | wp shell > /dev/null
     fi
 }
+
+echo "Final Approval for Individual Applicants"
 
 gfFinalApproval "${INDIVIDUALAPPLICANT1}" "Yes"
 gfFinalApproval "${INDIVIDUALAPPLICANT4}" "No"
