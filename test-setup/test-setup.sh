@@ -13,15 +13,6 @@ pushd "${WPROOT}"
 
 
 ################################################################################
-# Make the admin a super-user so they can see the Global Network admin views
-################################################################################
-
-wp user add-role 1 membership-council-member
-wp user add-role 1 membership-final-approver
-wp user add-role 1 membership-cc-legal
-
-
-################################################################################
 # Create some users
 ################################################################################
 

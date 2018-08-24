@@ -93,3 +93,14 @@ entries and WordPress User object metadata in various states.
 The setup script does not enable CAS. You will need to enable CAS and update
 the admin login (WordPress User ID 1) if you wish to test the User-facing UI for
 the application workflow.
+
+
+# Viewing The Admin Interface
+
+To give the Admin user access to the complete Global Network admin UI (no real
+user would have this degree of access), enter the WordPress install directory
+and run:
+
+wp user add-role 1 membership-council-member
+wp user add-role 1 membership-final-approver
+wp user add-role 1 membership-cc-legal
