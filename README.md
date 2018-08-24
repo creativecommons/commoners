@@ -15,7 +15,19 @@ GNU General Public License Version 2 or (at your option) any later version.
 
 ## WordPress
 
-See the setup/ directory for information.
+See the `setup/` directory for information.
+
+# How To Install
+
+## Production
+
+See the `setup/` directory .
+
+## Testing
+
+See the `test-setup/` directory.
+
+Be very careful with this code, it deletes things. And drops them.
 
 # Design Notes
 
