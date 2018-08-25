@@ -547,6 +547,8 @@ function ccgn_reopen_application_auto_closed_because_cannots (
         'RE-OPENING APPLICATION AUTO-CLOSED DUE TO "CANNOT" VOUCHES: Setting update date to '
         . $update_date
     );
+    // Restore the user to the new-user role
+    ccgn_user_level_set_applicant_new( $applicant_id );
     // Set the application to be in the update vouchers stage
     ccgn_registration_user_set_stage_update_vouchers( $applicant_id );
     // Remind them to do so by email
