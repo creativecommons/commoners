@@ -85,7 +85,7 @@ function ccgn_email_vouch_request_reminder_maybe_close (
 // Send reminders to those that need them, close those that haven't responded
 
 function ccgn_email_vouch_request_reminders () {
-    $today = new DateTime( 'today' );
+    $now = new DateTime( 'now' );
     // There may be a more efficient SQL query but I don't want to be
     // dependent on database structure - RobM.
     $applicants = ccgn_applicant_ids_with_state(
@@ -93,16 +93,22 @@ function ccgn_email_vouch_request_reminders () {
     );
     foreach ( $applicants as $applicant_id ) {
         // This may have been created some time ago, don't use the date on it
+        // to calculate how long it is since the vouchers should have been
+        // notified that they must vouch
         $vouchers_form = ccgn_application_vouchers ( $applicant_id );
-        // The clock should instead start when the applicant is pre-approved
-        $pre_approval_form = ccgn_pre_approval_entry_for ( $applicant_id );
-        $request_date = new DateTime(
-            ccgn_entry_created_or_updated(
-                $pre_approval_form
-            )
-        );
+        // And don't use the time on the Pre-Approval form either.
+        // The applicant may have had to choose new vouchers after initially
+        // entering the VOUCHING state, which should reset the time for the
+        // newly chosen vouchers.
+        // So use the time since the applicant was last set to this state,
+        // which is the last time their Vouchers were initially notified.
+        $days_in_state = ccgn_days_since_state_set ( $applicant_id, $now );
+        $date_last_set_to_state = get_user_meta(
+            $user_id
+        )[ CCGN_APPLICATION_STATE_DATE ][ 0 ];
+        $request_date = new DateTime( $date_last_set_to_state );
         # php 5.2.2 or later for DateTime comparisons....
-        $day = ($today->diff($request_date))->days;
+        $day = ($now->diff($request_date))->days;
         $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
         foreach ( $vouchers as $voucher_id ) {
             if ( ccgn_vouching_request_open ( $applicant_id, $voucher_id ) ) {

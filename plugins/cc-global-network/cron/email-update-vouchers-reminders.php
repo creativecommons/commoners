@@ -34,13 +34,6 @@ function ccgn_close_vouchers ( $applicant_id ) {
     ccgn_registration_email_voucher_cannot_closed( $applicant_id );
 }
 
-function ccgn_days_in_state ( $applicant_id, $now ) {
-    $state = ccgn_registration_user_get_stage_and_date ( $applicant_id );
-    // Calculate days in the state
-    $state_date = new DateTime($state['date']);
-    return $state_date->diff($now)->days;
-}
-
 // Send reminders to those that need them
 
 function ccgn_email_update_vouchers_reminders () {
@@ -49,7 +42,7 @@ function ccgn_email_update_vouchers_reminders () {
         CCGN_APPLICATION_STATE_UPDATE_VOUCHERS
     );
     foreach ( $applicants as $applicant_id) {
-        $days_in_state = ccgn_days_in_state ( $applicant_id, $now );
+        $days_in_state = ccgn_days_since_state_set ( $applicant_id, $now );
         if ( $days_in_state > CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS ) {
             ccgn_close_vouchers ( $applicant_id );
         } elseif ( $days_in_state > CCGN_REMIND_UPDATE_VOUCHERS_AFTER_DAYS ) {
