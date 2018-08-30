@@ -240,6 +240,18 @@ function ccgn_registration_user_is_vouchable ( $user_id ) {
     );
 }
 
+//NOTE: This returns, and is meant to be, the number of days since the
+// CCGN_APPLICATION_STATE_DATE was last updated. If the Applicant's state
+// had been set to the same state ten times over the course of 100 days and the
+// last time was one day ago, this function MUST return 1.
+
+function ccgn_days_since_state_set ( $applicant_id, $now ) {
+    $state = ccgn_registration_user_get_stage_and_date ( $applicant_id );
+    // Calculate days in the state
+    $state_date = new DateTime($state['date']);
+    return $state_date->diff($now)->days;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // List WordPress User IDs for pre-approval and post-approval
 ////////////////////////////////////////////////////////////////////////////////
