@@ -246,6 +246,7 @@ function ccgn_list_applications_for_final_approval () {
              && ( ! ccgn_current_user_is_final_approver() ) ) {
             continue;
         }
+        $vouch_no_style = '';
         if ( $vouch_counts[ 'no' ] > 0 ) {
             $vouch_no_style = ' style="font-weight: bold"';
         }
@@ -295,28 +296,44 @@ function ccgn_list_applications_for_final_approval () {
 function ccgn_application_approval_page () {
     ?>
 <h1>Applications for Approval</h1>
-<table class="ccgn-approval-table">
-  <thead>
-    <tr>
-      <th>Applicant</th>
-      <th>Type</th>
-<?php if ( ccgn_current_user_is_final_approver() ) { ?>
-      <th>Email</th>
-      <th>Vouching Status</th>
-      <th>Vouches Declined</th>
-      <th>Vouches For</th>
-      <th>Vouches Against</th>
-<?php } ?>
-      <th>Voting Status</th>
-      <th>Votes For</th>
-      <th>Votes Against</th>
-      <th>Application date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php ccgn_list_applications_for_final_approval(); ?>
-  </tbody>
-</table>
+<div class="custom-filters">
+    <div class="member-type">
+        <h4 class="filter-title">Filters</h4>
+        <label for="member_type">
+            Member type
+            <select name="member_type" id="member_type">
+                <option value="">Both</option>
+                <option value="Individual">Individual</option>
+                <option value="Institution">Institution</option>
+            </select>
+        </label>   
+    </div>
+</div>
+<div class="ccgn-table-container">
+    <table class="ccgn-approval-table">
+    <thead>
+        <tr>
+            <th></th>  
+        <th>Applicant</th>
+        <th>Type</th>
+    <?php if ( ccgn_current_user_is_final_approver() ) { ?>
+        <th>Email</th>
+        <th>Vouching Status</th>
+        <!-- <th>Vouches Declined</th>
+        <th>Vouches For</th>
+        <th>Vouches Against</th> -->
+    <?php } ?>
+        <th>Voting Status</th>
+        <!-- <th>Votes For</th>
+        <th>Votes Against</th> -->
+        <th>Application date</th>
+        </tr>
+    </thead>
+    
+        <?php //ccgn_list_applications_for_final_approval(); ?>
+    
+    </table>
+</div>
 <p>This is the list of applicants currently being Vouched by existing
 members and voted on by the Membership Council.</p>
 <p>Applicants need <b><?php echo CCGN_NUMBER_OF_VOUCHES_NEEDED; ?></b>
@@ -358,4 +375,70 @@ function ccgn_application_final_approval_menu () {
         'global-network-application-approval',
         'ccgn_application_approval_page'
     );
+}
+
+/**
+ * Register endpoints to use data
+*/
+register_commoners_endpoints('/application-approval/list','ccgn_rest_return_application_approval_list', 'POST');
+
+function ccgn_rest_return_application_approval_list() {
+    $current_user = ( isset( $_POST['current_user'] ) ) ? esc_attr($_POST['current_user']) : 0;
+    $the_user = new WP_USER($current_user);
+    if ( rest_cookie_check_errors() && $the_user->has_cap('ccgn_list_applications') ) {
+        $user_entries = ccgn_applicant_ids_with_state(
+            CCGN_APPLICATION_STATE_VOUCHING
+        );
+        $return_data = array();
+        usort($user_entries, "ccgn_final_applications_cmp");
+        foreach ($user_entries as $user_id) {
+            $user_data = array();
+            $user = get_user_by('ID', $user_id);
+            // The last form the user filled out, so the time to use
+            $vouchers_entry = ccgn_application_vouchers($user_id);
+            // The actual count of vouches
+            $vouch_counts = ccgn_application_vouches_counts( $user_id );
+            // If the user is not a Final Approver,
+            // and the applicant does not have enough positive votes,
+            // or they have enough Vouches against that they must be rejected
+            // do not show.
+            // The Final Approver needs to see applicants who have been Vouched
+            // against, or whose applications have stalled, in order to handle
+            // those cases.
+            if( ( ( $vouch_counts['no'] > CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED )
+                || ( $vouch_counts['yes'] < CCGN_NUMBER_OF_VOUCHES_NEEDED) )
+                && ( ! ccgn_current_user_is_final_approver() ) ) {
+                continue;
+            }
+            // If the user has been asked to Vouch for the applicant and they
+            // are not the Final Approver, they should not see the entry as they
+            // cannot Vote for them.
+            // Final Approvers cannot vote either, but they must be able to see
+            // the user.
+            if ( ccgn_vouching_request_exists( $user_id, get_current_user_id() )
+                && ( ! ccgn_current_user_is_final_approver() ) ) {
+                continue;
+            }
+            $vote_counts = ccgn_application_votes_counts( $user_id, $vouch_counts );
+            $user_data['applicant_id'] = $user_id;
+            $user_data['applicant'] = ccgn_applicant_display_name ( $user_id );
+            $user_data['applicant_url'] = ccgn_application_user_application_page_url( $user_id );
+            $user_data['applicant_type'] = ccgn_applicant_type_desc( $user_id );
+            $user_data['user_mail'] = $user->user_email;
+            $user_data['vouching_status'] = ccgn_final_approval_status_for_vouch_counts( $vouch_counts );
+            $user_data['vouches_declined'] = $vouch_counts[ 'cannot' ];
+            $user_data['vouches_for'] = $vouch_counts[ 'yes' ];
+            $user_data['vouches_against'] = $vouch_counts[ 'no' ];
+            $user_data['voting_status'] = ccgn_final_approval_status_for_vote_counts( $user_id, $vote_counts, $vouch_counts );
+            $user_data['votes_for'] = $vote_counts[ 'yes'];
+            $user_data['votes_against'] = $vote_counts[ 'no'];
+            $user_data['application_date'] = $vouchers_entry[ 'date_created' ];
+
+            $return_data['data'][] = $user_data;
+        }
+
+        return $return_data;
+    } else {
+        return new WP_Error('Forbidden', "You don't have access to request this data" , array('status' => 403));
+    }
 }

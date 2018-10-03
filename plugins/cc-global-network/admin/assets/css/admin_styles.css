@@ -1,0 +1,36 @@
+.dataTables_wrapper .details-control {
+    cursor: pointer;
+}
+.dataTables_wrapper .details-control .dashicons {
+    transition: all .4s ease;
+    color: #0073aa;
+}
+.dataTables_wrapper .shown .details-control .dashicons {
+    transform: rotate(-180deg);
+}
+
+.detail-table .data-left {
+    padding-right: 1.5rem;
+    border-right: 1px solid #ececec;
+}
+.detail-table .data-right {
+    padding-left: 1.5rem;
+}
+.custom-filters {
+    padding: 1rem;
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    width: 96%;
+    background-color: #e7e7e7;
+    border-radius: .2rem;
+}
+.custom-filters .filter-title {
+    margin: 0;
+    padding-bottom: .5rem;
+    margin-bottom: .5rem;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e1e1e1;
+}
+.ccgn-table-container {
+    width: 98%;
+}

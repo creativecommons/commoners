@@ -106,27 +106,54 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
     if ( $individuals ) {
 ?>
     <h2>New Individual Members<?php echo $date_spec_string; ?></h2>
-    <h3>Details</h3>
-    <table id="ccgn-list-new-individuals" class="tablesorter">
-      <thead align="left">
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Location</th>
-          <th><span style="white-space: nowrap">Chapter of Interest</span></th>
-          <th><span style="white-space: nowrap">Aread of Interest</span></th>
-          <th>Vouchers</th>
-          <th><span style="white-space: nowrap">Final Approval Date</span></th>
-        </tr>
-      </thead>
-      <tbody>
+    <div class="custom-filters">
+        <div class="member-type">
+            <h4 class="filter-title">Filters</h4>
+            <label for="member_type">
+                Member type
+                <select name="member_type" id="member_type">
+                    <option value="">Both</option>
+                    <option value="Individual">Individual</option>
+                    <option value="Institution">Institution</option>
+                </select>
+            </label>
+            <a href="#TB_inline?width=600&height=550&inlineId=emails-modal" class="thickbox email-list button button-primary">View Emails</a>
+        </div>
+    </div>
+    <div class="ccgn-table-container">
+
+        <table id="ccgn-list-new-individuals" class="tablesorter">
+        <thead align="left">
+            <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th><span style="white-space: nowrap">Chapter of Interest</span></th>
+            <th><span style="white-space: nowrap">Aread of Interest</span></th>
+            <th>Vouchers</th>
+            <th><span style="white-space: nowrap">Final Approval Date</span></th>
+            </tr>
+        </thead>
+        <tbody>
 <?php
-       $individual_emails = ccgn_list_render_individual_applicants (
-           $individuals
-       );
+        //echo bp_profile_field_data('field=Location&user_id=5811');
+        //echo xprofile_get_field_data(array('field' => 'Location', 'user_id' => 5811));
+        
+    //    $individual_emails = ccgn_list_render_individual_applicants (
+    //        $individuals
+    //    );
 ?>
-      </tbody>
-    </table>
+        </tbody>
+        </table>
+    </div>
+    <?php add_thickbox(); ?>
+    <div id="emails-modal" style="display:none;">
+        <p>
+            Emails list
+        </p>
+    </div>
+
       <h3>Email List (Individual Members only, see below for Institutions)</h3>
 <?php
        echo join( ', ', $individual_emails );
@@ -230,4 +257,42 @@ function ccgn_application_list_members_menu () {
         'global-network-list-users',
         'ccgn_list_members_admin_page'
     );
+}
+
+/**
+ * Register endpoints to use data
+ */
+register_commoners_endpoints('/list-members', 'ccgn_rest_return_members', 'POST');
+
+function ccgn_rest_return_members()
+{
+    $current_user = (isset($_POST['current_user'])) ? esc_attr($_POST['current_user']) : 0;
+    $the_user = new WP_USER($current_user);
+    $start_date = (isset($_POST['start_date'])) ? $start_date : '';
+    $end_date = (isset($_POST['end_date'])) ? $end_date : '';
+    $return_data = array();
+    if (rest_cookie_check_errors() && $the_user->has_cap('ccgn_list_applications')) {
+        $individuals = ccgn_new_final_approvals_since($start_date, $end_date);
+        foreach ($individuals as $member) {
+            $user_data = array();
+            $member_id = $member[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID];
+            $user = get_user_by('ID', $member_id);
+
+            $user_data['user_id'] = $member_id;
+            $user_data['user_type'] = ccgn_applicant_type_desc($member_id);
+            $user_data['display_name'] = $user->display_name;
+            $user_data['user_email'] = $user->user_email;
+            $user_data['location'] = bp_get_profile_field_data( 'field=Location&user_id=' . $member_id );
+            $user_data['location_chapter'] = bp_get_profile_field_data( 'field=Preferred%20Country%20Chapter&user_id=' . $member_id );
+            $user_data['member_interests'] = join( ', ', bp_get_profile_field_data( 'field=Areas%20of%20Interest&user_id=' . $member_id ) );
+            $user_data['member_vouchers'] = ccgn_application_format_vouches_yes($member_id);
+            $user_data['member_approval_date'] = $member['date_created'];
+
+            $return_data['data'][] = $user_data;
+        }
+        return $return_data;
+        
+    } else {
+        return new WP_Error('Forbidden', "You don't have access to request this data", array('status' => 403));
+    }
 }
