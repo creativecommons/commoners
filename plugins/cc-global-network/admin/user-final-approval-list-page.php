@@ -296,6 +296,15 @@ function ccgn_list_applications_for_final_approval () {
 function ccgn_application_approval_page () {
     ?>
 <h1>Applications for Approval</h1>
+<?php
+    $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'applications-approval';
+?>
+<h2 class="nav-tab-wrapper">
+    <a href="?page=global-network-application-approval&tab=applications-approval" class="nav-tab <?php echo $active_tab == 'applications-approval' ? 'nav-tab-active' : ''; ?>">Applications for Approval</a>
+    <a href="?page=global-network-application-approval&tab=mc-voting-count" class="nav-tab <?php echo $active_tab == 'mc-voting-count' ? 'nav-tab-active' : ''; ?>">MC Voting count</a>
+</h2>
+<br>
+<?php if ($active_tab == 'applications-approval') : ?>
 <div class="custom-filters">
     <div class="member-type">
         <h4 class="filter-title">Filters</h4>
@@ -309,20 +318,25 @@ function ccgn_application_approval_page () {
         </label>   
     </div>
 </div>
+<div class="color-guide">
+    <ul class="colors">
+        <li><span class="color green"></span> Already voted</li>
+    </ul>
+</div>
 <div class="ccgn-table-container">
-    <table class="ccgn-approval-table">
+    <table class="ccgn-approval-table" id="ccgn-table-applications-approval">
     <thead>
         <tr>
             <th></th>  
         <th>Applicant</th>
         <th>Type</th>
-    <?php if ( ccgn_current_user_is_final_approver() ) { ?>
+    <?php// if ( ccgn_current_user_is_final_approver() ) { ?>
         <th>Email</th>
         <th>Vouching Status</th>
         <!-- <th>Vouches Declined</th>
         <th>Vouches For</th>
         <th>Vouches Against</th> -->
-    <?php } ?>
+    <?php // } ?>
         <th>Voting Status</th>
         <!-- <th>Votes For</th>
         <th>Votes Against</th> -->
@@ -340,6 +354,24 @@ members and voted on by the Membership Council.</p>
 vouches for them and <b>zero</b> against them.</p>
 <p>You can review the guidelines for reviewing applications here: <a href="https://github.com/creativecommons/global-network-strategy/blob/master/docs/Guide_for_approve_new_members.md">https://github.com/creativecommons/global-network-strategy/blob/master/docs/Guide_for_approve_new_members.md</a>.</p>
 <!-- move to stylesheet and queue -->
+<?php endif; ?>
+<?php if ($active_tab == 'mc-voting-count') : ?>
+<h2>MC voting stats</h2>
+<div class="ccgn-table-container">
+    <table id="ccgn-list-mc-voting" class="tablesorter">
+    <thead align="left">
+        <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Voting Yes</th>
+        <th>Voting No</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    </table>
+</div>
+<?php endif; ?>
 <style>
 .ccgn-approval-table {
     border-collapse: collapse;
@@ -385,6 +417,11 @@ register_commoners_endpoints('/application-approval/list','ccgn_rest_return_appl
 function ccgn_rest_return_application_approval_list() {
     $current_user = ( isset( $_POST['current_user'] ) ) ? esc_attr($_POST['current_user']) : 0;
     $the_user = new WP_USER($current_user);
+    $user_voting = ccgn_application_votes_by_user($the_user->data->ID);
+    $voted_users = array();
+    foreach ($user_voting as $vote) {
+        $voted_users[] = $vote[4];
+    }
     if ( rest_cookie_check_errors() && $the_user->has_cap('ccgn_list_applications') ) {
         $user_entries = ccgn_applicant_ids_with_state(
             CCGN_APPLICATION_STATE_VOUCHING
@@ -394,6 +431,7 @@ function ccgn_rest_return_application_approval_list() {
         foreach ($user_entries as $user_id) {
             $user_data = array();
             $user = get_user_by('ID', $user_id);
+            $user_application_status = get_user_meta($user_id, 'ccgn-application-state', true); 
             // The last form the user filled out, so the time to use
             $vouchers_entry = ccgn_application_vouchers($user_id);
             // The actual count of vouches
@@ -405,6 +443,7 @@ function ccgn_rest_return_application_approval_list() {
             // The Final Approver needs to see applicants who have been Vouched
             // against, or whose applications have stalled, in order to handle
             // those cases.
+
             if( ( ( $vouch_counts['no'] > CCGN_NUMBER_OF_VOUCHES_AGAINST_ALLOWED )
                 || ( $vouch_counts['yes'] < CCGN_NUMBER_OF_VOUCHES_NEEDED) )
                 && ( ! ccgn_current_user_is_final_approver() ) ) {
@@ -422,9 +461,11 @@ function ccgn_rest_return_application_approval_list() {
             $vote_counts = ccgn_application_votes_counts( $user_id, $vouch_counts );
             $user_data['applicant_id'] = $user_id;
             $user_data['applicant'] = ccgn_applicant_display_name ( $user_id );
+            $user_data['applicant_status'] = $user_application_status;
             $user_data['applicant_url'] = ccgn_application_user_application_page_url( $user_id );
             $user_data['applicant_type'] = ccgn_applicant_type_desc( $user_id );
             $user_data['user_mail'] = $user->user_email;
+            $user_data['already_voted_by_me'] = (in_array($user_id,$voted_users)) ? 'yes' : 'no';
             $user_data['vouching_status'] = ccgn_final_approval_status_for_vouch_counts( $vouch_counts );
             $user_data['vouches_declined'] = $vouch_counts[ 'cannot' ];
             $user_data['vouches_for'] = $vouch_counts[ 'yes' ];
@@ -432,7 +473,7 @@ function ccgn_rest_return_application_approval_list() {
             $user_data['voting_status'] = ccgn_final_approval_status_for_vote_counts( $user_id, $vote_counts, $vouch_counts );
             $user_data['votes_for'] = $vote_counts[ 'yes'];
             $user_data['votes_against'] = $vote_counts[ 'no'];
-            $user_data['application_date'] = $vouchers_entry[ 'date_created' ];
+            $user_data['application_date'] = date('Y-m-d', strtotime($vouchers_entry[ 'date_created' ]));
 
             $return_data['data'][] = $user_data;
         }
@@ -440,5 +481,40 @@ function ccgn_rest_return_application_approval_list() {
         return $return_data;
     } else {
         return new WP_Error('Forbidden', "You don't have access to request this data" , array('status' => 403));
+    }
+}
+register_commoners_endpoints('/mc-voting/list', 'ccgn_rest_return_mc_voting_list', 'POST');
+
+function ccgn_rest_return_mc_voting_list()
+{
+    $current_user = (isset($_POST['current_user'])) ? esc_attr($_POST['current_user']) : 0;
+    $the_user = new WP_USER($current_user);
+    $start_date = (isset($_POST['start_date'])) ? $start_date : '';
+    $end_date = (isset($_POST['end_date'])) ? $end_date : '';
+    $return_data = array();
+    if (rest_cookie_check_errors() && $the_user->has_cap('ccgn_list_applications')) {
+        $users_mc = get_users(array('role' => 'membership-council-member'));
+        foreach ($users_mc as $user) {
+            $user_data = array();
+            $report = ccgn_application_votes_by_user($user->data->ID);
+            $user_data['user_id'] = $user->data->ID;
+            $user_data['user_name'] = $user->data->display_name;
+            $user_data['user_email'] = $user->data->user_email;
+            $user_data['voting_yes'] = 0;
+            $user_data['voting_no'] = 0;
+            foreach ($report as $voting) {
+                if ($voting[2] == 'Yes') {
+                    $user_data['voting_yes']++;
+                }
+                if ($voting[2] == 'No') {
+                    $user_data['voting_no']++;
+                }
+            }
+            $return_data['data'][] = $user_data;
+        }
+        return $return_data;
+
+    } else {
+        return new WP_Error('Forbidden', "You don't have access to request this data", array('status' => 403));
     }
 }

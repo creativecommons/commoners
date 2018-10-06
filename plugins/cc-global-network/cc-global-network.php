@@ -354,13 +354,18 @@ function ccgn_admin_enqueue_scripts($hook_suffix) {
     if (is_admin() && strstr($hook_suffix, 'global-network') ) {
         wp_enqueue_style('datatables-style', CCGN_URL_PATH . 'admin/assets/css/datatables.css');
         wp_enqueue_style('admin-style', CCGN_URL_PATH . 'admin/assets/css/admin_styles.css');
+        wp_enqueue_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
         wp_enqueue_script('jquery');
+        wp_enqueue_script('jquery-ui-datepicker');
         wp_enqueue_script('datatables', CCGN_URL_PATH . 'admin/assets/js/datatables.min.js', array('jquery'), '', '');
         wp_enqueue_script('ccgn-script', CCGN_URL_PATH . 'admin/assets/js/script.js', array('jquery'), '', '');
         wp_localize_script('ccgn-script', 'wpApiSettings', array(
             'root' => esc_url_raw(rest_url()),
             'nonce' => wp_create_nonce('wp_rest'),
-            'current_user' => get_current_user_id()
+            'current_user' => get_current_user_id(),
+            'site_epoch' => CCGN_SITE_EPOCH,
+            'date_now' => date("Y-m-d"),
+            'ajax_url' => admin_url('admin-ajax.php')
         ));
     }
 }

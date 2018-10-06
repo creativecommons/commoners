@@ -90,11 +90,19 @@ function ccgn_report_member_country_count() {
         }
         $countries[$country] += 1;
     }
-    echo '<h1>Total Individual Members by Country (All-time)</h1><table><thead><tr><td>Country</td><td>Count</td></tr></thead><tbody>';
-    foreach ($countries as $country => $count) {
-        echo '<tr><td>' . $country . '</td><td>' . $count . '</td></tr>';
-    }
-    echo '</tbody></table>';
+    echo '<h1>Total Individual Members by Country (All-time)</h1>';
+    echo '<div class="ccgn-table-container">';
+        echo '<table id="ccgn-members-by-country">';
+            echo '<thead>';
+                echo '<tr>';
+                    echo '<td><strong>Country</strong></td>';
+                    echo '<td><strong>Count</strong></td>';
+                echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+            echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
 }
 
 function ccgn_list_recent_members ( $start_date, $end_date ) {
@@ -102,14 +110,14 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
     if ( $start_date || $end_date ) {
         $date_spec_string = " ( $start_date &mdash; $end_date )";
     }
-    $individuals = ccgn_new_final_approvals_since ( $start_date, $end_date );
-    if ( $individuals ) {
+    //$individuals = ccgn_new_final_approvals_since ( $start_date, $end_date );
+    //if ( $individuals ) {
 ?>
-    <h2>New Individual Members<?php echo $date_spec_string; ?></h2>
+    <h2>New Members</h2>
     <div class="custom-filters">
         <div class="member-type">
             <h4 class="filter-title">Filters</h4>
-            <label for="member_type">
+            <label for="member_type" class="inline-label">
                 Member type
                 <select name="member_type" id="member_type">
                     <option value="">Both</option>
@@ -117,7 +125,15 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
                     <option value="Institution">Institution</option>
                 </select>
             </label>
-            <a href="#TB_inline?width=600&height=550&inlineId=emails-modal" class="thickbox email-list button button-primary">View Emails</a>
+            <label class="inline-label"><a href="#TB_inline?width=600&height=550&inlineId=emails-modal" class="thickbox email-list button button-primary">View Emails</a></label>
+            <label for="date-start" class="inline-label with-description">
+                <input type="text" class="ui-datepicker-input" name="date-start" id="date-start" placeholder="Start date">
+                <small class="description">(Leave blank for since registration began)</small>
+            </label>
+            <label for="date-end" class="inline-label with-description">
+                <input type="text" class="ui-datepicker-input" name="date-end" id="date-end" placeholder="End date">
+                <small class="description">(Leave blank for since registration began)</small>
+            </label>
         </div>
     </div>
     <div class="ccgn-table-container">
@@ -153,47 +169,72 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
             Emails list
         </p>
     </div>
-
-      <h3>Email List (Individual Members only, see below for Institutions)</h3>
 <?php
-       echo join( ', ', $individual_emails );
-    } else {
-?>
-    <h2>No Individual Members matched the specified dates</h2>
-<?php
-    }
-    $institutions = ccgn_new_legal_approvals_since ( $start_date, $end_date );
-    if ( $institutions ) {
-?>
-    <h2>New Institutional Members<?php echo $date_spec_string; ?></h2>
-    <h3>Details</h3>
-    <table id="ccgn-list-new-institutions" class="tablesorter">
-      <thead align="left">
-        <tr>
-          <th>Organization</th>
-          <th>Contact Name</th>
-          <th>Contact Email</th>
-          <th>Legal Approval Date</th>
-        </tr>
-      </thead>
-      <tbody>
-<?php
-        $institution_emails = ccgn_list_render_institutional_applicants (
-            $institutions
-        );
-?>
-      </tbody>
-    </table>
-    <h3>Email List (Institutional Members only, see above for Individuals )</h3>
-<?php
-      echo join( ', ', $institution_emails );
-    } else {
-?>
-    <h2>No Institutional Members matched the specified dates</h2>
-<?php
-    }
+    //}
+    
     ccgn_report_member_country_count();
 }
+function ccgn_list_and_search_members() {
+    echo '<h2>Search Members</h2>';
+    echo '<div id="alert-messages"></div>';
+    echo '<div class="custom-filters">';
+        echo '<div class="member-type">';
+            echo '<h4 class="filter-title">Search for</h4>';
+            echo '<label for="user_id" class="inline-label">';
+                echo '<input type="text" id="user_id" name="user_id" placeholder="User email, username or ID">';
+            echo '</label>';
+            echo '<label class="inline-label"><a href="#" class="button button-primary" id="search-all-members">Search Member</a></label>';
+        echo '</div>';
+    echo '</div>';
+    echo '<div class="search-results ccgn-table-container" id="search-results">';
+        echo '<table id="ccgn-search-users">';
+            echo '<thead>';
+                echo '<tr>';
+                    echo '<td><strong>ID</strong></td>';
+                    echo '<td><strong>Name</strong></td>';
+                    echo '<td><strong>Mail</strong></td>';
+                    echo '<td><strong>Roles</strong></td>';
+                    echo '<td><strong>User since</strong></td>';
+                    echo '<td><strong>Application Status</strong></td>';
+                    echo '<td><strong>Status last update</strong></td>';
+                    echo '<td><strong>Actions</strong></td>';
+                echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+            echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+     add_thickbox();
+    echo '<div id="resetvouchers-modal" style="display:none;">';
+        echo '<h2>You are about to reset the vouching state of an user</h2>';
+        echo '<p>Are you sure you want to do this? with this action you will:</p>';
+        echo '<ul>';
+            echo '<li>- Roll back an application that was automatically closed</li>';
+            echo '<li>- Notify the applicant by mail</li>';
+        echo '</ul>';
+        echo '<br><br>';
+        echo  wp_nonce_field('reset_vouchers', 'reset_vouchers_nonce', true, false);
+        echo '<div class="buttons">';
+            echo '<button id="close-reset-vouchers" class="button close-window">Close</button> ';
+            echo " <button id=\"reset-vouchers-for-sure\" class=\"button button-primary reset-vouchers-for-sure\">Yes, I'm sure</button>";
+        echo '</div>';
+        echo '</p>';
+    echo '</div>';
+}
+function ccgn_ajax_reset_vouchers() {
+    $user_id = $_POST['user_id'];
+    if ( check_ajax_referer('reset_vouchers', 'sec') && (!empty($user_id) ) ) {
+        $reset_vouchers = ccgn_reopen_application_auto_closed_because_cannots($user_id);
+        if ($reset_vouchers) {
+            echo 'ok';
+        } else {
+            echo 'error';
+        }
+    }
+    exit(0);
+}
+add_action('wp_ajax_nopriv_reset_vouchers', 'ccgn_ajax_reset_vouchers');
+add_action('wp_ajax_reset_vouchers', 'ccgn_ajax_reset_vouchers');
 
 function ccgn_list_members_admin_page () {
 ?>
@@ -215,31 +256,19 @@ function ccgn_list_members_admin_page () {
     } else {
         $end_date = date( 'Y-m-d', time() );
     }
-?>
-  <form method="get" action="<?php
-     echo esc_html( admin_url( 'admin.php?page=global-network-list-users' ) );
-?>">
-    <input type="hidden" name="page" value="global-network-list-users" />
-    <div class="options">
-      <p>
-        <label>Start date <i>(leave blank for since registration began)</i></label>
-        <br />
-        <input type="text" name="start_date" id="ccgn-list-members-date-from"
-          value="<?php echo $start_date; ?>" placeholder="YYYY-MM-DD" />
-      </p>
-      <p>
-        <label>End date <i>(leave blank for today's date)</i></label>
-        <br />
-        <input type="text" name="end_date" id="ccgn-list-members-date-from"
-          value="<?php echo $end_date; ?>" placeholder="YYYY-MM-DD" />
-      </p>
-    </div>
-<?php
-    submit_button('List');
-?>
-  </form>
-<?php
-    ccgn_list_recent_members( $start_date, $end_date );
+        $active_tab = isset($_GET ['tab']) ? $_GET ['tab'] : 'individual-members';
+    ?>
+    <h2 class="nav-tab-wrapper">
+        <a href="?page=global-network-list-users&tab=individual-members" class="nav-tab <?php echo $active_tab == 'individual-members' ? 'nav-tab-active' : ''; ?>">New Members</a>
+        <a href="?page=global-network-list-users&tab=search-members" class="nav-tab <?php echo $active_tab == 'search-members' ? 'nav-tab-active' : ''; ?>">Search Members</a>
+    </h2>
+    <?php 
+    if ($active_tab == 'individual-members') {
+        ccgn_list_recent_members( $start_date, $end_date );
+    }
+    if ($active_tab == 'search-members') {
+        ccgn_list_and_search_members();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -286,12 +315,80 @@ function ccgn_rest_return_members()
             $user_data['location_chapter'] = bp_get_profile_field_data( 'field=Preferred%20Country%20Chapter&user_id=' . $member_id );
             $user_data['member_interests'] = join( ', ', bp_get_profile_field_data( 'field=Areas%20of%20Interest&user_id=' . $member_id ) );
             $user_data['member_vouchers'] = ccgn_application_format_vouches_yes($member_id);
-            $user_data['member_approval_date'] = $member['date_created'];
+            $user_data['member_approval_date'] = date('Y-m-d', strtotime($member['date_created']));
 
             $return_data['data'][] = $user_data;
         }
         return $return_data;
         
+    } else {
+        return new WP_Error('Forbidden', "You don't have access to request this data", array('status' => 403));
+    }
+}
+
+register_commoners_endpoints('/list-members/by-country', 'ccgn_rest_return_members_by_country', 'POST');
+
+function ccgn_rest_return_members_by_country()
+{
+    $current_user = (isset($_POST['current_user'])) ? esc_attr($_POST['current_user']) : 0;
+    $the_user = new WP_USER($current_user);
+    $return_data = array();
+    $countries = array();
+    
+    if (rest_cookie_check_errors() && $the_user->has_cap('ccgn_list_applications')) {
+        $member_ids = ccgn_members_individual_ids();
+        foreach ($member_ids as $member_id) {
+            $country = bp_get_profile_field_data(
+                'field=Location&user_id=' . $member_id
+            );
+            if (!isset($countries[$country])) {
+                $countries[$country] = 0;
+            }
+            $countries[$country] += 1;
+        }
+        foreach ($countries as $country => $count) {
+            $user_data = array();
+            $country_name = (!empty($country)) ? $country : '<strong>No country</strong>';
+            $user_data['country'] = $country_name;
+            $user_data['country_count'] = $count;
+            
+            $return_data['data'][] = $user_data;
+        }
+        return $return_data;
+
+    } else {
+        return new WP_Error('Forbidden', "You don't have access to request this data", array('status' => 403));
+    }
+}
+register_commoners_endpoints('/list-members/by-id', 'ccgn_rest_return_members_by_id', 'POST');
+
+function ccgn_rest_return_members_by_id()
+{
+    $current_user = (isset($_POST['current_user'])) ? esc_attr($_POST['current_user']) : 0;
+    $the_user = new WP_USER($current_user);
+    $search_user = (isset($_POST['search_user'])) ? esc_attr($_POST['search_user']) : 0;
+    $return_data = array();
+
+    if (rest_cookie_check_errors() && $the_user->has_cap('ccgn_list_applications')) {
+        $params = array(
+            'search' => $search_user
+        );
+        $users = get_users($params);
+        foreach ($users as $user) {
+            $user_data = array();
+            $user_data['ID'] = $user->data->ID;
+            $user_data['user_name'] = $user->data->display_name;
+            $user_data['user_mail'] = $user->data->user_email;
+            $user_data['user_register_date'] = date('Y-m-d',strtotime($user->data->user_registered));
+            $user_data['user_roles']  = join(', ', $user->roles);
+            $user_data['user_application_status'] = get_user_meta($user->data->ID, 'ccgn-application-state', true);
+            $user_data['user_status_update'] = date('Y-m-d',strtotime(get_user_meta($user->data->ID, 'ccgn-application-state-date', true)));
+
+            $return_data[] = $user_data;
+        }
+
+        return $return_data;
+
     } else {
         return new WP_Error('Forbidden', "You don't have access to request this data", array('status' => 403));
     }

@@ -3,15 +3,28 @@
 ////////////////////////////////////
 $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
-        var member_type = $('#member_type').val();
-        var column_member_type = data[2]; // use data for the age column
-        if (member_type != '') {
+        var member_type = $('#member_type').val(),
+            column_member_type = data[2],
+            date_start = $('#date-start').val(),
+            date_end = $('#date-end').val(),
+            column_date = data[7];
+        if ((member_type != '') && ((settings.sTableId == 'ccgn-table-applications-approval') || (settings.sTableId == 'ccgn-list-new-individuals')  ) ) {
             if (member_type == column_member_type) {
                 return true;
             } else {
                 return false;
             }
-        } else {
+        } else if (((date_start != '') || (date_end != '')) && (settings.sTableId == 'ccgn-list-new-individuals' )) {
+            var target_date = new Date(column_date),
+                from_date = ( date_start != '' ) ? new Date(date_start) : new Date(wpApiSettings.site_epoch),
+                to_date = ( date_end != '' ) ? new Date(date_end) : Date.now();
+                if ( (target_date >= from_date) && (target_date <= to_date ) ) {
+                    return true;
+                } else {
+                    return false;
+                }
+        } 
+        else {
             return true;
         }
     }
@@ -25,19 +38,6 @@ function format(d) {
 
             '<td class="data-right"><strong>Votes for</strong></td>' +
             '<td>' + d.votes_for + '</td>' +
-            '<td class="data-right"> <select class="user_select">'+
-                '<option value="">Select new state</option>'+
-                '<option value="vouched">Charter form</option>' +
-                '<option value="vouched">Detail Forms</option>' +
-                '<option value="vouched">Received</option>' +
-                '<option value="vouched">Vouching</option>' +
-                '<option value="vouched">Legal</option>' +
-                '<option value="vouched">Update Vouchers</option>'+
-                '<option value="vouched">Update details</option>' +
-                '<option value="vouched">Rejected</option>' +
-                '<option value="vouched">Accepted</option>' +
-                '<option value="vouched">On hold</option>' +
-            '</select> <button class="button button-primary">Reset user state</button></td>'+
         '</tr>' +
         '<tr>' +
             '<td><strong>Vouchers for</strong></td>' +
@@ -52,8 +52,47 @@ function format(d) {
         '</tr>' +
         '</table>';
 }
+
 jQuery(document).ready(function($){
-   var table1 = $('.ccgn-approval-table').DataTable({
+    $.resetVouchers = function(id) {
+        $('#reset-vouchers-for-sure').off('click');
+        tb_show("Reset Vouchers", "#TB_inline?width=600&height=250&inlineId=resetvouchers-modal");
+        $('#close-reset-vouchers').on('click', function(e){
+            e.preventDefault();
+            tb_remove();
+            return false;
+        });
+        $('#reset-vouchers-for-sure').on('click', function(e){
+            var sec = $('#reset_vouchers_nonce').val(),
+                this_button = $(this);
+            $.ajax({
+                url: wpApiSettings.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'reset_vouchers',
+                    user_id: id,
+                    sec: sec
+                },
+                beforeSend: function () {
+                    this_button.text('Working...');
+                },
+                success: function (data) {
+                    this_button.text("Yes, I'm sure");
+                    $('#alert-messages').html('');
+                    if (data == 'ok') {
+                        tb_remove();
+                        $('#alert-messages').append('<div class="updated notice is-dismissible"><p>Vouching state restored</div></p>').find('.notice').delay(3200).fadeOut(300);
+                        $('#search-all-members').trigger('click');
+                    }
+                    if (data == 'error') {
+                        $('#alert-messages').append('<div class="updated notice is-dismissible"><p>There was an error restoring the vouching state</div></p>').find('.notice').delay(3200).fadeOut(300);
+                        tb_remove();
+                    }
+                }
+            });
+        });
+    }
+    var table1 = $('#ccgn-table-applications-approval').DataTable({
        'columns': [
             {
                "className": 'details-control',
@@ -68,6 +107,14 @@ jQuery(document).ready(function($){
             { 'data': 'voting_status' },
             { 'data': 'application_date' }
        ],
+       'columnDefs': [
+           {
+               targets: 1,
+               'render': function (data, type, row, meta) {
+                   return '<a href="' + row.applicant_url + '">' + data+'</a>';
+               }
+           }
+       ],
        'ajax': {
            'url': wpApiSettings.root + 'commoners/v2/application-approval/list',
            'type': 'POST',
@@ -75,6 +122,11 @@ jQuery(document).ready(function($){
                xhr.setRequestHeader('X-WP-Nonce', wpApiSettings.nonce);
            },
            'data': { 'current_user': wpApiSettings.current_user }
+       },
+       rowCallback: function(row, data) {
+           if (data.already_voted_by_me == 'yes') {
+               $(row).addClass('green-mark');
+           }
        }
    });
     var table_members = $('#ccgn-list-new-individuals').DataTable({
@@ -94,10 +146,100 @@ jQuery(document).ready(function($){
             'beforeSend': function (xhr) {
                 xhr.setRequestHeader('X-WP-Nonce', wpApiSettings.nonce);
             },
+            'data': { 
+                'current_user': wpApiSettings.current_user,
+                'start_date': wpApiSettings.site_epoch,
+                'end_date': wpApiSettings.date_now
+            }
+        },
+        rowCallback: function (row, data) {
+            if (data.user_type == 'Institution') {
+                $(row).addClass('red-mark');
+            }
+        }
+    });
+    var table_mc_voting = $('#ccgn-list-mc-voting').DataTable({
+        'columns': [
+            { 'data': 'user_name' },
+            { 'data': 'user_email' },
+            { 'data': 'voting_yes' },
+            { 'data': 'voting_no' },
+        ],
+        'ajax': {
+            'url': wpApiSettings.root + 'commoners/v2/mc-voting/list',
+            'type': 'POST',
+            'beforeSend': function (xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', wpApiSettings.nonce);
+            },
             'data': { 'current_user': wpApiSettings.current_user }
         }
     });
-
+    var table_members_by_country = $('#ccgn-members-by-country').DataTable({
+        'columns': [
+            { 'data': 'country' },
+            { 'data': 'country_count' }
+        ],
+        'ajax': {
+            'url': wpApiSettings.root + 'commoners/v2/list-members/by-country',
+            'type': 'POST',
+            'beforeSend': function (xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', wpApiSettings.nonce);
+            },
+            'data': { 'current_user': wpApiSettings.current_user }
+        }
+    });
+    var table_search_users = $('#ccgn-search-users').DataTable({
+        'columns': [
+            { 'data': 'ID' },
+            { 'data': 'user_name' },
+            { 'data': 'user_mail' },
+            { 'data': 'user_roles' },
+            { 'data': 'user_register_date' },
+            { 'data': 'user_application_status' },
+            { 'data': 'user_status_update' },
+            {
+                "className": 'user_actions',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+            }
+        ],
+        'columnDefs': [
+            {
+                'targets': 7,
+                'render' : function(data, type, row, meta) {
+                    var output = '<span class="inline-buttons">';
+                        output += '<a href="?page=global-network-application-change-vouchers&user_id=' + data.ID + '" target="_blank" class="button button-icon change_vouchers" data-user-id="' + data.ID + '" title="Change Vouchers"><span class="dashicons dashicons-universal-access-alt"></span></a>'; 
+                        output += '<button class="button button-icon reset_vouchers" onClick="$.resetVouchers(' + data.ID + ')" data-user-id="' + data.ID + '" title="Reset Vouchers selection"><span class="dashicons dashicons-image-rotate"></span></button>'; 
+                    output += '</span>';
+                    return output;
+                }
+            }
+        ] 
+    });
+    $('#search-all-members').on('click', function(e){
+        e.preventDefault;
+        var obj = $(this);
+        $.ajax({
+            url: wpApiSettings.root + 'commoners/v2/list-members/by-id',
+            'type': 'POST',
+            'beforeSend': function (xhr) {
+                obj.text('Loading...');
+                xhr.setRequestHeader('X-WP-Nonce', wpApiSettings.nonce);
+            },
+            'data': { 
+                'current_user': wpApiSettings.current_user,
+                'search_user': $('#user_id').val()
+            },
+            success: function(data) {
+                table_search_users.clear();
+                table_search_users.rows.add(data);
+                table_search_users.draw();
+                obj.text('Search Member');
+            }
+        });
+        return false;
+    });
     $('.ccgn-approval-table tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
         var row = table1.row(tr);
@@ -117,6 +259,9 @@ jQuery(document).ready(function($){
         table1.draw();
         table_members.draw();
     });
+    $('.ui-datepicker-input').on('change', function () {
+        table_members.draw();
+    });
     $('.email-list').on('click', function(e){
         $('#emails-modal').find('p').html(
             table_members
@@ -127,6 +272,9 @@ jQuery(document).ready(function($){
                 .unique()     // Reduce to unique values
                 .join(', ')
         );
+    });
+    $('.ui-datepicker-input').datepicker({
+        dateFormat: 'yy-mm-dd'
     });
     
 });
