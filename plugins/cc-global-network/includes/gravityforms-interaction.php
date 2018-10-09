@@ -951,6 +951,7 @@ function ccgn_application_votes_by_user(
         'key' => 'created_by',
         'value' => $user_id
     );
+    $total_count = 0;
     return GFAPI::get_entries(
         $form_id,
         $search_criteria,
@@ -960,7 +961,9 @@ function ccgn_application_votes_by_user(
                 'direction' => 'ASC',
                 'is_numeric' => false
             )
-        )
+        ),
+        array('offset' => 0, 'page_size' => 400), 
+        $total_count
     );
 }
 
