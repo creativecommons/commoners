@@ -941,6 +941,28 @@ function ccgn_application_votes_for_applicant_by_user (
         )
     );
 }
+function ccgn_application_votes_by_user(
+    $user_id
+) {
+    $form_id = RGFormsModel::get_form_id(CCGN_GF_VOTE);
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+        'key' => 'created_by',
+        'value' => $user_id
+    );
+    return GFAPI::get_entries(
+        $form_id,
+        $search_criteria,
+        array(
+            array(
+                'key' => 'date_created',
+                'direction' => 'ASC',
+                'is_numeric' => false
+            )
+        )
+    );
+}
 
 // Vote *by* current user
 

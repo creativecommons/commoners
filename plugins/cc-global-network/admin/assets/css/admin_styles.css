@@ -1,0 +1,91 @@
+.dataTables_wrapper .details-control {
+    cursor: pointer;
+}
+.dataTables_wrapper .details-control .dashicons {
+    transition: all .4s ease;
+    color: #0073aa;
+}
+.dataTables_wrapper .shown .details-control .dashicons {
+    transform: rotate(-180deg);
+}
+
+.detail-table .data-left {
+    padding-right: 1.5rem;
+    border-right: 1px solid #ececec;
+}
+.detail-table .data-right {
+    padding-left: 1.5rem;
+}
+.custom-filters {
+    padding: 1rem;
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    width: 96%;
+    background-color: #e7e7e7;
+    border-radius: .2rem;
+}
+.custom-filters .filter-title {
+    margin: 0;
+    padding-bottom: .5rem;
+    margin-bottom: .5rem;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e1e1e1;
+}
+.ccgn-table-container {
+    width: 98%;
+}
+.custom-filters .inline-label {
+    display: inline-block;
+    margin-right: .5rem;
+}
+.custom-filters .inline-label .description {
+    display: block;
+    font-size: .6rem;
+    color: #b6b6b6;
+}
+.custom-filters .inline-label.with-description {
+    position: relative;
+    top: .5rem;
+}
+.button.button-icon {
+    display: flex;
+    align-items: center;
+}
+.inline-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.color-guide {
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    padding: .5rem 0;
+    margin: 1.5rem 0;
+}
+.color-guide .colors {
+    list-style-type: none;
+}
+.color-guide .colors li {
+    display: flex;
+    margin-right: 1rem;
+    align-items: center;
+    font-size: .7rem;
+}
+.color-guide .colors li .color {
+    display: inline-block;
+    margin-right: .5rem;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid white;
+    box-shadow: 0 1px 2px rgba(0,0,0,.3);
+}
+.color-guide .colors li .color.green {
+    background-color: #cff9cf;
+}
+/* Marked Rows */
+.dataTable tbody tr.red-mark {
+    background-color: #fff4f4;
+}
+.dataTable tbody tr.green-mark {
+    background-color: #cff9cf;
+}
