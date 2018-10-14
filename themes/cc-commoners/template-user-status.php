@@ -37,7 +37,7 @@ $step[3] = ($application_status['step']['step'] == 3) ? $application_status['ste
                                         <span class="icon"><span class="dashicons dashicons-universal-access-alt"></span></span>
                                         <span class="subtitle">Application</span>
                                         <h4 class="entry-title">Create Account && Select vouchers</h4>
-                                        <p class="entry-summary">Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam id dolor id nibh ultricies vehicula ut id elit. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                        <p class="entry-summary">At this stage you have to agree with the Membership Charter and our privacy policy and terms, also you have to provide us some personal details and select two members to vouch for your application</p>
                                     </article>
                                 </div>
                                 <div class="cell">
@@ -45,7 +45,7 @@ $step[3] = ($application_status['step']['step'] == 3) ? $application_status['ste
                                         <span class="icon"><span class="dashicons dashicons-tickets-alt"></span></span>
                                         <span class="subtitle">Vouching</span>
                                         <h4 class="entry-title">Wait for Vouchers</h4>
-                                        <p class="entry-summary">Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam id dolor id nibh ultricies vehicula ut id elit. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                        <p class="entry-summary">Wait for your vouchers and stay alert if you have to update them in case if they cannot vouch for you</p>
                                     </article>
                                 </div>
                                 <div class="cell">
@@ -53,7 +53,7 @@ $step[3] = ($application_status['step']['step'] == 3) ? $application_status['ste
                                         <span class="icon"><span class="dashicons dashicons-thumbs-up"></span></span>
                                         <span class="subtitle">Approval</span>
                                         <h4 class="entry-title">Final Approval</h4>
-                                        <p class="entry-summary">Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam id dolor id nibh ultricies vehicula ut id elit. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                        <p class="entry-summary">You're almost ready for the final approval</p>
                                     </article>
                                 </div>
                             </div>
