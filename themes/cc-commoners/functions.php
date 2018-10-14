@@ -51,15 +51,18 @@ function cc_commoners_theme_scripts () {
         '1.0',
         true
     );
-
+    wp_enqueue_style('dashicons');
     $parent_style = 'twentyseventeen-style';
-
     wp_enqueue_style(
         $parent_style,
         // We do want template_directory, as this is our parent theme's css
         get_template_directory_uri() . '/style.css'
     );
-
+    wp_enqueue_style(
+        'foundation-base',
+        get_stylesheet_directory_uri() . '/assets/css/foundation.min.css',
+        array($parent_style)
+    );
 
     wp_enqueue_style(
         'cc-commoners-gf',
@@ -73,15 +76,12 @@ function cc_commoners_theme_scripts () {
         array( $parent_style ),
         wp_get_theme()->get('Version')
     );
-
-    /*
     wp_enqueue_style(
         'cc-commoners-style-extra',
         get_theme_file_uri( '/assets/css/extra.css' ),
         array( $parent_style ),
         wp_get_theme()->get('Version')
     );
-    */
 
     wp_enqueue_style(
         'load-font-awesome',

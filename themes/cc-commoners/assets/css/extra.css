@@ -20,3 +20,112 @@
     }
 }
 */
+
+/*
+    EXTRA STYLES
+*/
+.top-space {
+    padding-top: 11rem;
+}
+.inner-space {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+/*
+    CALLOUT
+*/
+.callout {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.callout.warning {
+    background-color: #ffeb92;
+    border: 4px solid #ecb500;
+}
+.callout .title {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+.application-status {
+    position: relative;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-top: 1px solid #ececec;
+    border-bottom: 1px solid #ececec;
+}
+.application-status small {
+    font-style: italic;
+}
+.application-status .title {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+.button {
+    padding: 8px 15px;
+    color: white;
+    background-color: #27a635;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+.button.top-right {
+    position: absolute;
+    right: 0;
+    top: 28%;
+}
+/*
+    ENTRY STATUS
+*/
+.page-header .entry-title {
+    color: #F46B2C;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+.user-status-container {
+    padding-top: 3rem;
+}
+.entry-status {
+    padding: 1rem;
+    border: 4px solid #ececec;
+    text-align: center;
+    min-height: 17rem;
+}
+
+.entry-status .icon {
+    display: block;
+    text-align: center;
+}
+.entry-status .icon .dashicons {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+}
+.entry-status .subtitle {
+    text-transform: uppercase;
+}
+.entry-status .entry-title {
+    font-size: 1.5rem;
+}
+/*Status success*/
+.entry-status.success {
+    border: 4px solid #33b400;
+    background-color: #c7ffb1;
+}
+.entry-status.success .entry-title {
+    color: #1a5c00;
+}
+.entry-status.success .icon .dashicons {
+    color: #1a5c00;
+}
+/* Status error */
+.entry-status.error {
+    border: 4px solid #b40000;
+    background-color: #ffb1b1;
+}
+.entry-status.error .entry-title {
+    color: #5c0000;
+}
+.entry-status.error .icon .dashicons {
+    color: #5c0000;
+}
