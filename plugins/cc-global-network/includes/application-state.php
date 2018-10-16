@@ -395,15 +395,22 @@ function ccgn_show_current_application_status($user_id) {
             'link' => $link_form,
             'link_text' => 'Select vouchers'
         ),
-        'received' => array(
+        'update-details' => array(
             'step' => 1,
+            'msg' => 'You have to update your details',
+            'class' => 'success',
+            'link' => $link_form,
+            'link_text' => 'Update details'
+        ),
+        'received' => array(
+            'step' => 2,
             'msg' => 'You have selected your Vouchers and now you have to wait for pre-approval',
-            'class' => 'success'
+            'class' => 'on-hold'
         ),
         'vouching' => array(
             'step' => 2,
             'msg' => 'You have been pre-approved and you have to wait for your vouchers',
-            'class' => 'success'
+            'class' => 'on-hold'
         ),
         'update-vouchers' => array(
             'step' => 2,
@@ -412,16 +419,9 @@ function ccgn_show_current_application_status($user_id) {
             'link' => $link_form,
             'link_text' => 'Update vouchers'
         ),
-        'update-details' => array(
-            'step' => 2,
-            'msg' => 'You have to update your details',
-            'class' => 'success',
-            'link' => $link_form,
-            'link_text' => 'Update details'
-        ),
         'rejected-because-didnt-update-vouchers' => array(
             'step' => 2,
-            'msg' => 'You have been rejected because you didn \'t update your vouchers',
+            'msg' => 'Your application has been declined, because you didn \'t update your vouchers on time',
             'class' => 'error'
         ),
         'accepted' => array(
@@ -431,17 +431,17 @@ function ccgn_show_current_application_status($user_id) {
         ),
         'legal' => array(
             'step' => 3,
-            'msg' => 'Your application has been voted and now is waiting for Legal approval',
-            'class' => 'success'
+            'msg' => 'Your application has been approved and now is waiting for Legal approval',
+            'class' => 'on-hold'
         ),
         'on-hold' => array(
             'step' => 3,
-            'msg' => 'The application has been paused for some reason. Contact us',
+            'msg' => 'The application has been paused for some reason. Contact us at '.antispambot('network-support@creativecommons.org'),
             'class' => 'error'
         ),
         'rejected' => array(
             'step' => 3,
-            'msg' => 'Your application has been rejected',
+            'msg' => 'Your application has been rejected. Please get in touch with us at' . antispambot('network-support@creativecommons.org'),
             'class' => 'error'
         )
     );
