@@ -367,3 +367,86 @@ function ccgn_application_put_on_hold ( $user_id ) {
         CCGN_APPLICATION_STATE_ON_HOLD
     );
 }
+/*
+    Application status for user status page
+ */
+function ccgn_show_current_application_status($user_id) {
+    $current_status = ccgn_registration_user_get_stage_and_date($user_id);
+    $link_form = (ccgn_user_is_individual_applicant($user_id)) ? site_url('sign-up/individual/form') : site_url('sign-up/institution/form');
+    $steps = array(
+        'charter-form' => array(
+            'step' => 1,
+            'msg' => 'You have to agree with the Charter',
+            'class' => 'success',
+            'link' => $link_form,
+            'link_text' => 'Agree with the Charter'   
+        ),
+        'details-form' => array(
+            'step' => 1,
+            'msg' =>'You have to fill out the details form',
+            'class' => 'success',
+            'link' => $link_form,
+            'link_text' => 'Fill Details' 
+        ),
+        'vouchers-form' => array(
+            'step' => 1,
+            'msg' => 'You have to select your vouchers',
+            'class' => 'success',
+            'link' => $link_form,
+            'link_text' => 'Select vouchers'
+        ),
+        'update-details' => array(
+            'step' => 1,
+            'msg' => 'You have to update your details',
+            'class' => 'success',
+            'link' => $link_form,
+            'link_text' => 'Update details'
+        ),
+        'received' => array(
+            'step' => 2,
+            'msg' => 'You have selected your Vouchers and now you have to wait for pre-approval',
+            'class' => 'on-hold'
+        ),
+        'vouching' => array(
+            'step' => 2,
+            'msg' => 'You have been pre-approved and you have to wait for your vouchers',
+            'class' => 'on-hold'
+        ),
+        'update-vouchers' => array(
+            'step' => 2,
+            'msg' => 'You have to update your vouchers',
+            'class' => 'success',
+            'link' => $link_form,
+            'link_text' => 'Update vouchers'
+        ),
+        'rejected-because-didnt-update-vouchers' => array(
+            'step' => 2,
+            'msg' => 'Your application has been declined, because you didn \'t update your vouchers on time',
+            'class' => 'error'
+        ),
+        'accepted' => array(
+            'step' => 3,
+            'msg' => 'Your application has been accepted in final approval',
+            'class' => 'success'
+        ),
+        'legal' => array(
+            'step' => 3,
+            'msg' => 'Your application has been approved and now is waiting for Legal approval',
+            'class' => 'on-hold'
+        ),
+        'on-hold' => array(
+            'step' => 3,
+            'msg' => 'The application has been paused for some reason. Contact us at '.antispambot('network-support@creativecommons.org'),
+            'class' => 'error'
+        ),
+        'rejected' => array(
+            'step' => 3,
+            'msg' => 'Your application has been rejected. Please get in touch with us at' . antispambot('network-support@creativecommons.org'),
+            'class' => 'error'
+        )
+    );
+    $current_state = array();
+    $current_state['step'] = $steps[$current_status['stage']];
+    $current_state['date'] = $current_status['date'];
+    return $current_state;
+}
