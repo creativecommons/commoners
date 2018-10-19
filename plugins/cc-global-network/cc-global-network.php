@@ -365,7 +365,8 @@ function ccgn_admin_enqueue_scripts($hook_suffix) {
             'current_user' => get_current_user_id(),
             'site_epoch' => CCGN_SITE_EPOCH,
             'date_now' => date("Y-m-d"),
-            'ajax_url' => admin_url('admin-ajax.php')
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'is_sub_admin' => (ccgn_current_user_is_sub_admin()) ? 'yes' : 'no'
         ));
     }
 }

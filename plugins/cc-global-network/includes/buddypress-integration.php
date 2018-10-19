@@ -73,6 +73,12 @@ define( 'CCGN_USER_ROLE_FINAL_APPROVER', 'membership-final-approver' );
 
 define( 'CCGN_USER_ROLE_CC_LEGAL_TEAM', 'membership-cc-legal' );
 
+// User is a sub admin. new profile added on Octobre, 2018
+// The purpose is a rol that can only see some applications data on the admin screens
+// the sub-admin can't make any action
+
+define('CCGN_USER_ROLE_SUB_ADMIN', 'membership-cc-sub-admin');
+
 // Which Field Groups different levels of registration/vouching can see
 // Admin users are handled separately
 
@@ -135,6 +141,10 @@ function ccgn_add_roles_on_plugin_activation () {
     $approver->add_cap( 'ccgn_view_applications' );
     $legal->add_cap( 'ccgn_view_applications' );
 
+    $council->add_cap('ccgn_sub_admin_view');
+    $approver->add_cap('ccgn_sub_admin_view');
+    $legal->add_cap('ccgn_sub_admin_view');
+
     $council->add_cap( 'ccgn_list_applications' );
     $approver->add_cap( 'ccgn_list_applications' );
     $legal->add_cap( 'ccgn_list_applications' );
@@ -144,8 +154,34 @@ function ccgn_add_roles_on_plugin_activation () {
     $legal->add_cap( 'ccgn_list_applications_legal' );
     // The Final Approver can list but not approve legal-stage applications
     $approver->add_cap( 'ccgn_list_applications_legal' );
+    //Create sub_admin role
+    add_sub_admin_role();
 }
 
+// The subadmin function  have the permission to see the application list 
+// but can not make any actions
+
+function add_sub_admin_role() {
+    $result = add_role(
+        CCGN_USER_ROLE_SUB_ADMIN,
+        'CC Sub Administrator',
+        array()
+    );
+    if (null !== $result ) {
+        $sub_admin = get_role(CCGN_USER_ROLE_SUB_ADMIN);
+        $sub_admin->add_cap('ccgn_view_applications');
+        $sub_admin->add_cap('ccgn_list_applications');
+        $sub_admin->add_cap('ccgn_sub_admin_view');
+        $sub_admin->add_cap('ccgn_list_applications_legal');
+    }
+    $council = get_role(CCGN_USER_ROLE_MEMBERSHIP_COUNCIL);
+    $approver = get_role(CCGN_USER_ROLE_FINAL_APPROVER);
+    $legal = get_role(CCGN_USER_ROLE_CC_LEGAL_TEAM);
+    
+    $council->add_cap('ccgn_sub_admin_view');
+    $approver->add_cap('ccgn_sub_admin_view');
+    $legal->add_cap('ccgn_sub_admin_view');
+}
 function ccgn_user_is_new ( $user_id ) {
     $new = true;
     $user = get_user_by( 'ID', $user_id );
@@ -227,11 +263,22 @@ function ccgn_current_user_is_legal_team () {
     }
     return $is;
 }
+function ccgn_current_user_is_sub_admin()
+{
+    $is = false;
+    if (is_user_logged_in()) {
+        $user_id = get_current_user_id();
+        $data = get_userdata($user_id);
+        $is = in_array(CCGN_USER_ROLE_SUB_ADMIN, $data->roles);
+    }
+    return $is;
+}
 
 function ccgn_current_user_can_see_user_application_page () {
     return ccgn_current_user_is_membership_council ()
         || ccgn_current_user_is_final_approver ()
-        || ccgn_current_user_is_legal_team ();
+        || ccgn_current_user_is_legal_team ()
+        || ccgn_current_user_is_sub_admin();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

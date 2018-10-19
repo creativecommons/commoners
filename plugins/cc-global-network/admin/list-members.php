@@ -282,7 +282,7 @@ function ccgn_application_list_members_menu () {
         'global-network-application-approval',
         'List Members',
         'List Members',
-        'ccgn_pre_approve',
+        'ccgn_sub_admin_view',
         'global-network-list-users',
         'ccgn_list_members_admin_page'
     );

@@ -208,10 +208,15 @@ jQuery(document).ready(function($){
             {
                 'targets': 7,
                 'render' : function(data, type, row, meta) {
-                    var output = '<span class="inline-buttons">';
-                        output += '<a href="?page=global-network-application-change-vouchers&user_id=' + data.ID + '" target="_blank" class="button button-icon change_vouchers" data-user-id="' + data.ID + '" title="Change Vouchers"><span class="dashicons dashicons-universal-access-alt"></span></a>'; 
-                        output += '<button class="button button-icon reset_vouchers" onClick="$.resetVouchers(' + data.ID + ')" data-user-id="' + data.ID + '" title="Reset Vouchers selection"><span class="dashicons dashicons-image-rotate"></span></button>'; 
-                    output += '</span>';
+                    var output = '';
+                    if (wpApiSettings.is_sub_admin != 'yes') {
+                        output += '<span class="inline-buttons">';
+                            output += '<a href="?page=global-network-application-change-vouchers&user_id=' + data.ID + '" target="_blank" class="button button-icon change_vouchers" data-user-id="' + data.ID + '" title="Change Vouchers"><span class="dashicons dashicons-universal-access-alt"></span></a>'; 
+                            output += '<button class="button button-icon reset_vouchers" onClick="$.resetVouchers(' + data.ID + ')" data-user-id="' + data.ID + '" title="Reset Vouchers selection"><span class="dashicons dashicons-image-rotate"></span></button>'; 
+                        output += '</span>';
+                    } else {
+                        output += 'No actions';
+                    }
                     return output;
                 }
             }
