@@ -842,7 +842,15 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
         'cannot' => $cannot
     );
 }
-
+//Return true if the applicant can be voted
+function ccgn_application_can_be_voted( $applicant_id ) {
+    $vouches = ccgn_application_vouches_counts( $applicant_id );
+    if ($vouches['yes'] >= 2) {
+        return true;
+    } else {
+        return false;
+    }
+}
 // A predicate function for sorting. Is this Vouching result a 'Cannot' rather
 // than a 'Yes' or a 'No'?
 
