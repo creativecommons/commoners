@@ -309,6 +309,7 @@ function ccgn_rest_return_members()
 
             $user_data['user_id'] = $member_id;
             $user_data['user_type'] = ccgn_applicant_type_desc($member_id);
+            $user_data['user_url'] = ccgn_application_user_application_page_url($user->data->ID);
             $user_data['display_name'] = $user->display_name;
             $user_data['user_email'] = $user->user_email;
             $user_data['location'] = bp_get_profile_field_data( 'field=Location&user_id=' . $member_id );
@@ -378,6 +379,7 @@ function ccgn_rest_return_members_by_id()
             $user_data = array();
             $user_data['ID'] = $user->data->ID;
             $user_data['user_name'] = $user->data->display_name;
+            $user_data['user_url'] = ccgn_application_user_application_page_url($user->data->ID);
             $user_data['user_mail'] = $user->data->user_email;
             $user_data['user_register_date'] = date('Y-m-d',strtotime($user->data->user_registered));
             $user_data['user_roles']  = join(', ', $user->roles);

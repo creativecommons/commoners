@@ -140,6 +140,14 @@ jQuery(document).ready(function($){
             { 'data': 'member_vouchers' },
             { 'data': 'member_approval_date' }
         ],
+        'columnDefs': [
+            {
+                targets: 0,
+                'render': function (data, type, row, meta) {
+                    return '<a href="' + row.user_url + '">' + data + '</a>';
+                }
+            }
+        ],
         'ajax': {
             'url': wpApiSettings.root + 'commoners/v2/list-members',
             'type': 'POST',
@@ -205,6 +213,12 @@ jQuery(document).ready(function($){
             }
         ],
         'columnDefs': [
+            {
+                targets: 1,
+                'render': function (data, type, row, meta) {
+                    return '<a href="' + row.user_url + '">' + data + '</a>';
+                }
+            },
             {
                 'targets': 7,
                 'render' : function(data, type, row, meta) {
