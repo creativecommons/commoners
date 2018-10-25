@@ -915,40 +915,44 @@ function _bp_not_signed_in_redirect () {
 // Not all users, just new users (who are not yet members)
 
 function ccgn_bp_directory_query ( $qs=false, $object=false ) {
-    if ( $object != 'members' ) {
-        return $qs;
-    }
-    $args = wp_parse_args( $qs );
-    if(!empty($args['user_id'])) {
-        return $qs;
-    }
-    $users = get_users();
-    $exclude = array();
-    // Filter users manually so we can exclude those with no role (those that
-    // have had their application declined) and exclude institutions
-    foreach ( $users as $user ) {
-        if (
-            array_intersect(
-                $user->roles,
-                array( 'subscriber', 'membership-council-member' )
-            ) == array()
-             || ccgn_member_is_institution( $user->ID )
-        ) {
-            $exclude[] = $user->ID;
+    $current_page = get_query_var('name');
+    //I add this condition because we don't need to filter members when a certain type of member type directory is showed
+    if ($current_page == 'members') {
+        if ( $object != 'members' ) {
+            return $qs;
         }
-    }
-    if( ! empty( $args[ 'exclude' ] ) ) {
-        $args[ 'exclude' ] = $args[ 'exclude' ] . ',' . $exclude;
-    } else {
-        $args[ 'exclude' ] = join( ',', $exclude );
-    }
+        $args = wp_parse_args( $qs );
+        if(!empty($args['user_id'])) {
+            return $qs;
+        }
+        $users = get_users();
+        $exclude = array();
+        // Filter users manually so we can exclude those with no role (those that
+        // have had their application declined) and exclude institutions
+        foreach ( $users as $user ) {
+            if (
+                array_intersect(
+                    $user->roles,
+                    array( 'subscriber', 'membership-council-member' )
+                ) == array()
+                || ccgn_member_is_institution( $user->ID )
+            ) {
+                $exclude[] = $user->ID;
+            }
+        }
+        if( ! empty( $args[ 'exclude' ] ) ) {
+            $args[ 'exclude' ] = $args[ 'exclude' ] . ',' . $exclude;
+        } else {
+            $args[ 'exclude' ] = join( ',', $exclude );
+        }
 
-    // Force alphabetic order
-    // Is the /members/ membership directory order wrong? This is the cause.
-    // See also #members-order-select
-    $args['type'] = 'alphabetical';
+        // Force alphabetic order
+        // Is the /members/ membership directory order wrong? This is the cause.
+        // See also #members-order-select
+        $args['type'] = 'alphabetical';
 
-    $qs = build_query( $args );
+        $qs = build_query( $args );
+    }
     return $qs;
 }
 
