@@ -547,6 +547,8 @@ function ccgn_reopen_application_auto_closed_because_cannots (
         'RE-OPENING APPLICATION AUTO-CLOSED DUE TO "CANNOT" VOUCHES: Setting update date to '
         . $update_date
     );
+    // Delete votes from user if there are
+    ccgn_delete_vote_entries_from_user( $applicant_id );
     // Restore the user to the new-user role
     ccgn_user_level_set_applicant_new( $applicant_id );
     // Set the application to be in the update vouchers stage
@@ -555,7 +557,15 @@ function ccgn_reopen_application_auto_closed_because_cannots (
     ccgn_registration_email_voucher_cannot_reminder( $applicant_id );
     return true;
 }
-
+// Delete vote entries from an applicant in order to restore the application status
+function ccgn_delete_vote_entries_from_user( $applicant_id ) {
+    $entries = ccgn_application_votes($applicant_id);
+    if ( count( $entries ) > 0 ) {
+        foreach ($entries as $entry) {
+            GFAPI::delete_entry($entry['id']);
+        }
+    }
+}
 // Remove a mistaken vouching response and reset the applicant's vouching
 // timescale. This should only be called extraordinarily, in response to a
 // support request.
@@ -830,7 +840,14 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
         'cannot' => $cannot
     );
 }
-
+function ccgn_application_can_vote($applicant_id) {
+    $vouches = ccgn_application_vouches_counts($applicant_id);
+    if ($vouches[ 'yes' ] >= 2) {
+        return true;
+    } else {
+        return false;
+    }
+}
 // A predicate function for sorting. Is this Vouching result a 'Cannot' rather
 // than a 'Yes' or a 'No'?
 
