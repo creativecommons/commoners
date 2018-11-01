@@ -53,14 +53,15 @@ function ccgn_application_users_page_vote_responses ( $applicant_id ) {
     $votes = ccgn_application_votes ( $applicant_id );
     foreach ($votes as $vote) {
         $voter = get_user_by('ID', $vote['created_by']);
-        $result .=
-                '<h4>From: '
-                . $voter->display_name
-                . '</h4><p><strong>Voted:</strong> '
+        $result .= '<div class="ccgn-box applicant">';
+        $result .= '<div class="icon"><span class="dashicons dashicons-admin-users"></span></div>'
+                . '<h4>'. $voter->display_name . '</h4>'
+                .'<p><strong>Voted:</strong>'
                 .  $vote[
                     CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
                 ]
                 . '</p>';
+                $result .= '</div>';
     }
     return $result;
 }
@@ -418,11 +419,10 @@ function ccgn_application_format_legal_approval ( $applicant_id, $state ) {
 function ccgn_application_user_page_render_change_vouchers ( $applicant_id,
                                                              $state ) {
     if ( current_user_can( 'ccgn_pre_approve' ) ) {
-        echo _('<h3>Change Vouch Requests</h3>');
         if ( $state == CCGN_APPLICATION_STATE_VOUCHING ) {
             echo '<p><a href="'
                 . ccgn_application_change_vouchers_page_url( $applicant_id )
-                . '">';
+                . '" class="button">';
             echo _('Change vouch requests for applicant.');
             echo '</a></p>';
         } else {
@@ -463,35 +463,90 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
     echo _('<h1>Membership Application Details</h1>');
     echo _('<h2>Details Provided By Applicant</h2>');
     echo ccgn_user_page_applicant_profile_text( $applicant_id );
-    echo _('<h2>Vouchers Requested</h2>');
-    $voucher_choices = ccgn_application_vouchers ( $applicant_id );
-    echo '<p><b>Original request date:</b> '
-        . $voucher_choices['date_created']
-        . '</p>';
-    if (! is_null ( $voucher_choices[ 'date_updated' ]  ) ) {
-        echo '<p><b>Updated request date:</b> '
-            . $voucher_choices['date_updated']
-            . '</p>';
-    }
-    echo ccgn_application_users_page_vouchers( $applicant_id );
+    echo '<br /><h1 class="section-title">Vouchers information</h1>';
+    echo '<div class="applicant-columns">';
+        echo '<div class="ccgn-box">';
+            echo _('<h2>Vouchers Requested</h2>');
+            $voucher_choices = ccgn_application_vouchers ( $applicant_id );
+            echo '<p> <span class="dashicons dashicons-calendar-alt"></span> <b>Original request date:</b> '
+                . date('Y-m-d', strtotime($voucher_choices['date_created']))
+                . '</p>';
+            if (! is_null ( $voucher_choices[ 'date_updated' ]  ) ) {
+                echo '<p> <span class="dashicons dashicons-calendar-alt"></span> <b>Updated request date:</b> '
+                    . date('Y-m-d', strtotime($voucher_choices['date_updated']))
+                    . '</p>';
+            }
+            echo ccgn_application_users_page_vouchers( $applicant_id );
+    echo '</div>';
+    
     if ( $state != CCGN_APPLICATION_STATE_RECEIVED ) {
-        ccgn_application_user_page_render_change_vouchers (
-            $applicant_id,
-            $state
-        );
-        echo _('<h2>Vouches Received</h2>');
-        echo ccgn_application_users_page_vouch_counts ( $applicant_id );
-        echo _('<h2>Vouches</h2>');
-        echo ccgn_application_users_page_vouch_responses (
+            echo '<div class="ccgn-box">';
+            echo _('<h2>Vouches Received</h2>');
+                echo ccgn_application_users_page_vouch_counts ( $applicant_id );
+                ccgn_application_user_page_render_change_vouchers(
+                    $applicant_id,
+                    $state
+                );
+            echo '</div>';
+        echo '</div><br>';
+        echo _('<h1 class="section-title">Vouches list</h1>');
+        echo '<div class="applicant-columns">';
+        $vouchers = ccgn_application_users_page_vouch_responses_data(
             $applicant_id,
             true
         );
+        foreach ($vouchers as $voucher) {
+            echo '<div class="ccgn-box applicant">';
+                echo '<div class="icon"><span class="dashicons dashicons-admin-users"></span></div>';
+                echo '<h3 class="applicant-name">'.$voucher['name'].'</h3>';
+                echo '<span class="date">'.$voucher['date'].'</span>';
+                echo '<p class="applicant-reason">' . $voucher['reason'] . '</p>';
+                echo '<p class="state"><strong>Vouched:</strong> '.$voucher['vouched'].'</p>';
+                if (($voucher['vouched'] == 'Yes') && (ccgn_current_user_is_final_approver($applicant_id) || ccgn_current_user_is_membership_council($applicant_id)) ) {
+                    echo '<a href="#" onClick="$.askVoucher('.$voucher['id'].',\''.$voucher['name'].'\')" class="button">Ask for clarification</a>';
+                }
+            echo '</div>';
+        }
+        echo '</div>';
+        // echo  cgn_application_users_page_vouch_responses (
+        //     $applicant_id,
+        //     true
+        // );
+        add_thickbox();
+        echo '<div id="ask-clarification-modal" style="display:none;">';
+            echo '<h2>You are about to ask for clarification to the voucher: <span class="name-display"></span></h2>';
+            $log = ccgn_ask_clarification_log_get_id($applicant_id);
+            if (!empty($log)) {
+                echo '<p>This operation have been perfomed some times: </p>';
+                echo '<div class="inner-scroll medium">';
+                    echo '<ol>';
+                    foreach ($log as $entry) {
+                        echo '<li><div class="log-entry"><strong>'.$entry['ask_user_name'].'</strong> asked on <span class="date">'.$entry['date'].'</span></div></li>';
+                    }
+                    echo '</ol>';
+                echo '</div>';
+            }
+            echo '<p>Are you sure you want to do this? </p>';
+            echo '<br>';
+            echo wp_nonce_field('ask_voucher', 'ask_voucher_nonce', true, false);
+            echo '<div class="buttons">';
+                echo '<button id="close-ask-voucher" class="button close-window">Close</button> ';
+                echo "<button id=\"ask-voucher-for-sure\"  class=\"button button-primary ask-voucher-for-sure\">Yes, I'm sure</button>";
+            echo '</div>';
+            //echo '</p>';
+        echo '</div>';
     }
-    echo _('<h2>Global Council Approval</h2>');
-    echo _('<h3>Votes Received</h3>');
-    echo ccgn_application_users_page_vote_counts ( $applicant_id );
+    echo _('<br><h1 class="section-title">Global Council Approval</h2>');
+    echo '<div class="applicant-columns">';
+        echo '<div class="ccgn-box">';
+            echo _('<h3>Votes Received</h3>');
+            echo ccgn_application_users_page_vote_counts ( $applicant_id );
+        echo '</div>';
+    echo '</div>';
     echo _('<h3>Votes</h3>');
-    echo ccgn_application_users_page_vote_responses ( $applicant_id );
+    echo '<div class="applicant-columns">';
+        echo ccgn_application_users_page_vote_responses ( $applicant_id );
+    echo '</div>';
 }
 
 function ccgn_application_users_page () {

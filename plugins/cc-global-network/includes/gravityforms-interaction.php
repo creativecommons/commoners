@@ -1799,16 +1799,40 @@ function ccgn_application_users_page_vouch_responses (
     }
     return $result;
 }
+function ccgn_application_users_page_vouch_responses_data(
+    $applicant_id,
+    $full_date = false
+) {
+    $result = '';
+    $vouches = ccgn_application_vouches($applicant_id);
+    $vouches_list = array();
+    foreach ($vouches as $vouch) {
+        $voucher = get_user_by('ID', $vouch['created_by']);
+        $vouch_date = ccgn_entry_created_or_updated($vouch);
+        if (!$full_date) {
+            $vouch_date = explode(' ', $vouch_date)[0];
+        }
+        $the_vouch = array();
+        $the_vouch['id'] = $vouch['created_by'];
+        $the_vouch['name'] = $voucher->display_name;
+        $the_vouch['date'] = $vouch_date;
+        $the_vouch['vouched'] = $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH];
+        $the_vouch['reason'] = $vouch[CCGN_GF_VOUCH_REASON];
+
+        $vouches_list[] = $the_vouch;
+    }
+    return $vouches_list;
+}
 
 // Format the count of vouches
 
 function ccgn_application_users_page_vouch_counts ( $applicant_id ) {
     $counts = ccgn_application_vouches_counts( $applicant_id );
-    return '<p><strong>Cannot: </strong>'
+    return '<p><span class="dashicons dashicons-warning"></span> <strong>Cannot: </strong>'
         . $counts['cannot']
-        . '<p><strong>Yes: </strong>'
+        . '<p><span class="dashicons dashicons-yes"></span> <strong>Yes: </strong>'
         . $counts['yes']
-        . '<p><strong>No: </strong>'
+        . '<p><span class="dashicons dashicons-no"></span> <strong>No: </strong>'
         . $counts['no']
         . '</p>';
 }
@@ -1819,7 +1843,7 @@ function ccgn_application_users_page_vouchers ( $applicant_id ) {
     $result = '';
     $vouchers = ccgn_application_vouchers_users ( $applicant_id );
     foreach ( $vouchers as $voucher ) {
-        $result .= '<p>' . $voucher->display_name  . '</p>';
+        $result .= '<p> <span class="dashicons dashicons-admin-users"></span> ' . $voucher->display_name  . '</p>';
     }
     return $result;
 }
