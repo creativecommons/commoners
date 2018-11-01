@@ -311,6 +311,27 @@ function ccgn_settings_emails_chapter_contact_wrapper () {
       ><?php echo $options['wrapper']; ?></textarea>
     <?php
 }
+function ccgn_settings_emails_ask_voucher_subject()
+{
+    $options = get_option('ccgn-email-ask-voucher');
+    ?>
+    <input type="text" name="ccgn-email-ask-voucher[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+
+}
+
+function ccgn_settings_emails_ask_voucher_message()
+{
+    $options = get_option('ccgn-email-ask-voucher');
+    ?>
+    <textarea name="ccgn-email-ask-voucher[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+
+}
 
 function ccgn_settings_emails_options_page () {
     add_options_page(
@@ -822,6 +843,37 @@ function ccgn_settings_emails_options_chapter_contact () {
     );
 }
 
+function ccgn_settings_emails_options_ask_voucher()
+{
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-ask-voucher'
+    );
+
+    add_settings_section(
+        'ccgn-email-ask-voucher',
+        'Ask voucher for clarification',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_ask_voucher_subject',
+        'global-network-emails',
+        'ccgn-email-ask-voucher'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message Wrapper',
+        'ccgn_settings_emails_ask_voucher_message',
+        'global-network-emails',
+        'ccgn-email-ask-voucher'
+    );
+}
+
 function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_page();
     ccgn_settings_emails_options_sender();
@@ -841,6 +893,7 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_rejected();
     ccgn_settings_emails_options_notify_legal();
     ccgn_settings_emails_options_chapter_contact();
+    ccgn_settings_emails_options_ask_voucher();
 }
 
 function ccgn_settings_emails_print_info () {
