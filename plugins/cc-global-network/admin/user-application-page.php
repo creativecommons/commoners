@@ -461,6 +461,7 @@ function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
 
 function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
     echo _('<h1>Membership Application Details</h1>');
+    echo '<div id="alert-messages"></div>';
     echo _('<h2>Details Provided By Applicant</h2>');
     echo ccgn_user_page_applicant_profile_text( $applicant_id );
     echo '<br /><h1 class="section-title">Vouchers information</h1>';
@@ -503,7 +504,7 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
                 echo '<p class="applicant-reason">' . $voucher['reason'] . '</p>';
                 echo '<p class="state"><strong>Vouched:</strong> '.$voucher['vouched'].'</p>';
                 if (($voucher['vouched'] == 'Yes') && (ccgn_current_user_is_final_approver($applicant_id) || ccgn_current_user_is_membership_council($applicant_id)) ) {
-                    echo '<a href="#" onClick="$.askVoucher('.$voucher['id'].',\''.$voucher['name'].'\')" class="button">Ask for clarification</a>';
+                    echo '<a href="#" onClick="$.askVoucher('.$voucher['id'].',\''.$voucher['name'].'\','.$applicant_id.')" class="button">Ask for clarification</a>';
                 }
             echo '</div>';
         }
@@ -610,3 +611,19 @@ function ccgn_application_user_link( $actions, $user_object ) {
     }
     return $actions;
 }
+
+// Ajax function
+// Executed in the UI when a MC member ask to a voucher for clarification
+function ccgn_ajax_ask_voucher()
+{
+    $user_id = $_POST['user_id'];
+    $applicant_id = $_POST['applicant_id'];
+    if (check_ajax_referer('ask_voucher', 'sec') && (!empty($user_id))) {
+        ccgn_ask_email_vouching_request($applicant_id,$user_id);
+        ccgn_ask_clarification_log_append($applicant_id);
+        echo 'ok';        
+    }
+    exit(0);
+}
+add_action('wp_ajax_nopriv_ask_voucher', 'ccgn_ajax_ask_voucher');
+add_action('wp_ajax_ask_voucher', 'ccgn_ajax_ask_voucher');

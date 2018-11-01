@@ -85,14 +85,14 @@ jQuery(document).ready(function ($) {
                         $('#search-all-members').trigger('click');
                     }
                     if (data == 'error') {
-                        $('#alert-messages').append('<div class="updated notice is-dismissible"><p>There was an error restoring the vouching state</div></p>').find('.notice').delay(3200).fadeOut(300);
+                        $('#alert-messages').append('<div class="error notice is-dismissible"><p>There was an error restoring the vouching state</div></p>').find('.notice').delay(3200).fadeOut(300);
                         tb_remove();
                     }
                 }
             });
         });
     }
-    $.askVoucher = function (id, name) {
+    $.askVoucher = function (id, name, applicant_id) {
         $('#ask-voucher-for-sure').off('click');
         $('#ask-clarification-modal').find('.name-display').html(name);
         tb_show("Ask for clarification to voucher", "#TB_inline?width=600&height=300&inlineId=ask-clarification-modal");
@@ -101,7 +101,6 @@ jQuery(document).ready(function ($) {
             tb_remove();
             return false;
         });
-        console.log(id);
         $('#ask-voucher-for-sure').on('click', function (e) {
             var sec = $('#ask_voucher_nonce').val(),
                 this_button = $(this);
@@ -111,6 +110,7 @@ jQuery(document).ready(function ($) {
                 data: {
                     action: 'ask_voucher',
                     user_id: id,
+                    applicant_id: applicant_id,
                     sec: sec
                 },
                 beforeSend: function () {
@@ -125,7 +125,7 @@ jQuery(document).ready(function ($) {
                         $('#search-all-members').trigger('click');
                     }
                     if (data == 'error') {
-                        $('#alert-messages').append('<div class="updated notice is-dismissible"><p>There was an error sending your request</p></div>').find('.notice').delay(3200).fadeOut(300);
+                        $('#alert-messages').append('<div class="error notice is-dismissible"><p>There was an error sending your request</p></div>').find('.notice').delay(3200).fadeOut(300);
                         tb_remove();
                     }
                 }
