@@ -200,3 +200,19 @@ table.ccgn-profile tr td.title {
     font-size: 1.3rem;
     font-weight: bold;
 }
+.button.tiny {
+    font-size: .7rem;
+    padding: 0 .5rem;
+}
+#input_changeVoucher_chosen {
+    width: 100% !important;
+}
+#TB_ajaxContent {
+    position: relative;
+    padding-bottom: 2rem;
+}
+#TB_ajaxContent .buttons {
+    position: absolute;
+    bottom: .5rem;
+    padding: .5rem;
+}

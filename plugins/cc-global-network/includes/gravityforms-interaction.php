@@ -1842,8 +1842,24 @@ function ccgn_application_users_page_vouch_counts ( $applicant_id ) {
 function ccgn_application_users_page_vouchers ( $applicant_id ) {
     $result = '';
     $vouchers = ccgn_application_vouchers_users ( $applicant_id );
+    $vouch_data = ccgn_application_users_page_vouch_responses_data(
+        $applicant_id,
+        true
+    );
+    $position = 1;
     foreach ( $vouchers as $voucher ) {
-        $result .= '<p> <span class="dashicons dashicons-admin-users"></span> ' . $voucher->display_name  . '</p>';
+        $data = array();
+        $other_voucher = 0; // get the other voucher ID in case if vouched is "yes". this means that we have to disable the name in the select box
+        foreach ($vouch_data as $vouch_item) {
+            if ($voucher->ID == $vouch_item['id']) {
+                $data = $vouch_item;
+            } else if ( ($voucher->ID != $vouch_item['id']) && ($vouch_item['vouched'] == 'Yes') ) {
+                $other_voucher = $vouch_item['id'];
+            }
+        }
+        $action_button = (ccgn_current_user_is_final_approver() && ($data['vouched'] != 'Yes') && ($data['vouched'] != 'No') ) ? ' <button class="button tiny action-change-voucher" onclick="$.changeVoucher('.$applicant_id.',\''.$voucher->display_name.'\','.$voucher->ID.','.$other_voucher.','.$position.')">Change</button>' : '';
+        $result .= '<p> <span class="dashicons dashicons-admin-users"></span> ' . $voucher->display_name  . $action_button .'</p>';
+        $position++;
     }
     return $result;
 }

@@ -92,6 +92,56 @@ jQuery(document).ready(function ($) {
             });
         });
     }
+    $.changeVoucher = function (applicantId, voucherName, currentVoucher,theOtherVoucher,position) {
+        $('#change-voucher-for-sure').off('click');
+        $('#input_changeVoucher option[disabled="disabled"]').removeAttr('disabled');
+        $('#change-voucher-modal').find('.name-display').html(voucherName); //Display the voucher name that will be changed
+        $('#change-voucher-modal').find('#input_changeVoucher').val(currentVoucher);
+        $('#input_changeVoucher option[value="'+theOtherVoucher+'"]').attr('disabled','disabled');
+        $("#input_changeVoucher").trigger("chosen:updated");
+        tb_show("Change current voucher", "#TB_inline?width=600&height=300&inlineId=change-voucher-modal");
+        $('#close-change-voucher').on('click', function (e) {
+            e.preventDefault();
+            tb_remove();
+            return false;
+        });
+        $('#change-voucher-for-sure').on('click', function (e) {
+            var sec = $('#change_voucher_nonce').val(),
+                this_button = $(this),
+                new_voucher = $("#input_changeVoucher").val();
+            $.ajax({
+                url: wpApiSettings.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'change_voucher',
+                    voucher_id: currentVoucher,
+                    applicant_id: applicantId,
+                    position: position,
+                    new_voucher: new_voucher,
+                    sec: sec
+                },
+                beforeSend: function () {
+                    this_button.text('Working...');
+                },
+                success: function (data) {
+                    this_button.text("Yes, I'm sure");
+                    $('#alert-messages').html('');
+                    if (data == 'ok') {
+                        tb_remove();
+                        //$('#alert-messages').append('<div class="updated notice is-dismissible"><p>The request was sended to the user</p></div>').find('.notice').delay(3200).fadeOut(300);
+                        console.log('ok');
+                        location.reload();
+                        
+                    }
+                    if (data == 'error') {
+                        console.log('error');
+                        $('#alert-messages').append('<div class="error notice is-dismissible"><p>There was an error sending your request</p></div>').find('.notice').delay(3200).fadeOut(300);
+                        tb_remove();
+                    }
+                }
+            });
+        });
+    }
     $.askVoucher = function (id, name, applicant_id) {
         $('#ask-voucher-for-sure').off('click');
         $('#ask-clarification-modal').find('.name-display').html(name);
@@ -341,6 +391,39 @@ jQuery(document).ready(function ($) {
             target = obj.data('target');
         obj.toggleClass('opened');
         $(target).slideToggle('fast');
+        return false;
+    });
+    $('#input_changeVoucher').chosen({});
+
+    $('#set-new-vouch-reason').on('click', function(e) {
+        e.preventDefault(); 
+        var obj = $(this),
+            new_reason = $('#clarification_voucher').val(),
+            entry_id = obj.data('entry-id'),
+            sec = $('#clarification_voucher_nonce').val();
+        $.ajax({
+            url: wpApiSettings.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'reason_voucher',
+                entry_id: entry_id,
+                new_reason: new_reason,
+                sec: sec
+            },
+            beforeSend: function () {
+                obj.text('Working...');
+            },
+            success: function (data) {
+                obj.text("Set new reason");
+                $('#change-voucher-messages').html('');
+                if (data == 'ok') {
+                    location.reload();
+                }
+                if (data == 'error') {
+                    $('#change-voucher-messages').append('<div class="error notice is-dismissible"><p>There was an error sending your request</p></div>').find('.notice').delay(3200).fadeOut(300);
+                }
+            }
+        });
         return false;
     });
 });
