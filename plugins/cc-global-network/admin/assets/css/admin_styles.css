@@ -210,7 +210,7 @@ table.ccgn-profile tr td.title {
 }
 #TB_ajaxContent {
     position: relative;
-    padding-bottom: 2rem;
+    padding-bottom: 4rem !important;
 }
 #TB_ajaxContent .buttons {
     position: absolute;

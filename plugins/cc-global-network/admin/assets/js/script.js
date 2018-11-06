@@ -145,7 +145,32 @@ jQuery(document).ready(function ($) {
     $.askVoucher = function (id, name, applicant_id) {
         $('#ask-voucher-for-sure').off('click');
         $('#ask-clarification-modal').find('.name-display').html(name);
-        tb_show("Ask for clarification to voucher", "#TB_inline?width=600&height=300&inlineId=ask-clarification-modal");
+        tb_show("Ask for clarification to voucher", "#TB_inline?width=600&height=350&inlineId=ask-clarification-modal");
+        $('#log-content-ask-voucher').hide();
+        var logList = $('#log-entry-ask-voucher');
+        logList.html('');
+        $.ajax({
+            url: wpApiSettings.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'ask_voucher_log',
+                applicant_id: applicant_id,
+                voucher_id: id
+            },
+            success: function (data) {
+                converted_data = JSON.parse(data);
+                console.log(logList);
+                if (converted_data.length > 0) {
+                    converted_data.forEach(function(element){
+                        console.log(element);
+                        logList.append('<li><div class="log-entry"><strong>' + element.ask_user_name + '</strong> on <span class="date">' + element.date + '</span></div></li>');
+                    });
+                    $('#log-content-ask-voucher').show();
+                } else {
+                    $('#log-content-ask-voucher').hide();
+                }
+            }
+        });
         $('#close-ask-voucher').on('click', function (e) {
             e.preventDefault();
             tb_remove();

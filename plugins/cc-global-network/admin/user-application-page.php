@@ -54,8 +54,7 @@ function ccgn_application_users_page_vote_responses ( $applicant_id ) {
     foreach ($votes as $vote) {
         $voter = get_user_by('ID', $vote['created_by']);
         $result .= '<div class="ccgn-box applicant">';
-        $result .= '<div class="icon"><span class="dashicons dashicons-admin-users"></span></div>'
-                . '<h4>'. $voter->display_name . '</h4>'
+        $result .= '<h4>'. $voter->display_name . '</h4>'
                 .'<p><strong>Voted:</strong>'
                 .  $vote[
                     CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
@@ -532,7 +531,7 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
             echo '</div>';
         }
         echo '</div><br>';
-        echo _('<h1 class="section-title">Vouches list</h1>');
+        echo _('<h1 class="section-title">Vouchers list</h1>');
         echo '<div class="applicant-columns">';
         $vouchers = ccgn_application_users_page_vouch_responses_data(
             $applicant_id,
@@ -540,7 +539,7 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
         );
         foreach ($vouchers as $voucher) {
             echo '<div class="ccgn-box applicant">';
-                echo '<div class="icon"><span class="dashicons dashicons-admin-users"></span></div>';
+                //echo '<div class="icon"><span class="dashicons dashicons-admin-users"></span></div>';
                 echo '<h3 class="applicant-name">'.$voucher['name'].'</h3>';
                 echo '<span class="date">'.$voucher['date'].'</span>';
                 echo '<p class="applicant-reason">' . $voucher['reason'] . '</p>';
@@ -558,17 +557,22 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
         add_thickbox();
         echo '<div id="ask-clarification-modal" style="display:none;">';
             echo '<h2>You are about to ask for clarification to the voucher: <span class="name-display"></span></h2>';
-            $log = ccgn_ask_clarification_log_get_id($applicant_id);
-            if (!empty($log)) {
-                echo '<p>This operation have been perfomed some times: </p>';
+            echo '<p>That means you think the text supporting this application is not enough, is not clear or is not helpful for you to approve this application. If that is the case, you can ask the voucher to clarify.</p>';
+            
+            
+            echo '<div class="log-content" id="log-content-ask-voucher">';
+                echo '<p>This already was requested by: </p>';
                 echo '<div class="inner-scroll medium">';
-                    echo '<ol>';
-                    foreach ($log as $entry) {
-                        echo '<li><div class="log-entry"><strong>'.$entry['ask_user_name'].'</strong> asked on <span class="date">'.$entry['date'].'</span></div></li>';
-                    }
+                    echo '<ol class="log-entries" id="log-entry-ask-voucher">';
+
+                    //foreach ($log as $entry) {
+                      //  echo '<li><div class="log-entry"><strong>'.$entry['ask_user_name'].'</strong> asked on <span class="date">'.$entry['date'].'</span></div></li>';
+                    //}
                     echo '</ol>';
                 echo '</div>';
-            }
+                echo '<p>There is no need to send this email again to the voucher. In case you consider that necessary, you can do it again.</p>';
+            echo '</div>';
+            
             echo '<p>Are you sure you want to do this? </p>';
             echo '<br>';
             echo wp_nonce_field('ask_voucher', 'ask_voucher_nonce', true, false);
@@ -699,7 +703,7 @@ function ccgn_ajax_ask_voucher()
         ccgn_ask_email_vouching_request($applicant_id,$user_id);
         //set user state to clarification of the reason to vouch applicant
         update_user_meta($user_id,'ccgn_need_to_clarify_vouch_reason',1);
-        ccgn_ask_clarification_log_append($applicant_id);
+        ccgn_ask_clarification_log_append($applicant_id,$user_id);
         echo 'ok';        
     }
     exit(0);

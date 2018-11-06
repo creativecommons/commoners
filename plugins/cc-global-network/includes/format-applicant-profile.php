@@ -264,6 +264,22 @@ function ccgn_ask_clarification_log_get_id($applicant_id) {
     $log = ccgn_ask_clarification_log_get();
     return $log[$applicant_id];
 }
+function ccgn_ask_clarification_log_get_id_ajax()
+{
+    $applicant_id = esc_attr($_POST['applicant_id']);
+    $voucher_id = esc_attr($_POST['voucher_id']);
+    $log = ccgn_ask_clarification_log_get();
+    $return_log = array();
+    foreach ($log[$applicant_id] as $entry) {
+        if ($entry['voucher_id'] == $voucher_id) {
+            $return_log[] = $entry;
+        }
+    }
+    echo json_encode($return_log);
+    exit(0);
+}
+add_action('wp_ajax_nopriv_ask_voucher_log', 'ccgn_ask_clarification_log_get_id_ajax');
+add_action('wp_ajax_ask_voucher_log', 'ccgn_ask_clarification_log_get_id_ajax');
 function ccgn_ask_clarification_log_ensure($today)
 {
     $option = ccgn_ask_clarification_log_get();
@@ -287,13 +303,15 @@ function ccgn_ask_clarification_log_set($log_structure)
 }
 
 function ccgn_ask_clarification_log_append(
-    $applicant_id
+    $applicant_id,
+    $voucher_id
 ) {
     $today = date('Y-m-d');
     $log = ccgn_ask_clarification_log_get();
     $log[$applicant_id][] = array(
         'applicant_id' => $applicant_id,
         'date' => $today,
+        'voucher_id' => $voucher_id,
         'ask_user_id' => get_current_user_id(),
         'applicant_name' => get_user_by('ID', $applicant_id)->display_name,
         'ask_user_name' => get_user_by('ID', get_current_user_id())->display_name,
