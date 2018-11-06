@@ -372,6 +372,9 @@ function ccgn_application_put_on_hold ( $user_id ) {
  */
 function ccgn_show_current_application_status($user_id) {
     $current_status = ccgn_registration_user_get_stage_and_date($user_id);
+    if ( ($current_status['stage'] == 'vouching') && ( ccgn_application_can_be_voted($user_id) )) {
+        $current_status['stage'] = 'voting';
+    }
     $link_form = (ccgn_user_is_individual_applicant($user_id)) ? site_url('sign-up/individual/form') : site_url('sign-up/institution/form');
     $steps = array(
         'charter-form' => array(
@@ -410,6 +413,11 @@ function ccgn_show_current_application_status($user_id) {
         'vouching' => array(
             'step' => 2,
             'msg' => 'You have been pre-approved and you have to wait for your vouchers',
+            'class' => 'on-hold'
+        ),
+        'voting' => array(
+            'step' => 3,
+            'msg' => 'Your application going OK and it’s now under review for being approved.',
             'class' => 'on-hold'
         ),
         'update-vouchers' => array(

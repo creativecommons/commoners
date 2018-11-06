@@ -42,9 +42,8 @@ function format(d) {
         '<tr>' +
         '<td><strong>Vouchers for</strong></td>' +
         '<td class="data-left">' + d.vouches_for + '</td>' +
-
-        '<td class="data-right"><strong>Votes against</strong></td>' +
-        '<td>' + d.votes_against + '</td>' +
+            '<td class="data-right"><strong>Votes against</strong></td>' +
+            '<td>' + d.votes_against + '</td>' +
         '</tr>' +
         '<tr>' +
         '<td><strong>Vouchers against</strong></td>' +

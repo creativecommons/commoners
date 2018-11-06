@@ -519,53 +519,58 @@ function ccgn_application_to_vouching_if_no_current_cannots ( $applicant_id ) {
 // "Cannot" or an automatically closed vouching request (also appearing as a
 // "Cannot").
 
-function ccgn_reopen_application_auto_closed_because_cannots (
+function ccgn_reopen_application_auto_closed_because_cannots(
     $applicant_id
 ) {
-    $applicant_state = ccgn_registration_user_get_stage ( $applicant_id );
-    if( $applicant_state != CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS ) {
-        error_log( "Not re-opening Application for User ID "
-                   . $applicant_id
-                   . ": not in state CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS." );
+    $applicant_state = ccgn_registration_user_get_stage($applicant_id);
+    if ($applicant_state != CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS) {
+        error_log("Not re-opening Application for User ID "
+            . $applicant_id
+            . ": not in state CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS.");
         return false;
     }
-    $current_cannots = ccgn_application_vouches_cannots( $applicant_id );
-    if ( count( $current_cannots ) == 0 ) {
-        error_log( "Not re-opening Application for User ID "
-                   . $applicant_id
-                   . ': it does not have any "Cannot" vouches.' );
+    $current_cannots = ccgn_application_vouches_cannots($applicant_id);
+    if (count($current_cannots) == 0) {
+        error_log("Not re-opening Application for User ID "
+            . $applicant_id
+            . ': it does not have any "Cannot" vouches.');
         return false;
     }
-    $choose_vouchers_entry = ccgn_application_vouchers( $applicant_id );
+    $choose_vouchers_entry = ccgn_application_vouchers($applicant_id);
     // Update the date on the Choose Vouchers form, resetting the timescale
     // for updating voucher choices
-    $update_date = date( 'Y-m-d H:i:s', strtotime( 'now' ) );
-    ccgn_set_entry_update_date( $choose_vouchers_entry, $update_date );
+    $update_date = date('Y-m-d H:i:s', strtotime('now'));
+    ccgn_set_entry_update_date($choose_vouchers_entry, $update_date);
     // Keep admin log
     ccgn_entry_append_note(
         $choose_vouchers_entry,
         'RE-OPENING APPLICATION AUTO-CLOSED DUE TO "CANNOT" VOUCHES: Setting update date to '
-        . $update_date
+            . $update_date
     );
     // Delete votes from user if there are
+
     ccgn_delete_vote_entries_from_user( $applicant_id );
+
     // Restore the user to the new-user role
-    ccgn_user_level_set_applicant_new( $applicant_id );
+    ccgn_user_level_set_applicant_new($applicant_id);
     // Set the application to be in the update vouchers stage
-    ccgn_registration_user_set_stage_update_vouchers( $applicant_id );
+    ccgn_registration_user_set_stage_update_vouchers($applicant_id);
     // Remind them to do so by email
-    ccgn_registration_email_voucher_cannot_reminder( $applicant_id );
+    ccgn_registration_email_voucher_cannot_reminder($applicant_id);
     return true;
 }
 // Delete vote entries from an applicant in order to restore the application status
-function ccgn_delete_vote_entries_from_user( $applicant_id ) {
+
+function ccgn_delete_vote_entries_from_user($applicant_id)
+{
     $entries = ccgn_application_votes($applicant_id);
-    if ( count( $entries ) > 0 ) {
+    if (count($entries) > 0) {
         foreach ($entries as $entry) {
             GFAPI::delete_entry($entry['id']);
         }
     }
 }
+
 // Remove a mistaken vouching response and reset the applicant's vouching
 // timescale. This should only be called extraordinarily, in response to a
 // support request.
@@ -840,9 +845,11 @@ function ccgn_application_vouches_counts ( $applicant_id ) {
         'cannot' => $cannot
     );
 }
-function ccgn_application_can_vote($applicant_id) {
-    $vouches = ccgn_application_vouches_counts($applicant_id);
-    if ($vouches[ 'yes' ] >= 2) {
+
+//Return true if the applicant can be voted
+function ccgn_application_can_be_voted( $applicant_id ) {
+    $vouches = ccgn_application_vouches_counts( $applicant_id );
+    if ($vouches['yes'] >= 2) {
         return true;
     } else {
         return false;
