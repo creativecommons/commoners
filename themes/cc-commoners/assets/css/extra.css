@@ -73,6 +73,9 @@
     right: 0;
     top: 28%;
 }
+/*///////////////////////////////////////
+    USER APPLICATION STATUS
+////////////////////////////////////////*/
 /*
     ENTRY STATUS
 */
@@ -163,4 +166,80 @@
 }
 .entry-status.on-hold .icon .dashicons {
     color: #ff7300;
+}
+
+/*///////////////////////////////////////
+    APPLICANT PUBLIC PROFILE 
+////////////////////////////////////////*/
+
+table.ccgn-profile {
+    display: none;
+    width: 100%;
+    border-top: 5px solid #e6e6e6;
+}
+table.ccgn-profile tr td {
+    padding: .8rem 1rem;
+    border-bottom: 1px solid #e6e6e6;
+}
+table.ccgn-profile tr td.title {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: right;
+}
+.display-details {
+    text-decoration: none;
+    display: flex;
+    padding: .5rem;
+    align-items: center;
+    background-color: #cea500;
+    color: #FFF;
+    transition: all .5s ease;
+}
+.display-details:hover {
+    background-color: #e6b800;
+}
+.display-details .dashicons {
+    transition: all .5s ease;
+}
+.display-details.opened .dashicons {
+    transform: rotate(-180deg);
+}
+.preview-details td {
+    padding: .5rem;
+    width: 50%;
+    vertical-align: top;
+    font-size: .9rem;
+}
+.preview-details td h6 {
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+.signup-form-body .applicant-title {
+    padding: .5rem 0;
+    border-bottom: 1px solid #cea500;
+    border-top: 1px solid #cea500;
+}
+.signup-form-body h3 {
+    font-size: 1.2rem;
+}
+/* VOUCH LIST */
+.vouch-list {
+    list-style-type: none;
+}
+.vouch-list .vouch-item a {
+    display: flex;
+    padding: .5rem;
+    margin-bottom: 1rem;
+    align-items: center;
+    background-color: #efaf01;
+    text-decoration: none;
+    color: #5D5D5D;
+}
+.vouch-list .vouch-item a .dashicons {
+    margin-right: .5rem;
+}
+.vouch-list .vouch-item a:hover {
+    background-color: #ef9c01;
+    color: white;
 }

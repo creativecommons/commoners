@@ -469,7 +469,7 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
         echo '<div class="ccgn-box">';
             echo _('<h2>Vouchers Requested</h2>');
             $voucher_choices = ccgn_application_vouchers ( $applicant_id );
-            echo '<pre>'; print_r($voucher_choices); echo '</pre>';
+            
             echo '<p> <span class="dashicons dashicons-calendar-alt"></span> <b>Original request date:</b> '
                 . date('Y-m-d', strtotime($voucher_choices['date_created']))
                 . '</p>';
@@ -490,7 +490,7 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
                     $state
                 );
             echo '</div>';
-        echo '</div><br>';
+        
         $clarification_mode = get_user_meta(get_current_user_id(), 'ccgn_need_to_clarify_vouch_reason', true);
         if ( isset($_GET['clarification']) && $clarification_mode ) {
             echo '<div id="voucher-clarification-container">';
@@ -529,6 +529,7 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
                 echo '<button class="button button-primary" id="set-new-vouch-reason" data-entry-id="'.$entry_id.'">Set new reason</button>';
             echo '</div>';
         }
+        echo '</div><br>';
         echo _('<h1 class="section-title">Vouches list</h1>');
         echo '<div class="applicant-columns">';
         $vouchers = ccgn_application_users_page_vouch_responses_data(
@@ -607,6 +608,8 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
             //echo '</p>';
         echo '</div>';
 
+    } else {
+        echo '</div><br>';
     }
     echo _('<br><h1 class="section-title">Global Council Approval</h2>');
     echo '<div class="applicant-columns">';

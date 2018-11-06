@@ -192,6 +192,7 @@ table.ccgn-profile tr td.title {
     margin-bottom: 2rem;
 }
 .preview-details td {
+    padding: .5rem;
     width: 50%;
     vertical-align: top;
 }

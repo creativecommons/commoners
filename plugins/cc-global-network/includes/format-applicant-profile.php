@@ -117,7 +117,12 @@ function ccgn_vouching_form_profile_format( $entry, $map, $applicant_id ) {
     $is_individual = ccgn_user_is_individual_applicant($entry['created_by']);
     $statement = ($is_individual) ? $entry[3] : $entry[6];
     $bio = $entry[2];
-    $html = '<div class="ccgn-vouching-profile">';
+    $html = '';
+    if (!is_admin()){
+        $the_user = get_user_by('ID', $applicant_id);
+        $html .= '<h1 class="applicant-title">'.$the_user->display_name.'</h1>';
+    }
+    $html .= '<div class="ccgn-vouching-profile">';
     $html .= '<table class="preview-details">';
         $html .= '<tr>';
             $html .= '<td>';
@@ -134,11 +139,20 @@ function ccgn_vouching_form_profile_format( $entry, $map, $applicant_id ) {
     $html .= '</table>';
     $html .= '<a href="#" class="display-details" data-target="#ccgn-profile-table">View more applicant details  <span class="dashicons dashicons-arrow-down-alt2"></span></a>';
     $html .= '<table class="ccgn-profile" id="ccgn-profile-table">';
-    if ($is_individual) {
-        unset($map[2]);
-        unset($map[3]);
+    if (is_admin()) {
+        if ($is_individual) {
+            unset($map[2]);
+            unset($map[3]);
+        } else {
+            unset($map[4]);
+        }
     } else {
-        unset($map[4]);
+        if ($is_individual) {
+            unset($map[0]);
+            unset($map[1]);
+        } else {
+            unset($map[2]);
+        }
     }
     unset ($statement);
     unset ($bio);
