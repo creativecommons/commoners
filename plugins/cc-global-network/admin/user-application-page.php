@@ -748,7 +748,7 @@ function ccgn_ajax_change_voucher()
             //send email to the new voucher
             ccgn_registration_email_vouching_request(
                 $applicant_id,
-                $voucher_id
+                $new_voucher
             );
             echo 'ok';
         } else {
