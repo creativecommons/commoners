@@ -215,6 +215,20 @@ function ccgn_registration_email_to_voucher ( $applicant_id,
     );
 }
 
+function ccgn_ask_email_to_voucher ( $applicant_id,
+                                              $voucher_id,
+                                              $email_option ) {
+    $applicant = get_user_by( 'ID', $applicant_id );
+    $voucher = get_user_by( 'ID', $voucher_id );
+    ccgn_registration_email(
+        $applicant->user_nicename,
+        $applicant->ID,
+        $voucher->user_nicename,
+        $voucher->user_email,
+        $email_option
+    );
+}
+
 function ccgn_registration_email_application_received ( $applicant_id ) {
     ccgn_registration_email_to_applicant(
         $applicant_id,
@@ -283,6 +297,15 @@ function ccgn_registration_email_notify_legal_insititution_approved (
         'ccgn-email-notify-legal'
     );
 }
+function ccgn_ask_email_vouching_request ( $applicant_id,
+                                                    $voucher_id ) {
+    ccgn_ask_email_to_voucher(
+        $applicant_id,
+        $voucher_id,
+        'ccgn-email-ask-voucher'
+    );
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Use the name and address from our settings for emails

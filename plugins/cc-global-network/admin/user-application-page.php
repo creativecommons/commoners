@@ -53,14 +53,14 @@ function ccgn_application_users_page_vote_responses ( $applicant_id ) {
     $votes = ccgn_application_votes ( $applicant_id );
     foreach ($votes as $vote) {
         $voter = get_user_by('ID', $vote['created_by']);
-        $result .=
-                '<h4>From: '
-                . $voter->display_name
-                . '</h4><p><strong>Voted:</strong> '
+        $result .= '<div class="ccgn-box applicant">';
+        $result .= '<h4>'. $voter->display_name . '</h4>'
+                .'<p><strong>Voted:</strong>'
                 .  $vote[
                     CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION
                 ]
                 . '</p>';
+                $result .= '</div>';
     }
     return $result;
 }
@@ -418,11 +418,10 @@ function ccgn_application_format_legal_approval ( $applicant_id, $state ) {
 function ccgn_application_user_page_render_change_vouchers ( $applicant_id,
                                                              $state ) {
     if ( current_user_can( 'ccgn_pre_approve' ) ) {
-        echo _('<h3>Change Vouch Requests</h3>');
         if ( $state == CCGN_APPLICATION_STATE_VOUCHING ) {
             echo '<p><a href="'
                 . ccgn_application_change_vouchers_page_url( $applicant_id )
-                . '">';
+                . '" class="button">';
             echo _('Change vouch requests for applicant.');
             echo '</a></p>';
         } else {
@@ -463,37 +462,179 @@ function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
 
 function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
     echo _('<h1>Membership Application Details</h1>');
+    echo '<div id="alert-messages"></div>';
     echo _('<h2>Details Provided By Applicant</h2>');
     echo ccgn_user_page_applicant_profile_text( $applicant_id );
-    echo _('<h2>Vouchers Requested</h2>');
-    $voucher_choices = ccgn_application_vouchers ( $applicant_id );
-    echo '<p><b>Original request date:</b> '
-        . $voucher_choices['date_created']
-        . '</p>';
-    if (! is_null ( $voucher_choices[ 'date_updated' ]  ) ) {
-        echo '<p><b>Updated request date:</b> '
-            . $voucher_choices['date_updated']
-            . '</p>';
-    }
-    echo ccgn_application_users_page_vouchers( $applicant_id );
+    echo '<br /><h1 class="section-title">Vouchers information</h1>';
+    echo '<div class="applicant-columns">';
+        echo '<div class="ccgn-box">';
+            echo _('<h2>Vouchers Requested</h2>');
+            $voucher_choices = ccgn_application_vouchers ( $applicant_id );
+            
+            echo '<p> <span class="dashicons dashicons-calendar-alt"></span> <b>Original request date:</b> '
+                . date('Y-m-d', strtotime($voucher_choices['date_created']))
+                . '</p>';
+            if (! is_null ( $voucher_choices[ 'date_updated' ]  ) ) {
+                echo '<p> <span class="dashicons dashicons-calendar-alt"></span> <b>Updated request date:</b> '
+                    . date('Y-m-d', strtotime($voucher_choices['date_updated']))
+                    . '</p>';
+            }
+            echo ccgn_application_users_page_vouchers( $applicant_id );
+    echo '</div>';
+    
     if ( $state != CCGN_APPLICATION_STATE_RECEIVED ) {
-        ccgn_application_user_page_render_change_vouchers (
-            $applicant_id,
-            $state
-        );
-        echo _('<h2>Vouches Received</h2>');
-        echo ccgn_application_users_page_vouch_counts ( $applicant_id );
-        echo _('<h2>Vouches</h2>');
-        echo ccgn_application_users_page_vouch_responses (
+            echo '<div class="ccgn-box">';
+            echo _('<h2>Vouches Received</h2>');
+                echo ccgn_application_users_page_vouch_counts ( $applicant_id );
+                ccgn_application_user_page_render_change_vouchers(
+                    $applicant_id,
+                    $state
+                );
+            echo '</div>';
+        
+        $clarification_mode = get_user_meta(get_current_user_id(), 'ccgn_need_to_clarify_vouch_reason', true);
+        if ( isset($_GET['clarification']) && $clarification_mode ) {
+            echo '</div>';
+            echo '<div class="applicant-columns">';
+            echo '<div id="voucher-clarification-container">';
+                echo '<a name="voucher-clarification"></a>';
+                echo '<h3>Clarification of your voucher</h3>';
+                echo '<div id="change-voucher-messages"></div>';
+                $form_id = RGFormsModel::get_form_id(CCGN_GF_VOUCH);
+                
+                $search_criteria = array();
+                $search_criteria['field_filters'][]
+                    = array(
+                    'key' => 'created_by',
+                    'value' => get_current_user_id(),
+                );
+                $search_criteria['field_filters'][]
+                    = array(
+                    'key' => CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
+                    'value' => $applicant_id,
+                );
+                $get_the_entries =  GFAPI::get_entries(
+                    $form_id,
+                    $search_criteria,
+                    array(
+                        array(
+                            'key' => 'date_created',
+                            'direction' => 'ASC',
+                            'is_numeric' => false
+                        )
+                    )
+                );
+                //echo '<pre>'; print_r($get_the_entries); echo '</pre>';
+                $entry_id = $get_the_entries[0]['id'];
+                
+                echo wp_nonce_field('clarification_voucher', 'clarification_voucher_nonce', true, false);
+                echo '<p><textarea name="clarification_voucher" id="clarification_voucher" cols="50" rows="10">'. $get_the_entries[0]['4'] .'</textarea></p>';
+                echo '<button class="button button-primary" id="set-new-vouch-reason" data-entry-id="'.$entry_id.'">Set new reason</button>';
+            echo '</div>';
+        }
+        echo '</div><br>';
+        echo _('<h1 class="section-title">Vouchers list</h1>');
+        echo '<div class="applicant-columns">';
+        $vouchers = ccgn_application_users_page_vouch_responses_data(
             $applicant_id,
             true
         );
+        foreach ($vouchers as $voucher) {
+            $asked = get_user_meta($voucher['id'], 'ccgn_need_to_clarify_vouch_reason', true);
+            $asked_class = ($asked) ? ' asked-box' : '';
+            echo '<div class="ccgn-box applicant'.$asked_class.'">';
+                //echo '<div class="icon"><span class="dashicons dashicons-admin-users"></span></div>';
+                echo '<h3 class="applicant-name">'.$voucher['name'].'</h3>';
+                echo '<span class="date">'.$voucher['date'].'</span>';
+                if ($asked) {
+                    echo '<br><small><em>Asked for clarification</em></small>';
+                }
+                echo '<p class="applicant-reason">' . $voucher['reason'] . '</p>';
+                echo '<p class="state"><strong>Vouched:</strong> '.$voucher['vouched'].'</p>';
+                if (($voucher['vouched'] == 'Yes') && (ccgn_current_user_is_final_approver($applicant_id) || ccgn_current_user_is_membership_council($applicant_id)) ) {
+                    echo '<a href="#" onClick="$.askVoucher('.$voucher['id'].',\''.$voucher['name'].'\','.$applicant_id.')" class="button">Ask for clarification</a>';
+                }
+            echo '</div>';
+        }
+        echo '</div>';
+        // echo  cgn_application_users_page_vouch_responses (
+        //     $applicant_id,
+        //     true
+        // );
+        add_thickbox();
+        echo '<div id="ask-clarification-modal" style="display:none;">';
+            echo '<h2>You are about to ask for clarification to the voucher: <span class="name-display"></span></h2>';
+            echo '<p>That means you think the text supporting this application is not enough, is not clear or is not helpful for you to approve this application. If that is the case, you can ask the voucher to clarify.</p>';
+            
+            
+            echo '<div class="log-content" id="log-content-ask-voucher">';
+                echo '<p>This already was requested by: </p>';
+                echo '<div class="inner-scroll medium">';
+                    echo '<ol class="log-entries" id="log-entry-ask-voucher">';
+
+                    //foreach ($log as $entry) {
+                      //  echo '<li><div class="log-entry"><strong>'.$entry['ask_user_name'].'</strong> asked on <span class="date">'.$entry['date'].'</span></div></li>';
+                    //}
+                    echo '</ol>';
+                echo '</div>';
+                echo '<p>There is no need to send this email again to the voucher. In case you consider that necessary, you can do it again.</p>';
+            echo '</div>';
+            
+            echo '<p>Are you sure you want to do this? </p>';
+            echo '<br>';
+            echo wp_nonce_field('ask_voucher', 'ask_voucher_nonce', true, false);
+            echo '<div class="buttons">';
+                echo '<button id="close-ask-voucher" class="button close-window">Close</button> ';
+                echo "<button id=\"ask-voucher-for-sure\"  class=\"button button-primary ask-voucher-for-sure\">Yes, I'm sure</button>";
+            echo '</div>';
+            //echo '</p>';
+        echo '</div>';
+        echo '<div id="change-voucher-modal" style="display:none;">';
+            echo '<h2>You are about to change the current voucher: <span class="name-display"></span></h2>';
+            echo '<div class="gform_wrapper">';
+            gravity_form_enqueue_scripts( 41, false );
+            $choices = array();
+            $members = ccgn_registration_form_list_members(get_current_user_id());
+            foreach ($members as $member) {
+                $choices[] = array(
+                    'text' => $member[1].' ('.$member[2].')',
+                    'value' => $member[0],
+                    'is_selected' => false
+                );
+            }
+            $field_properties = array(
+                'type' => 'select',
+                'enableEnhancedUI' => true,
+                'id' => 'changeVoucher',
+                'cssClass' => 'custom-select-changer',
+                'choices' => $choices
+            );
+            $field = GF_Fields::create($field_properties);
+            echo $field->get_field_input();
+            echo '</div>';
+            echo '<br>';
+            echo wp_nonce_field('change_voucher', 'change_voucher_nonce', true, false);
+            echo '<div class="buttons">';
+                echo '<button id="close-change-voucher" class="button close-window">Close</button> ';
+                echo "<button id=\"change-voucher-for-sure\"  class=\"button button-primary change-voucher-for-sure\">Change</button>";
+            echo '</div>';
+            //echo '</p>';
+        echo '</div>';
+
+    } else {
+        echo '</div><br>';
     }
-    echo _('<h2>Global Council Approval</h2>');
-    echo _('<h3>Votes Received</h3>');
-    echo ccgn_application_users_page_vote_counts ( $applicant_id );
+    echo _('<br><h1 class="section-title">Global Council Approval</h2>');
+    echo '<div class="applicant-columns">';
+        echo '<div class="ccgn-box">';
+            echo _('<h3>Votes Received</h3>');
+            echo ccgn_application_users_page_vote_counts ( $applicant_id );
+        echo '</div>';
+    echo '</div>';
     echo _('<h3>Votes</h3>');
-    echo ccgn_application_users_page_vote_responses ( $applicant_id );
+    echo '<div class="applicant-columns">';
+        echo ccgn_application_users_page_vote_responses ( $applicant_id );
+    echo '</div>';
 }
 
 function ccgn_application_users_page () {
@@ -557,3 +698,97 @@ function ccgn_application_user_link( $actions, $user_object ) {
     }
     return $actions;
 }
+
+// Ajax function
+// Executed in the UI when a MC member ask to a voucher for clarification
+// @user_id : user to be notified
+function ccgn_ajax_ask_voucher()
+{
+    $user_id = $_POST['user_id'];
+    $applicant_id = $_POST['applicant_id'];
+    if (check_ajax_referer('ask_voucher', 'sec') && (!empty($user_id))) {
+        ccgn_ask_email_vouching_request($applicant_id,$user_id);
+        //set user state to clarification of the reason to vouch applicant
+        update_user_meta($user_id,'ccgn_need_to_clarify_vouch_reason',1);
+        ccgn_ask_clarification_log_append($applicant_id,$user_id);
+        echo 'ok';        
+    }
+    exit(0);
+}
+add_action('wp_ajax_nopriv_ask_voucher', 'ccgn_ajax_ask_voucher');
+add_action('wp_ajax_ask_voucher', 'ccgn_ajax_ask_voucher');
+
+function ccgn_ajax_change_voucher()
+{
+    $voucher_id = esc_attr($_POST['voucher_id']);
+    $applicant_id = esc_attr($_POST['applicant_id']);
+    $position = esc_attr($_POST['position']);
+    $new_voucher = esc_attr( $_POST['new_voucher'] );
+
+    if (check_ajax_referer('change_voucher', 'sec') && (!empty($new_voucher))) {
+
+        $form_id = RGFormsModel::get_form_id(CCGN_GF_CHOOSE_VOUCHERS);
+
+        $search_criteria = array();
+        $search_criteria['field_filters'][]
+            = array(
+            'key' => 'created_by',
+            'value' => $applicant_id,
+        );
+        
+        $get_the_entries = GFAPI::get_entries(
+            $form_id,
+            $search_criteria,
+            array(
+                array(
+                    'key' => 'date_created',
+                    'direction' => 'ASC',
+                    'is_numeric' => false
+                )
+            )
+        );
+        $entry_id = $get_the_entries[0]['id'];
+        $update_date = GFAPI::update_entry_field($entry_id, 'date_updated', date('Y-m-d H:m:s'));
+        $change_voucher_result = GFAPI::update_entry_field($entry_id, $position, $new_voucher);
+        if ($change_voucher_result) {
+            //send email to the new voucher
+            $send_mail = ccgn_registration_email_vouching_request(
+                $applicant_id,
+                $new_voucher
+            );
+            echo 'ok';
+        } else {
+            echo 'error';
+        } 
+    } else {
+        echo 'error';
+    }
+    exit(0);
+}
+add_action('wp_ajax_nopriv_change_voucher', 'ccgn_ajax_change_voucher');
+add_action('wp_ajax_change_voucher', 'ccgn_ajax_change_voucher');
+
+// Save new reason to vouch in order to clarify the reason of the vouched user
+function ccgn_ajax_modify_reason_voucher()
+{
+    $user_id = get_current_user_id();
+    $applicant_id = esc_attr($_POST['applicant_id']);
+    $new_reason = esc_attr($_POST['new_reason']);
+    $entry_id = esc_attr($_POST['entry_id']);
+    if (check_ajax_referer('clarification_voucher', 'sec') && (!empty($user_id)) && (!empty($entry_id)) && (!empty($new_reason)) ) {
+        //ccgn_ask_email_vouching_request($applicant_id, $user_id);
+        $update_date = GFAPI::update_entry_field($entry_id, 'date_updated', date('Y-m-d H:m:s'));
+        $reasonchange_result = GFAPI::update_entry_field($entry_id, CCGN_GF_VOUCH_REASON,$new_reason);
+        if ($reasonchange_result) {
+            echo 'ok';
+            update_user_meta($user_id, 'ccgn_need_to_clarify_vouch_reason', 0);
+        } else {
+            echo 'error';
+        }
+    } else {
+        echo 'error';
+    }
+    exit(0);
+}
+add_action('wp_ajax_nopriv_reason_voucher', 'ccgn_ajax_modify_reason_voucher');
+add_action('wp_ajax_reason_voucher', 'ccgn_ajax_modify_reason_voucher');

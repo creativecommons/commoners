@@ -83,9 +83,9 @@ function ccgn_vp_format_field ( $entry, $item ) {
     );
     // Make sure the entry has a value for this item
     if( $value ) {
-        $html = '<p><strong>'
-              . $item[ 0 ] . '</strong><br />'
-              . $value
+        $html = '<tr>'
+              . '<td class="title">'. $item[ 0 ] . '</td>'
+              . '<td>'.$value.'</td>'
               . '</p>';
     }
     return $html;
@@ -113,11 +113,53 @@ function ccgn_vp_format_avatar ( $entry ) {
 
 // Format the relevant fields from the Applicant Details form as html.
 
-function ccgn_vouching_form_profile_format( $entry, $map ) {
-    $html = '<div class="ccgn-vouching-profile">';
+function ccgn_vouching_form_profile_format( $entry, $map, $applicant_id ) {
+    $is_individual = ccgn_user_is_individual_applicant($entry['created_by']);
+    $statement = ($is_individual) ? $entry[3] : $entry[6];
+    $bio = $entry[2];
+    $html = '';
+    if (!is_admin()){
+        $the_user = get_user_by('ID', $applicant_id);
+        $html .= '<h1 class="applicant-title">'.$the_user->display_name.'</h1>';
+    }
+    $html .= '<div class="ccgn-vouching-profile">';
+    $html .= '<table class="preview-details">';
+        $html .= '<tr>';
+            $html .= '<td>';
+            $html .= '<h6>Membership Statement</h6>';
+            $html .= ccgn_vp_clean_string($statement);
+            $html .= '</td>';
+            if ($is_individual):
+            $html .=  '<td>';
+                $html .= '<h6>Brief Biography</h6>';
+                $html .= ccgn_vp_clean_string($bio);
+            $html .= '</td>';
+            endif;
+        $html .= '</tr>';
+    $html .= '</table>';
+    $html .= '<a href="#" class="display-details" data-target="#ccgn-profile-table">View more applicant details  <span class="dashicons dashicons-arrow-down-alt2"></span></a>';
+    $html .= '<table class="ccgn-profile" id="ccgn-profile-table">';
+    if (is_admin()) {
+        if ($is_individual) {
+            unset($map[2]);
+            unset($map[3]);
+        } else {
+            unset($map[4]);
+        }
+    } else {
+        if ($is_individual) {
+            unset($map[0]);
+            unset($map[1]);
+        } else {
+            unset($map[2]);
+        }
+    }
+    unset ($statement);
+    unset ($bio);
     foreach( $map as $item ) {
          $html .= ccgn_vp_format_field( $entry, $item );
     }
+    $html .= '</table>';
     $html .= '</div>';
     return $html;
 }
@@ -131,7 +173,8 @@ function ccgn_vouching_form_individual_profile_text ( $applicant_id ) {
         //. ccgn_vp_format_avatar( $entry )
         . ccgn_vouching_form_profile_format(
             $entry,
-            CCGN_GF_DETAILS_VOUCH_MAP
+            CCGN_GF_DETAILS_VOUCH_MAP,
+            $applicant_id
         );
 }
 
@@ -139,7 +182,8 @@ function ccgn_vouching_form_institution_profile_text ( $applicant_id ) {
     return '<h3>Institutional Applicant</h3>'
         . ccgn_vouching_form_profile_format(
             ccgn_details_institution_form_entry ( $applicant_id ),
-            CCGN_GF_INSTITUTION_DETAILS_VOUCH_MAP
+            CCGN_GF_INSTITUTION_DETAILS_VOUCH_MAP,
+            $applicant_id
         );
 }
 
@@ -157,9 +201,9 @@ function ccgn_vouching_form_applicant_profile_text ( $applicant_id ) {
 
 function ccgn_user_page_individual_profile_text ( $applicant_id ) {
     $entry = ccgn_details_individual_form_entry( $applicant_id );
-    return '<h3>Individual Applicant</h3>'
-        //. ccgn_vp_format_avatar ( $entry )
-        . ccgn_applicant_display_name_formatted ( $applicant_id )
+    
+    return //. ccgn_vp_format_avatar ( $entry )
+            ccgn_applicant_display_name_formatted ( $applicant_id )
         . ccgn_vouching_form_profile_format(
             $entry,
             CCGN_GF_DETAILS_USER_PAGE_MAP
@@ -167,8 +211,7 @@ function ccgn_user_page_individual_profile_text ( $applicant_id ) {
 }
 
 function ccgn_user_page_institution_profile_text ( $applicant_id ) {
-    return '<h3>Institutional Applicant</h3>'
-        . ccgn_applicant_display_name_formatted ( $applicant_id )
+    return ccgn_applicant_display_name_formatted ( $applicant_id )
         .ccgn_vouching_form_profile_format(
             ccgn_details_institution_form_entry ( $applicant_id ),
             CCGN_GF_INSTITUTION_DETAILS_USER_PAGE_MAP
@@ -195,12 +238,83 @@ function ccgn_applicant_display_name ( $applicant_id ) {
 
 function ccgn_applicant_display_name_formatted ( $applicant_id ) {
     if ( ccgn_user_is_individual_applicant ( $applicant_id ) ) {
-        return '<p><strong>Applicant Name</strong><br />'
-            . get_user_by( 'ID', $applicant_id)->display_name
+        return '<p class="title-container with-borders">'
+            . '<span class="big-name">' .get_user_by( 'ID', $applicant_id)->display_name. '</span>'
+            . '<span class="badge individual">Individual Applicant</span>'
             . '</p>';
     } else {
-        return '<p><strong>Institution Name</strong><br />'
-            . ccgn_institutional_applicant_name ( $applicant_id )
+        return '<p class="title-container with-borders">'
+            . '<span class="big-name">' . ccgn_institutional_applicant_name ( $applicant_id ) .'</span>'
+            . '<span class="badge institutional">Institutional Applicant</span>'
             . '</p>';
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Log ask for Clarification
+///////////////////////////////////////////////////////////////////////////////
+
+define('CCGN_CLARIFICATION_LOG_REG_PROP', 'ccgn-ask-clarification-log');
+
+function ccgn_ask_clarification_log_get()
+{
+    return get_option(CCGN_CLARIFICATION_LOG_REG_PROP, array());
+}
+function ccgn_ask_clarification_log_get_id($applicant_id) {
+    $log = ccgn_ask_clarification_log_get();
+    return $log[$applicant_id];
+}
+function ccgn_ask_clarification_log_get_id_ajax()
+{
+    $applicant_id = esc_attr($_POST['applicant_id']);
+    $voucher_id = esc_attr($_POST['voucher_id']);
+    $log = ccgn_ask_clarification_log_get();
+    $return_log = array();
+    foreach ($log[$applicant_id] as $entry) {
+        if ($entry['voucher_id'] == $voucher_id) {
+            $return_log[] = $entry;
+        }
+    }
+    echo json_encode($return_log);
+    exit(0);
+}
+add_action('wp_ajax_nopriv_ask_voucher_log', 'ccgn_ask_clarification_log_get_id_ajax');
+add_action('wp_ajax_ask_voucher_log', 'ccgn_ask_clarification_log_get_id_ajax');
+function ccgn_ask_clarification_log_ensure($today)
+{
+    $option = ccgn_ask_clarification_log_get();
+    $days = array_keys($option);
+    // Oldest to newest
+    sort($days);
+    // No entry for today? Insert it
+    if ($days[count($days) - 1] != $today) {
+        $option[$today] = array();
+    }
+    // Too many entries? Remove the oldest
+    if (count($option) > CCGN_CLARIFICATION_LOG_REG_TRUNCATE) {
+        unset($option[$days[0]]);
+    }
+    return $option;
+}
+
+function ccgn_ask_clarification_log_set($log_structure)
+{
+    update_option(CCGN_CLARIFICATION_LOG_REG_PROP, $log_structure);
+}
+
+function ccgn_ask_clarification_log_append(
+    $applicant_id,
+    $voucher_id
+) {
+    $today = date('Y-m-d');
+    $log = ccgn_ask_clarification_log_get();
+    $log[$applicant_id][] = array(
+        'applicant_id' => $applicant_id,
+        'date' => $today,
+        'voucher_id' => $voucher_id,
+        'ask_user_id' => get_current_user_id(),
+        'applicant_name' => get_user_by('ID', $applicant_id)->display_name,
+        'ask_user_name' => get_user_by('ID', get_current_user_id())->display_name,
+    );
+    ccgn_ask_clarification_log_set($log);
 }

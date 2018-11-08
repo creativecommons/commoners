@@ -458,3 +458,56 @@ function ccgn_show_current_application_status($user_id) {
     $current_state['date'] = $current_status['date'];
     return $current_state;
 }
+
+//Remove old applications left in custom state
+//The main reason is to wipe old applications considered abandoned
+function ccgn_get_old_applications_with_state($state, $months_ago)
+{
+    $args = array(
+        'role' => 'new-user',
+        'posts_per_page' => -1,
+        'date_query' => array(
+            array(
+                'column' => 'user_registered',
+                'before' => $months_ago . ' months ago'
+            )
+        ),
+        'meta_query' => array(
+            array(
+                'key' => 'ccgn-application-state',
+                'value' => $state
+            )
+        )
+    );
+    $query = new WP_User_Query($args);
+    return $query;
+}
+function ccgn_list_old_applications_with_state($state, $months_ago)
+{
+    $query = ccgn_get_old_applications_with_state($state, $months_ago);
+    echo '-------------------------------------------------------------------------------------' . "\n";
+    echo 'LISTING USERS WITH THE STATE "' . $state . '" AND REGISTERED ' . $months_ago . ' MONTHS AGO' . "\n";
+    echo '-------------------------------------------------------------------------------------' . "\n";
+    foreach ($query->get_results() as $user) {
+        $user_id = $user->data->ID;
+        echo $user_id . ' - ' . $user->data->display_name . '( ' . $user->data->user_login . ' ) - registered on: ' . $user->data->user_registered . "\n";
+    }
+}
+function ccgn_remove_old_applications_with_state($state, $months_ago)
+{
+    $query = ccgn_get_old_applications_with_state($state, $months_ago);
+    foreach ($query->get_results() as $user) {
+        $user_id = $user->data->ID;
+        $user_name = $user->data->display_name;
+        $user_login = $user->data->user_login;
+        _ccgn_application_delete_entries_created_by($user_id);
+        delete_user_meta($user_id, CCGN_APPLICATION_TYPE);
+        delete_user_meta($user_id, CCGN_APPLICATION_STATE);
+        delete_user_meta($user_id, CCGN_USER_IS_AUTOVOUCHED);
+
+        $delete = wp_delete_user($user_id);
+        if ($delete) {
+            echo 'DELETED USER: ' . $user_id . ' - ' . $user_name . '( ' . $user_login . ' )' . "\n";
+        }
+    }
+}
