@@ -89,3 +89,134 @@
 .dataTable tbody tr.green-mark {
     background-color: #cff9cf;
 }
+
+/*USER PROFILE*/
+.title-container {
+    display: flex;
+    align-items: center;
+}
+.title-container.with-borders {
+    padding: 1rem 0;
+    border-top: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+}
+.big-name {
+    font-size: 2.2rem;
+    display: inline-block;
+}
+.badge {
+    display: inline-block;
+    padding: .7rem;
+    margin-left: 1rem;
+    font-size: .8rem;
+    color: white;
+}
+.inner-scroll {
+    border-top: 1px solid #e4e4e4;
+    border-bottom: 5px solid #e4e4e4;
+    overflow-y: auto;
+}
+.inner-scroll.medium {
+    height: 90px;
+}
+.log-entry {
+    padding: .5rem 0;
+    font-size: .7rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+.log-entry .date {
+    font-style: italic;
+}
+.badge.individual {
+    background-color: #ca4a1f;
+}
+.badge.institutional {
+    background-color: #00b9eb;
+}
+table.ccgn-profile {
+    display: none;
+    border-top: 5px solid #e6e6e6;
+}
+table.ccgn-profile tr td {
+    padding: .8rem 1rem;
+    border-bottom: 1px solid #e6e6e6;
+}
+table.ccgn-profile tr td.title {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: right;
+}
+.display-details {
+    text-decoration: none;
+    display: block;
+    padding: .5rem;
+    background-color: #e6e6e6;
+    color: #666;
+    transition: all .5s ease;
+}
+.display-details .dashicons {
+    transition: all .5s ease;
+}
+.display-details.opened .dashicons {
+    transform: rotate(-180deg);
+}
+.applicant-columns {
+    display: flex;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+.applicant-columns .ccgn-box {
+    padding: .5rem 1.5rem 1rem 1.5rem;
+    margin-right: 1rem;
+    background-color: white;
+    border-radius: .2rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+.applicant-columns .ccgn-box.asked-box {
+    background-color: #fef6e1;
+}
+.applicant-columns .ccgn-box.applicant {
+    text-align: center;
+}
+.applicant-columns .ccgn-box .icon .dashicons {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+}
+.applicant-columns .ccgn-box .date {
+    color: #999;
+    font-style: italic;
+    font-size: .7rem;
+}
+.applicant-columns .ccgn-box .applicant-reason {
+    width: 15rem;
+}
+.preview-details {
+    margin-bottom: 2rem;
+}
+.preview-details td {
+    padding: .5rem;
+    width: 50%;
+    vertical-align: top;
+}
+.preview-details td h6 {
+    margin: 1rem 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+.button.tiny {
+    font-size: .7rem;
+    padding: 0 .5rem;
+}
+#input_changeVoucher_chosen {
+    width: 100% !important;
+}
+#TB_ajaxContent {
+    position: relative;
+    padding-bottom: 4rem !important;
+}
+#TB_ajaxContent .buttons {
+    position: absolute;
+    bottom: .5rem;
+    padding: .5rem;
+}

@@ -67,6 +67,13 @@ jQuery(document).ready(function($){
         $(this).removeClass("titulo-activo");
 
     });
-
+    $('.display-details').on('click', function (e) {
+        e.preventDefault();
+        var obj = $(this),
+            target = obj.data('target');
+        obj.toggleClass('opened');
+        $(target).slideToggle('fast');
+        return false;
+    });
 
 });
