@@ -351,9 +351,10 @@ register_deactivation_hook(
 add_action('admin_enqueue_scripts', 'ccgn_admin_enqueue_scripts');
 function ccgn_admin_enqueue_scripts($hook_suffix) {
     global $pagenow;
+    $style_version = '2.0.1';
     if (is_admin() && strstr($hook_suffix, 'global-network') ) {
         wp_enqueue_style('datatables-style', CCGN_URL_PATH . 'admin/assets/css/datatables.css');
-        wp_enqueue_style('admin-style', CCGN_URL_PATH . 'admin/assets/css/admin_styles.css');
+        wp_enqueue_style('admin-style', CCGN_URL_PATH . 'admin/assets/css/admin_styles.css',array(),$style_version);
         wp_enqueue_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
         wp_enqueue_script('jquery');
         wp_enqueue_script('jquery-ui-datepicker');
