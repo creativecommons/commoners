@@ -740,13 +740,12 @@ function ccgn_ajax_change_voucher()
                 )
             )
         );
-                //echo '<pre>'; print_r($get_the_entries); echo '</pre>';
         $entry_id = $get_the_entries[0]['id'];
         $update_date = GFAPI::update_entry_field($entry_id, 'date_updated', date('Y-m-d H:m:s'));
         $change_voucher_result = GFAPI::update_entry_field($entry_id, $position, $new_voucher);
         if ($change_voucher_result) {
             //send email to the new voucher
-            ccgn_registration_email_vouching_request(
+            $send_mail = ccgn_registration_email_vouching_request(
                 $applicant_id,
                 $new_voucher
             );

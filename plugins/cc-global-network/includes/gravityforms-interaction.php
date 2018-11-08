@@ -1806,6 +1806,8 @@ function ccgn_application_users_page_vouch_responses (
     }
     return $result;
 }
+//The same function up here but we get the result on an array
+//in order to get only the data
 function ccgn_application_users_page_vouch_responses_data(
     $applicant_id,
     $full_date = false
