@@ -172,6 +172,9 @@ table.ccgn-profile tr td.title {
     border-radius: .2rem;
     box-shadow: 0 1px 4px rgba(0,0,0,.2);
 }
+.applicant-columns .ccgn-box.asked-box {
+    background-color: #fef6e1;
+}
 .applicant-columns .ccgn-box.applicant {
     text-align: center;
 }

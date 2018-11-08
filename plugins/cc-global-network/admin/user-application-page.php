@@ -494,6 +494,8 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
         
         $clarification_mode = get_user_meta(get_current_user_id(), 'ccgn_need_to_clarify_vouch_reason', true);
         if ( isset($_GET['clarification']) && $clarification_mode ) {
+            echo '</div>';
+            echo '<div class="applicant-columns">';
             echo '<div id="voucher-clarification-container">';
                 echo '<a name="voucher-clarification"></a>';
                 echo '<h3>Clarification of your voucher</h3>';
@@ -538,10 +540,15 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
             true
         );
         foreach ($vouchers as $voucher) {
-            echo '<div class="ccgn-box applicant">';
+            $asked = get_user_meta($voucher['id'], 'ccgn_need_to_clarify_vouch_reason', true);
+            $asked_class = ($asked) ? ' asked-box' : '';
+            echo '<div class="ccgn-box applicant'.$asked_class.'">';
                 //echo '<div class="icon"><span class="dashicons dashicons-admin-users"></span></div>';
                 echo '<h3 class="applicant-name">'.$voucher['name'].'</h3>';
                 echo '<span class="date">'.$voucher['date'].'</span>';
+                if ($asked) {
+                    echo '<br><small><em>Asked for clarification</em></small>';
+                }
                 echo '<p class="applicant-reason">' . $voucher['reason'] . '</p>';
                 echo '<p class="state"><strong>Vouched:</strong> '.$voucher['vouched'].'</p>';
                 if (($voucher['vouched'] == 'Yes') && (ccgn_current_user_is_final_approver($applicant_id) || ccgn_current_user_is_membership_council($applicant_id)) ) {
