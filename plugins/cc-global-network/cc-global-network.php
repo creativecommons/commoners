@@ -351,8 +351,8 @@ register_deactivation_hook(
 add_action('admin_enqueue_scripts', 'ccgn_admin_enqueue_scripts');
 function ccgn_admin_enqueue_scripts($hook_suffix) {
     global $pagenow;
-    $style_version = '2.0.1';
-    $script_version = '2.0.1';
+    $style_version = '2.0.2';
+    $script_version = '2.0.2';
     if (is_admin() && strstr($hook_suffix, 'global-network') ) {
         wp_enqueue_style('datatables-style', CCGN_URL_PATH . 'admin/assets/css/datatables.css');
         wp_enqueue_style('admin-style', CCGN_URL_PATH . 'admin/assets/css/admin_styles.css',array(),$style_version);
