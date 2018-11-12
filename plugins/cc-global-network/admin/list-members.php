@@ -174,6 +174,52 @@ function ccgn_list_recent_members ( $start_date, $end_date ) {
     
     ccgn_report_member_country_count();
 }
+//Get application stats
+//we use WP transient because we don't wanna stress the server
+function ccgn_application_stats() {
+    delete_transient('ccgn_application_stats');
+    if (false === ($application_stats = get_transient('ccgn_application_stats'))) {
+        $individuals = ccgn_new_final_approvals_since('', '');
+        $application_stats = array();
+        $individual_members = 0;
+        $institutional_members = 0;
+        $total = 0;
+        foreach ($individuals as $entry) {
+            $member_id = $entry[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID];
+            $member_type = ccgn_applicant_type_desc($member_id);
+            if ($member_type == 'Individual') { $individual_members++; }
+            if ($member_type == 'Institution') { $institutional_members++; }
+            $total++;
+        }
+        $application_stats['individual'] = $individual_members;
+        $application_stats['institutional'] = $institutional_members;
+        $application_stats['total'] = $total;
+        set_transient( 'ccgn_application_stats', $application_stats, 6*60*60 );
+    }
+    return $application_stats;
+}
+function ccgn_list_members_stats() {
+    echo '<h2>Members stats</h2>';
+    if (ccgn_current_user_is_final_approver() || ccgn_current_user_is_sub_admin()):
+        $stats = ccgn_application_stats();
+        echo '<div class="stats-columns">';
+            echo '<div class="stats-box">';
+                echo '<h4 class="stats-title">Total members</h4>';
+                echo '<span class="stats-number">'.$stats['total'].'</span>';
+            echo '</div>';
+            echo '<div class="stats-box">';
+                echo '<h4 class="stats-title">Individual members</h4>';
+                echo '<span class="stats-number">'.$stats['individual'].'</span>';
+            echo '</div>';
+            echo '<div class="stats-box">';
+                echo '<h4 class="stats-title">Institutional members</h4>';
+                echo '<span class="stats-number">'.$stats['institutional'].'</span>';
+            echo '</div>';
+        echo '</div>';
+    else: 
+        echo '<p>You\'re not allowed to see this</p>';
+    endif;
+}
 function ccgn_list_and_search_members() {
     echo '<h2>Search Members</h2>';
     echo '<div id="alert-messages"></div>';
@@ -261,6 +307,9 @@ function ccgn_list_members_admin_page () {
     <h2 class="nav-tab-wrapper">
         <a href="?page=global-network-list-users&tab=individual-members" class="nav-tab <?php echo $active_tab == 'individual-members' ? 'nav-tab-active' : ''; ?>">New Members</a>
         <a href="?page=global-network-list-users&tab=search-members" class="nav-tab <?php echo $active_tab == 'search-members' ? 'nav-tab-active' : ''; ?>">Search Members</a>
+        <?php if (ccgn_current_user_is_final_approver() || ccgn_current_user_is_sub_admin()) : ?>
+            <a href="?page=global-network-list-users&tab=stats" class="nav-tab <?php echo $active_tab == 'stats' ? 'nav-tab-active' : ''; ?>">Stats</a>
+        <?php endif; ?>
     </h2>
     <?php 
     if ($active_tab == 'individual-members') {
@@ -268,6 +317,9 @@ function ccgn_list_members_admin_page () {
     }
     if ($active_tab == 'search-members') {
         ccgn_list_and_search_members();
+    }
+    if ($active_tab == 'stats') {
+        ccgn_list_members_stats();
     }
 }
 
