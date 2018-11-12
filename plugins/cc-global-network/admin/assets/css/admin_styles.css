@@ -220,3 +220,24 @@ table.ccgn-profile tr td.title {
     bottom: .5rem;
     padding: .5rem;
 }
+/* STATS STYLES */
+.stats-columns {
+    display: flex;
+    flex-wrap: wrap;
+}
+.stats-columns .stats-box {
+    border: 1px solid #b6b6b6;
+    padding: 1rem;
+}
+.stats-columns .stats-box .stats-title {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: .8rem;
+}
+.stats-columns .stats-box .stats-number {
+    display: block;
+    font-size: 3rem;
+    text-align: center;
+    font-weight: bold;
+    line-height: 3.5rem;
+}
