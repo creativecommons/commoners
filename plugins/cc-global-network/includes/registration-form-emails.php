@@ -90,6 +90,16 @@ function ccgn_registration_email_sub_names($applicant_name, $applicant_id,
         bp_core_get_userlink($applicant_id, false, true),
         $result
     );
+    $result = ccgn_registration_email_sub(
+        'APPLICANT_PROFILE_EDIT_URL',
+        bp_core_get_userlink($applicant_id, false, true).'profile/edit/',
+        $result
+    );
+    $result = ccgn_registration_email_sub(
+        'APPLICANT_PROFILE_CHANGE_AVATAR',
+        bp_core_get_userlink($applicant_id, false, true) . 'profile/change-avatar/',
+        $result
+    );
     $applicant_type = 'individual';
     if ( ccgn_user_is_institutional_applicant ( $applicant_id ) ) {
         $applicant_type = 'institution';
