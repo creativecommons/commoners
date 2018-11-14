@@ -436,8 +436,10 @@ function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
         ccgn_application_users_page_pre_form ( $applicant_id );
     } elseif ( $state == CCGN_APPLICATION_STATE_VOUCHING ) {
         if (ccgn_current_user_is_final_approver() || ccgn_current_user_is_membership_council()) {
-            echo _('<h3>Vote</h3>');
-            ccgn_application_users_page_vote_form ( $applicant_id );
+            if ( ccgn_application_can_be_voted( $applicant_id ) ) {
+                echo _('<h3>Vote</h3>');
+                ccgn_application_users_page_vote_form ( $applicant_id );
+            }
             if (ccgn_current_user_is_final_approver()) {
                 echo _('<h3>Final Approval</h3>');
                 ccgn_application_users_page_final_approval_form( $applicant_id );
