@@ -83,7 +83,7 @@ function cc_commoners_theme_scripts () {
     wp_enqueue_style(
         'cc-commoners-style-extra',
         get_theme_file_uri( '/assets/css/extra.css' ),
-        array( $parent_style ),
+        array( 'cc-commoners' ),
         $style_version
     );
 
