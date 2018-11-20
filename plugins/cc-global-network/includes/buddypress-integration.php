@@ -574,7 +574,8 @@ function ccgn_not_logged_in_ui () {
     // Actually never show these
     //    bp_core_remove_nav_item( 'activity' );
     //bp_core_remove_nav_item( 'groups' );
-    if (! is_user_logged_in() ) {
+
+    if (! is_user_logged_in() && !$institutional_member ) {
         // Just don't display people's profiles
         bp_core_remove_nav_item( 'profile' );
         // Hide the "view" subtab. Ideally we would hide the "profile" tab...
@@ -891,11 +892,18 @@ function _bp_meta_member_type () {
 }
 
 function _bp_not_signed_in_redirect () {
-    if ( bp_is_directory()
+    //Condition added to detect if the url is from a institutional member
+    // In order to leave those profiles in public
+    global $wp_query;
+    $user = get_user_by('slug',$wp_query->query_vars['name']);
+    $institutional_member = ccgn_member_is_institution($user->data->ID);
+    
+    if ( (bp_is_directory()
          || bp_is_activity_component() || bp_is_groups_component()
          // || bp_is_group_forum() // || bp_is_page( BP_MEMBERS_SLUG )
-         || bp_is_profile_component() || bp_is_forums_component()
+         || bp_is_profile_component() || bp_is_forums_component() )
          /*|| bbp_is_single_forum() || bbp_is_single_topic()*/
+         && (!$institutional_member)
     ) {
         if( ! is_user_logged_in() ) {
             wp_redirect(

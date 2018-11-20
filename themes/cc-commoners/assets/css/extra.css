@@ -243,3 +243,81 @@ table.ccgn-profile tr td.title {
     background-color: #ef9c01;
     color: white;
 }
+/*///////////////////////////////////////
+    GENERAL PAGES
+////////////////////////////////////////*/
+.error404 .main-content .entry-title {
+    margin-top: 1.5rem;
+    color: #BABABA;
+    text-transform: uppercase;
+    font-size: 5rem;
+    text-align: center;
+}
+.error404 .main-content .entry-title strong {
+    display: block;
+    font-size: 9rem;
+    color: #8E8E8E;
+    line-height: 6rem;
+}
+.error404 .main-content .subtitle {
+    margin: 2rem 0;
+    font-size: 2.5rem;
+    color: #838383;
+}
+.error404 .main-content .std-text p {
+    font-size: 1.5rem;
+}
+.main-content .std-text {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+}
+.main-content .std-text p {
+    margin: .5rem 0;
+}
+.main-content .std-text .link-list {
+    margin-top: 1.5rem;
+    padding-left: 1.8rem;
+}
+.main-content .std-text .link-list li {
+    margin-bottom: .5rem;
+}
+.main-content .search-form {
+    position: relative;
+    width: 60%;
+    margin: 2rem auto;
+}
+.main-content .search-form .search-field {
+    padding: .5rem;
+    border: 0;
+    border-bottom: 1px solid #C0C0C0;
+    font-size: 1.2rem;
+}
+.main-content .search-form .search-field::-webkit-input-placeholder { 
+  color: #BABABA;
+  font-style: italic;
+}
+.main-content .search-form .search-field::-moz-placeholder {
+  color: #BABABA;
+  font-style: italic;
+}
+.main-content .search-form .search-field:-moz-placeholder { 
+  color: #BABABA;
+  font-style: italic;
+}
+.main-content .search-form .search-field:-ms-input-placeholder { 
+  color: #BABABA;
+  font-style: italic;
+}
+.main-content .search-form .search-submit {
+    position: absolute;
+    right: 2rem;
+    top: .3rem;
+    background-color: transparent;
+}
+
+.page-body .gform_wrapper .gform_body input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]) {
+    padding: 5px 4px !important;
+    width: auto !important;
+    font-size: 1rem !important;
+    border: 1px solid lightgray;
+}
