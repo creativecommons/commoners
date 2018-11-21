@@ -42,6 +42,10 @@
     background-color: #ffeb92;
     border: 4px solid #ecb500;
 }
+.callout.success {
+    border: 4px solid #33b400;
+    background-color: #c7ffb1;
+}
 .callout .title {
     font-size: 1.2rem;
     text-transform: uppercase;
@@ -72,6 +76,9 @@
     position: absolute;
     right: 0;
     top: 28%;
+}
+.votation-content {
+    min-height: 20rem;
 }
 /*///////////////////////////////////////
     USER APPLICATION STATUS
