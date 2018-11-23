@@ -45,6 +45,10 @@
     background-color: #ffeb92;
     border: 4px solid #ecb500;
 }
+.callout.success {
+    border: 4px solid #33b400;
+    background-color: #c7ffb1;
+}
 .callout .title {
     font-size: 1.2rem;
     text-transform: uppercase;
@@ -84,6 +88,34 @@
     position: absolute;
     right: 0;
     top: 28%;
+}
+.votation-content {
+    min-height: 20rem;
+}
+.entry-ask-request {
+    padding: 1rem;
+    border: 2px solid #ececec;
+    text-align: center;
+}
+.entry-ask-request .subtitle {
+    text-transform: uppercase;
+    font-size: .9rem;
+    color: #8a8a8a;
+}
+.entry-ask-request h5 {
+    margin: .5rem 0;
+    font-size: 1.3rem;
+}
+.entry-ask-request .button {
+    display: block;
+    margin-top: 1rem;
+    font-size: .9rem;
+    color: white;
+}
+.entry-ask-request #clarification_voucher {
+    padding: .5rem;
+    width: 100%;
+    border: 1px solid #BABABA;
 }
 /*///////////////////////////////////////
     USER APPLICATION STATUS
@@ -264,6 +296,7 @@ table.ccgn-profile tr td.title {
     color: #BABABA;
     text-transform: uppercase;
     font-size: 5rem;
+    text-align: center;
 }
 .error404 .main-content .entry-title strong {
     display: block;
@@ -325,4 +358,14 @@ table.ccgn-profile tr td.title {
     right: 2rem;
     top: .3rem;
     background-color: transparent;
+}
+
+.page-body .gform_wrapper .gform_body input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]) {
+    padding: 5px 4px !important;
+    width: auto !important;
+    font-size: 1rem !important;
+    border: 1px solid lightgray;
+}
+.block-area .entry-content {
+    min-height: 20rem;
 }

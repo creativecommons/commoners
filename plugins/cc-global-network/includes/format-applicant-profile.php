@@ -264,6 +264,18 @@ function ccgn_ask_clarification_log_get_id($applicant_id) {
     $log = ccgn_ask_clarification_log_get();
     return $log[$applicant_id];
 }
+function ccgn_ask_clarification_log_user_get($user_id) {
+    $log = ccgn_ask_clarification_log_get();
+    $saved_entries = array();
+    foreach ($log as $key => $item) {
+        foreach ($item as $entry) {
+            if ($entry['voucher_id'] == $user_id) {
+                $saved_entries[] = $entry;
+            }
+        }
+    }
+    return $saved_entries;
+}
 function ccgn_ask_clarification_log_get_id_ajax()
 {
     $applicant_id = esc_attr($_POST['applicant_id']);

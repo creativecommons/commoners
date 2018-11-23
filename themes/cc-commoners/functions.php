@@ -53,6 +53,11 @@ function cc_commoners_theme_scripts () {
         $script_version,
         true
     );
+    $ajax_data = array(
+        'url' => admin_url('admin-ajax.php') //only if we need to use ajax
+    );
+    wp_localize_script( 'cc-commoners', 'Ajax', $ajax_data );
+    
     wp_enqueue_style('dashicons');
     $parent_style = 'twentyseventeen-style';
     wp_enqueue_style(
