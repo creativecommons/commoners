@@ -35,12 +35,14 @@ function cc_commoners_widgets () {
 add_action( 'widgets_init', 'cc_commoners_widgets', 11 );
 
 function cc_commoners_theme_scripts () {
+    $style_version = '2.0.3';
+    $script_version = '1.0.0';
 
     wp_enqueue_script(
         'swiper',
         get_theme_file_uri( '/assets/js/swiper.js' ),
         array(),
-        '1.0',
+        $script_version,
         true
     );
 
@@ -48,7 +50,7 @@ function cc_commoners_theme_scripts () {
         'cc-commoners',
         get_theme_file_uri( '/assets/js/cc-commoners.js' ),
         array(),
-        '1.0',
+        $script_version,
         true
     );
     $ajax_data = array(
@@ -66,7 +68,9 @@ function cc_commoners_theme_scripts () {
     wp_enqueue_style(
         'foundation-base',
         get_stylesheet_directory_uri() . '/assets/css/foundation.min.css',
-        array($parent_style)
+        array($parent_style),
+        array(),
+        $style_version
     );
 
     wp_enqueue_style(
@@ -79,13 +83,13 @@ function cc_commoners_theme_scripts () {
     wp_enqueue_style( 'cc-commoners',
         get_stylesheet_directory_uri() . '/style.css',
         array( $parent_style ),
-        wp_get_theme()->get('Version')
+        $style_version
     );
     wp_enqueue_style(
         'cc-commoners-style-extra',
         get_theme_file_uri( '/assets/css/extra.css' ),
-        array( $parent_style ),
-        wp_get_theme()->get('Version')
+        array( 'cc-commoners' ),
+        $style_version
     );
 
     wp_enqueue_style(

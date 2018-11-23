@@ -31,6 +31,9 @@
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
+.text-center {
+    text-align: center;
+}
 /*
     CALLOUT
 */
@@ -72,6 +75,15 @@
     text-transform: uppercase;
     text-decoration: none;
 }
+.button.yellow {
+    background-color: #efbe01;
+    color: black;
+    font-weight: normal;
+    text-transform: none;
+}
+.button.yellow:hover {
+    background-color: #d3a900;
+}
 .button.top-right {
     position: absolute;
     right: 0;
@@ -111,6 +123,7 @@
 /*
     ENTRY STATUS
 */
+
 .page-header .entry-title {
     color: #F46B2C;
     font-size: 1.8rem;
