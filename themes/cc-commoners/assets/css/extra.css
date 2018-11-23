@@ -80,6 +80,31 @@
 .votation-content {
     min-height: 20rem;
 }
+.entry-ask-request {
+    padding: 1rem;
+    border: 2px solid #ececec;
+    text-align: center;
+}
+.entry-ask-request .subtitle {
+    text-transform: uppercase;
+    font-size: .9rem;
+    color: #8a8a8a;
+}
+.entry-ask-request h5 {
+    margin: .5rem 0;
+    font-size: 1.3rem;
+}
+.entry-ask-request .button {
+    display: block;
+    margin-top: 1rem;
+    font-size: .9rem;
+    color: white;
+}
+.entry-ask-request #clarification_voucher {
+    padding: .5rem;
+    width: 100%;
+    border: 1px solid #BABABA;
+}
 /*///////////////////////////////////////
     USER APPLICATION STATUS
 ////////////////////////////////////////*/
@@ -327,4 +352,7 @@ table.ccgn-profile tr td.title {
     width: auto !important;
     font-size: 1rem !important;
     border: 1px solid lightgray;
+}
+.block-area .entry-content {
+    min-height: 20rem;
 }

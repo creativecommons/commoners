@@ -682,6 +682,37 @@ function ccgn_hide_application_users_menu () {
     );
 }
 
+function ccgn_user_get_vouch_entry($applicant_id) {
+    $form_id = RGFormsModel::get_form_id(CCGN_GF_VOUCH);
+
+    $search_criteria = array();
+    $search_criteria['field_filters'][]
+        = array(
+        'key' => 'created_by',
+        'value' => get_current_user_id(),
+    );
+    $search_criteria['field_filters'][]
+        = array(
+        'key' => CCGN_GF_VOUCH_APPLICANT_ID_FIELD,
+        'value' => $applicant_id,
+    );
+    $get_the_entries = GFAPI::get_entries(
+        $form_id,
+        $search_criteria,
+        array(
+            array(
+                'key' => 'date_created',
+                'direction' => 'ASC',
+                'is_numeric' => false
+            )
+        )
+    );
+    $return = array(
+        'entry_id' => $get_the_entries[0]['id'],
+        'entry_text' => $get_the_entries[0]['4']
+    );
+    return $return;
+}
 // If the user is at the vouching / approval stage, link to this page
 // from the user's entry in the User list page.
 
@@ -709,6 +740,8 @@ function ccgn_ajax_ask_voucher()
     if (check_ajax_referer('ask_voucher', 'sec') && (!empty($user_id))) {
         ccgn_ask_email_vouching_request($applicant_id,$user_id);
         //set user state to clarification of the reason to vouch applicant
+        $update_ask_status = array('status' => 1, 'applicant_id' => $applicant_id);
+        update_user_meta($user_id, 'ccgn_need_to_clarify_vouch_reason_applicant_status', $update_ask_status );
         update_user_meta($user_id,'ccgn_need_to_clarify_vouch_reason',1);
         ccgn_ask_clarification_log_append($applicant_id,$user_id);
         echo 'ok';        
@@ -781,6 +814,8 @@ function ccgn_ajax_modify_reason_voucher()
         $reasonchange_result = GFAPI::update_entry_field($entry_id, CCGN_GF_VOUCH_REASON,$new_reason);
         if ($reasonchange_result) {
             echo 'ok';
+            $update_ask_status = array('status' => 0, 'applicant_id' => $applicant_id);
+            update_user_meta($user_id, 'ccgn_need_to_clarify_vouch_reason_applicant_status', $update_ask_status);
             update_user_meta($user_id, 'ccgn_need_to_clarify_vouch_reason', 0);
         } else {
             echo 'error';

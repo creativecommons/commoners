@@ -75,5 +75,37 @@ jQuery(document).ready(function($){
         $(target).slideToggle('fast');
         return false;
     });
-
+    $('#set-new-vouch-reason').on('click', function (e) {
+        e.preventDefault();
+        var obj = $(this),
+            new_reason = $('#clarification_voucher').val(),
+            entry_id = obj.data('entry-id'),
+            applicant_id = obj.data('applicant-id'),
+            sec = $('#clarification_voucher_nonce').val();
+        $.ajax({
+            url: Ajax.url,
+            type: 'POST',
+            data: {
+                action: 'reason_voucher',
+                entry_id: entry_id,
+                new_reason: new_reason,
+                applicant_id: applicant_id,
+                sec: sec
+            },
+            beforeSend: function () {
+                obj.text('Working...');
+            },
+            success: function (data) {
+                obj.text("Set new reason");
+                $('#change-voucher-messages').html('');
+                if (data == 'ok') {
+                    location.reload();
+                }
+                if (data == 'error') {
+                    $('#change-voucher-messages').append('<div class="error notice is-dismissible"><p>There was an error sending your request</p></div>').find('.notice').delay(3200).fadeOut(300);
+                }
+            }
+        });
+        return false;
+    });
 });

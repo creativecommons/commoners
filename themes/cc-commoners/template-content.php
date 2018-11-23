@@ -4,9 +4,12 @@
 Template Name: Content Page
  */
 
-get_header(); ?>
+get_header(); 
+?>
 
-
+<div class="inner-section-title">
+    <h1><?php the_title(); ?></h1>
+</div>
 	<div class="block-area">
 
 		<div class="inner-section-list entry-content">
