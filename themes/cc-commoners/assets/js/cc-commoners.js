@@ -44,7 +44,22 @@ var swiper = new Swiper('.swiper-container', {
 
 
 jQuery(document).ready(function($){
-
+    var getUserPublicUrl = function(userId, targetId) {
+        $.ajax({
+            url: Ajax.url,
+            type: 'POST',
+            data: {
+                action: 'get_public_user_url',
+                user_id: userId
+            },
+            success: function (data) {
+                var target = $('#'+targetId),
+                    link = '<a href="'+data+'" target="_blank" class="voucher_profile_link">View User profile</a>';
+                target.html('');
+                target.html(link);
+            }
+        });
+    }
 
     $("body.page-template-page-faqs .item-acordion h2").toggleClickV2(function(e){
 
@@ -113,22 +128,30 @@ jQuery(document).ready(function($){
     */
     $('#input_41_1').on('change', function(e){
         var thisSelect = $(this),
+            thisSelectId = thisSelect.attr('id'),
             selectedValue = thisSelect.val(),
             otherSelectId = '#input_41_2',
-            otherSelect = $(otherSelectId);
+            otherSelect = $(otherSelectId),
+            profileUrlId = thisSelectId + '_profile_url';
 
+        $('<span id="'+profileUrlId+'"></span>').insertAfter('#'+thisSelectId+'_chosen');
         $(otherSelectId+' option[disabled="disabled"]').removeAttr('disabled');    
         $(otherSelectId+' option[value="' + selectedValue + '"]').attr('disabled', 'disabled');
         otherSelect.trigger("chosen:updated");
+        getUserPublicUrl(selectedValue,profileUrlId);
     });
     $('#input_41_2').on('change', function (e) {
         var thisSelect = $(this),
+            thisSelectId = thisSelect.attr('id'),
             selectedValue = thisSelect.val(),
             otherSelectId = '#input_41_1',
-            otherSelect = $(otherSelectId);
+            otherSelect = $(otherSelectId),
+            profileUrlId = thisSelectId + '_profile_url';
 
+        $('<span id="' + profileUrlId + '"></span>').insertAfter('#'+thisSelectId+'_chosen');
         $(otherSelectId + ' option[disabled="disabled"]').removeAttr('disabled');
         $(otherSelectId + ' option[value="' + selectedValue + '"]').attr('disabled', 'disabled');
         otherSelect.trigger("chosen:updated");
+        getUserPublicUrl(selectedValue, profileUrlId);
     });
 });

@@ -369,3 +369,7 @@ table.ccgn-profile tr td.title {
 .block-area .entry-content {
     min-height: 20rem;
 }
+.voucher_profile_link {
+    margin-left: 1rem;
+    font-size: .9rem;
+}

@@ -250,6 +250,16 @@ function ccgn_applicant_display_name_formatted ( $applicant_id ) {
     }
 }
 
+function ccgn_get_ajax_public_user_url() {
+    $user_id = esc_attr($_POST['user_id']);
+    $user_link = bp_core_get_userlink($user_id, false, true);
+    echo $user_link;
+    exit(0);
+}
+
+add_action('wp_ajax_nopriv_get_public_user_url', 'ccgn_get_ajax_public_user_url');
+add_action('wp_ajax_get_public_user_url', 'ccgn_get_ajax_public_user_url');
+
 ///////////////////////////////////////////////////////////////////////////////
 // Log ask for Clarification
 ///////////////////////////////////////////////////////////////////////////////
