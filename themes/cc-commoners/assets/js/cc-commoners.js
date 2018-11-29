@@ -108,4 +108,27 @@ jQuery(document).ready(function($){
         });
         return false;
     });
+    /*
+        Avoiding selecting the same voucher in form
+    */
+    $('#input_41_1').on('change', function(e){
+        var thisSelect = $(this),
+            selectedValue = thisSelect.val(),
+            otherSelectId = '#input_41_2',
+            otherSelect = $(otherSelectId);
+
+        $(otherSelectId+' option[disabled="disabled"]').removeAttr('disabled');    
+        $(otherSelectId+' option[value="' + selectedValue + '"]').attr('disabled', 'disabled');
+        otherSelect.trigger("chosen:updated");
+    });
+    $('#input_41_2').on('change', function (e) {
+        var thisSelect = $(this),
+            selectedValue = thisSelect.val(),
+            otherSelectId = '#input_41_1',
+            otherSelect = $(otherSelectId);
+
+        $(otherSelectId + ' option[disabled="disabled"]').removeAttr('disabled');
+        $(otherSelectId + ' option[value="' + selectedValue + '"]').attr('disabled', 'disabled');
+        otherSelect.trigger("chosen:updated");
+    });
 });
