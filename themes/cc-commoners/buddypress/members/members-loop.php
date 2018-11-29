@@ -6,15 +6,15 @@
  *
  * @package BuddyPress
  * @subpackage bp-legacy
+ * @version 3.0.0
  */
 
 /**
  * Fires before the display of the members loop.
  *
  * @since 1.2.0
- **/
+ */
 do_action( 'bp_before_members_loop' ); ?>
-
 
 <?php if ( bp_get_current_member_type() ) : ?>
 	<p class="current-member-type"><?php bp_current_member_type_message() ?></p>
@@ -22,7 +22,6 @@ do_action( 'bp_before_members_loop' ); ?>
 
 <?php if ( bp_has_members( bp_ajax_querystring( 'members' ) ) ) : ?>
 
-	
 	<div id="pag-top" class="pagination">
 
 		<div class="pag-count" id="member-dir-count-top">
@@ -38,7 +37,6 @@ do_action( 'bp_before_members_loop' ); ?>
 		</div>
 
 	</div>
-	
 
 	<?php
 
@@ -48,34 +46,29 @@ do_action( 'bp_before_members_loop' ); ?>
 	 * @since 1.1.0
 	 */
 	do_action( 'bp_before_directory_members_list' ); ?>
-hola hola hola
-	<div id="members-list" aria-live="assertive" aria-relevant="all">
 
+	<ul id="members-list" class="item-list" aria-live="assertive" aria-relevant="all">
 
 	<?php while ( bp_members() ) : bp_the_member(); ?>
 
-		<article <?php bp_member_class(); ?>>
-
-			<div class="avatar-container">
-				<!--<a href="<?php bp_member_permalink(); ?>">-->
-					<?php bp_member_avatar(); ?>
-				<!--</a>-->
+		<li <?php bp_member_class(); ?>>
+			<div class="item-avatar">
+				<a href="<?php bp_member_permalink(); ?>"><?php bp_member_avatar(); ?></a>
 			</div>
 
-			<div class="member-info">
-				
-				<h4><a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a></h4>
+			<div class="item">
+				<div class="item-title">
+					<a href="<?php bp_member_permalink(); ?>"><?php bp_member_name(); ?></a>
 
-				<p class="member-country"><?php echo bp_member_profile_data('field=Location'); ?></p>
+					<?php if ( bp_get_member_latest_update() ) : ?>
 
-				<?php if ( bp_get_member_latest_update() ) : ?>
+						<span class="update"> <?php bp_member_latest_update(); ?></span>
 
-					<p> <?php bp_member_latest_update(); ?></p>
+					<?php endif; ?>
 
-				<?php endif; ?>
+				</div>
 
-				
-				<p class="activity" data-livestamp="<?php bp_core_iso8601_date( bp_get_member_last_active( array( 'relative' => false ) ) ); ?>"><?php bp_member_last_active(); ?></p>
+				<div class="item-meta"><span class="activity" data-livestamp="<?php bp_core_iso8601_date( bp_get_member_last_active( array( 'relative' => false ) ) ); ?>"><?php bp_member_last_active(); ?></span></div>
 
 				<?php
 
@@ -110,12 +103,12 @@ hola hola hola
 
 			</div>
 
-			
-		</article>
+			<div class="clear"></div>
+		</li>
 
 	<?php endwhile; ?>
 
-	</div>
+	</ul>
 
 	<?php
 
@@ -128,7 +121,6 @@ hola hola hola
 
 	<?php bp_member_hidden_fields(); ?>
 
-	
 	<div id="pag-bottom" class="pagination">
 
 		<div class="pag-count" id="member-dir-count-bottom">
@@ -144,7 +136,6 @@ hola hola hola
 		</div>
 
 	</div>
-	
 
 <?php else: ?>
 
