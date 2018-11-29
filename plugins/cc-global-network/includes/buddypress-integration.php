@@ -24,7 +24,7 @@ if ( defined( 'CCGN_DEVELOPMENT' ) ) {
 }
 
 // The user has not been vouched by other members, but is considered vouched
-define( 'COMMONERS_USER_IS_AUTOVOUCHED', 'ccgn-user-autovouched' );
+define( 'CCGN_USER_IS_AUTOVOUCHED', 'ccgn-user-autovouched' );
 
 ////////////////////////////////////////////////////////////////////////////////
 // Buddypress config
@@ -896,6 +896,8 @@ function _bp_not_signed_in_redirect () {
     // In order to leave those profiles in public
     global $wp_query;
     $user = get_user_by('slug',$wp_query->query_vars['name']);
+    $bp = buddypress();
+    $institutional_directory = ($bp->current_member_type == 'institutional-member') ? true : false;
     $institutional_member = ccgn_member_is_institution($user->data->ID);
     
     if ( (bp_is_directory()
@@ -903,7 +905,7 @@ function _bp_not_signed_in_redirect () {
          // || bp_is_group_forum() // || bp_is_page( BP_MEMBERS_SLUG )
          || bp_is_profile_component() || bp_is_forums_component() )
          /*|| bbp_is_single_forum() || bbp_is_single_topic()*/
-         && (!$institutional_member)
+         && (!$institutional_member) && (!$institutional_directory)
     ) {
         if( ! is_user_logged_in() ) {
             wp_redirect(
