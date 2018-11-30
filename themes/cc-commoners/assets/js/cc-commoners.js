@@ -154,5 +154,5 @@ jQuery(document).ready(function($){
         otherSelect.trigger("chosen:updated");
         getUserPublicUrl(selectedValue, profileUrlId);
     });
-    $('.input-disable').attr('disabled', 'disabled');
+    $('.input-disable').find('input[type="text"]').attr('disabled', 'disabled');
 });

@@ -98,7 +98,7 @@
 
       <?php
 
-      global $post
+      global $post;
 
       ?>
 
