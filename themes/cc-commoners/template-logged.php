@@ -19,7 +19,7 @@ get_header();
                 <?php get_template_part('template-parts/loop/frontpage-loop'); ?>
             <?php else: ?>
                 <div class="callout warning">
-                    <h5>Sorry</h5>
+                    <h5 class="title">Sorry</h5>
                     <p>You have to be logged in to see this content</p>
                 </div>
             <?php endif; ?>
