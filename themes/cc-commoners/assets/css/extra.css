@@ -373,3 +373,17 @@ table.ccgn-profile tr td.title {
     margin-left: 1rem;
     font-size: .9rem;
 }
+
+.cc-content-area .block-area {
+    padding-top: 3rem;
+}
+.cc-content-area .block-area .entry-content {
+    min-height: 60vh !important;
+}
+.cc-content-area .block-area .entry-content.not-login {
+    margin-top: 10rem;
+}
+.entry-content p {
+    margin: 1.2rem 0;
+    line-height: 1.8rem;
+}
