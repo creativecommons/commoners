@@ -387,3 +387,42 @@ table.ccgn-profile tr td.title {
     margin: 1.2rem 0;
     line-height: 1.8rem;
 }
+.cc-content-area .block-area .entry-content ul.user-list {
+    margin: 1rem 0 2rem;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    columns: 2;
+    -webkit-column-gap: 2rem;
+    -moz-column-gap: 2rem;
+    column-gap: 2rem;
+    list-style-type: none;
+}
+.cc-content-area .block-area .entry-content ul.link-list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+    list-style-type: none;
+}
+.cc-content-area .block-area .entry-content ul.link-list li {
+    padding: .5rem;
+}
+.cc-content-area .block-area .entry-content ul.link-list li a {
+    text-decoration: none;
+}
+.cc-content-area .block-area .entry-content ul.link-list li a:hover {
+    text-decoration: underline;
+}
+.cc-content-area .block-area .entry-content h1, .cc-content-area .block-area .entry-content h2, .cc-content-area .block-area .entry-content h3, .cc-content-area .block-area .entry-content h4, .cc-content-area .block-area .entry-content h5, .cc-content-area .block-area .entry-content h6 {
+    margin: 1rem 0;
+}    
+.cc-content-area .block-area .entry-content ul.user-list li {
+    padding: .8rem 1rem;
+    border-bottom: 1px solid #f1f1f1;
+}
+.cc-content-area .block-area .entry-content ul {
+    padding-left: 1.5rem;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    margin-left: 1rem;
+}
