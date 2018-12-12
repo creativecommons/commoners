@@ -551,11 +551,16 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
                 if ($asked) {
                     echo '<br><small><em>Asked for clarification</em></small>';
                 }
-                echo '<p class="applicant-reason">' . $voucher['reason'] . '</p>';
+                if ($voucher['vouched'] == 'Yes') {
+                    echo '<p class="applicant-reason">' . $voucher['reason'] . '</p>';
+                } else {
+                    echo '<p class="applicant-reason">' . $voucher['reason_no'] . '</p>';
+                }
                 echo '<p class="state"><strong>Vouched:</strong> '.$voucher['vouched'].'</p>';
                 if (($voucher['vouched'] == 'Yes') && (ccgn_current_user_is_final_approver($applicant_id) || ccgn_current_user_is_membership_council($applicant_id)) ) {
                     echo '<a href="#" onClick="$.askVoucher('.$voucher['id'].',\''.$voucher['name'].'\','.$applicant_id.')" class="button">Ask for clarification</a>';
                 }
+            
             echo '</div>';
         }
         echo '</div>';

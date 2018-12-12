@@ -136,6 +136,7 @@ define( 'CCGN_GF_VOUCH_APPLICANT_ID', 'applicant_id' );
 define( 'CCGN_GF_VOUCH_APPLICANT_ID_FIELD', '7' );
 define( 'CCGN_GF_VOUCH_DO_YOU_VOUCH', '3' );
 define( 'CCGN_GF_VOUCH_REASON', '4' );
+define('CCGN_GF_VOUCH_REASON_NO', '9');
 
 define( 'CCGN_GF_PRE_APPROVAL_APPROVE_MEMBERSHIP_APPLICATION', '1' );
 define(
@@ -1827,6 +1828,7 @@ function ccgn_application_users_page_vouch_responses_data(
         $the_vouch['date'] = $vouch_date;
         $the_vouch['vouched'] = $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH];
         $the_vouch['reason'] = $vouch[CCGN_GF_VOUCH_REASON];
+        $the_vouch['reason_no'] = $vouch[CCGN_GF_VOUCH_REASON_NO];
 
         $vouches_list[] = $the_vouch;
     }
