@@ -219,7 +219,17 @@ add_action(
     10,
     2
 );
-
+//Avoid strict sanitize on wordpress username
+//This filter was added to avoid wordpress strip '+' on username email alias
+function ccgn_sanitize_user_not_strict($user, $raw_user, $strict)
+{
+    if ($strict) {
+        $user = sanitize_user($raw_user, false);
+        $user = preg_replace('|[^a-z0-9 _.+\-@]|i', '', $user);
+    }
+    return $user;
+}
+add_filter('sanitize_user', 'ccgn_sanitize_user_not_strict', 10, 3);
 ////////////////////////////////////////////////////////////////////////////////
 // Admin forms
 ////////////////////////////////////////////////////////////////////////////////
