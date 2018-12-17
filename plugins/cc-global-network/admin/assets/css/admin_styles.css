@@ -63,6 +63,7 @@
     margin: 1.5rem 0;
 }
 .color-guide .colors {
+    display: flex;
     list-style-type: none;
 }
 .color-guide .colors li {
@@ -82,12 +83,28 @@
 .color-guide .colors li .color.green {
     background-color: #cff9cf;
 }
+.color-guide .colors li .color.orange {
+    background-color: #fcf3e6;
+}
+.color-guide .colors li .color.blue {
+    background-color: #cff9f7;
+}
 /* Marked Rows */
 .dataTable tbody tr.red-mark {
     background-color: #fff4f4;
 }
 .dataTable tbody tr.green-mark {
     background-color: #cff9cf;
+}
+.dataTable tbody tr.orange-mark {
+    background-color: #fcf3e6;
+}
+.dataTable tbody tr.blue-mark {
+    background-color: #cff9f7;
+}
+/* CELL STYLES */
+.dataTable tbody tr td.text-center {
+    text-align: center;
 }
 
 /*USER PROFILE*/
@@ -168,6 +185,7 @@ table.ccgn-profile tr td.title {
 .applicant-columns .ccgn-box {
     padding: .5rem 1.5rem 1rem 1.5rem;
     margin-right: 1rem;
+    margin-bottom: 1rem;
     background-color: white;
     border-radius: .2rem;
     box-shadow: 0 1px 4px rgba(0,0,0,.2);

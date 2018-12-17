@@ -219,7 +219,7 @@ add_action(
     10,
     2
 );
-//Avoid strict sanitize on wordpress username
+//Manully doing a strict sanitize on wordpress username
 //This filter was added to avoid wordpress strip '+' on username email alias
 function ccgn_sanitize_user_not_strict($user, $raw_user, $strict)
 {
