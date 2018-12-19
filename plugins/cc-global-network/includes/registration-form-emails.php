@@ -315,7 +315,20 @@ function ccgn_ask_email_vouching_request ( $applicant_id,
         'ccgn-email-ask-voucher'
     );
 }
-
+function ccgn_registration_email_update_details_first_reminder($applicant_id)
+{
+    ccgn_registration_email_to_applicant(
+        $applicant_id,
+        'ccgn-email-update-details-first'
+    );
+}
+function ccgn_registration_email_update_details_second_reminder($applicant_id)
+{
+    ccgn_registration_email_to_applicant(
+        $applicant_id,
+        'ccgn-email-update-details-second'
+    );
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Use the name and address from our settings for emails

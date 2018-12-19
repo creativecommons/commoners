@@ -333,6 +333,49 @@ function ccgn_settings_emails_ask_voucher_message()
 
 }
 
+function ccgn_settings_emails_update_details_first_subject()
+{
+    $options = get_option('ccgn-email-update-details-first');
+    ?>
+    <input type="text" name="ccgn-email-update-details-first[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+
+}
+
+function ccgn_settings_emails_update_details_first_message()
+{
+    $options = get_option('ccgn-email-update-details-first');
+    ?>
+    <textarea name="ccgn-email-update-details-first[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+}
+
+function ccgn_settings_emails_update_details_second_subject()
+{
+    $options = get_option('ccgn-email-update-details-second');
+    ?>
+    <input type="text" name="ccgn-email-update-details-second[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+
+}
+
+function ccgn_settings_emails_update_details_second_message()
+{
+    $options = get_option('ccgn-email-update-details-second');
+    ?>
+    <textarea name="ccgn-email-update-details-second[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+
+}
+
 function ccgn_settings_emails_options_page () {
     add_options_page(
         'Global Network Emails',
@@ -874,6 +917,67 @@ function ccgn_settings_emails_options_ask_voucher()
     );
 }
 
+function ccgn_settings_emails_options_update_details_first_reminder()
+{
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-update-details-first-reminder'
+    );
+
+    add_settings_section(
+        'ccgn-email-update-details-first-reminder',
+        'Update details first reminder',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_update_details_first_subject',
+        'global-network-emails',
+        'ccgn-email-update-details-first-reminder'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message Wrapper',
+        'ccgn_settings_emails_update_details_first_message',
+        'global-network-emails',
+        'ccgn-email-update-details-first-reminder'
+    );
+}
+function ccgn_settings_emails_options_update_details_second_reminder()
+{
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-update-details-second-reminder'
+    );
+
+    add_settings_section(
+        'ccgn-email-update-details-second-reminder',
+        'Update details second reminder',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_update_details_second_subject',
+        'global-network-emails',
+        'ccgn-email-update-details-second-reminder'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message Wrapper',
+        'ccgn_settings_emails_update_details_second_message',
+        'global-network-emails',
+        'ccgn-email-update-details-second-reminder'
+    );
+}
+
 function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_page();
     ccgn_settings_emails_options_sender();
@@ -894,6 +998,8 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_notify_legal();
     ccgn_settings_emails_options_chapter_contact();
     ccgn_settings_emails_options_ask_voucher();
+    ccgn_settings_emails_options_update_details_first_reminder();
+    ccgn_settings_emails_options_update_details_second_reminder();
 }
 
 function ccgn_settings_emails_print_info () {
