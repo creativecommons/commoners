@@ -432,7 +432,53 @@ function ccgn_entries_referring_to_user (
         )
     );
 }
-
+/* 
+    This two function were made in a special case 
+    If there is an user that has a new account and wants to link his/her old entries to the new account
+    It should be used with wp-cli (eval command)
+    Be careful with this
+*/
+function ccgn_link_refering_entries_to_new_user(
+    $user_id,
+    $form_name,
+    $field_id,
+    $new_user_id
+) {
+    $entries = ccgn_entries_referring_to_user($user_id,$form_name,$field_id);
+    if (!empty($entries)) {
+        foreach ($entries as $entry) {
+            $entry_id = $entry['id'];
+            $change_user_result = GFAPI::update_entry_field($entry_id, $field_id, $new_user_id);
+            if ($change_user_result) {
+                echo 'Entry id: '.$entry_id.' changed from user ID: '.$user_id.' to '.$new_user_id."\n";
+            }
+        }
+    }
+}
+function ccgn_link_entries_by_user_to_new_user(
+    $user_id,
+    $form_name,
+    $new_user_id
+) {
+    $entries = ccgn_entries_created_by_user($user_id,$form_name);
+    if (!empty($entries)) {
+        foreach($entries as $entry) {
+            global $wpdb;
+            $entry_id = $entry['id'];
+            $entry_table_name = $wpdb->prefix.'gf_entry';
+            /*
+                I have to make it with an SQL query because the GForms function does not change the created_by value
+            */
+            $result = $wpdb->update($entry_table_name, array('created_by' => $new_user_id),array('id' => $entry_id),array('%d'),array('%d'));
+            if (false === $result) {
+                echo 'ERROR updating entry id: ' . $entry_id  . "\n";
+                echo '<pre>'; print_r($wpdb->show_errors()); echo '</pre>';
+            } else {
+                echo 'Entry id: ' . $entry_id . ' changed from user ID: ' . $user_id . ' to ' . $new_user_id . "\n";
+            }
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Vouching form
