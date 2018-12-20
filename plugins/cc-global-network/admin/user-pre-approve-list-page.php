@@ -23,6 +23,11 @@ function ccgn_list_applications_for_pre_approval () {
         $applicant_state = ccgn_registration_user_get_stage_and_date(
             $user_id
         );
+        $status = get_user_meta($user_id, 'ccgn_applicant_update_details_state');
+        $reminders = 'none';
+        if (!empty($status)) {
+            $reminders = $status['state'].' (<small>'.$status['date'].'</small>)';
+        }
         // The last form the user filled out, so the time to use
         $vouchers_entry = ccgn_application_vouchers( $user_id );
         echo '<tr';
@@ -41,6 +46,8 @@ function ccgn_list_applications_for_pre_approval () {
             . $applicant_state[ 'stage' ]
             . '</td><td>'
             . $applicant_state[ 'date' ]
+            . '</td><td>'
+            . $reminders
             .'</td></tr>';
     }
 }
@@ -56,6 +63,7 @@ function ccgn_application_spam_check_page () {
       <th>Application date</th>
       <th>Application state</th>
       <th>Application state date</th>
+      <th>Reminder</th>
     </tr>
   </thead>
   <tbody>
