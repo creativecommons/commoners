@@ -347,10 +347,6 @@ add_action(
     'ccgn_email_update_vouchers_reminders_event',
     'ccgn_email_update_vouchers_reminders'
 );
-add_action(
-    'ccgn_email_update_details_reminders_event',
-    'ccgn_email_update_details_reminders'
-);
 register_activation_hook(
     __FILE__,
     'ccgn_schedule_email_upate_vouchers_reminders'
@@ -359,9 +355,17 @@ register_deactivation_hook(
     __FILE__,
     'ccgn_schedule_remove_email_update_vouchers_reminders'
 );
+add_action(
+    'ccgn_email_update_details_reminders_event',
+    'ccgn_email_update_details_reminders'
+);
+register_activation_hook(
+    __FILE__,
+    'ccgn_schedule_email_upate_details_reminders'
+);
 register_deactivation_hook(
     __FILE__,
-    'ccgn_email_update_details_reminders_event'
+    'ccgn_schedule_remove_email_update_details_reminders'
 );
 
 ////////////////////////////////////////////////////////////////////////////////
