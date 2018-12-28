@@ -19,9 +19,9 @@ defined('ABSPATH') or die('No script kiddies please!');
 // Be careful changing this value, you may send a reminder sooner than expected
 // Also beware any knock-on effect on CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS
 define('CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS', 7);
-define('CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS', CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 5);
+define('CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS', CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 7);
 //define('CCGN_SEND_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS', CCGN_SEND_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 3 );
-define( 'CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS', CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 3 );
+define( 'CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS', CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 10 );
 
 ////////////////////////////////////////////////////////////////////////////////
 // Checking and sending
@@ -51,12 +51,12 @@ function ccgn_email_update_details_reminders()
         $status = get_user_meta($applicant_id, 'ccgn_applicant_update_details_state');
         $days_in_state = ccgn_days_since_state_set($applicant_id, $now);
         if ($days_in_state > CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS) {
-            if ( ($status['state'] == 'second-reminer') && ($status['done']) ) {
+            if ( ($status['state'] == 'second-reminder') && ($status['done']) ) {
                 ccgn_close_update_details_applicant($applicant_id);
             } else {
                 //update user status date
                 update_user_meta(
-                    $user_id,
+                    $applicant_id,
                     CCGN_APPLICATION_STATE_DATE,
                     date('Y-m-d H:i:s', strtotime('now'))
                 );
@@ -81,6 +81,7 @@ function ccgn_email_update_details_reminders()
                     'date' => date('Y-m-d H:i:s', strtotime('now')),
                     'done' => true
                 );
+                update_user_meta($applicant_id, 'ccgn_applicant_update_details_state', $update_details_meta);
             }
         }
     }

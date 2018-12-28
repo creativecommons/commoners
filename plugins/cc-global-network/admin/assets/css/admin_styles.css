@@ -193,6 +193,9 @@ table.ccgn-profile tr td.title {
 .applicant-columns .ccgn-box.asked-box {
     background-color: #fef6e1;
 }
+.applicant-columns .ccgn-box.asked-box-answered {
+    background-color: #cff9f7;
+}
 .applicant-columns .ccgn-box.applicant {
     text-align: center;
 }
