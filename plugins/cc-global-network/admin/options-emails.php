@@ -335,9 +335,9 @@ function ccgn_settings_emails_ask_voucher_message()
 
 function ccgn_settings_emails_update_details_first_subject()
 {
-    $options = get_option('ccgn-email-update-details-first');
+    $options = get_option('ccgn-email-update-details-first-reminder');
     ?>
-    <input type="text" name="ccgn-email-update-details-first[subject]"
+    <input type="text" name="ccgn-email-update-details-first-reminder[subject]"
       class="large-text"
       value="<?php echo $options['subject']; ?>" />
     <?php
@@ -346,9 +346,9 @@ function ccgn_settings_emails_update_details_first_subject()
 
 function ccgn_settings_emails_update_details_first_message()
 {
-    $options = get_option('ccgn-email-update-details-first');
+    $options = get_option('ccgn-email-update-details-first-reminder');
     ?>
-    <textarea name="ccgn-email-update-details-first[message]"
+    <textarea name="ccgn-email-update-details-first-reminder[message]"
       rows="12" cols="64" class="large-text"
       ><?php echo $options['message']; ?></textarea>
     <?php
@@ -356,9 +356,9 @@ function ccgn_settings_emails_update_details_first_message()
 
 function ccgn_settings_emails_update_details_second_subject()
 {
-    $options = get_option('ccgn-email-update-details-second');
+    $options = get_option('ccgn-email-update-details-second-reminder');
     ?>
-    <input type="text" name="ccgn-email-update-details-second[subject]"
+    <input type="text" name="ccgn-email-update-details-second-reminder[subject]"
       class="large-text"
       value="<?php echo $options['subject']; ?>" />
     <?php
@@ -367,9 +367,9 @@ function ccgn_settings_emails_update_details_second_subject()
 
 function ccgn_settings_emails_update_details_second_message()
 {
-    $options = get_option('ccgn-email-update-details-second');
+    $options = get_option('ccgn-email-update-details-second-reminder');
     ?>
-    <textarea name="ccgn-email-update-details-second[message]"
+    <textarea name="ccgn-email-update-details-second-reminder[message]"
       rows="12" cols="64" class="large-text"
       ><?php echo $options['message']; ?></textarea>
     <?php
