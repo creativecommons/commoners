@@ -23,7 +23,7 @@ function ccgn_list_applications_for_pre_approval () {
         $applicant_state = ccgn_registration_user_get_stage_and_date(
             $user_id
         );
-        $status = get_user_meta($user_id, 'ccgn_applicant_update_details_state');
+        $status = get_user_meta($user_id, 'ccgn_applicant_update_details_state', true);
         $reminders = 'none';
         if (!empty($status)) {
             $reminders = $status['state'].' (<small>'.$status['date'].'</small>)';
