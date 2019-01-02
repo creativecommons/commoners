@@ -319,14 +319,14 @@ function ccgn_registration_email_update_details_first_reminder($applicant_id)
 {
     ccgn_registration_email_to_applicant(
         $applicant_id,
-        'ccgn-email-update-details-first'
+        'ccgn-email-update-details-first-reminder'
     );
 }
 function ccgn_registration_email_update_details_second_reminder($applicant_id)
 {
     ccgn_registration_email_to_applicant(
         $applicant_id,
-        'ccgn-email-update-details-second'
+        'ccgn-email-update-details-second-reminder'
     );
 }
 
