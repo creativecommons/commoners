@@ -543,18 +543,48 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
         );
         foreach ($vouchers as $voucher) {
             $asked = get_user_meta($voucher['id'], 'ccgn_need_to_clarify_vouch_reason', true);
-            $asked_class = ($asked) ? ' asked-box' : '';
-            echo '<div class="ccgn-box applicant'.$asked_class.'">';
+            $asked_info = get_user_meta($voucher['id'], 'ccgn_need_to_clarify_vouch_reason_applicant_status', true);
+            $user_is_asked_for_clarification = 0;
+            $applicant_votes = ccgn_application_votes_counts($applicant_id);
+            $asked_class = '';
+            $who_asked = '';
+            //print_r($voucher);
+            if (empty($asked_info['user_id'])) {
+                $log_user = ccgn_ask_clarification_log_get_id($applicant_id);
+                foreach ($log_user as $entry) {
+                    $asked_meta = get_user_meta($entry['voucher_id'], 'ccgn_need_to_clarify_vouch_reason_applicant_status', true);
+                    
+                    if (($asked_meta['status'] == 1) && ($entry['voucher_id'] == $voucher['id'])) {
+                        $user_is_asked_for_clarification = 1;
+                        $asked_class = 'asked-box';
+                        $who_asked = $entry['ask_user_name'];
+                    } else if (($asked_meta['status'] == 0) && ($entry['voucher_id'] == $voucher['id'])) {
+                        $user_is_asked_for_clarification = 2;
+                        $asked_class = 'asked-box-answered';
+                        $who_asked = $entry['ask_user_name'];
+                    }
+                }
+
+            } else {
+                $who_asked = get_user_by('ID', $asked_info['user_id'])->display_name;
+                $user_is_asked_for_clarification = $asked_info['status'];
+            }
+            echo '<div class="ccgn-box applicant '.$asked_class.'">';
                 //echo '<div class="icon"><span class="dashicons dashicons-admin-users"></span></div>';
                 echo '<h3 class="applicant-name">'.$voucher['name'].'</h3>';
                 echo '<span class="date">'.$voucher['date'].'</span>';
-                if ($asked) {
+                if ($user_is_asked_for_clarification) {
                     echo '<br><small><em>Asked for clarification</em></small>';
+                    if (!empty($who_asked)) {
+                        echo '<br><small><em><strong>Asked by:</strong> '.$who_asked.'</em></small>';
+                    }
                 }
                 if ($voucher['vouched'] == 'Yes') {
                     echo '<p class="applicant-reason">' . $voucher['reason'] . '</p>';
                 } else {
-                    echo '<p class="applicant-reason">' . $voucher['reason_no'] . '</p>';
+                    if ($applicant_votes['yes'] < 5) {
+                        echo '<p class="applicant-reason">' . $voucher['reason_no'] . '</p>';
+                    }
                 }
                 echo '<p class="state"><strong>Vouched:</strong> '.$voucher['vouched'].'</p>';
                 if (($voucher['vouched'] == 'Yes') && (ccgn_current_user_is_final_approver($applicant_id) || ccgn_current_user_is_membership_council($applicant_id)) ) {
@@ -747,7 +777,7 @@ function ccgn_ajax_ask_voucher()
     if (check_ajax_referer('ask_voucher', 'sec') && (!empty($user_id))) {
         ccgn_ask_email_vouching_request($applicant_id,$user_id);
         //set user state to clarification of the reason to vouch applicant
-        $update_ask_status = array('status' => 1, 'applicant_id' => $applicant_id);
+        $update_ask_status = array('status' => 1, 'applicant_id' => $applicant_id, 'user_id' => $user_id);
         update_user_meta($user_id, 'ccgn_need_to_clarify_vouch_reason_applicant_status', $update_ask_status );
         update_user_meta($user_id,'ccgn_need_to_clarify_vouch_reason',1);
         ccgn_ask_clarification_log_append($applicant_id,$user_id);

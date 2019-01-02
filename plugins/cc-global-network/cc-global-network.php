@@ -72,6 +72,7 @@ require_once(CCGN_PATH . 'public/vouching-form-shortcode.php');
 
 require_once CCGN_PATH . 'cron/email-vouch-request-reminders.php';
 require_once CCGN_PATH . 'cron/email-update-vouchers-reminders.php';
+require_once CCGN_PATH . 'cron/email-update-details-reminders.php';
 
 
 // Testing support
@@ -219,7 +220,7 @@ add_action(
     10,
     2
 );
-//Avoid strict sanitize on wordpress username
+//Manully doing a strict sanitize on wordpress username
 //This filter was added to avoid wordpress strip '+' on username email alias
 function ccgn_sanitize_user_not_strict($user, $raw_user, $strict)
 {
@@ -353,6 +354,18 @@ register_activation_hook(
 register_deactivation_hook(
     __FILE__,
     'ccgn_schedule_remove_email_update_vouchers_reminders'
+);
+add_action(
+    'ccgn_email_update_details_reminders_event',
+    'ccgn_email_update_details_reminders'
+);
+register_activation_hook(
+    __FILE__,
+    'ccgn_schedule_email_upate_details_reminders'
+);
+register_deactivation_hook(
+    __FILE__,
+    'ccgn_schedule_remove_email_update_details_reminders'
 );
 
 ////////////////////////////////////////////////////////////////////////////////

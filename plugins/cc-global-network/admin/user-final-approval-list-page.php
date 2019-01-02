@@ -321,6 +321,8 @@ function ccgn_application_approval_page () {
 <div class="color-guide">
     <ul class="colors">
         <li><span class="color green"></span> Already voted</li>
+        <li><span class="color orange"></span> Asked for clarification</li>
+        <li><span class="color blue"></span> Statement updated</li>
     </ul>
 </div>
 <div class="ccgn-table-container">
@@ -331,7 +333,7 @@ function ccgn_application_approval_page () {
         <th>Applicant</th>
         <th>Type</th>
     <?php// if ( ccgn_current_user_is_final_approver() ) { ?>
-        <th>Email</th>
+        <th>Votes</th>
         <th>Vouching Status</th>
         <!-- <th>Vouches Declined</th>
         <th>Vouches For</th>
@@ -431,7 +433,20 @@ function ccgn_rest_return_application_approval_list() {
         foreach ($user_entries as $user_id) {
             $user_data = array();
             $user = get_user_by('ID', $user_id);
-            $user_application_status = get_user_meta($user_id, 'ccgn-application-state', true); 
+            $user_application_status = get_user_meta($user_id, 'ccgn-application-state', true);
+            $log_user = ccgn_ask_clarification_log_get_id($user_id);
+            $user_is_asked_for_clarification = 0;
+            $voucher_asked = null;
+            foreach ($log_user as $entry) {
+                $asked_meta = get_user_meta($entry['voucher_id'], 'ccgn_need_to_clarify_vouch_reason_applicant_status', true);
+                if ( ($asked_meta['status'] == 1) && ($asked_meta['applicant_id'] == $user_id) ) {
+                    $user_is_asked_for_clarification = 1;
+                    $asked_voucher_user = get_user_by('ID', $entry['voucher_id'])->display_name;
+                } else if (($asked_meta['status'] == 0) && ($asked_meta['applicant_id'] == $user_id)) {
+                    $user_is_asked_for_clarification = 2;
+                    $asked_voucher_user = get_user_by('ID', $entry['voucher_id'])->display_name;
+                }
+            }
             // The last form the user filled out, so the time to use
             $vouchers_entry = ccgn_application_vouchers($user_id);
             // The actual count of vouches
@@ -474,6 +489,8 @@ function ccgn_rest_return_application_approval_list() {
             $user_data['votes_for'] = $vote_counts[ 'yes'];
             $user_data['votes_against'] = $vote_counts[ 'no'];
             $user_data['application_date'] = date('Y-m-d', strtotime($vouchers_entry[ 'date_created' ]));
+            $user_data['is_asked'] = $user_is_asked_for_clarification;
+            $user_data['who_is_asked'] = $asked_voucher_user;
 
             $return_data['data'][] = $user_data;
         }

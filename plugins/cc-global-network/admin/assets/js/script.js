@@ -31,23 +31,33 @@ $.fn.dataTable.ext.search.push(
 );
 function format(d) {
     // `d` is the original data object for the row
+    var still_asked = '',
+        left_class = '';
+    if ( d.is_asked == 1) {
+        still_asked =   '<td class="data-right"><strong>Clarification asked to </strong></td>' + 
+                        '<td>' + d.who_is_asked + '</td>';
+        left_class = ' class="data-left"';
+    }
     return '<table cellpadding="5" class="detail-table" cellspacing="0" border="0" style="padding-left:50px;">' +
         '<tr>' +
-        '<td><strong>Vouchers declined</strong></td>' +
-        '<td class="data-left">' + d.vouches_declined + '</td>' +
+            '<td><strong>Vouchers declined</strong></td>' +
+            '<td class="data-left">' + d.vouches_declined + '</td>' +
 
-        '<td class="data-right"><strong>Votes for</strong></td>' +
-        '<td>' + d.votes_for + '</td>' +
+            '<td class="data-right"><strong>Votes for</strong></td>' +
+            '<td'+left_class+'>' + d.votes_for + '</td>' +
+            
+            still_asked +
+            
         '</tr>' +
         '<tr>' +
-        '<td><strong>Vouchers for</strong></td>' +
-        '<td class="data-left">' + d.vouches_for + '</td>' +
+            '<td><strong>Vouchers for</strong></td>' +
+            '<td class="data-left">' + d.vouches_for + '</td>' +
             '<td class="data-right"><strong>Votes against</strong></td>' +
             '<td>' + d.votes_against + '</td>' +
         '</tr>' +
         '<tr>' +
-        '<td><strong>Vouchers against</strong></td>' +
-        '<td class="data-left">' + d.vouches_against + '</td>' +
+            '<td><strong>Vouchers against</strong></td>' +
+            '<td class="data-left">' + d.vouches_against + '</td>' +
         '</tr>' +
         '</table>';
 }
@@ -216,7 +226,7 @@ jQuery(document).ready(function ($) {
             },
             { 'data': 'applicant' },
             { 'data': 'applicant_type' },
-            { 'data': 'user_mail' },
+            { 'data': 'votes_for' },
             { 'data': 'vouching_status' },
             { 'data': 'voting_status' },
             { 'data': 'application_date' }
@@ -227,6 +237,10 @@ jQuery(document).ready(function ($) {
                 'render': function (data, type, row, meta) {
                     return '<a href="' + row.applicant_url + '">' + data + '</a>';
                 }
+            },
+            {
+                targets: 3,
+                'className': 'text-center'
             }
         ],
         'ajax': {
@@ -237,9 +251,16 @@ jQuery(document).ready(function ($) {
             },
             'data': { 'current_user': wpApiSettings.current_user }
         },
+        "pageLength": 50,
         rowCallback: function (row, data) {
             if (data.already_voted_by_me == 'yes') {
                 $(row).addClass('green-mark');
+            }
+            if (data.is_asked == 1) {
+                $(row).addClass('orange-mark');
+            }
+            if (data.is_asked == 2) {
+                $(row).addClass('blue-mark');
             }
         }
     });
