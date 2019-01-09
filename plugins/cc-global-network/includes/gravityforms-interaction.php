@@ -2138,9 +2138,13 @@ class GFLimitCheckboxes
             return $field_limits;
         }
 }
-// new GFLimitCheckboxes(52, array(
-//     3 => array(
-//         'min' => 3,
-//         'max' => 3
-//     )
-// ));
+new GFLimitCheckboxes(53, array(
+    1 => array(
+        'min' => 3,
+        'max' => 3
+    ),
+    2 => array(
+        'min' => 3,
+        'max' => 3
+    )
+));
