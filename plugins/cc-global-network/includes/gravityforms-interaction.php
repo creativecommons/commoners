@@ -2190,3 +2190,15 @@ new GFLimitCheckboxes(52, array(
         'max' => 3
     )
 ));
+
+
+add_filter('gform_entries_field_value', 'ccgn_gf_display_name_instead_login', 10, 4);
+function ccgn_gf_display_name_instead_login($value, $form_id, $field_id, $entry)
+{
+    if ($field_id == 'created_by') {
+        $email = $value;
+        $user = get_user_by('email', $email);
+        $value = $user->display_name;
+    }
+    return $value;
+}
