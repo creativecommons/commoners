@@ -3,24 +3,24 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="apple-touch-icon" sizes="57x57" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="<?php bloginfo('stylesheet_directory') ?>/assets/images/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-16x16.png">
-<link rel="shortcut icon" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon.ico" type="image/x-icon">
-         <link rel="icon" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon.ico" type="image/x-icon">
-    
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="<?php bloginfo('stylesheet_directory') ?>/assets/images/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" sizes="60x60" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="<?php bloginfo('stylesheet_directory') ?>/assets/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-16x16.png">
+    <link rel="shortcut icon" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon.ico" type="image/x-icon">
+            <link rel="icon" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon.ico" type="image/x-icon">
+        
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="<?php bloginfo('stylesheet_directory') ?>/assets/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     
     
     <meta charset="<?php bloginfo( 'charset' ); ?>" />
@@ -38,21 +38,33 @@
 
 
     <header class="site-header" >
-      
-      <a href="/" class="logo"><h1>CC Network</h1></a>
-
-      <nav class="main-nav">
-        <?php wp_nav_menu( array(
-                     'depth'=>1,
-                     'after'=>'<span class="sep">|</span>',
-                     'theme_location' => 'top',
-                     'menu_id'        => 'top-menu',
-               ) ); ?>
-      </nav>
-      <form method="post" action="/" class="header-search">
-        <input type="text" name="s">
-          <i class="fa fa-search" aria-hidden="true"></i>
-      </form>
+        <div class="grid-container">
+            <div class="cell grid-x grid-padding-x align-center">
+                <div class="cell small-3">
+                    <a href="<?php echo site_url(); ?>" class="logo"><h1>CC Network</h1></a>
+                </div>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="grid-container">
+                <div class="grid-x align-center">
+                    <div class="cell small-12">            
+                        <?php wp_nav_menu( array(
+                                    'depth'=>1,
+                                    'theme_location' => 'top',
+                                    'menu_id'        => 'top-menu',
+                                    'items_wrap' => '<ul id = "%1$s" class = "menu align-center %2$s">%3$s</ul>'
+                                ) ); ?>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <form method="post" action="/" class="header-search">
+            <input type="text" name="s">
+                <i class="fa fa-search" aria-hidden="true"></i>
+        </form>
+      </div>
     </header>
 
 

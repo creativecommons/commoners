@@ -36,7 +36,7 @@ add_action( 'widgets_init', 'cc_commoners_widgets', 11 );
 
 function cc_commoners_theme_scripts () {
     $style_version = '2.0.5';
-    $script_version = '1.0.0';
+    $script_version = '1.0.1';
 
     wp_enqueue_script(
         'swiper',
@@ -65,27 +65,26 @@ function cc_commoners_theme_scripts () {
         // We do want template_directory, as this is our parent theme's css
         get_template_directory_uri() . '/style.css'
     );
-    wp_enqueue_style(
-        'foundation-base',
-        get_stylesheet_directory_uri() . '/assets/css/foundation.min.css',
-        array($parent_style),
-        array(),
-        $style_version
-    );
-
+    
     wp_enqueue_style(
         'cc-commoners-gf',
         get_stylesheet_directory_uri() . '/assets/css/swiper.css',
         array( $parent_style ),
         wp_get_theme()->get('Version')
     );
-
+    
     wp_enqueue_style( 'cc-commoners',
         get_stylesheet_directory_uri() . '/style.css',
         array( $parent_style ),
         $style_version
     );
     wp_enqueue_style(
+        'style-base',
+        get_theme_file_uri('/assets/css/style.css'),
+        array('cc-commoners'),
+        $style_version
+    );
+wp_enqueue_style(
         'cc-commoners-style-extra',
         get_theme_file_uri( '/assets/css/extra.css' ),
         array( 'cc-commoners' ),
@@ -115,3 +114,17 @@ function cc_commoners_replace_last_nav_item ( $items, $args ) {
 }
 
 add_filter( 'wp_nav_menu', 'cc_commoners_replace_last_nav_item', 100, 2 );
+
+
+/*
+    Disable admin bar except for administrators
+ */
+
+add_action('after_setup_theme', 'remove_admin_bar');
+
+function remove_admin_bar()
+{
+    if (!current_user_can('administrator') && !is_admin()) {
+        show_admin_bar(false);
+    }
+}
