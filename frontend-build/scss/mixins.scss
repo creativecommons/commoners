@@ -14,3 +14,20 @@
     width: 100%;
     height: 100%;
 }
+@mixin logo-display {
+    display: block;
+    width: 230px;
+    height: 50px;
+    margin: 20px auto 0 auto;
+    background: url('../i/logo.png') no-repeat center top;
+    background-size: contain;
+    opacity: 1;
+    transition: all .2s ease;
+    h1, span {
+        display: block;
+        text-indent: -1000rem;
+    }
+    &:hover {
+        opacity: .4;
+    }
+}
