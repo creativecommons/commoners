@@ -4,5 +4,58 @@
             max-width: 100%;
             height: auto;
         }
+        .slide-caption {
+            position: absolute;
+            right: 2rem ;
+            bottom: 2rem;
+            width: rem-calc(280);
+            padding: 1rem;
+            z-index: 1;
+            font-family: $font-alt;
+            background-color: $primary-color;
+            h3 {
+                font-weight: bold;
+                font-family: $font-alt;
+                font-size: 1.9rem;
+                letter-spacing: -1px;
+                text-transform: uppercase;
+            }
+            p {
+                margin-bottom: 0;
+                font-size: .9rem;
+            }
+            .slide-caption-btn {
+                display: inline-block;
+                float: right;
+                padding: .2rem .5rem;
+                margin-top: .9rem;
+                text-decoration: none;
+                text-align: center;
+                line-height: 26px;
+                color: $white !important;
+                font-size: 0.85rem;
+                background-color: $alert-color;
+                &:hover {
+                    background-color: lighten($alert-color, 10);
+                }
+            }
+        }
+    }
+}
+
+.block-section {
+    .block {
+        position: relative;
+        padding: 1rem 1.5rem 3.8rem 1rem;
+        color: #fff;
+        &:first-child {
+            background-color: $alert-color;
+        }
+        &:nth-child(2) {
+            background-color: $secondary-color;
+        }
+        &:last-child {
+            background-color: $success-color;
+        }
     }
 }

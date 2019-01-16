@@ -1,0 +1,22 @@
+// General styles
+.page-body {
+    .container-top-message {
+        padding: 1.5rem 0;
+        background-color: #35bbd8;
+        .top-message {
+            color: $white;
+            h2 {
+                font-weight: 900;
+            }
+            .to-r {
+                font-size: 0.9rem;
+            }
+        }
+    }
+}
+
+.home {
+    .page-body {
+        padding-top: 142px;
+    }
+}

@@ -22,24 +22,6 @@ Template: twentyseventeen
 }
 
 
-.main-nav a:first-child {
-	border-left: none;
-}
-
-.header-search {
-	position: absolute;
-	right: 25px;
-	top: 30px;
-}
-
-.header-search input[type="text"] {
-	width: 140px;
-	line-height: 1.1em;
-	padding: 3px;
-	background: transparent;
-	border-bottom: 1px solid #111;
-}
-
 @media all and (max-width: 600px) {
 	
 	.header-search input[type="text"] {
@@ -47,18 +29,6 @@ Template: twentyseventeen
 		opacity: 0;
 	}
 	
-}
-
-.header-search i {
-	vertical-align: middle;
-	font-style: normal;
-}
-
-.page-body {
-	position: relative;
-	width: 100%;
-	max-width: 1280px;
-	margin: 0 auto;
 }
 
 .push-page-body, .page-template-page-platform-php .page-body, .page-template-page-chapter-php .page-body {
@@ -89,17 +59,6 @@ body.my-profile .page-body .signup-form-body {
 	
 }
 
-.container-top-message {
-	width: 100%;
-	padding: 40px 0;
-	background-color: #35bbd8;
-}
-
-.top-message {
-	max-width: 740px;
-	margin: 0 auto;
-	color: #fff;
-}
 
 @media all and (max-width: 600px) {
 
@@ -111,10 +70,6 @@ body.my-profile .page-body .signup-form-body {
 		max-width: 100%;
 	}
 	
-}
-
-.top-message p {
-    padding: 0;
 }
 
 .form-top-text {
@@ -142,14 +97,6 @@ body.my-profile .page-body .signup-form-body {
 	
 }
 
-.top-message p {
-	font-size: 0.8rem;
-}
-
-.to-r {
-	overflow: auto;
-}
-
 @media all and (max-width: 600px) {
 	
 	.to-r {
@@ -158,29 +105,6 @@ body.my-profile .page-body .signup-form-body {
 	
 }
 
-.main-slideshow,.swiper-wrapper{
-	width: 100%;
-	position: relative;
-	z-index: 0;
-}
-
-.main-slideshow img {
-	display: block;
-	position: relative;
-	z-index: 0;
-}
-
-.slide-caption {
-	position: absolute;
-	right: 70px;
-	bottom: 50px;
-	width: 280px;
-	padding: 15px 20px;
-	z-index: 1;
-	color: #000;
-	font-family: 'Roboto Condensed', sans-serif;
-	background-color: #efbe01;
-}
 
 .caption-hub {
 	background-color: #f46b2c;
@@ -206,20 +130,7 @@ body.my-profile .page-body .signup-form-body {
 
 }
 
-.slide-caption-btn {
-	float: right;
-	margin-top: 5px;
-	display: inline-block;
-	text-decoration: none;
-	text-align: center;
-	line-height: 26px;
-	padding: 1px 5px;
-	font-weight: bold;
-	color: #fff !important;
-	font-size: 0.85rem;
-	background-color: #f46b2c;
-	overflow: hidden;
-}
+
 
 /*
 .triangle {
@@ -246,12 +157,6 @@ body.my-profile .page-body .signup-form-body {
 	
 }
 
-.slide-caption h3 {
-	font-size: 1.9rem;
-	letter-spacing: -1px;
-	text-transform: uppercase;
-}
-
 @media all and (max-width: 600px) {
 	
 	.slide-caption h3 {
@@ -259,30 +164,6 @@ body.my-profile .page-body .signup-form-body {
 	}
 	
 }
-
-.slide-caption p {
-	font-size: 0.9rem;
-}
-
-.block-area {
-	position: relative;
-	width: 100%;
-	display: table;
-	table-layout: fixed;
-	/*-webkit-box-shadow: inset 0px 15px 16px -4px rgba(0,0,0,0.29);
-	-moz-box-shadow: inset 0px 15px 16px -4px rgba(0,0,0,0.29);
-	box-shadow: inset 0px 15px 16px -4px rgba(0,0,0,0.29);*/
-}
-
-@media all and (max-width: 600px) {
-	
-	.block-area {
-		display: block;
-		table-layout: auto;
-	}
-	
-}
-
 footer::before {
 	position: absolute;
 	left: 0;
@@ -299,25 +180,6 @@ footer::before {
 	box-shadow: 0px -6px 5px -3px rgba(0,0,0,0.3);
 }
 
-.block-area-row {
-	display: table-row;
-}
-
-@media all and (max-width: 600px) {
-	
-	.block-area-row {
-		display: block;
-	}
-	
-}
-
-.block {
-	position: relative;
-	display: table-cell;
-	padding: 20px 32px 55px 32px;
-	color: #fff;
-}
-
 @media all and (max-width: 600px) {
 	
 	.block {
@@ -330,17 +192,6 @@ footer::before {
 	
 }
 
-.block:first-child {
-	background-color: #f46b2c;
-}
-
-.block:nth-child(2) {
-	background-color: #35bbd8;
-}
-
-.block:last-child {
-	background-color: #27a635;
-}
 
 .block h3 {
 	margin-bottom: 15px;

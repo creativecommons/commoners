@@ -3686,6 +3686,38 @@ a.thumbnail {
       text-indent: -1000rem; }
     .site-header .logo:hover {
       opacity: .4; }
+  .site-header .search-form {
+    position: absolute;
+    right: 25px;
+    top: 30px; }
+    .site-header .search-form .header-search {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center; }
+      .site-header .search-form .header-search input[type=text] {
+        width: 140px;
+        height: 1.8rem;
+        padding: 3px;
+        margin: 0;
+        border: none;
+        border-bottom: 1px solid #0a0a0a;
+        background: transparent;
+        -webkit-box-shadow: none;
+                box-shadow: none;
+        line-height: 1.1em; }
+        .site-header .search-form .header-search input[type=text].placeholder {
+          color: #8a8a8a; }
+        .site-header .search-form .header-search input[type=text]:-moz-placeholder {
+          color: #8a8a8a; }
+        .site-header .search-form .header-search input[type=text]::-moz-placeholder {
+          color: #8a8a8a; }
+        .site-header .search-form .header-search input[type=text]:-ms-input-placeholder {
+          color: #8a8a8a; }
+        .site-header .search-form .header-search input[type=text]::-webkit-input-placeholder {
+          color: #8a8a8a; }
   .site-header .main-nav {
     padding: 1.5rem;
     margin-top: .5rem;
@@ -3703,6 +3735,62 @@ a.thumbnail {
     .site-header .main-nav .menu-item:first-child a {
       border-left: none; }
 
+.page-body .container-top-message {
+  padding: 1.5rem 0;
+  background-color: #35bbd8; }
+  .page-body .container-top-message .top-message {
+    color: #fefefe; }
+    .page-body .container-top-message .top-message h2 {
+      font-weight: 900; }
+    .page-body .container-top-message .top-message .to-r {
+      font-size: 0.9rem; }
+
+.home .page-body {
+  padding-top: 142px; }
+
 .main-slideshow .swiper-slide img {
   max-width: 100%;
   height: auto; }
+
+.main-slideshow .swiper-slide .slide-caption {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  width: 17.5rem;
+  padding: 1rem;
+  z-index: 1;
+  font-family: "Roboto Condensed", sans-serif;
+  background-color: #efbe01; }
+  .main-slideshow .swiper-slide .slide-caption h3 {
+    font-weight: bold;
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 1.9rem;
+    letter-spacing: -1px;
+    text-transform: uppercase; }
+  .main-slideshow .swiper-slide .slide-caption p {
+    margin-bottom: 0;
+    font-size: .9rem; }
+  .main-slideshow .swiper-slide .slide-caption .slide-caption-btn {
+    display: inline-block;
+    float: right;
+    padding: .2rem .5rem;
+    margin-top: .9rem;
+    text-decoration: none;
+    text-align: center;
+    line-height: 26px;
+    color: #fefefe !important;
+    font-size: 0.85rem;
+    background-color: #f46b2c; }
+    .main-slideshow .swiper-slide .slide-caption .slide-caption-btn:hover {
+      background-color: #f78d5c; }
+
+.block-section .block {
+  position: relative;
+  padding: 1rem 1.5rem 3.8rem 1rem;
+  color: #fff; }
+  .block-section .block:first-child {
+    background-color: #f46b2c; }
+  .block-section .block:nth-child(2) {
+    background-color: #35bbd8; }
+  .block-section .block:last-child {
+    background-color: #27a635; }

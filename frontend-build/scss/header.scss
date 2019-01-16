@@ -36,6 +36,29 @@
             opacity: .4;
         }
     }
+    .search-form {
+        position: absolute;
+        right: 25px;
+        top: 30px;
+        .header-search {
+            display: flex;
+            align-items: center;
+            input[type=text] {
+                width: 140px;
+                height: 1.8rem;
+                padding: 3px;
+                margin: 0;
+                border: none;
+                border-bottom: 1px solid $black;
+                background: transparent;
+                box-shadow: none;
+                line-height: 1.1em;
+                @include placeholder {
+                    color: $dark-gray;
+                }
+            }
+        }
+    }
     .main-nav {
         padding: 1.5rem;
         margin-top: .5rem;
