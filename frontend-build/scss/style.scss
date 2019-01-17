@@ -1,5 +1,8 @@
 // General styles
 .page-body {
+    .space-top {
+        padding-top: 12rem;
+    }
     .container-top-message {
         padding: 1.5rem 0;
         background-color: #35bbd8;
@@ -13,10 +16,41 @@
             }
         }
     }
+    .entry-header {
+        .entry-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }   
+    }
+    .entry-content {
+        .post-content {
+            padding: 1rem 0  3rem 0;
+            a {
+                color: $secondary-color;
+                font-weight: bold;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-family: $font-alt;
+            }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            h3 { font-size: 1.6rem; }
+            h4 { font-size: 1.5rem; }
+            h5 { font-size: 1.4rem; }
+            h6 { font-size: 1.3rem; font-weight: bold; }
+
+            .item-acordion {
+                h2 {
+                    padding: .8rem 0;
+                    border-bottom: 1px solid $light-gray;
+                }
+            }
+        }
+    }
 }
 
 .home {
     .page-body {
-        padding-top: 142px;
+        padding-top: 8.9rem;
     }
 }

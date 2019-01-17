@@ -521,18 +521,6 @@ a.cc-btn {
 
 /* -------- Second stage screens -------- */
 
-.inner-section-title {
-	width: 100%;
-	background: #35bbd8;
-	padding: 15px 0;
-	text-align: center;
-	color: #fff;
-	font-size: 0.6em;
-	clear: both;
-	margin-top: 158px;
-	text-transform: uppercase;
-	font-family: 'Roboto Condensed', sans-serif;
-}
 
 .inner-section-list {
 	max-width: 800px;

@@ -84,3 +84,27 @@
         }
     }
 }
+.inner-section-title {
+    width: 100%;
+	background: $secondary-color;
+	padding: 1rem 0;
+	text-align: center;
+	color: $white;
+	margin-top: 8.8rem;
+    .entry-title {
+        &.big {
+            text-transform: uppercase;
+	        font-family: $font-alt;
+        }
+    }
+}
+.members-meta {
+    width: 50%;
+    margin: 2rem 0;
+    a {
+        color: $secondary-color;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}

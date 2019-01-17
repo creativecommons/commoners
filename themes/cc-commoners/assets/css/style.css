@@ -3736,6 +3736,9 @@ a.thumbnail {
     .site-header .main-nav .menu-item:first-child a {
       border-left: none; }
 
+.page-body .space-top {
+  padding-top: 12rem; }
+
 .page-body .container-top-message {
   padding: 1.5rem 0;
   background-color: #35bbd8; }
@@ -3746,10 +3749,39 @@ a.thumbnail {
     .page-body .container-top-message .top-message .to-r {
       font-size: 0.9rem; }
 
+.page-body .entry-header .entry-title {
+  font-size: 2rem;
+  font-weight: bold; }
+
+.page-body .entry-content .post-content {
+  padding: 1rem 0  3rem 0; }
+  .page-body .entry-content .post-content a {
+    color: #35bbd8;
+    font-weight: bold; }
+  .page-body .entry-content .post-content h1, .page-body .entry-content .post-content h2, .page-body .entry-content .post-content h3, .page-body .entry-content .post-content h4, .page-body .entry-content .post-content h5, .page-body .entry-content .post-content h6 {
+    font-family: "Roboto Condensed", sans-serif; }
+  .page-body .entry-content .post-content h1 {
+    font-size: 2rem; }
+  .page-body .entry-content .post-content h2 {
+    font-size: 1.8rem; }
+  .page-body .entry-content .post-content h3 {
+    font-size: 1.6rem; }
+  .page-body .entry-content .post-content h4 {
+    font-size: 1.5rem; }
+  .page-body .entry-content .post-content h5 {
+    font-size: 1.4rem; }
+  .page-body .entry-content .post-content h6 {
+    font-size: 1.3rem;
+    font-weight: bold; }
+  .page-body .entry-content .post-content .item-acordion h2 {
+    padding: .8rem 0;
+    border-bottom: 1px solid #e6e6e6; }
+
 .home .page-body {
-  padding-top: 142px; }
+  padding-top: 8.9rem; }
 
 .main-footer {
+  margin-top: 2rem;
   padding: 1.2rem 0;
   position: relative;
   background-color: #efbe01;
@@ -3887,3 +3919,22 @@ a.thumbnail {
     background-color: #35bbd8; }
   .block-section .block:last-child {
     background-color: #27a635; }
+
+.inner-section-title {
+  width: 100%;
+  background: #35bbd8;
+  padding: 1rem 0;
+  text-align: center;
+  color: #fefefe;
+  margin-top: 8.8rem; }
+  .inner-section-title .entry-title.big {
+    text-transform: uppercase;
+    font-family: "Roboto Condensed", sans-serif; }
+
+.members-meta {
+  width: 50%;
+  margin: 2rem 0; }
+  .members-meta a {
+    color: #35bbd8; }
+    .members-meta a:hover {
+      text-decoration: none; }
