@@ -2191,7 +2191,7 @@ new GFLimitCheckboxes(52, array(
     )
 ));
 
-
+add_filter('gform_export_field_value', 'ccgn_gf_display_name_instead_login', 10, 4);
 add_filter('gform_entries_field_value', 'ccgn_gf_display_name_instead_login', 10, 4);
 function ccgn_gf_display_name_instead_login($value, $form_id, $field_id, $entry)
 {
