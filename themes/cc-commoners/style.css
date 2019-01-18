@@ -788,29 +788,7 @@ p.member-country {
 	font-weight: bold;
 }
 
-.hub-quote-block {
-	width: 100%;
-	padding: 30px;
-	clear: both;
-	background: #efbe01;
-	color: #111;
-}
 
-.hub-quote-content {
-	max-width: 700px;
-	margin: 0 auto;
-}
-
-.hub-quote-block h2 {
-	font-size: 1.8em;
-	margin-bottom: 13px;
-	font-weight: bold;
-}
-
-.hub-quote-block p {
-	font-size: 0.8em;
-	font-style: italic;
-}
 
 .we-are-gorwing-block {
 	position: relative;
@@ -920,15 +898,7 @@ p.member-country {
 
 /* ----- Hub grid ----- */
 
-.hub-grid {
-	position: relative;
-	width: 100%;
-	display: table;
-	table-layout: fixed;
-	/*-webkit-box-shadow: inset 0px 15px 16px -4px rgba(0,0,0,0.29);
-	-moz-box-shadow: inset 0px 15px 16px -4px rgba(0,0,0,0.29);
-	box-shadow: inset 0px 15px 16px -4px rgba(0,0,0,0.29);*/
-}
+
 
 @media all and (max-width: 600px) {
 	
@@ -939,23 +909,7 @@ p.member-country {
 	
 }
 
-.hub-grid::after {
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	width: 100%;
-	height: 10px;
-	content: " ";
-	display: block;
-	z-index: 1;
-	background: transparent;
-	box-shadow: 0px 4px 5px rgba(0,0,0,0.2);
-}
 
-.hub-grid-row {
-	display: table-row;
-}
 
 @media all and (max-width: 600px) {
 	
@@ -965,12 +919,6 @@ p.member-country {
 	
 }
 
-.hub-grid-block {
-	position: relative;
-	display: table-cell;
-	padding: 20px 32px 55px 140px;
-	color: #111;
-}
 
 @media all and (max-width: 800px) {
 	
@@ -984,64 +932,9 @@ p.member-country {
 	
 }
 
-.hub-grid-block:hover, .hub-grid-block:hover a {
-	color: #fff;
-}
-
-.hub-grid-row:first-child .hub-grid-block:first-child:hover {
-	background: #27a635;
-}
-
-.hub-grid-row:first-child .hub-grid-block:nth-child(2):hover {
-	background: #f46b2c;
-}
-
-.hub-grid-row:first-child .hub-grid-block:last-child:hover {
-	background: #35bbd8;
-}
-
-.hub-grid-row:last-child .hub-grid-block:first-child:hover {
-	background: #f46b2c;
-}
-
-.hub-grid-row:last-child .hub-grid-block:nth-child(2):hover {
-	background: #35bbd8;
-}
-
-.hub-grid-row:last-child .hub-grid-block:last-child:hover {
-	background: #27a635;
-}
 
 
-.hub-grid-block h3 {
-	margin-bottom: 15px;
-	font-size: 2.2rem;
-	letter-spacing: -1px;
-	text-transform: uppercase;
-	font-family: 'Roboto Condensed', sans-serif;
-}
 
-.hub-grid-block p {
-	font-size: 0.9rem;
-	margin-bottom: 15px;
-}
-
-.hub-grid-block p a {
-	color: #000;
-	font-weight: bold;
-}
-
-.hub-grid-block-svg {
-	width: 100px;
-	min-height: 100px;
-	position: absolute;
-	top: 20px;
-	left: 20px;
-}
-
-.hub-grid-block:hover svg .icon-path {
-	fill: #ffffff;
-}
 
 
 .we-are-growing-grid {
@@ -1282,10 +1175,6 @@ p.member-country {
 	width: 50%;
 	float: left;
 	margin-bottom: 20px;
-}
-
-.item-acordion h2 {
-	cursor: pointer;
 }
 
 .item-content {

@@ -3774,8 +3774,14 @@ a.thumbnail {
     font-size: 1.3rem;
     font-weight: bold; }
   .page-body .entry-content .post-content .item-acordion h2 {
-    padding: .8rem 0;
-    border-bottom: 1px solid #e6e6e6; }
+    padding: .8rem .5rem;
+    border-bottom: 1px solid #e6e6e6;
+    font-size: 1.3rem;
+    cursor: pointer; }
+    .page-body .entry-content .post-content .item-acordion h2:hover {
+      background-color: whitesmoke; }
+  .page-body .entry-content .post-content .item-acordion .item-content {
+    font-size: .9rem; }
 
 .home .page-body {
   padding-top: 8.9rem; }
@@ -3938,3 +3944,60 @@ a.thumbnail {
     color: #35bbd8; }
     .members-meta a:hover {
       text-decoration: none; }
+
+.hub-grid .hub-grid-block {
+  position: relative;
+  padding: 20px 32px 55px 140px;
+  color: #111; }
+  .hub-grid .hub-grid-block h3 {
+    margin-bottom: 15px;
+    font-size: 2.2rem;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    font-family: "Roboto Condensed", sans-serif; }
+  .hub-grid .hub-grid-block p {
+    font-size: 0.9rem;
+    margin-bottom: 15px; }
+    .hub-grid .hub-grid-block p a {
+      color: #0a0a0a; }
+  .hub-grid .hub-grid-block .hub-grid-block-svg {
+    width: 100px;
+    min-height: 100px;
+    position: absolute;
+    top: 20px;
+    left: 20px; }
+  .hub-grid .hub-grid-block:hover {
+    color: #fefefe; }
+    .hub-grid .hub-grid-block:hover svg .icon-path {
+      fill: #ffffff; }
+    .hub-grid .hub-grid-block:hover a {
+      color: #fefefe; }
+  .hub-grid .hub-grid-block:first-child:hover {
+    background: #27a635; }
+  .hub-grid .hub-grid-block:nth-child(2):hover {
+    background: #f46b2c; }
+  .hub-grid .hub-grid-block:nth-child(3):hover {
+    background: #35bbd8; }
+  .hub-grid .hub-grid-block:nth-child(4):hover {
+    background: #f46b2c; }
+  .hub-grid .hub-grid-block:nth-child(5):hover {
+    background: #35bbd8; }
+  .hub-grid .hub-grid-block:nth-child(6):hover {
+    background: #27a635; }
+
+.hub-quote-block {
+  width: 100%;
+  padding: 30px;
+  clear: both;
+  background: #efbe01;
+  color: #0a0a0a; }
+  .hub-quote-block .hub-quote-content {
+    max-width: 700px;
+    margin: 0 auto; }
+    .hub-quote-block .hub-quote-content h2 {
+      font-size: 1.8em;
+      margin-bottom: 13px;
+      font-weight: bold; }
+    .hub-quote-block .hub-quote-content p {
+      font-size: 0.8em;
+      font-style: italic; }

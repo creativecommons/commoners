@@ -41,8 +41,16 @@
 
             .item-acordion {
                 h2 {
-                    padding: .8rem 0;
+                    padding: .8rem .5rem;
                     border-bottom: 1px solid $light-gray;
+                    font-size: 1.3rem;
+                    cursor: pointer;
+                    &:hover {
+                        background-color: lighten($light-gray,6);
+                    }
+                }
+                .item-content {
+                    font-size: .9rem;
                 }
             }
         }
