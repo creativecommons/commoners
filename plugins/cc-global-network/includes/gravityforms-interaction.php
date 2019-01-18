@@ -2190,6 +2190,12 @@ new GFLimitCheckboxes(52, array(
         'max' => 3
     )
 ));
+new GFLimitCheckboxes(53, array(
+    1 => array(
+        'min' => 3,
+        'max' => 3
+    )
+));
 add_filter('gform_entries_field_value', 'ccgn_gf_display_name_instead_login', 10, 4);
 function ccgn_gf_display_name_instead_login($value, $form_id, $field_id, $entry)
 {
