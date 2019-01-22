@@ -1,3 +1,8 @@
+.home {
+    .main-footer {
+        margin-top: 0 !important;
+    }
+}
 .main-footer {
     margin-top: 2rem;
     padding: 1.2rem 0;
@@ -51,6 +56,9 @@
                 font-weight: bold;
                 padding: 0 5px;
                 border-left: 1px solid #000;
+                &:hover {
+                    text-decoration: underline;
+                }
             }
             &:first-child {
                 a {

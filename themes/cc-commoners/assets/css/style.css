@@ -2636,16 +2636,16 @@ table {
   thead,
   tbody,
   tfoot {
-    border: 1px solid #f1f1f1;
-    background-color: #fefefe; }
+    border: 1px solid rgba(13, 13, 13, 0);
+    background-color: transparent; }
   caption {
     padding: 0.5rem 0.625rem 0.625rem;
     font-weight: bold; }
   thead {
-    background: #f8f8f8;
+    background: rgba(6, 6, 6, 0);
     color: #0a0a0a; }
   tfoot {
-    background: #f1f1f1;
+    background: rgba(13, 13, 13, 0);
     color: #0a0a0a; }
   thead tr,
   tfoot tr {
@@ -2662,13 +2662,13 @@ table {
     padding: 0.5rem 0.625rem 0.625rem; }
   tbody tr:nth-child(even) {
     border-bottom: 0;
-    background-color: #f1f1f1; }
+    background-color: rgba(13, 13, 13, 0); }
   table.unstriped tbody {
-    background-color: #fefefe; }
+    background-color: transparent; }
     table.unstriped tbody tr {
       border-bottom: 0;
-      border-bottom: 1px solid #f1f1f1;
-      background-color: #fefefe; }
+      border-bottom: 1px solid rgba(13, 13, 13, 0);
+      background-color: transparent; }
 
 @media screen and (max-width: 63.99875em) {
   table.stack thead {
@@ -2688,16 +2688,16 @@ table.scroll {
   overflow-x: auto; }
 
 table.hover thead tr:hover {
-  background-color: #f3f3f3; }
+  background-color: rgba(1, 1, 1, 0); }
 
 table.hover tfoot tr:hover {
-  background-color: #ececec; }
+  background-color: rgba(8, 8, 8, 0); }
 
 table.hover tbody tr:hover {
-  background-color: #f9f9f9; }
+  background-color: rgba(0, 0, 0, 0); }
 
 table.hover:not(.unstriped) tr:nth-of-type(even):hover {
-  background-color: #ececec; }
+  background-color: rgba(0, 0, 0, 0); }
 
 .table-scroll {
   overflow-x: auto; }
@@ -3786,6 +3786,131 @@ a.thumbnail {
 .home .page-body {
   padding-top: 8.9rem; }
 
+#buddypress #members-dir-search #members_search_submit {
+  height: 2.45rem; }
+
+.gform_wrapper .gform_body .gfield a {
+  color: #f46b2c;
+  font-weight: bold; }
+  .gform_wrapper .gform_body .gfield a:hover {
+    text-decoration: underline; }
+
+.gform_wrapper .gform_body .gfield input {
+  width: 100% !important; }
+
+.gform_wrapper .gform_body .gfield.gfield_html blockquote {
+  padding-bottom: .5rem;
+  color: #646464;
+  border-left: 1px solid #8a8a8a;
+  font-style: italic; }
+  .gform_wrapper .gform_body .gfield.gfield_html blockquote p {
+    line-height: 1.8rem; }
+
+.gform_wrapper .gform_body .ginput_container .chosen-single {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 40px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .gform_wrapper .gform_body .ginput_container .chosen-single span {
+    color: #0a0a0a; }
+  .gform_wrapper .gform_body .ginput_container .chosen-single div b {
+    position: relative;
+    top: .4rem; }
+  .gform_wrapper .gform_body .ginput_container .chosen-single .chosen-search .chosen-search-input {
+    width: 100% !important; }
+
+.gform_wrapper .gform_body .ginput_container .gfield_radio li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start; }
+  .gform_wrapper .gform_body .ginput_container .gfield_radio li label {
+    width: 100%;
+    max-width: 100%; }
+  .gform_wrapper .gform_body .ginput_container .gfield_radio li input[type=radio] {
+    position: relative;
+    width: 23px !important;
+    height: 23px;
+    margin-bottom: 0;
+    margin-right: 1rem;
+    border-radius: 50%;
+    background: #fefefe;
+    border: 1px solid #cacaca;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer; }
+    .gform_wrapper .gform_body .ginput_container .gfield_radio li input[type=radio]:checked:after {
+      content: "\f159";
+      position: absolute;
+      top: 0;
+      left: .05rem;
+      font-family: 'Dashicons';
+      font-size: 1.2rem;
+      color: #efbe01; }
+
+.gform_wrapper .gform_body .ginput_container .gfield_checkbox li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .gform_wrapper .gform_body .ginput_container .gfield_checkbox li input[type=checkbox] {
+    position: relative;
+    width: 23px !important;
+    height: 23px;
+    margin-bottom: 0;
+    margin-right: 1rem;
+    background: #fefefe;
+    border: 1px solid #cacaca;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer; }
+    .gform_wrapper .gform_body .ginput_container .gfield_checkbox li input[type=checkbox]:checked:after {
+      content: "\f147";
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-family: 'Dashicons';
+      font-size: 1.2rem;
+      color: #efbe01; }
+
+.gform_wrapper .gform_body .ginput_container .gfield_select {
+  padding-right: 1.5rem; }
+
+.gform_wrapper .gform_footer {
+  text-align: center; }
+  .gform_wrapper .gform_footer .gform_button {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 1rem 0;
+    padding: 0.85em 1em;
+    border: 1px solid transparent;
+    border-radius: 0;
+    -webkit-transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    font-family: inherit;
+    font-size: 0.9rem;
+    -webkit-appearance: none;
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: #27a635;
+    color: #fefefe; }
+    [data-whatinput='mouse'] .gform_wrapper .gform_footer .gform_button {
+      outline: 0; }
+    .gform_wrapper .gform_footer .gform_button:hover, .gform_wrapper .gform_footer .gform_button:focus {
+      background-color: #2cbb3c;
+      color: #fefefe; }
+
+.home .main-footer {
+  margin-top: 0 !important; }
+
 .main-footer {
   margin-top: 2rem;
   padding: 1.2rem 0;
@@ -3841,6 +3966,8 @@ a.thumbnail {
       font-weight: bold;
       padding: 0 5px;
       border-left: 1px solid #000; }
+      .main-footer .bottom-nav .menu-item a:hover {
+        text-decoration: underline; }
     .main-footer .bottom-nav .menu-item:first-child a {
       border-left: 0; }
   .main-footer::before {
@@ -3856,6 +3983,15 @@ a.thumbnail {
     background: transparent;
     -webkit-box-shadow: 0px -6px 5px -3px rgba(0, 0, 0, 0.3);
     box-shadow: 0px -6px 5px -3px rgba(0, 0, 0, 0.3); }
+
+.signup-bg {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  overflow: hidden; }
+  .signup-bg img {
+    width: 100%;
+    height: auto; }
 
 .main-slideshow .swiper-slide img {
   max-width: 100%;
@@ -3919,6 +4055,8 @@ a.thumbnail {
     color: #0a0a0a;
     font-size: 0.8rem;
     background-color: #efbe01; }
+    .block-section .block .block-link:hover {
+      background-color: #fecc0c; }
   .block-section .block:first-child {
     background-color: #f46b2c; }
   .block-section .block:nth-child(2) {
@@ -4001,3 +4139,105 @@ a.thumbnail {
     .hub-quote-block .hub-quote-content p {
       font-size: 0.8em;
       font-style: italic; }
+
+.signup-form-body {
+  position: relative;
+  padding: 2rem;
+  margin: -37vh auto 100px auto;
+  font-size: 1rem;
+  line-height: 1.6em;
+  background-color: #efbe01; }
+  .signup-form-body h2, .signup-form-body h1, .signup-form-body .gform_wrapper h1 {
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: bold !important; }
+  .signup-form-body h3 {
+    margin-bottom: 19px; }
+  .signup-form-body h4 {
+    margin-bottom: 18px; }
+  .signup-form-body h5 {
+    font-size: 1rem; }
+  .signup-form-body p {
+    margin-bottom: 15px; }
+  .signup-form-body hr {
+    color: #222 !important;
+    border: none; }
+  .signup-form-body .form-confirm-step {
+    width: 100%;
+    text-align: center; }
+    .signup-form-body .form-confirm-step p {
+      margin-bottom: 0; }
+      .signup-form-body .form-confirm-step p a {
+        color: #f46b2c; }
+    .signup-form-body .form-confirm-step .confirm-step-btn {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 0 1rem 0;
+      padding: 0.85em 1em;
+      border: 1px solid transparent;
+      border-radius: 0;
+      -webkit-transition: background-color 0.25s ease-out, color 0.25s ease-out;
+      transition: background-color 0.25s ease-out, color 0.25s ease-out;
+      font-family: inherit;
+      font-size: 0.9rem;
+      -webkit-appearance: none;
+      line-height: 1;
+      text-align: center;
+      cursor: pointer;
+      background-color: #27a635;
+      color: #fefefe; }
+      [data-whatinput='mouse'] .signup-form-body .form-confirm-step .confirm-step-btn {
+        outline: 0; }
+      .signup-form-body .form-confirm-step .confirm-step-btn:hover, .signup-form-body .form-confirm-step .confirm-step-btn:focus {
+        background-color: #2cbb3c;
+        color: #fefefe; }
+
+.cc-btn {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0 1rem 0;
+  padding: 0.85em 1em;
+  border: 1px solid transparent;
+  border-radius: 0;
+  -webkit-transition: background-color 0.25s ease-out, color 0.25s ease-out;
+  transition: background-color 0.25s ease-out, color 0.25s ease-out;
+  font-family: inherit;
+  font-size: 0.9rem;
+  -webkit-appearance: none;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  background-color: #27a635;
+  color: #fefefe; }
+  [data-whatinput='mouse'] .cc-btn {
+    outline: 0; }
+  .cc-btn:hover, .cc-btn:focus {
+    background-color: #2cbb3c;
+    color: #fefefe; }
+
+.display-details {
+  text-decoration: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: .5rem;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #cea500;
+  color: #FFF;
+  -webkit-transition: all .5s ease;
+  transition: all .5s ease; }
+  .display-details.opened {
+    color: #fefefe; }
+    .display-details.opened .dashicons {
+      -webkit-transform: rotate(-180deg);
+          -ms-transform: rotate(-180deg);
+              transform: rotate(-180deg); }
+  .display-details .dashicons {
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease; }
+  .display-details:hover {
+    background-color: #e6b800; }

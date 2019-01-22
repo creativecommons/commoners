@@ -37,7 +37,6 @@ add_action( 'widgets_init', 'cc_commoners_widgets', 11 );
 function cc_commoners_theme_scripts () {
     $style_version = '2.0.5';
     $script_version = '1.0.1';
-
     wp_enqueue_script(
         'swiper',
         get_theme_file_uri( '/assets/js/swiper.js' ),
