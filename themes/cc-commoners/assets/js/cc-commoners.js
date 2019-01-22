@@ -155,4 +155,33 @@ jQuery(document).ready(function($){
         getUserPublicUrl(selectedValue, profileUrlId);
     });
     $('.input-disable').find('input[type="text"]').attr('disabled', 'disabled');
+
+    //Mobile menu
+    var lastScroll = 0;
+    $(window).scroll(function () {
+        var st = $(window).scrollTop();
+        if ($('body').hasClass('admin-bar')) {
+            if ((st > 10) && (st > lastScroll)) {
+                $('.mobile-header').css({ top: 0 });
+                $('.menu-mobile-container').css({ top: -42 });
+            } else {
+                //arriba
+                if (st < 45) {
+                    $('.mobile-header').css({ top: 45 });
+                    $('.menu-mobile-container').css({ top: 4 });
+                }
+            }
+        }
+        lastScroll = st;
+    });
+    $('.open-mobile-menu').on('click', function (e) {
+        e.preventDefault();
+        $('.menu-mobile-container').toggleClass('hide');
+        return false;
+    });
+    $('.menu-mobile-container').find('.close').on('click', function (e) {
+        e.preventDefault();
+        $(this).parent().addClass('hide');
+        return false;
+    });
 });

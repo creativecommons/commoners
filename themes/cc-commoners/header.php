@@ -36,10 +36,39 @@
 
   <body <?php body_class(); ?> >
 
-
-    <header class="site-header" >
+    <header class="mobile-header show-for-small-only">
         <div class="grid-container">
-            <div class="cell grid-x grid-padding-x align-center">
+            <div class="grid-x align-justify">
+                <div class="cell small-5">
+                    <a href="<?php echo site_url(); ?>" class="logo"><h1>CC Network</h1></a>
+                </div>
+                <div class="cell small-3 mobile-buttons">
+                    <a href="#" class="open-mobile-menu"><span class="dashicons dashicons-menu"></span></a>
+                    <a href="#" class="open-mobile-search"><span class="dashicons dashicons-search"></span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="menu-mobile-container hide">
+        <a class="close" href="#">
+            <button class="close-button" aria-label="Close alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </a>
+        <?php 
+        $args = array(
+            'theme_location' => 'top',
+            'container' => '',
+            'depth' => 1,
+            'items_wrap' => '<ul id = "%1$s" class = "menu vertical %2$s">%3$s</ul>'
+        );
+
+        wp_nav_menu($args);
+        ?>
+    </div>
+    <header class="site-header hide-for-small-only" >
+        <div class="grid-container">
+            <div class="grid-x grid-padding-x align-center">
                 <div class="cell small-3">
                     <a href="<?php echo site_url(); ?>" class="logo"><h1>CC Network</h1></a>
                 </div>

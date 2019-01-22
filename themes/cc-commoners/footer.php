@@ -7,10 +7,10 @@
     <div class="footer-content">
     <div class="grid-container">
         <div class="grid-x grid-padding-x align-justify">
-            <div class="large-4 cell">
+            <div class="large-4 small-12 cell">
                 <a href="/" class="logo"><span>CC Network</span></a>
             </div>
-            <div class="large-5 cell">
+            <div class="large-5 small-12 cell">
                 <div class="footer-text-block">
                     <div class="license-icons">
                         <a rel="license" href="https://creativecommons.org/licenses/by/4.0/" title="Creative Commons Attribution 4.0 International license">
