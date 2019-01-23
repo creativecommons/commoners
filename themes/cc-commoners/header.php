@@ -55,16 +55,18 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </a>
+        <nav class="mobile-navigation">
         <?php 
-        $args = array(
-            'theme_location' => 'top',
-            'container' => '',
-            'depth' => 1,
-            'items_wrap' => '<ul id = "%1$s" class = "menu vertical %2$s">%3$s</ul>'
-        );
+            $args = array(
+                'theme_location' => 'top',
+                'container' => '',
+                'depth' => 1,
+                'items_wrap' => '<ul id = "%1$s" class = "menu vertical %2$s">%3$s</ul>'
+            );
 
-        wp_nav_menu($args);
-        ?>
+            wp_nav_menu($args);
+            ?>
+        </nav>
     </div>
     <header class="site-header hide-for-small-only" >
         <div class="grid-container">
@@ -153,4 +155,4 @@
 
 
     <!-- this 'push-page-body' class will be remove when all templating structure will be defined  -->
-    <div class="page-body <?php if( is_front_page() || is_page( array(4, 104, 121, 124) ) ){ echo ' push-page-body'; } ?>">
+    <div class="page-body <?php if( is_front_page() || is_page( array(4, 121, 124) ) ){ echo ' push-page-body'; } ?>">

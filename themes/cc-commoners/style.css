@@ -13,62 +13,6 @@ Template: twentyseventeen
 */
 
 
-@media all and (max-width: 600px) {
-	
-	.main-nav {
-		font-size: 0.8rem;
-	}
-	
-}
-
-
-@media all and (max-width: 600px) {
-	
-	.header-search input[type="text"] {
-		width: 0;
-		opacity: 0;
-	}
-	
-}
-
-
-body.page-template-page-sidebar-php .page-body, body.page-template-hub-page-php .page-body, body.my-profile .page-body {
-	padding-top: 158px;
-}
-
-body.my-profile .page-body .signup-form-body {
-	margin-top: 0;
-}
-
-/*
-.admin-bar .page-body {
-    padding-top: 100px;
-}
-*/
-
-@media all and (max-width: 600px) {
-	
-	.page-body {
-		max-width: 100%;
-		width: 100%;
-		overflow: hidden;
-	}
-	
-}
-
-
-@media all and (max-width: 600px) {
-
-	.container-top-message {
-		padding: 40px 35px;
-	}
-	
-	.top-message {
-		max-width: 100%;
-	}
-	
-}
-
 .form-top-text {
 	column-count: 2;
 	column-gap: 40px;

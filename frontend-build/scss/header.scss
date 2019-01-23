@@ -100,7 +100,7 @@
     }
 }
 .menu-mobile-container {
-	margin-top: 3.8rem;
+	margin-top: 3.6rem;
     @include coverer;
     position: fixed;
     z-index: 9999;
@@ -114,6 +114,9 @@
         .dashicons {
             font-size: 2rem;
         }
+    }
+    .mobile-navigation {
+        padding-right: 4rem;
     }
     .is-drilldown {
     	margin-top: 1rem;

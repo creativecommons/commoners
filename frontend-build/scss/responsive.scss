@@ -5,16 +5,55 @@
             padding-top: 2.9rem;
         }
     }
+    .page-template-template-form {
+        .page-body {
+            .signup-form-body {
+                margin-top: 3rem;
+            }
+        }
+    }
     .page-body {
+        .space-top {
+            padding-top: 5rem;
+        }
         .container-top-message {
             text-align: center;
         }
+        .hub-quote-block {
+            text-align: center;
+        }
+        .inner-section-title {
+            margin-top: 3.7rem;
+        }
+        .entry-content {
+            margin-top: 2rem;
+        }
+        .signup-form-body {
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .preview-details {
+                tr {
+                    display: flex;
+                    flex-direction: column;
+                    td {
+                        width: 80%;
+                        word-wrap: break-word;
+                        font-size: .9rem;
+                    }
+                }
+            }
+        }
     }
     .main-slideshow {
+        margin-bottom: .6rem;
         .swiper-slide {
             .slide-caption {
                 position: static;
-                width: 96%;
+                width: auto;
                 padding: 1rem;
                 padding-bottom: 4rem;
                 .slide-caption-btn {
@@ -43,6 +82,44 @@
             .menu-bottom-container {
                 .menu {
                     @include menu-align(center);
+                }
+            }
+        }
+    }
+    .gform_wrapper {
+        .gform_body {
+            .gfield {
+                .gfield_label {
+                    display: block;
+                    text-align: center;
+                }
+                .ginput_container_radio {
+                    .gfield_radio {
+                        input[type=radio] {
+                            width: 25px !important;
+                            height: 23px !important;
+                            &:after {
+                                top: -.01rem;   
+                            }
+                        }
+                    }
+                }
+                .ginput_container {
+                    .voucher_profile_link {
+                        display: block;
+                        padding: 1rem 0;
+                        text-align: center;
+                    }
+                }
+                &.gfield_html {
+                    text-align: center;
+                    h1 { font-size: 1.7rem; }
+                    h2 { font-size: 1.3rem; }
+                    ul {
+                        li {
+                            text-align: left;
+                        }
+                    }
                 }
             }
         }

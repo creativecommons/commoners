@@ -20,7 +20,7 @@ get_header(); ?>
 	?>
 
 
-<div class="grid-container">
+<div class="grid-container space-top">
 	<div class="grid-x">
 		<div class="cell large-12">
 			<figure class="main-slideshow">

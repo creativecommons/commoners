@@ -11,11 +11,11 @@ $step[1] = ($application_status['step']['step'] == 1) ? $application_status['ste
 $step[2] = ($application_status['step']['step'] == 2) ? $application_status['step']['class'] : '';
 $step[3] = ($application_status['step']['step'] == 3) ? $application_status['step']['class'] : '';
 ?>
-<section class="main-content top-space">
+<section class="main-content space-top">
     <div class="grid-container">
         <div class="grid-x grid-padding-x inner-space">
             <div class="cell large-12">
-                <div class="page-header">
+                <div class="entry-header">
                     <h1 class="entry-title"><?php the_title() ?></h1>
                 </div>
                 <div class="entry-content">
