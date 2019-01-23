@@ -4511,7 +4511,9 @@ table.ccgn-profile {
   .page-body .hub-quote-block {
     text-align: center; }
   .page-body .inner-section-title {
-    margin-top: 3.7rem; }
+    margin-top: 0; }
+    .page-body .inner-section-title .grid-content {
+      margin-top: 3.7rem; }
   .page-body .entry-content {
     margin-top: 2rem; }
   .page-body .signup-form-body h1 {
