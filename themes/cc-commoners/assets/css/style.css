@@ -3885,31 +3885,45 @@ a.thumbnail {
   position: relative;
   width: 60%;
   margin: 2rem auto; }
-  .page-body .main-content .search-form .search-field {
-    padding: .5rem;
-    border: 0;
-    border-bottom: 1px solid #C0C0C0;
-    font-size: 1.2rem; }
-    .page-body .main-content .search-form .search-field.placeholder {
-      color: #BABABA;
-      font-style: italic; }
-    .page-body .main-content .search-form .search-field:-moz-placeholder {
-      color: #BABABA;
-      font-style: italic; }
-    .page-body .main-content .search-form .search-field::-moz-placeholder {
-      color: #BABABA;
-      font-style: italic; }
-    .page-body .main-content .search-form .search-field:-ms-input-placeholder {
-      color: #BABABA;
-      font-style: italic; }
-    .page-body .main-content .search-form .search-field::-webkit-input-placeholder {
-      color: #BABABA;
-      font-style: italic; }
-  .page-body .main-content .search-form .search-submit {
-    position: absolute;
-    right: 2rem;
-    top: .3rem;
-    background-color: transparent; }
+  .page-body .main-content .search-form .header-search {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 60%;
+    margin: auto; }
+    .page-body .main-content .search-form .header-search .search-field {
+      padding: .5rem;
+      height: 4rem;
+      border: 0;
+      border-bottom: 1px solid #C0C0C0;
+      font-size: 1.2rem;
+      -webkit-box-shadow: none;
+              box-shadow: none; }
+      .page-body .main-content .search-form .header-search .search-field.placeholder {
+        color: #BABABA;
+        font-style: italic; }
+      .page-body .main-content .search-form .header-search .search-field:-moz-placeholder {
+        color: #BABABA;
+        font-style: italic; }
+      .page-body .main-content .search-form .header-search .search-field::-moz-placeholder {
+        color: #BABABA;
+        font-style: italic; }
+      .page-body .main-content .search-form .header-search .search-field:-ms-input-placeholder {
+        color: #BABABA;
+        font-style: italic; }
+      .page-body .main-content .search-form .header-search .search-field::-webkit-input-placeholder {
+        color: #BABABA;
+        font-style: italic; }
+    .page-body .main-content .search-form .header-search .fa-search {
+      font-size: 2rem;
+      -ms-flex-item-align: center;
+          align-self: center; }
+    .page-body .main-content .search-form .header-search .search-submit {
+      position: absolute;
+      right: 2rem;
+      top: .3rem;
+      font-size: 3rem;
+      background-color: transparent; }
 
 .page-template-default .page-body .signup-form-body {
   margin-top: 0; }
@@ -4581,4 +4595,48 @@ table.ccgn-profile {
     .gform_wrapper .gform_body .gfield.gfield_html h2 {
       font-size: 1.3rem; }
     .gform_wrapper .gform_body .gfield.gfield_html ul li {
-      text-align: left; } }
+      text-align: left; }
+  .error404 .main-content .entry-title {
+    font-size: 3rem;
+    strong: 5rem; }
+  .error404 .main-content .std-text .subtitle {
+    font-size: 1.5rem; }
+  .error404 .main-content .search-form .header-search {
+    width: 90%; }
+  .members-meta {
+    width: 100%;
+    text-align: center; }
+  #buddypress .pagination .pag-count {
+    width: 100%;
+    text-align: center; }
+  #buddypress .pagination .pagination-links {
+    width: 100%;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 1.2rem; }
+  #buddypress .item-list li .item .item-meta {
+    text-align: center; }
+  .xprofile #buddypress #item-header {
+    margin-bottom: 1rem; }
+  .xprofile #buddypress .item-list-tabs a {
+    color: #35bbd8; }
+  .xprofile #buddypress .profile-fields tr {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    border-bottom: 1px solid #fecb06; }
+    .xprofile #buddypress .profile-fields tr .label {
+      width: 100%;
+      text-align: center;
+      border-right: 0;
+      color: #0a0a0a !important; }
+    .xprofile #buddypress .profile-fields tr .data {
+      text-align: center; }
+    .xprofile #buddypress .profile-fields tr.alt td {
+      background: transparent; }
+  .xprofile #buddypress .wp-profile-fields tr .label {
+    width: 95%; } }

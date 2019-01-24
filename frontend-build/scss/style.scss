@@ -71,24 +71,37 @@
     }
     .main-content {
         .search-form {
+            
             position: relative;
             width: 60%;
             margin: 2rem auto;
-            .search-field {
-                padding: .5rem;
-                border: 0;
-                border-bottom: 1px solid #C0C0C0;
-                font-size: 1.2rem;
-                @include placeholder {
-                    color: #BABABA;
-                    font-style: italic;
+            .header-search {
+                display: flex;
+                width: 60%;
+                margin: auto;
+                .search-field {
+                    padding: .5rem;
+                    height: 4rem;
+                    border: 0;
+                    border-bottom: 1px solid #C0C0C0;
+                    font-size: 1.2rem;
+                    box-shadow: none;
+                    @include placeholder {
+                        color: #BABABA;
+                        font-style: italic;
+                    }
                 }
-            }
-            .search-submit {
-                position: absolute;
-                right: 2rem;
-                top: .3rem;
-                background-color: transparent;
+                .fa-search {
+                    font-size: 2rem;
+                    @include flex-align-self(center);
+                }
+                .search-submit {
+                    position: absolute;
+                    right: 2rem;
+                    top: .3rem;
+                    font-size: 3rem;
+                    background-color: transparent;
+                }
             }
         }
     }

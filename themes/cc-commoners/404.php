@@ -1,5 +1,5 @@
 <?php get_header(); ?>
-<section class="main-content top-space">
+<section class="main-content space-top">
     <div class="grid-content">
         <div class="grid-x grid-padding-x">
             <div class="cell large-12 text-center">
