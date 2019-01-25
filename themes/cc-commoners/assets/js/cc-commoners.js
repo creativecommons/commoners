@@ -179,9 +179,19 @@ jQuery(document).ready(function($){
         $('.menu-mobile-container').toggleClass('hide');
         return false;
     });
+    $('.open-mobile-search').on('click', function(e){
+        e.preventDefault();
+        $('.search-mobile-container').toggleClass('open');
+        return false;
+    })
     $('.menu-mobile-container').find('.close').on('click', function (e) {
         e.preventDefault();
         $(this).parent().addClass('hide');
+        return false;
+    });
+    $('.search-mobile-container').find('.close').on('click', function (e) {
+        e.preventDefault();
+        $('.search-mobile-container').removeClass('open');
         return false;
     });
 });

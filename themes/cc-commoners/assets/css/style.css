@@ -4513,6 +4513,45 @@ table.ccgn-profile {
     font-size: 1.1rem;
     font-weight: bold; }
 
+.search-mobile-container {
+  position: fixed;
+  width: 100%;
+  top: -3rem;
+  padding: 2rem 1rem 1rem 1rem;
+  background-color: #efbe01;
+  -webkit-transition: all .5s ease-in-out;
+  transition: all .5s ease-in-out;
+  opacity: 0; }
+  .search-mobile-container .search-form {
+    position: relative;
+    margin-top: .5rem; }
+    .search-mobile-container .search-form .search-field {
+      height: 3rem;
+      padding: .5rem;
+      background-color: #fefefe;
+      border: 0;
+      border-bottom: 1px solid #0a0a0a;
+      -webkit-box-shadow: none;
+              box-shadow: none; }
+      .search-mobile-container .search-form .search-field.placeholder {
+        color: #8a8a8a; }
+      .search-mobile-container .search-form .search-field:-moz-placeholder {
+        color: #8a8a8a; }
+      .search-mobile-container .search-form .search-field::-moz-placeholder {
+        color: #8a8a8a; }
+      .search-mobile-container .search-form .search-field:-ms-input-placeholder {
+        color: #8a8a8a; }
+      .search-mobile-container .search-form .search-field::-webkit-input-placeholder {
+        color: #8a8a8a; }
+    .search-mobile-container .search-form .fa-search {
+      position: absolute;
+      right: .5rem;
+      top: .5rem;
+      font-size: 1.5rem; }
+  .search-mobile-container.open {
+    top: 3.5rem;
+    opacity: 1; }
+
 @media screen and (max-width: 39.99875em) {
   .home .page-body {
     padding-top: 2.9rem; }

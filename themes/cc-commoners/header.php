@@ -68,6 +68,14 @@
             ?>
         </nav>
     </div>
+    <div class="search-mobile-container">
+        <a class="close" href="#">
+            <button class="close-button search" aria-label="Close alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </a>
+        <?php get_search_form(); ?>
+    </div>
     <header class="site-header hide-for-small-only" >
         <div class="grid-container">
             <div class="grid-x grid-padding-x align-center">

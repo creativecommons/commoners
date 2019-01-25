@@ -424,3 +424,37 @@ table.ccgn-profile {
         }
     }
 }
+.search-mobile-container {
+    position: fixed;
+    width: 100%;
+    top: -3rem;
+    padding: 2rem 1rem 1rem 1rem;
+    background-color: $primary-color;
+    transition: all .5s ease-in-out;
+    opacity: 0;
+    .search-form {
+        position: relative;
+        margin-top: .5rem;
+        .search-field {
+            height: 3rem;
+            padding: .5rem;
+            background-color: $white;
+            border: 0;
+            border-bottom: 1px solid $black;
+            box-shadow: none;
+            @include placeholder {
+                color: $dark-gray;
+            }
+        }
+        .fa-search {
+            position: absolute;
+            right: .5rem;
+            top: .5rem;
+            font-size: 1.5rem;
+        }
+    }
+    &.open {
+        top: 3.5rem;
+        opacity: 1;
+    }
+}
