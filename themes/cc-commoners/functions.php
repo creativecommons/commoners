@@ -127,3 +127,16 @@ function remove_admin_bar()
         show_admin_bar(false);
     }
 }
+/*
+    Filter gravityforms countries list to show them with country code
+ */
+add_filter('gform_countries', function ($countries) {
+    $new_countries = array();
+
+    foreach ($countries as $country) {
+        $code = GF_Fields::get('address')->get_country_code($country);
+        $new_countries[$code] = $country;
+    }
+
+    return $new_countries;
+});

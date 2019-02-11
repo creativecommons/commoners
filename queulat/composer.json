@@ -1,0 +1,10 @@
+{
+    "require": {
+        "felipelavinz/queulat": "dev-master"
+    },
+	"extra" : {
+		"installer-paths" : {
+			"../../html/wp-content/mu-plugins/{$name}" : ["type:wordpress-muplugin"]
+		}
+	}
+}
