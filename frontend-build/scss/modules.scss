@@ -23,6 +23,10 @@
             z-index: 1;
             font-family: $font-alt;
             background-color: $primary-color;
+            &.caption-hub {
+                background-color: $alert-color;
+                color: $white;
+            }
             h3 {
                 font-weight: bold;
                 font-family: $font-alt;
@@ -456,5 +460,152 @@ table.ccgn-profile {
     &.open {
         top: 3.5rem;
         opacity: 1;
+    }
+}
+
+.directory {
+    &.members {
+        .item-list-tabs {
+            display: none;
+        }
+    }
+    li {
+        &:before {
+            content: none !important;
+        }
+    }
+}
+.block-area {
+    .entry-content {
+        min-height: 20rem;
+    }
+}
+.cc-content-area {
+    .block-area {
+        padding-top: 3rem;
+        .entry-content {
+            min-height: 60vh !important;
+            &.not-login {
+                margin-top: 10rem;
+            }
+            ul {
+                padding-left: 1.5rem;
+                margin-top: .5rem;
+                margin-bottom: .5rem;
+                margin-left: 1rem;
+                &.user-list {
+                    margin: 1rem 0 2rem;
+                    -webkit-columns: 2;
+                    -moz-columns: 2;
+                    columns: 2;
+                    -webkit-column-gap: 2rem;
+                    -moz-column-gap: 2rem;
+                    column-gap: 2rem;
+                    list-style-type: none;
+                    li {
+                        padding: .8rem 1rem;
+                        border-bottom: 1px solid #f1f1f1;
+                    }
+                }
+                &.link-list {
+                    margin: 0;
+                    padding: 0;
+                    border-top: 1px solid #f1f1f1;
+                    border-bottom: 1px solid #f1f1f1;
+                    list-style-type: none;
+                    li {
+                        padding: .5rem;
+                        a {
+                            text-decoration: none;
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+            }
+            h1, h2, h3, h4, h5, h6 {
+                margin: 1rem 0;
+            }
+        }
+    }
+}
+.entry-content p {
+    margin: 1.2rem 0;
+    line-height: 1.8rem;
+}
+.entry-ask-request {
+    padding: 1rem;
+    border: 2px solid #ececec;
+    text-align: center;
+    .subtitle {
+        text-transform: uppercase;
+        font-size: .9rem;
+        color: #8a8a8a;
+    }
+    h5 {
+        margin: .5rem 0;
+        font-size: 1.3rem;
+    }
+    .button {
+        display: block;
+        margin-top: 1rem;
+        font-size: .9rem;
+        color: white;
+    }
+    #clarification_voucher {
+        padding: .5rem;
+        width: 100%;
+        border: 1px solid #BABABA;
+    }
+}
+.voucher_profile_link {
+    margin-left: 1rem;
+    font-size: .9rem;
+}
+.page-template-template-user-status {
+    .application-status {
+        position: relative;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-top: 1px solid #ececec;
+        border-bottom: 1px solid #ececec;
+        small {
+            font-style: italic;
+        }
+        .title {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+    }
+    .button {
+        padding: 8px 15px;
+        color: white;
+        background-color: #27a635;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        &.yellow {
+            background-color: #efbe01;
+            color: black;
+            font-weight: normal;
+            text-transform: none;
+            &:hover {
+                background-color: #d3a900;
+            }
+        }
+        &.top-right {
+            position: absolute;
+            right: 0;
+            top: 28%;
+        }
+    }
+}
+.votation-content {
+    min-height: 20rem;
+}
+#cc_worldmap {
+    .active {
+        fill: $success-color;
     }
 }

@@ -1,4 +1,10 @@
 // General styles
+
+body:not(.page-template-page-faqs) {
+    .item-content {
+        display: block;
+    }
+}
 .page-body {
     .space-top {
         padding-top: 12rem;
@@ -10,6 +16,7 @@
             color: $white;
             h2 {
                 font-weight: 900;
+                font-size: 1.5rem;
             }
             .to-r {
                 font-size: 0.9rem;
@@ -28,6 +35,10 @@
             a {
                 color: $secondary-color;
                 font-weight: bold;
+                &.more-link {
+                    font-weight: normal;
+                    font-size: .9rem;
+                }
             }
             h1, h2, h3, h4, h5, h6 {
                 font-family: $font-alt;
@@ -51,6 +62,35 @@
                 }
                 .item-content {
                     font-size: .9rem;
+                    display: none;
+                }
+            }
+            .search-result {
+                padding: 2rem 0;
+                border-bottom: 1px solid $light-gray;
+                .entry-title {
+                    font-size: 1.3rem;
+                    &:hover {
+                        color: $primary-color;
+                    }
+                }
+                .link-more {
+                    .more-link {
+                        .screen-reader-text {
+                            position: relative;
+                            padding-left: 1rem;
+                            &:before {
+                                content: "\f345";
+                                font-family: dashicons;
+                                position: absolute;
+                                left: .2rem;
+                                top: -.1rem;
+                            }
+                        }
+                        &:hover {
+                            color: $dark-gray;
+                        }
+                    }
                 }
             }
         }

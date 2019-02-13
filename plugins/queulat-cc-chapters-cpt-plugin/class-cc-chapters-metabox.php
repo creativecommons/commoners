@@ -74,6 +74,28 @@ class Chapters_Metabox extends Metabox
     {
         return [
             Node_Factory::make(
+                Select::class,
+                [
+                    'name' => 'chapter_status',
+                    'label' => 'Chapter Status',
+                    'attributes' => [
+                        'class' => 'widefat'
+                    ],
+                    'properties' => [
+                        'description' => 'Choose the Status of the current chapter',
+                    ],
+                    'options' => (function () {
+                        $status = array(
+                            '' => 'Choose',
+                            'active' => 'Active',
+                            'inactive' => 'Inactive',
+                            'in-progress' => 'In Progress'
+                        );
+                            return $status;
+                    })()
+                ]
+            ),
+            Node_Factory::make(
                 Input::class,
                 [
                     'name' => 'date',
@@ -252,6 +274,9 @@ class Chapters_Metabox extends Metabox
                 case 'meeting_url':
                     $sanitized[$key] = esc_url_raw($val);
                     break;
+                case 'chapter_status':
+                    $sanitized[$key] = $val;
+                break;
             }
         }
         return $sanitized;

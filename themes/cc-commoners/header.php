@@ -106,35 +106,6 @@
 
 <?php if( is_page(array(24, 26, 63, 65, 55)) ) { ?>
 
-      <!--
-        <div class="container-top-message">
-          
-          <div class="top-message form-top-text">
-            
-            <p>If you would like to join the Creative Commons Global Network as an individual human being, here’s where you can do so.
-            <br>
-            <br>
-            To join the Creative Commons Global network you will need:
-            - A CCID login account. If you don’t have one don’t worry, it only takes a minute to <a href="#signup-now">sign up here</a>.
-            <br>
-            Two people who are already part of the network and know you well enough to vouch for you. You can find them on this site.
-            <br>
-            - A name that people know you by. This doesn’t have to be the name on your birth certificate but should be one that you are known by in the community.
-            <br>
-            Once you have completed the sign-up process:
-            <br>
-            <br>
-            You will have agreed to and be bound by the Global Network Code of Conduct and the usage policy for this site.
-            <br>
-            Your application will have been viewed by the people you have nominated to vouch for you, and by the Global Council.
-            <br>
-            Your photograph, username, and the social media account names you provide during sign-up will be published and publicly visible on this site.</p>
-            
-          </div>
-          
-        </div>
-      -->
-
       <div class="signup-bg">
           <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/bg-form-page.jpg">
       </div>
@@ -142,7 +113,7 @@
     <?php } ?>
 
 
-<?php if( is_page( array(132, 134, 136) ) || is_page_template('page-platform.php') || is_page_template('page-chapter.php') || is_search() ){ ?>
+<?php if( is_page( array(132, 134, 136) ) || is_page_template('page-platform.php') || is_page_template('page-chapter.php') ){ ?>
 
       <?php
 

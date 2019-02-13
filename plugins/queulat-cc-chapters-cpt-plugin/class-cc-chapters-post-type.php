@@ -68,7 +68,7 @@ class Cc_Chapters_Post_Type extends Post_Type {
 				'with_front' => true,
 				'feeds'      => true,
 				'pages'      => true,
-				'slug'       => 'cc_chapters',
+				'slug'       => 'chapter',
 				'ep_mask'    => 1,
 			],
 			'supports'              => [

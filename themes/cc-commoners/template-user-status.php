@@ -23,7 +23,7 @@ $step[3] = ($application_status['step']['step'] == 3) ? $application_status['ste
                     <div class="user-status-container">
                         <?php if ($logged_in): ?>
                            
-                            <div class="grid-x grid-padding-x large-up-3">
+                            <div class="grid-x grid-padding-x large-up-3 medium-up-3 small-up-1">
                                 <div class="cell">
                                     <article class="entry-status <?php echo $step[1] ?>">
                                         <span class="icon"><span class="dashicons dashicons-universal-access-alt"></span></span>

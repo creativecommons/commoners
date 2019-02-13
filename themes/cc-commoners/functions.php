@@ -5,6 +5,11 @@ show_admin_bar(false);
 // disable the admin bar
 add_filter('show_admin_bar', '__return_false');
 
+/*
+    Require related files
+*/
+include STYLESHEETPATH.'/inc/site.php';
+
 function cc_commoners_theme_setup () {
     register_nav_menus(
         array(
@@ -56,7 +61,16 @@ function cc_commoners_theme_scripts () {
         'url' => admin_url('admin-ajax.php') //only if we need to use ajax
     );
     wp_localize_script( 'cc-commoners', 'Ajax', $ajax_data );
-    
+    if (is_post_type_archive('cc_chapters')) {
+        wp_enqueue_script(
+            'cc-commoners-chapters',
+            get_theme_file_uri('/assets/js/cc-commoners-chapters.js'),
+            array(),
+            $script_version,
+            true
+        );
+        wp_localize_script('cc-commoners-chapters', 'Ajax', $ajax_data);
+    }
     wp_enqueue_style('dashicons');
     $parent_style = 'twentyseventeen-style';
     wp_enqueue_style(
@@ -81,12 +95,6 @@ function cc_commoners_theme_scripts () {
         'style-base',
         get_theme_file_uri('/assets/css/style.css'),
         array('cc-commoners'),
-        $style_version
-    );
-wp_enqueue_style(
-        'cc-commoners-style-extra',
-        get_theme_file_uri( '/assets/css/extra.css' ),
-        array( 'cc-commoners' ),
         $style_version
     );
 
