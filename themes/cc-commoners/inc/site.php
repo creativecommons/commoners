@@ -17,6 +17,7 @@ class Commoners {
                 $single_chapter = [];
                 $single_chapter['name'] = $post->post_title;
                 $single_chapter['date'] = $post->cc_chapters_date;
+                $single_chapter['email'] = $post->cc_chapters_email;
                 $single_chapter['chapter_lead'] = get_user_by('id', $post->cc_chapters_chapter_lead)->display_name;
                 $single_chapter['member_gnc'] = get_user_by('id', $post->cc_chapters_member_gnc)->display_name;
                 $single_chapter['country_code'] = $post->cc_chapters_chapter_country;

@@ -4757,8 +4757,37 @@ table.ccgn-profile {
 .votation-content {
   min-height: 20rem; }
 
-#cc_worldmap .active {
+.world-map #cc_worldmap .active {
   fill: #27a635; }
+
+.world-map #world-map-info {
+  display: none;
+  position: absolute;
+  padding: 1rem;
+  min-width: 22rem;
+  top: 0;
+  background-color: #fefefe;
+  -webkit-box-shadow: 1px 1px 4px rgba(10, 10, 10, 0.3);
+          box-shadow: 1px 1px 4px rgba(10, 10, 10, 0.3); }
+  .world-map #world-map-info .chapter-title {
+    margin-bottom: 0;
+    font-weight: bold;
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 1.8rem; }
+  .world-map #world-map-info .chapter-line {
+    margin-top: 0;
+    margin-bottom: .2rem;
+    font-size: .9rem;
+    color: #8a8a8a;
+    font-style: italic; }
+  .world-map #world-map-info .chapter-buttons {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    text-align: center; }
+    .world-map #world-map-info .chapter-buttons .button {
+      color: #fefefe; }
+      .world-map #world-map-info .chapter-buttons .button:hover {
+        background: #ffbe33; }
 
 @media screen and (max-width: 39.99875em) {
   .home .page-body {

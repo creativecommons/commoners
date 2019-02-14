@@ -604,8 +604,62 @@ table.ccgn-profile {
 .votation-content {
     min-height: 20rem;
 }
-#cc_worldmap {
-    .active {
-        fill: $success-color;
+.world-map {
+    // position: relative;
+    #cc_worldmap {
+        .active {
+            fill: $success-color;
+        }
+    }
+    #world-map-info {
+        display: none;
+        position: absolute;
+        padding: 1rem;
+        min-width: 22rem;
+        top: 0;
+        background-color: $white;
+        box-shadow: 1px 1px 4px rgba($black,.3);
+        .chapter-title {
+            margin-bottom: 0;
+            font-weight: bold;
+            font-family: $font-alt;
+            font-size: 1.8rem;
+        }
+        .chapter-line {
+            margin-top: 0;
+            margin-bottom: .2rem;
+            font-size: .9rem;
+            color: $dark-gray;
+            font-style: italic;
+        }
+        .chapter-buttons {
+            margin-top: 1.5rem;
+            margin-bottom: 0;
+            text-align: center;
+            .button {
+                color: $white;
+                &:hover {
+                    background: lighten($warning-color, 10);
+                }
+            }
+        }
+        // &:after {
+        //     content: '';
+        //     position: absolute;
+        //     width: 0;
+        //     height: 0;
+        //     margin-left: -0.5em;
+        //     bottom: -2em;
+        //     left: 45%;
+        //     box-sizing: border-box;
+            
+        //     border: 1em solid black;
+        //     border-color: transparent transparent $white $white;
+            
+        //     transform-origin: 0 0;
+        //     transform: rotate(-45deg);
+            
+        //     box-shadow: -3px 3px 3px 0 rgba(0, 0, 0, 0.4);
+        // }
     }
 }
