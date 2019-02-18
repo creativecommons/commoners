@@ -62,6 +62,14 @@ function cc_commoners_theme_scripts () {
     );
     wp_localize_script( 'cc-commoners', 'Ajax', $ajax_data );
     if (is_post_type_archive('cc_chapters')) {
+        
+        wp_enqueue_script(
+            'cc-theme-datatable',
+            get_stylesheet_directory_uri() . '/assets/js/datatables.min.js',
+            array(),
+            $script_version,
+            true
+        );
         wp_enqueue_script(
             'cc-commoners-chapters',
             get_theme_file_uri('/assets/js/cc-commoners-chapters.js'),
@@ -70,6 +78,12 @@ function cc_commoners_theme_scripts () {
             true
         );
         wp_localize_script('cc-commoners-chapters', 'Ajax', $ajax_data);
+        wp_enqueue_style(
+            'cc-datatables-styles',
+            get_stylesheet_directory_uri() . '/assets/css/datatables.css',
+            array(),
+            wp_get_theme()->get('Version')
+        );
     }
     wp_enqueue_style('dashicons');
     $parent_style = 'twentyseventeen-style';

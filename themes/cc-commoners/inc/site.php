@@ -30,6 +30,23 @@ class Commoners {
         return wp_send_json($results);
         wp_die();
     }
+    public static function get_chapters($status='active') {
+        $params = array(
+            'post_type' => 'cc_chapters',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'meta_key' => 'cc_chapters_chapter_status',
+            'meta_value' => $status
+        );
+        $query = new WP_Query($params);
+        if ($query->have_posts()) {
+            return $query->posts;
+        } else {
+            return null;
+        }
+
+    }
 }
 //add_action("wp_ajax_event-chapters__get_countries", Commoners::get_chapters_by_status());
 add_action('wp_ajax_event-get-chapters',array('Commoners','get_chapters_by_status'));
+add_action('wp_ajax_nopriv_event-get-chapters', array('Commoners', 'get_chapters_by_status'));

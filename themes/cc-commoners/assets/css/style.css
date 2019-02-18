@@ -3657,6 +3657,12 @@ a.thumbnail {
   padding-top: 2rem;
   padding-bottom: 2rem; }
 
+.button.gray {
+  background-color: #cacaca;
+  color: #fefefe; }
+  .button.gray:hover {
+    background-color: #e4e4e4; }
+
 .site-header {
   position: fixed;
   top: 0;
@@ -4757,8 +4763,41 @@ table.ccgn-profile {
 .votation-content {
   min-height: 20rem; }
 
+.view-content {
+  display: none; }
+  .view-content.active {
+    display: block; }
+  .view-content #chapters-table {
+    width: 100% !important; }
+
+.view-switch .grid-x {
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6; }
+  .view-switch .grid-x .title {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    font-family: "Roboto Condensed", sans-serif;
+    text-transform: uppercase;
+    font-size: .9rem; }
+  .view-switch .grid-x .buttons .button {
+    margin-bottom: 0; }
+    .view-switch .grid-x .buttons .button.active {
+      background-color: #35bbd8;
+      color: #fefefe; }
+      .view-switch .grid-x .buttons .button.active:hover {
+        background-color: #60c9e0; }
+
 .world-map #cc_worldmap .active {
   fill: #27a635; }
+  .world-map #cc_worldmap .active:hover {
+    fill: #efbe01;
+    cursor: pointer; }
 
 .world-map #world-map-info {
   display: none;
