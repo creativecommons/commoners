@@ -46,6 +46,41 @@ class Commoners {
         }
 
     }
+    public static function stats() {
+        //delete_transient('ccgn_global_stats');
+        if (false === ($stats = get_transient('ccgn_global_stats'))) {
+            $chapters = new WP_Query(array(
+                'post_type' => 'cc_chapters',
+                'post_status' => 'publish',
+                'posts_per_page' => -1
+            ));
+            if ($chapters->have_posts()) {
+                foreach ($chapters->posts as $chapter) {
+                    switch ($chapter->cc_chapters_chapter_status) {
+                        case 'active':
+                            $stats['active_chapters']++;
+                        break;
+                        case 'in-progress':
+                            $stats['in-progress_chapters']++;
+                        break;
+                        case 'inactive':
+                            $stats['inactive_chapters']++;
+                        break;
+                    }
+                }
+            }
+            $members_query = new WP_User_Query(array(
+                'meta_key' => 'ccgn-application-state',
+                'meta_value' => 'accepted'
+            ));
+            $members_result = $members_query->get_results();
+            $stats['total_members'] = count($members_result);
+
+            // SET THE TRANSIENT FOR 12 HRS
+            set_transient('ccgn_global_stats', $stats, 12 * 60 * 60);
+        }
+        return $stats;
+    }
 }
 //add_action("wp_ajax_event-chapters__get_countries", Commoners::get_chapters_by_status());
 add_action('wp_ajax_event-get-chapters',array('Commoners','get_chapters_by_status'));

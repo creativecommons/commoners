@@ -606,6 +606,7 @@ table.ccgn-profile {
 }
 .view-content {
     display: none;
+    margin-bottom: 1.5rem;
     &.active {
         display: block;
     }
@@ -683,23 +684,101 @@ table.ccgn-profile {
                 }
             }
         }
-        // &:after {
-        //     content: '';
-        //     position: absolute;
-        //     width: 0;
-        //     height: 0;
-        //     margin-left: -0.5em;
-        //     bottom: -2em;
-        //     left: 45%;
-        //     box-sizing: border-box;
-            
-        //     border: 1em solid black;
-        //     border-color: transparent transparent $white $white;
-            
-        //     transform-origin: 0 0;
-        //     transform: rotate(-45deg);
-            
-        //     box-shadow: -3px 3px 3px 0 rgba(0, 0, 0, 0.4);
-        // }
+ 
+    }
+}
+.dataTables_wrapper {
+    .dataTables_filter {
+        margin-bottom: 2rem;
+        label {
+            display: flex;
+            align-items: center;
+            input {
+                margin-bottom: 0;
+            }
+        }
+    }
+    .dataTable {
+        thead {
+            td {
+                font-family: $font-alt;
+                text-transform: uppercase;
+                font-size: .9rem;
+                border-bottom: 1px solid $light-gray;
+            }
+        }
+        tbody {
+            td {
+                border-bottom: 1px solid lighten($light-gray,6);
+                .button {
+                    color: $white !important;
+                }
+            }
+        }
+        &.no-footer {
+            border-bottom: 1px solid $light-gray;
+        }
+    }
+    .dataTables_info {
+        margin-top: 1rem;
+        color: $dark-gray;
+        font-size: .9rem;
+        font-style: italic;
+    }
+    .dataTables_paginate {
+        margin-top: 1rem;
+        font-size: .9rem;
+        .paginate_button {
+            &.current {
+                background: $dark-gray;
+                color: $white !important;
+                &:hover {
+                    background: $primary-color;
+                }
+            }
+        }
+    }
+}
+.chapter-stats {
+    .cell {
+        &:nth-child(1) {
+            .stat-box {
+                background-color: $alert-color;
+            }
+        }
+        &:nth-child(2) {
+            .stat-box {
+                background-color: $success-color;
+            }
+        }
+        &:nth-child(3) {
+            .stat-box {
+                background-color: $warning-color;
+            }
+        }
+        .stat-box {
+            padding: .5rem 1.5rem;
+            color: $white;
+            font-family: $font-alt;
+            text-align: center;
+            .stat-number {
+                display: block;
+                font-size: rem-calc(80);
+                line-height: 5.6rem;
+                font-weight: bold;
+            }
+            .subtitle {
+                text-transform: uppercase;
+            }
+            .title {
+                font-size: rem-calc(42);
+                text-transform: uppercase;
+            }
+            &.with-subtitle {
+                .title {
+                    line-height: 2.3rem;
+                }
+            }
+        }
     }
 }

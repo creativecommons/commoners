@@ -240,7 +240,7 @@ class Chapters_Metabox extends Metabox
                     'label' => 'Meeting URL',
                     'attributes' => [
                         'class' => 'widefat',
-                        'placeholder' => 'Chapter URL',
+                        'placeholder' => 'Chapter first meeting URL',
                         'type' => 'url'
                     ],
                     'properties' => [

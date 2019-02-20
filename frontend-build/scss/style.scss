@@ -93,6 +93,16 @@ body:not(.page-template-page-faqs) {
                     }
                 }
             }
+            .button-list {
+                margin: 2.5rem 0 1.5rem 0;
+                .button {
+                    color: $white;
+                    font-style: normal;
+                    font-family: $font-alt;
+                    font-size: .9rem;
+                    text-transform: uppercase;
+                }
+            }
         }
         .std-text {
             margin-bottom: 1rem;

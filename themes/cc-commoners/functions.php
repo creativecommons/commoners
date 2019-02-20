@@ -9,6 +9,7 @@ add_filter('show_admin_bar', '__return_false');
     Require related files
 */
 include STYLESHEETPATH.'/inc/site.php';
+include STYLESHEETPATH . '/inc/settings.php';
 
 function cc_commoners_theme_setup () {
     register_nav_menus(
@@ -82,6 +83,12 @@ function cc_commoners_theme_scripts () {
             'cc-datatables-styles',
             get_stylesheet_directory_uri() . '/assets/css/datatables.css',
             array(),
+            wp_get_theme()->get('Version')
+        );
+        wp_enqueue_style(
+            'cc-datatables-styles-foundation',
+            get_stylesheet_directory_uri() . '/assets/css/datatables.css',
+            array('cc-datatables-styles'),
             wp_get_theme()->get('Version')
         );
     }

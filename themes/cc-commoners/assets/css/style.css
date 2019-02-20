@@ -3908,6 +3908,14 @@ body:not(.page-template-page-faqs) .item-content {
         top: -.1rem; }
     .page-body .entry-content .post-content .search-result .link-more .more-link:hover {
       color: #8a8a8a; }
+  .page-body .entry-content .post-content .button-list {
+    margin: 2.5rem 0 1.5rem 0; }
+    .page-body .entry-content .post-content .button-list .button {
+      color: #fefefe;
+      font-style: normal;
+      font-family: "Roboto Condensed", sans-serif;
+      font-size: .9rem;
+      text-transform: uppercase; }
 
 .page-body .entry-content .std-text {
   margin-bottom: 1rem;
@@ -4764,7 +4772,8 @@ table.ccgn-profile {
   min-height: 20rem; }
 
 .view-content {
-  display: none; }
+  display: none;
+  margin-bottom: 1.5rem; }
   .view-content.active {
     display: block; }
   .view-content #chapters-table {
@@ -4827,6 +4836,74 @@ table.ccgn-profile {
       color: #fefefe; }
       .world-map #world-map-info .chapter-buttons .button:hover {
         background: #ffbe33; }
+
+.dataTables_wrapper .dataTables_filter {
+  margin-bottom: 2rem; }
+  .dataTables_wrapper .dataTables_filter label {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center; }
+    .dataTables_wrapper .dataTables_filter label input {
+      margin-bottom: 0; }
+
+.dataTables_wrapper .dataTable thead td {
+  font-family: "Roboto Condensed", sans-serif;
+  text-transform: uppercase;
+  font-size: .9rem;
+  border-bottom: 1px solid #e6e6e6; }
+
+.dataTables_wrapper .dataTable tbody td {
+  border-bottom: 1px solid whitesmoke; }
+  .dataTables_wrapper .dataTable tbody td .button {
+    color: #fefefe !important; }
+
+.dataTables_wrapper .dataTable.no-footer {
+  border-bottom: 1px solid #e6e6e6; }
+
+.dataTables_wrapper .dataTables_info {
+  margin-top: 1rem;
+  color: #8a8a8a;
+  font-size: .9rem;
+  font-style: italic; }
+
+.dataTables_wrapper .dataTables_paginate {
+  margin-top: 1rem;
+  font-size: .9rem; }
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #8a8a8a;
+    color: #fefefe !important; }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+      background: #efbe01; }
+
+.chapter-stats .cell:nth-child(1) .stat-box {
+  background-color: #f46b2c; }
+
+.chapter-stats .cell:nth-child(2) .stat-box {
+  background-color: #27a635; }
+
+.chapter-stats .cell:nth-child(3) .stat-box {
+  background-color: #ffae00; }
+
+.chapter-stats .cell .stat-box {
+  padding: .5rem 1.5rem;
+  color: #fefefe;
+  font-family: "Roboto Condensed", sans-serif;
+  text-align: center; }
+  .chapter-stats .cell .stat-box .stat-number {
+    display: block;
+    font-size: 5rem;
+    line-height: 5.6rem;
+    font-weight: bold; }
+  .chapter-stats .cell .stat-box .subtitle {
+    text-transform: uppercase; }
+  .chapter-stats .cell .stat-box .title {
+    font-size: 2.625rem;
+    text-transform: uppercase; }
+  .chapter-stats .cell .stat-box.with-subtitle .title {
+    line-height: 2.3rem; }
 
 @media screen and (max-width: 39.99875em) {
   .home .page-body {
