@@ -10,19 +10,22 @@ jQuery(document).ready(function($){
         info_box.find('.button.url').attr('href', value.url);
         info_box.find('.button.meet').attr('href', value.meeting_url);
     }
-    var windowPosition = function(pointX, pointY) {
-        
-        var topY = (pointY < 630) ? pointY + 10 : 630 - info_box.height();
-            if ($(window).width <= 1280) {
-                leftX = (pointX < 1040) ? pointX + 10 : 1040 - info_box.width();
-            } else {
-                var additionalLeft = (($(window).width() - 1200) / 2),
-                    newRightLimit = additionalLeft + 1040 - (info_box.width() / 2),
-                    atLimit = ((pointX + info_box.width()) >= $(window).width());
-                    
-                leftX = (pointX < newRightLimit) ? pointX + 10 : newRightLimit - info_box.width();
-            }
+    
+    var windowPosition = function(target) {
+        console.log(target);
+        var position = target.offset(),
+            boundingBox = target[0].getBBox(),
+            topY = position.top + boundingBox.height - 30,
+            leftX = position.left + boundingBox.width - 30,
+            mapOffset = $('#cc_worldmap').offset();
             
+        if ( leftX + info_box.width() > $(document).width() ) {
+            leftX = leftX - info_box.width();
+        }
+        if ( topY + info_box.height() > mapOffset.top + $('#cc_worldmap').height()) {
+            topY = topY - info_box.height();
+        }
+
         info_box.css({
             'top': topY,
             'left': leftX
@@ -34,7 +37,8 @@ jQuery(document).ready(function($){
             
             $('#cc_worldmap').find('#'+value.country_code).addClass('active');
             $('#cc_worldmap').find('#'+value.country_code).hover(function(e){
-                windowPosition(e.pageX, e.pageY);
+                var object = $(this);
+                windowPosition(object);
                 writeInfoBox(value);
                 info_box.show();
             }, function(e){
@@ -43,11 +47,15 @@ jQuery(document).ready(function($){
             info_box.on('mouseleave', function(e) {
                 info_box.hide();
             });
-            $('#cc_worldmap').find('#' + value.country_code).on('mousemove',function(e){
-                windowPosition(e.pageX, e.pageY);
-            });
+            // $('#cc_worldmap').find('#' + value.country_code).on('mousemove',function(e){
+            //     var object = $(this),   
+            //     windowPosition(object);
+            // });
         });
     });
+    // $(document).on('mousemove', function(e) {
+    //     console.log('MOUSE X: '+e.pageX, 'MOUSE Y: '+e.pageY);
+    // });
     var chapter_table = $('#chapters-table').DataTable({
         "lengthChange": false
     });

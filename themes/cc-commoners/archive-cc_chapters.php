@@ -10,7 +10,7 @@
         <div class="grid-x grid-padding-x align-center">
             <div class="cell large-12">
                 <div class="grid-x align-center">
-                    <div class="large-10 cell">
+                    <div class="large-10 cell entry-content" id="entry-chapters-content">
                         <div class="entry-header">
                             <h1 class="entry-title"><?php echo $section_title ?></h1>
                         </div>
