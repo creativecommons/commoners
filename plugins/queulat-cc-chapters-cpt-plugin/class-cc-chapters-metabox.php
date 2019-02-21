@@ -252,6 +252,8 @@ class Chapters_Metabox extends Metabox
     }
     public function sanitize_data(array $data) : array
     {
+        //Delete stats transient to update the global chapter stats
+        delete_transient('ccgn_global_stats');
         $sanitized = [];
         foreach ($data as $key => $val) {
             switch ($key) {
