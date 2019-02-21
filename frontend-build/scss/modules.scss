@@ -613,6 +613,14 @@ table.ccgn-profile {
     #chapters-table {
         width: 100% !important;
     }
+    &.map-list {
+        @include breakpoint(medium only) {
+            display: block;
+        }
+        @include breakpoint(small only) {
+            display: block;
+        }
+    }
 }
 .view-switch {
     .grid-x {
@@ -768,6 +776,7 @@ table.ccgn-profile {
                 font-weight: bold;
             }
             .subtitle {
+                display: block;
                 text-transform: uppercase;
             }
             .title {

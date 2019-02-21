@@ -22,7 +22,7 @@
                     </div>
                 </div>
 
-                <div class="view-switch">
+                <div class="view-switch show-for-large">
                     <div class="grid-x align-justify">
                         <div class="cell large-3 title">
                             Switch view
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="world-map view-content active" id="view-map">
+                <div class="world-map view-content active show-for-large" id="view-map">
                     <?php get_template_part('template-parts/maps/world','map'); ?>
                     <div id="world-map-info">
                         <h2 class="chapter-title"></h2>
@@ -84,7 +84,7 @@
             <div class="cell large-10">
                 <div class="chapter-stats">
                     <?php $global_stats = Commoners::stats(); ?>
-                    <div class="grid-x grid-margin-x large-up-3 medium-up-3 small-up-3">
+                    <div class="grid-x grid-margin-x large-up-3 medium-up-3 small-up-1">
                         <?php if (!empty($global_stats['total_members'])) : ?>
                             <div class="cell">
                                 <article class="stat-box">

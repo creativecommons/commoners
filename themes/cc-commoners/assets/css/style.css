@@ -4778,6 +4778,12 @@ table.ccgn-profile {
     display: block; }
   .view-content #chapters-table {
     width: 100% !important; }
+  @media screen and (min-width: 40em) and (max-width: 63.99875em) {
+    .view-content.map-list {
+      display: block; } }
+  @media screen and (max-width: 39.99875em) {
+    .view-content.map-list {
+      display: block; } }
 
 .view-switch .grid-x {
   padding: 1rem 0;
@@ -4898,6 +4904,7 @@ table.ccgn-profile {
     line-height: 5.6rem;
     font-weight: bold; }
   .chapter-stats .cell .stat-box .subtitle {
+    display: block;
     text-transform: uppercase; }
   .chapter-stats .cell .stat-box .title {
     font-size: 2.625rem;

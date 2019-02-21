@@ -57,7 +57,8 @@ jQuery(document).ready(function($){
     //     console.log('MOUSE X: '+e.pageX, 'MOUSE Y: '+e.pageY);
     // });
     var chapter_table = $('#chapters-table').DataTable({
-        "lengthChange": false
+        "lengthChange": false,
+        "responsive" : true
     });
     $('.buttons').find('.button').on('click', function(e){
         e.preventDefault();

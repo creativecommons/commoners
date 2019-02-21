@@ -72,6 +72,13 @@ function cc_commoners_theme_scripts () {
             true
         );
         wp_enqueue_script(
+            'cc-theme-responsive-datatable',
+            get_stylesheet_directory_uri() . '/assets/js/responsive.datatables.min.js',
+            array('cc-theme-datatable'),
+            $script_version,
+            true
+        );
+        wp_enqueue_script(
             'cc-commoners-chapters',
             get_theme_file_uri('/assets/js/cc-commoners-chapters.js'),
             array(),
@@ -82,6 +89,12 @@ function cc_commoners_theme_scripts () {
         wp_enqueue_style(
             'cc-datatables-styles',
             get_stylesheet_directory_uri() . '/assets/css/datatables.css',
+            array(),
+            wp_get_theme()->get('Version')
+        );
+        wp_enqueue_style(
+            'cc-datatables-responsive-styles',
+            get_stylesheet_directory_uri() . '/assets/css/responsive.datatables.min.css',
             array(),
             wp_get_theme()->get('Version')
         );
