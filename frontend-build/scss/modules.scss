@@ -436,6 +436,7 @@ table.ccgn-profile {
     background-color: $primary-color;
     transition: all .5s ease-in-out;
     opacity: 0;
+    z-index: 90;
     .search-form {
         position: relative;
         margin-top: .5rem;

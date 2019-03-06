@@ -4638,7 +4638,8 @@ table.ccgn-profile {
   background-color: #efbe01;
   -webkit-transition: all .5s ease-in-out;
   transition: all .5s ease-in-out;
-  opacity: 0; }
+  opacity: 0;
+  z-index: 90; }
   .search-mobile-container .search-form {
     position: relative;
     margin-top: .5rem; }
