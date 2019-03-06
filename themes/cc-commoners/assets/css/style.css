@@ -4055,6 +4055,12 @@ body:not(.page-template-page-faqs) .item-content {
   margin-left: 170px !important;
   margin-top: -130px !important;
   font-size: 1rem; }
+  @media screen and (max-width: 39.99875em) {
+    .bp-user #buddypress #cover-image-container #item-header-cover-image #item-header-content {
+      float: none;
+      margin-left: 0 !important; }
+      .bp-user #buddypress #cover-image-container #item-header-cover-image #item-header-content #item-meta {
+        text-align: center; } }
 
 .gform_wrapper .gform_body .gfield a {
   color: #f46b2c;

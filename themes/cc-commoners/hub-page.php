@@ -83,7 +83,7 @@ get_header(); ?>
 						</div>
 						<h3>Contribute Your skills</h3>
 						<p>Use your language skills and help us with <a href="https://wiki.creativecommons.org/wiki/Translate">translation</a>. <br>
-							Are you a developer?. Learn about how to <a href="https://wiki.creativecommons.org/wiki/Integrate">integrate CC license information</a>. Join our <a href="https://wiki.creativecommons.org/wiki/Developers">developer community</a>. Check out our page on <a href="https://github.com/creativecommons">github</a> and help us improve our tools.</p>
+							Are you a developer? Join our <a href="https://creativecommons.github.io/" target="_blank">developer community</a> to learn about how to integrate CC license information and help us improve our tools. </p>
 					</div>
 					<div class="hub-grid-block cell">
 						<div class="hub-grid-block-svg">
