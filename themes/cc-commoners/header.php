@@ -3,24 +3,24 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="apple-touch-icon" sizes="57x57" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="<?php bloginfo('stylesheet_directory') ?>/assets/images/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-16x16.png">
-<link rel="shortcut icon" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon.ico" type="image/x-icon">
-         <link rel="icon" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon.ico" type="image/x-icon">
-    
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="<?php bloginfo('stylesheet_directory') ?>/assets/images/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" sizes="60x60" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="<?php bloginfo('stylesheet_directory') ?>/assets/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon-16x16.png">
+    <link rel="shortcut icon" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon.ico" type="image/x-icon">
+            <link rel="icon" href="<?php bloginfo('stylesheet_directory') ?>/assets/images/favicon.ico" type="image/x-icon">
+        
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="<?php bloginfo('stylesheet_directory') ?>/assets/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     
     
     <meta charset="<?php bloginfo( 'charset' ); ?>" />
@@ -36,56 +36,75 @@
 
   <body <?php body_class(); ?> >
 
+    <header class="mobile-header show-for-small-only">
+        <div class="grid-container">
+            <div class="grid-x align-justify">
+                <div class="cell small-5">
+                    <a href="<?php echo site_url(); ?>" class="logo"><h1>CC Network</h1></a>
+                </div>
+                <div class="cell small-3 mobile-buttons">
+                    <a href="#" class="open-mobile-menu"><span class="dashicons dashicons-menu"></span></a>
+                    <a href="#" class="open-mobile-search"><span class="dashicons dashicons-search"></span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="menu-mobile-container hide">
+        <a class="close" href="#">
+            <button class="close-button" aria-label="Close alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </a>
+        <nav class="mobile-navigation">
+        <?php 
+            $args = array(
+                'theme_location' => 'top',
+                'container' => '',
+                'depth' => 1,
+                'items_wrap' => '<ul id = "%1$s" class = "menu vertical %2$s">%3$s</ul>'
+            );
 
-    <header class="site-header" >
-      
-      <a href="/" class="logo"><h1>CC Network</h1></a>
-
-      <nav class="main-nav">
-        <?php wp_nav_menu( array(
-                     'depth'=>1,
-                     'after'=>'<span class="sep">|</span>',
-                     'theme_location' => 'top',
-                     'menu_id'        => 'top-menu',
-               ) ); ?>
-      </nav>
-      <form method="post" action="/" class="header-search">
-        <input type="text" name="s">
-          <i class="fa fa-search" aria-hidden="true"></i>
-      </form>
+            wp_nav_menu($args);
+            ?>
+        </nav>
+    </div>
+    <div class="search-mobile-container show-for-small-only">
+        <a class="close" href="#">
+            <button class="close-button search" aria-label="Close alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </a>
+        <?php get_search_form(); ?>
+    </div>
+    <header class="site-header hide-for-small-only" >
+        <div class="grid-container">
+            <div class="grid-x grid-padding-x align-center">
+                <div class="cell small-3">
+                    <a href="<?php echo site_url(); ?>" class="logo"><h1>CC Network</h1></a>
+                </div>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="grid-container">
+                <div class="grid-x align-center">
+                    <div class="cell small-12">            
+                        <?php wp_nav_menu( array(
+                                    'depth'=>1,
+                                    'theme_location' => 'top',
+                                    'menu_id'        => 'top-menu',
+                                    'items_wrap' => '<ul id = "%1$s" class = "menu align-center %2$s">%3$s</ul>'
+                                ) ); ?>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <?php get_search_form(); ?>
+      </div>
     </header>
 
 
 <?php if( is_page(array(24, 26, 63, 65, 55)) ) { ?>
-
-      <!--
-        <div class="container-top-message">
-          
-          <div class="top-message form-top-text">
-            
-            <p>If you would like to join the Creative Commons Global Network as an individual human being, here’s where you can do so.
-            <br>
-            <br>
-            To join the Creative Commons Global network you will need:
-            - A CCID login account. If you don’t have one don’t worry, it only takes a minute to <a href="#signup-now">sign up here</a>.
-            <br>
-            Two people who are already part of the network and know you well enough to vouch for you. You can find them on this site.
-            <br>
-            - A name that people know you by. This doesn’t have to be the name on your birth certificate but should be one that you are known by in the community.
-            <br>
-            Once you have completed the sign-up process:
-            <br>
-            <br>
-            You will have agreed to and be bound by the Global Network Code of Conduct and the usage policy for this site.
-            <br>
-            Your application will have been viewed by the people you have nominated to vouch for you, and by the Global Council.
-            <br>
-            Your photograph, username, and the social media account names you provide during sign-up will be published and publicly visible on this site.</p>
-            
-          </div>
-          
-        </div>
-      -->
 
       <div class="signup-bg">
           <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/i/bg-form-page.jpg">
@@ -94,7 +113,7 @@
     <?php } ?>
 
 
-<?php if( is_page( array(132, 134, 149, 136, 4) ) || is_page_template('page-platform.php') || is_page_template('page-chapter.php') || is_page_template('page-faqs.php') || is_search() ){ ?>
+<?php if( is_page( array(132, 134, 136) ) || is_page_template('page-platform.php') || is_page_template('page-chapter.php') ){ ?>
 
       <?php
 
@@ -115,4 +134,4 @@
 
 
     <!-- this 'push-page-body' class will be remove when all templating structure will be defined  -->
-    <div class="page-body <?php if( is_front_page() || is_page( array(4, 104, 121, 124) ) ){ echo ' push-page-body'; } ?>">
+    <div class="page-body <?php if( is_front_page() || is_page( array(4, 121, 124) ) ){ echo ' push-page-body'; } ?>">

@@ -1,0 +1,16 @@
+.top-space {
+    padding-top: 11rem;
+}
+.inner-space {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+.button {
+    &.gray {
+        background-color: $medium-gray;
+        color: $white;
+        &:hover {
+            background-color: lighten($medium-gray,10);
+        }
+    }
+}

@@ -1,0 +1,209 @@
+// General styles
+
+body:not(.page-template-page-faqs) {
+    .item-content {
+        display: block;
+    }
+}
+.page-body {
+    .space-top {
+        padding-top: 12rem;
+    }
+    .container-top-message {
+        padding: 1.5rem 0;
+        background-color: #35bbd8;
+        .top-message {
+            color: $white;
+            h2 {
+                font-weight: 900;
+                font-size: 1.5rem;
+            }
+            .to-r {
+                font-size: 0.9rem;
+            }
+        }
+    }
+    .entry-header {
+        .entry-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }   
+    }
+    .entry-content {
+        .post-content {
+            padding: 1rem 0  3rem 0;
+            a {
+                color: $secondary-color;
+                font-weight: bold;
+                &.more-link {
+                    font-weight: normal;
+                    font-size: .9rem;
+                }
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-family: $font-alt;
+            }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            h3 { font-size: 1.6rem; }
+            h4 { font-size: 1.5rem; }
+            h5 { font-size: 1.4rem; }
+            h6 { font-size: 1.3rem; font-weight: bold; }
+
+            .item-acordion {
+                h2 {
+                    padding: .8rem .5rem;
+                    border-bottom: 1px solid $light-gray;
+                    font-size: 1.3rem;
+                    cursor: pointer;
+                    &:hover {
+                        background-color: lighten($light-gray,6);
+                    }
+                }
+                .item-content {
+                    font-size: .9rem;
+                    display: none;
+                }
+            }
+            .search-result {
+                padding: 2rem 0;
+                border-bottom: 1px solid $light-gray;
+                .entry-title {
+                    font-size: 1.3rem;
+                    &:hover {
+                        color: $primary-color;
+                    }
+                }
+                .link-more {
+                    .more-link {
+                        .screen-reader-text {
+                            position: relative;
+                            padding-left: 1rem;
+                            &:before {
+                                content: "\f345";
+                                font-family: dashicons;
+                                position: absolute;
+                                left: .2rem;
+                                top: -.1rem;
+                            }
+                        }
+                        &:hover {
+                            color: $dark-gray;
+                        }
+                    }
+                }
+            }
+            .button-list {
+                margin: 2.5rem 0 1.5rem 0;
+                .button {
+                    margin-right: 1.3rem;
+                    color: $white;
+                    font-style: normal;
+                    font-family: $font-alt;
+                    font-size: 1.1rem;
+                    text-transform: uppercase;
+                    .subtitle {
+                        display: block;
+                        font-size: .8rem;
+                        text-align: left;
+                        line-height: 1.4rem;
+                        text-transform: none;
+                        font-weight: initial;
+                    }
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+        .std-text {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            p {
+                margin: .5rem 0;
+                .link-list {
+                    margin-top: 1.5rem;
+                    padding-left: 1.8rem;
+                    li {
+                        margin-bottom: .5rem;
+                    }
+                }
+            }
+        }
+    }
+    .main-content {
+        .search-form {
+            
+            position: relative;
+            width: 60%;
+            margin: 2rem auto;
+            .header-search {
+                display: flex;
+                width: 60%;
+                margin: auto;
+                .search-field {
+                    padding: .5rem;
+                    height: 4rem;
+                    border: 0;
+                    border-bottom: 1px solid #C0C0C0;
+                    font-size: 1.2rem;
+                    box-shadow: none;
+                    @include placeholder {
+                        color: #BABABA;
+                        font-style: italic;
+                    }
+                }
+                .fa-search {
+                    font-size: 2rem;
+                    @include flex-align-self(center);
+                }
+                .search-submit {
+                    position: absolute;
+                    right: 2rem;
+                    top: .3rem;
+                    font-size: 3rem;
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+}
+.page-template-default {
+    .page-body {
+        .signup-form-body {
+            margin-top: 0;
+        }
+    }
+}
+.home {
+    .page-body {
+        padding-top: 8.9rem;
+    }
+}
+.error404 {
+    .main-content {
+        .entry-title {
+            margin-top: 1.5rem;
+            color: #BABABA;
+            text-transform: uppercase;
+            font-size: 5rem;
+            text-align: center;
+            strong {
+                display: block;
+                font-size: 9rem;
+                color: #8E8E8E;
+                line-height: 6rem;
+            }
+        }
+        .subtitle {
+            margin: 2rem 0;
+            font-size: 2.5rem;
+            color: #838383;
+        }
+        .std-text {
+            p {
+                font-size: 1.5rem;
+            }
+        }
+    }
+}

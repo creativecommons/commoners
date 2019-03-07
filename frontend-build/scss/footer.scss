@@ -1,0 +1,86 @@
+.home {
+    .main-footer {
+        margin-top: 0 !important;
+    }
+}
+.main-footer {
+    margin-top: 2rem;
+    padding: 1.2rem 0;
+    position: relative;
+	background-color: $primary-color;
+    text-align: center;
+    .logo {
+        @include logo-display;
+        float: left;
+        margin: 30px 0 12px 18px;
+    }
+    .footer-text-block {
+        font-size: 0.7rem;
+        padding: 10px 28px 0 0;
+        text-align: right;
+        .license-icons {
+            width: 30%;
+            float: left;
+            color: $black;
+            font-size: 2rem;
+            a {
+                color: $black;
+                .cc-icon-cc, .cc-icon-cc-by {
+                    &:before {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                }
+            }
+        }
+        p {
+            margin-top: .2rem;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            a {
+                color: $alert-color;
+                font-weight: bold;
+                &:hover {
+                    color: $black;
+                }
+            }
+        }
+    }
+    .bottom-nav {
+        clear: both;
+        font-size: 0.8rem;
+        .menu-item {
+            a {
+                text-decoration: none;
+                color: $black;
+                font-weight: bold;
+                padding: 0 5px;
+                border-left: 1px solid #000;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+            &:first-child {
+                a {
+                    border-left: 0;
+                }
+            }
+        }
+    }
+    &::before {
+        content: " ";
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 7px;
+        left: 0;
+        right: 0;
+        top: 2px;
+        z-index: 100;
+        background: transparent;
+        -webkit-box-shadow: 0px -6px 5px -3px rgba(0,0,0,0.3);
+        -moz-box-shadow: 0px -6px 5px -3px rgba(0,0,0,0.3);
+        box-shadow: 0px -6px 5px -3px rgba(0,0,0,0.3);
+    }
+
+}

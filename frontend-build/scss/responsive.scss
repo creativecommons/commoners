@@ -1,0 +1,218 @@
+// Mobile responsiveness -> Small size
+@include breakpoint(small only) {
+    .home {
+        .page-body {
+            padding-top: 2.9rem;
+        }
+    }
+    .page-template-template-form {
+        .page-body {
+            .signup-form-body {
+                margin-top: 3rem;
+            }
+        }
+    }
+    .page-body {
+        .space-top {
+            padding-top: 5rem;
+        }
+        .container-top-message {
+            text-align: center;
+        }
+        .hub-quote-block {
+            text-align: center;
+        }
+        .inner-section-title {
+            margin-top: 0;
+            .grid-content {
+                margin-top: 3.7rem;
+            }
+        }
+        .entry-content {
+            margin-top: 2rem;
+        }
+        .signup-form-body {
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .preview-details {
+                tr {
+                    display: flex;
+                    flex-direction: column;
+                    td {
+                        width: 80%;
+                        word-wrap: break-word;
+                        font-size: .9rem;
+                    }
+                }
+            }
+        }
+    }
+    .main-slideshow {
+        margin-bottom: .6rem;
+        .swiper-slide {
+            .slide-caption {
+                position: static;
+                width: auto;
+                padding: 1rem;
+                padding-bottom: 4rem;
+                .slide-caption-btn {
+                    margin-right: .9rem;
+                }
+            }
+        }
+    }
+    .main-footer {
+        .logo {
+            margin: auto;
+            float: none;
+        }
+        .footer-text-block {
+            p {
+                text-align: center;
+            }
+            .license-icons {
+                float: none;
+                margin: auto;
+                width: auto;
+                text-align: center;
+            }
+        }
+        .bottom-nav {
+            .menu-bottom-container {
+                .menu {
+                    @include menu-align(center);
+                }
+            }
+        }
+    }
+    //GRAVITY FORMS 
+    .gform_wrapper {
+        .gform_body {
+            .gfield {
+                .gfield_label {
+                    display: block;
+                    text-align: center;
+                }
+                .ginput_container_radio {
+                    .gfield_radio {
+                        input[type=radio] {
+                            width: 25px !important;
+                            height: 23px !important;
+                            &:after {
+                                top: -.01rem;   
+                            }
+                        }
+                    }
+                }
+                .ginput_container {
+                    .voucher_profile_link {
+                        display: block;
+                        padding: 1rem 0;
+                        text-align: center;
+                    }
+                }
+                &.gfield_html {
+                    text-align: center;
+                    h1 { font-size: 1.7rem; }
+                    h2 { font-size: 1.3rem; }
+                    ul {
+                        li {
+                            text-align: left;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //404 PAGE
+    .error404 {
+        .main-content {
+            .entry-title {
+                font-size: 3rem;
+                strong: 5rem;
+            }
+            .std-text {
+                .subtitle {
+                    font-size: 1.5rem;
+                }
+            }
+            .search-form {
+                .header-search {
+                    width: 90%;
+                }
+            }
+        }
+    }
+    .members-meta {
+        width: 100%;
+        text-align: center;
+    }
+    //BUDDYPRESS
+    #buddypress {
+        .pagination {
+            .pag-count {
+                width: 100%;
+                text-align: center;
+            }
+            .pagination-links {
+                width: 100%;
+                padding: 1rem 0;
+                text-align: center;
+                font-size: 1.2rem;
+            }
+        }
+        .item-list {
+            li {
+                .item {
+                    .item-meta {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+    .xprofile {
+        #buddypress {
+            #item-header {
+                margin-bottom: 1rem;
+            }
+            .item-list-tabs {
+                a {
+                    color: $secondary-color;
+                }
+            }
+            .profile-fields {
+                tr {
+                    display: flex;
+                    flex-direction: column;
+                    border-bottom: 1px solid lighten($primary-color,4);
+                    .label {
+                        width: 100%;
+                        text-align: center;
+                        border-right: 0;
+                        color: $black !important;
+                    }
+                    .data {
+                        text-align: center;
+                    }
+                    &.alt {
+                        td {
+                            background: transparent;
+                        }
+                    }
+                }
+            }
+            .wp-profile-fields {
+                tr {
+                    .label {
+                        width: 95%;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -11,11 +11,11 @@ $step[1] = ($application_status['step']['step'] == 1) ? $application_status['ste
 $step[2] = ($application_status['step']['step'] == 2) ? $application_status['step']['class'] : '';
 $step[3] = ($application_status['step']['step'] == 3) ? $application_status['step']['class'] : '';
 ?>
-<section class="main-content top-space">
+<section class="main-content space-top">
     <div class="grid-container">
         <div class="grid-x grid-padding-x inner-space">
             <div class="cell large-12">
-                <div class="page-header">
+                <div class="entry-header">
                     <h1 class="entry-title"><?php the_title() ?></h1>
                 </div>
                 <div class="entry-content">
@@ -23,7 +23,7 @@ $step[3] = ($application_status['step']['step'] == 3) ? $application_status['ste
                     <div class="user-status-container">
                         <?php if ($logged_in): ?>
                            
-                            <div class="grid-x grid-padding-x large-up-3">
+                            <div class="grid-x grid-padding-x large-up-3 medium-up-3 small-up-1">
                                 <div class="cell">
                                     <article class="entry-status <?php echo $step[1] ?>">
                                         <span class="icon"><span class="dashicons dashicons-universal-access-alt"></span></span>

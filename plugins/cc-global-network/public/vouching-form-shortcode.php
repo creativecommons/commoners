@@ -57,7 +57,10 @@ function ccgn_vouching_requests_render ( $voucher_id ) {
     $requests = ccgn_vouching_requests_for_me ( $voucher_id );
     if ( $requests !== [] ) {
         echo _( "<h2>Current Vouching Requests</h2>" );
+        echo '<ul class="vouch-list">';
+        
         foreach ( $requests as $request ) {
+            $request_html = '';
             $applicant_id = $request[ 'created_by' ];
             // Make sure the user has been Spam Checked, otherwise people
             // cannot vouch for them despite them being requested to do so.
@@ -66,7 +69,7 @@ function ccgn_vouching_requests_render ( $voucher_id ) {
             }
             $icon = (ccgn_user_is_individual_applicant($applicant_id)) ? '<span class="dashicons dashicons-admin-users">' : '<span class="dashicons dashicons-building"></span>';
             $applicant = get_user_by( 'ID', $applicant_id );
-            $request_html = '<ul class="vouch-list">';
+            
             $request_html .= '<li class="vouch-item"> <a href="'
                           . get_site_url()
                           . '/vouch/?applicant_id='
