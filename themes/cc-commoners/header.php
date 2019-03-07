@@ -68,7 +68,7 @@
             ?>
         </nav>
     </div>
-    <div class="search-mobile-container">
+    <div class="search-mobile-container show-for-small-only">
         <a class="close" href="#">
             <button class="close-button search" aria-label="Close alert" type="button" data-close>
                 <span aria-hidden="true">&times;</span>

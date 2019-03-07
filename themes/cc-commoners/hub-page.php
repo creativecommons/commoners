@@ -18,9 +18,6 @@ get_header(); ?>
 
 //endwhile; // End of the loop.
 ?>
-
-
-<<<<<<< HEAD
 <div class="grid-container space-top">
 	<div class="grid-x">
 		<div class="cell large-12">
