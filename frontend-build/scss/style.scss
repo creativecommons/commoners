@@ -96,11 +96,23 @@ body:not(.page-template-page-faqs) {
             .button-list {
                 margin: 2.5rem 0 1.5rem 0;
                 .button {
+                    margin-right: 1.3rem;
                     color: $white;
                     font-style: normal;
                     font-family: $font-alt;
-                    font-size: .9rem;
+                    font-size: 1.1rem;
                     text-transform: uppercase;
+                    .subtitle {
+                        display: block;
+                        font-size: .8rem;
+                        text-align: left;
+                        line-height: 1.4rem;
+                        text-transform: none;
+                        font-weight: initial;
+                    }
+                    &:last-child {
+                        margin-right: 0;
+                    }
                 }
             }
         }

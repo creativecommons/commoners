@@ -1,7 +1,8 @@
 <?php
 
 class Commoners {
-    public static function get_chapters_by_status($status='active') {
+    public static function get_chapters_by_status() {
+        $status='active';
         $params = array(
             'post_type' => 'cc_chapters',
             'post_status' => 'publish',

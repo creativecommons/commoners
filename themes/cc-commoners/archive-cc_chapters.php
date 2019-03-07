@@ -25,7 +25,7 @@
                 <div class="view-switch show-for-large">
                     <div class="grid-x align-justify">
                         <div class="cell large-3 title">
-                            Switch view
+                            &nbsp;
                         </div>
                         <div class="cell large-2 buttons">
                             <a href="#view-map" class="button gray active"><span class="dashicons dashicons-location-alt"></span> Map</a>
@@ -60,7 +60,7 @@
                         </thead>
                         <tbody>
                             <?php 
-                                $chapters = Commoners::get_chapters(); 
+                                $chapters = Commoners::get_chapters();
                                 if (!empty($chapters)) {
                                     foreach ($chapters as $chapter) {
                                         $chapter_url = (!empty($chapter->cc_chapters_url)) ? '<a href="'. filter_var($chapter->cc_chapters_url, FILTER_VALIDATE_URL) .'" target="_blank" class="button secondary tiny">View</a>' : 'No url';

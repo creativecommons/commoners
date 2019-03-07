@@ -168,11 +168,7 @@ function add_sub_admin_role() {
         array()
     );
     if (null !== $result ) {
-        $sub_admin = get_role(CCGN_USER_ROLE_SUB_ADMIN);
-        $sub_admin->add_cap('ccgn_view_applications');
-        $sub_admin->add_cap('ccgn_list_applications');
-        $sub_admin->add_cap('ccgn_sub_admin_view');
-        $sub_admin->add_cap('ccgn_list_applications_legal');
+        ccgn_ensure_sub_admin_capabilities();
     }
     $council = get_role(CCGN_USER_ROLE_MEMBERSHIP_COUNCIL);
     $approver = get_role(CCGN_USER_ROLE_FINAL_APPROVER);
@@ -181,6 +177,28 @@ function add_sub_admin_role() {
     $council->add_cap('ccgn_sub_admin_view');
     $approver->add_cap('ccgn_sub_admin_view');
     $legal->add_cap('ccgn_sub_admin_view');
+}
+function ccgn_ensure_sub_admin_capabilities() {
+    $sub_admin = get_role(CCGN_USER_ROLE_SUB_ADMIN);
+    $sub_admin->add_cap('ccgn_view_applications');
+    $sub_admin->add_cap('ccgn_list_applications');
+    $sub_admin->add_cap('ccgn_sub_admin_view');
+    $sub_admin->add_cap('ccgn_list_applications_legal');
+    //admin chapters
+    $sub_admin->add_cap('edit_cc_chapters');
+    $sub_admin->add_cap('read_cc_chapters');
+    $sub_admin->add_cap('delete_cc_chapters');
+    $sub_admin->add_cap('edit_others_cc_chapters');
+    $sub_admin->add_cap('publish_cc_chapters');
+    $sub_admin->add_cap('read_private_cc_chapters');
+    $sub_admin->add_cap('delete_private_cc_chapters');
+    $sub_admin->add_cap('edit_cc_chapters');
+    $sub_admin->add_cap('delete_published_cc_chapters');
+    $sub_admin->add_cap('delete_others_cc_chapters');
+    $sub_admin->add_cap('edit_private_cc_chapters');
+    $sub_admin->add_cap('edit_published_cc_chapters');
+
+    $sub_admin->add_cap( 'edit_theme_options' );
 }
 function ccgn_user_is_new ( $user_id ) {
     $new = true;

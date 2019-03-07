@@ -3911,11 +3911,21 @@ body:not(.page-template-page-faqs) .item-content {
   .page-body .entry-content .post-content .button-list {
     margin: 2.5rem 0 1.5rem 0; }
     .page-body .entry-content .post-content .button-list .button {
+      margin-right: 1.3rem;
       color: #fefefe;
       font-style: normal;
       font-family: "Roboto Condensed", sans-serif;
-      font-size: .9rem;
+      font-size: 1.1rem;
       text-transform: uppercase; }
+      .page-body .entry-content .post-content .button-list .button .subtitle {
+        display: block;
+        font-size: .8rem;
+        text-align: left;
+        line-height: 1.4rem;
+        text-transform: none;
+        font-weight: initial; }
+      .page-body .entry-content .post-content .button-list .button:last-child {
+        margin-right: 0; }
 
 .page-body .entry-content .std-text {
   margin-bottom: 1rem;
@@ -4793,8 +4803,8 @@ table.ccgn-profile {
       display: block; } }
 
 .view-switch .grid-x {
-  padding: 1rem 0;
-  margin-bottom: 1.5rem;
+  padding: .5rem 0;
+  margin-bottom: 3rem;
   border-top: 1px solid #e6e6e6;
   border-bottom: 1px solid #e6e6e6; }
   .view-switch .grid-x .title {
