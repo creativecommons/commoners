@@ -2190,8 +2190,12 @@ new GFLimitCheckboxes(52, array(
         'max' => 3
     )
 ));
-
-
+new GFLimitCheckboxes(53, array(
+    1 => array(
+        'min' => 3,
+        'max' => 3
+    )
+));
 add_filter('gform_entries_field_value', 'ccgn_gf_display_name_instead_login', 10, 4);
 function ccgn_gf_display_name_instead_login($value, $form_id, $field_id, $entry)
 {
@@ -2200,5 +2204,15 @@ function ccgn_gf_display_name_instead_login($value, $form_id, $field_id, $entry)
         $user = get_user_by('email', $email);
         $value = $user->display_name;
     }
+    return $value;
+}
+add_filter( 'gform_export_field_value', 'export_user_display_name', 10, 4 );
+function export_user_display_name( $value, $form_id, $field_id, $entry ) {
+    if ( $field_id == 'created_by' ) {
+        $user  = get_user_by( 'id', $value );
+ 
+        return is_object( $user ) ? $user->display_name : $value;
+    }
+ 
     return $value;
 }

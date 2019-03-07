@@ -5,21 +5,22 @@
 get_header(); ?>
 
 
-	<?php
-	//while ( have_posts() ) : the_post();
+<?php
+    //while ( have_posts() ) : the_post();
 
-		//get_template_part( 'template-parts/loop/frontpage-loop' );
+//get_template_part( 'template-parts/loop/frontpage-loop' );
 
-		/*
+/*
 		if ( comments_open() || get_comments_number() ) :
 			//comments_template();
 		endif;
 		*/
 
-	//endwhile; // End of the loop.
-	?>
+//endwhile; // End of the loop.
+?>
 
 
+<<<<<<< HEAD
 <div class="grid-container space-top">
 	<div class="grid-x">
 		<div class="cell large-12">
@@ -97,4 +98,5 @@ get_header(); ?>
 		</div>	
 	</div>
 </div>
+
 <?php get_footer();
