@@ -3839,6 +3839,9 @@ a.thumbnail {
 body:not(.page-template-page-faqs) .item-content {
   display: block; }
 
+.body.member-type-individual-member .signup-form-body {
+  margin-top: 0 !important; }
+
 .page-body .space-top {
   padding-top: 12rem; }
 

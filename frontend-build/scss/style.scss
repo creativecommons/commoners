@@ -5,6 +5,13 @@ body:not(.page-template-page-faqs) {
         display: block;
     }
 }
+.body {
+    &.member-type-individual-member {
+        .signup-form-body {
+            margin-top: 0 !important;
+        }
+    }
+}
 .page-body {
     .space-top {
         padding-top: 12rem;
