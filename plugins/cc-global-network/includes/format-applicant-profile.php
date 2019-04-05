@@ -201,7 +201,6 @@ function ccgn_vouching_form_applicant_profile_text ( $applicant_id ) {
 
 function ccgn_user_page_individual_profile_text ( $applicant_id ) {
     $entry = ccgn_details_individual_form_entry( $applicant_id );
-    
     return //. ccgn_vp_format_avatar ( $entry )
             ccgn_applicant_display_name_formatted ( $applicant_id )
         . ccgn_vouching_form_profile_format(
