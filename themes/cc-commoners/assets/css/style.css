@@ -4392,7 +4392,7 @@ body:not(.page-template-page-faqs) .item-content {
     font-size: 0.9rem;
     margin-bottom: 15px; }
     .hub-grid .hub-grid-block p a {
-      color: #0a0a0a; }
+      color: #35bbd8; }
   .hub-grid .hub-grid-block .hub-grid-block-svg {
     width: 100px;
     min-height: 100px;
@@ -4404,7 +4404,8 @@ body:not(.page-template-page-faqs) .item-content {
     .hub-grid .hub-grid-block:hover svg .icon-path {
       fill: #ffffff; }
     .hub-grid .hub-grid-block:hover a {
-      color: #fefefe; }
+      color: #fefefe;
+      text-decoration: underline; }
   .hub-grid .hub-grid-block:first-child:hover {
     background: #27a635; }
   .hub-grid .hub-grid-block:nth-child(2):hover {
