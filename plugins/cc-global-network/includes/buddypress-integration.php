@@ -944,8 +944,13 @@ function _bp_not_signed_in_redirect () {
 
 function ccgn_bp_directory_query ( $qs=false, $object=false ) {
     $current_page = get_query_var('name');
+    $is_member_page = false;
+
+    if ( ( $current_page == 'members' ) || ( ( $_SERVER['HTTP_REFERER'] == get_bloginfo('url')."/members/" ) && ( get_query_var('name') != 'institution' ) ) ) {
+        $is_member_page = true;
+    }
     //I add this condition because we don't need to filter members when a certain type of member type directory is showed
-    if ($current_page == 'members') {
+    if ($is_member_page) {
         if ( $object != 'members' ) {
             return $qs;
         }
@@ -958,13 +963,16 @@ function ccgn_bp_directory_query ( $qs=false, $object=false ) {
         // Filter users manually so we can exclude those with no role (those that
         // have had their application declined) and exclude institutions
         foreach ( $users as $user ) {
-            if (
+            $user_status = get_user_meta($user->ID, 'ccgn-application-state', true);
+             if (
                 array_intersect(
                     $user->roles,
                     array( 'subscriber', 'membership-council-member' )
                 ) == array()
-                || ccgn_member_is_institution( $user->ID )
+                ||  ccgn_member_is_institution( $user->ID ) 
+                || ($user_status != 'accepted') 
             ) {
+                //echo '<pre>'; print_r($user_status); echo '</pre>';
                 $exclude[] = $user->ID;
             }
         }

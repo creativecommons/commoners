@@ -20,7 +20,10 @@ do_action( 'bp_before_members_loop' ); ?>
 	<p class="current-member-type"><?php bp_current_member_type_message() ?></p>
 <?php endif; ?>
 
-<?php if ( bp_has_members( bp_ajax_querystring( 'members' ) ) ) : ?>
+<?php 
+	if ( bp_has_members( bp_ajax_querystring( 'members' ) ) ) : 
+	//if ( bp_has_members( 'meta_key=ccgn-application-state&meta_value=accepted&type=alphabetical' )):
+?>
 
 	<div id="pag-top" class="pagination">
 

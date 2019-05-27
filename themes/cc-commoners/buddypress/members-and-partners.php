@@ -48,7 +48,7 @@ do_action( 'bp_before_members_loop' ); ?>
 	 * @since 1.1.0
 	 */
 	do_action( 'bp_before_directory_members_list' ); ?>
-hola hola hola
+
 	<div id="members-list" aria-live="assertive" aria-relevant="all">
 
 
