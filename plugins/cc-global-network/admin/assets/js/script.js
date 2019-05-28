@@ -203,15 +203,14 @@ jQuery(document).ready(function ($) {
                 success: function (data) {
                     this_button.text("Yes, I'm sure");
                     $('#alert-messages').html('');
-                    if (data == 'ok') {
-                        tb_remove();
+                    if (data.trim() == 'ok') {
                         $('#alert-messages').append('<div class="updated notice is-dismissible"><p>The request was sended to the user</p></div>').find('.notice').delay(3200).fadeOut(300);
                         $('#search-all-members').trigger('click');
                     }
-                    if (data == 'error') {
+                    if (data.trim() == 'error') {
                         $('#alert-messages').append('<div class="error notice is-dismissible"><p>There was an error sending your request</p></div>').find('.notice').delay(3200).fadeOut(300);
-                        tb_remove();
                     }
+                    tb_remove();
                 }
             });
         });
