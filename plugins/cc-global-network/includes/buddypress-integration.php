@@ -943,14 +943,19 @@ function _bp_not_signed_in_redirect () {
 // Not all users, just new users (who are not yet members)
 
 function ccgn_bp_directory_query ( $qs=false, $object=false ) {
+    $output = '';
+    $qs_var = parse_str($qs, $output);
     $current_page = get_query_var('name');
     $is_member_page = false;
-
+    $is_search = false;
+    if (!empty($output['search_terms'])) {
+        $is_search = true;
+    }
     if ( ( $current_page == 'members' ) || ( ( $_SERVER['HTTP_REFERER'] == get_bloginfo('url')."/members/" ) && ( get_query_var('name') != 'institution' ) ) ) {
         $is_member_page = true;
     }
     //I add this condition because we don't need to filter members when a certain type of member type directory is showed
-    if ($is_member_page) {
+    if ($is_member_page || $is_search) {
         if ( $object != 'members' ) {
             return $qs;
         }
