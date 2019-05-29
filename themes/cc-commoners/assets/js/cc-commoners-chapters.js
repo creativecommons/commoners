@@ -12,24 +12,24 @@ jQuery(document).ready(function($){
     }
     
     var windowPosition = function(target) {
-        console.log(target);
         var position = target.offset(),
             boundingBox = target[0].getBBox(),
-            topY = position.top + boundingBox.height - 30,
-            leftX = position.left + boundingBox.width - 30,
-            mapOffset = $('#cc_worldmap').offset();
-            
-        if ( leftX + info_box.width() > $(document).width() ) {
-            leftX = leftX - info_box.width();
+            topY = position.top + boundingBox.height,
+            leftX = position.left + boundingBox.width,
+            mapOffset = $('#cc_worldmap').offset(),
+            mapWidth = $('#cc_worldmap').outerWidth();
+            positionObj = { 'top': topY, 'left': leftX }
+
+        if ( leftX + info_box.outerWidth() > $(window).width() ) {
+            valueX = $(window).outerWidth() - info_box.outerWidth() - boundingBox.width;
+            positionObj.left = valueX;
         }
-        if ( topY + info_box.height() > mapOffset.top + $('#cc_worldmap').height()) {
-            topY = topY - info_box.height();
+        if ( topY + info_box.outerHeight() > mapOffset.top + $('#cc_worldmap').outerHeight()) {
+            topY = topY - boundingBox.height - info_box.outerHeight();
+            positionObj.top = topY;
         }
 
-        info_box.css({
-            'top': topY,
-            'left': leftX
-        });
+        info_box.css(positionObj);
     }
     $.post(Ajax.url, { action: 'event-get-chapters'}, function(data){
         Country_data = data;
