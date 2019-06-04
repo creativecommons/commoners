@@ -168,10 +168,8 @@ jQuery(document).ready(function ($) {
             },
             success: function (data) {
                 converted_data = JSON.parse(data);
-                console.log(logList);
                 if (converted_data.length > 0) {
                     converted_data.forEach(function(element){
-                        console.log(element);
                         logList.append('<li><div class="log-entry"><strong>' + element.ask_user_name + '</strong> on <span class="date">' + element.date + '</span></div></li>');
                     });
                     $('#log-content-ask-voucher').show();
@@ -258,7 +256,7 @@ jQuery(document).ready(function ($) {
         },
         "pageLength": 50,
         rowCallback: function (row, data) {
-            console.log(data);
+
             if (data.applicant_stage == 'update-details') {
                 $(row).addClass('orange-mark');
             }
