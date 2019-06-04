@@ -137,6 +137,13 @@ function ccgn_application_users_page_pre_form_submit_handler ( $entry,
                 'ccgn-email-update-details',
                 $update_message
             );
+            $update_details_meta = array(
+                'state' => 'none',
+                'updated' => 0,
+                'date' => date('Y-m-d H:i:s', strtotime('now')),
+                'done' => false
+            );
+            update_user_meta( $applicant_id, 'ccgn_applicant_update_details_state', $update_details_meta );
         } else {
             ccgn_user_level_set_rejected( $applicant_id );
             ccgn_registration_email_application_rejected( $applicant_id );

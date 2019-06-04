@@ -215,6 +215,58 @@ jQuery(document).ready(function ($) {
             });
         });
     }
+    var table_pre_approval = $('#ccgn-pre-approval-table').DataTable({
+        'columns': [
+            { 'data': 'applicant_name' },
+            { 'data': 'applicant_type' },
+            { 'data': 'application_date' },
+            { 'data': 'applicant_stage' },
+            { 'data': 'applicant_stage_date' },
+            { 'data': 'applicant_reminders' }
+        ],
+        'columnDefs': [
+            {
+                targets: 0,
+                'render': function (data, type, row, meta) {
+                    return '<a href="' + row.applicant_url + '">' + data + '</a>';
+                }
+            },
+            {
+                targets: 3,
+                'render': function (data, type, row, meta) {
+                    switch (row.applicant_stage) {
+                        case 'update-details':
+                            return 'Requested info';
+                        break;
+                        case 'updated-details':
+                            return 'more info provided';
+                        break;                    
+                        default:
+                            return 'Received';
+                        break;
+                    }
+                }
+            }
+        ],
+        'ajax': {
+            'url': wpApiSettings.root + 'commoners/v2/application-approval/pre-approve',
+            'type': 'POST',
+            'beforeSend': function (xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', wpApiSettings.nonce);
+            },
+            'data': { 'current_user': wpApiSettings.current_user }
+        },
+        "pageLength": 50,
+        rowCallback: function (row, data) {
+            console.log(data);
+            if (data.applicant_stage == 'update-details') {
+                $(row).addClass('orange-mark');
+            }
+            if (data.applicant_stage_updated == 1) {
+                $(row).addClass('yellow-mark');
+            }
+        }
+    });
     var table1 = $('#ccgn-table-applications-approval').DataTable({
         'columns': [
             {
