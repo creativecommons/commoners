@@ -44,6 +44,14 @@ function ccgn_registration_institution_form_submit_handler ( $entry,
         );
         break;
     case CCGN_GF_INSTITUTION_DETAILS:
+        $user_state = ccgn_registration_user_get_stage( $entry['created_by'] );
+        if ( $user_state == CCGN_APPLICATION_STATE_UPDATE_DETAILS ) {
+            $status = get_user_meta( $entry['created_by'], 'ccgn_applicant_update_details_state', true );
+            $state['state'] = 'updated';
+            $state['updated'] = 1;
+            $state['date'] = date('Y-m-d H:i:s', strtotime('now'));
+            update_user_meta( $entry['created_by'], 'ccgn_applicant_update_details_state', $status );
+        }
         ccgn_registration_current_user_set_stage (
             CCGN_APPLICATION_STATE_RECEIVED
         );
