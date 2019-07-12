@@ -1,0 +1,62 @@
+.main-header {
+    position: relative;
+    background-color: $primary-color;
+    color: $white;
+    z-index: 90;
+    @include shadow;
+    .navigation {
+        margin-top: 0;
+    }
+    .grid-container {
+        padding-top: .8rem;
+        padding-bottom: .8rem;
+        .logo {
+            a {
+                color: $darker-gray;
+                .site-title {
+                    @include darkgray-logo;
+                    margin-bottom: 0;
+                }
+                .tagline {
+                    display: block;
+                    padding-left: 4rem;
+                    letter-spacing: 5px;
+                    text-transform: uppercase;
+                }
+                &:hover {
+                    text-decoration: none;
+                    opacity: .8;
+                }
+            }
+        }
+        .nav {
+            display: flex;
+            align-items: center;
+            padding-left: 2rem;
+            .main-navigation {
+                .menu {
+                    li {
+                        a {
+                            color: $darker-gray;
+                            font-family: $title-font-family;
+                            font-size: 1.3rem;
+                            border-bottom: 2px solid transparent;
+                            text-decoration: none;
+                            &:hover {
+                                border-bottom: 2px solid $secondary-color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.main-footer {
+    color: $white;
+    .footer-logos {
+        img {
+            width: 40px;
+        }
+    }
+}

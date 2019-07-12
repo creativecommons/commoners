@@ -152,7 +152,7 @@ add_filter( 'bp_after_has_profile_parse_args', '_bp_hide_profile_field_group' );
 
 add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 
-add_action( 'bp_profile_header_meta', '_bp_meta_member_type', 10, 0 );
+//add_action( 'bp_profile_header_meta', '_bp_meta_member_type', 10, 0 );
 
 // Remove unused modules
 

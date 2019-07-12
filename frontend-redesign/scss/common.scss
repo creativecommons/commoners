@@ -1,0 +1,105 @@
+// Common classes
+
+body {
+
+}
+// SPACES
+.inner-space {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    &.no-bottom-space {
+        padding-bottom: 0;
+    }
+}
+.closed {
+    position: absolute;
+    top: -100vh;
+    opacity: 0;
+    visibility: hidden;
+}
+.sidebar {
+    &.sidebar-move-up {
+        position: relative;
+        margin-top: -9rem;
+        @include breakpoint(xxlarge only) {
+            margin-top: -23vh;
+        }
+        &.tiny-space {
+            margin-top: -10vh;
+        }
+    }
+}
+//titles
+.section-title {
+    font-size: rem-calc(22);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-family: $title-font-family;
+}
+.archive-title {
+    margin: 1.5rem 0;
+    font-family: $title-font-family;
+    text-transform: uppercase;
+}
+.middle-title {
+    margin: 1rem 0 2.5rem 0;
+    border-bottom: 1px solid $light-gray;
+    text-align: center;
+    span {
+        position: relative;
+        padding: .3rem .8rem;
+        top: 1rem;
+        background: $white;
+        text-transform: uppercase;
+        font-family: $title-font-family;
+        font-size: 1.3rem;
+    }
+}
+.background-gray-dark {
+    .section-title {
+        color: $white;
+    }
+}
+.light-text {
+    font-size: .9rem;
+    color: $dark-gray;
+    font-style: italic;
+}
+.strong-tiny {
+    font-family: $title-font-family;
+    text-transform: uppercase;
+    font-size: .8rem;
+    font-weight: 600;
+    color: $dark-gray;
+}
+//colors
+a {
+    color: $secondary-color;
+    &:hover {
+        color: $secondary-color;
+        text-decoration: underline;
+    }
+}
+.background-lighter-gray {
+    background-color: $lighter-gray;
+}
+.background-gray-dark {
+    background-color: $dark-gray;
+}
+.background-gray-darker {
+    background-color: $darker-gray;
+}
+.gradient-yellow {
+    @include gradient-yellow;
+}
+.button {
+    &.gray {
+        background-color: $dark-gray;
+        &:hover {
+            background-color: lighten($dark-gray,10);
+        }
+    }
+    &.primary {
+        color: darken($primary-color,40) !important;
+    }
+}
