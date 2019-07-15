@@ -490,7 +490,7 @@
     }
     .content-wrap {
         @include coverer;
-        background-color: rgba(0,0,0,.4);
+        background-color: rgba(0,0,0,.6);
         .feature-content {
             @include xy-grid-container();
             padding-bottom: 8rem;
@@ -567,4 +567,124 @@
             }
         }
     }
+}
+
+.page-template-template-user-status {
+    .application-status {
+        position: relative;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-top: 1px solid #ececec;
+        border-bottom: 1px solid #ececec;
+        small {
+            font-style: italic;
+        }
+        .title {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+    }
+    .button {
+        padding: 8px 15px;
+        color: white;
+        background-color: #27a635;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        &.yellow {
+            background-color: #efbe01;
+            color: black;
+            font-weight: normal;
+            text-transform: none;
+            &:hover {
+                background-color: #d3a900;
+            }
+        }
+        &.top-right {
+            position: absolute;
+            right: 0;
+            top: 28%;
+        }
+    }
+    .entry-status {
+    padding: 1rem;
+    border: 4px solid lighten($light-gray,5);
+    min-height: 19rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    opacity: .5;
+    &.on-hold {
+        border: 4px solid #fdad00;
+        background-color: #ffe4b1;
+        opacity: 1;
+        .entry-title {
+            color: #ff7300;
+            .icon {
+                .dashicons {
+                    color: #ff7300;
+                }
+            }
+        }
+    }
+    &.error {
+        border: 4px solid #6e4d4d;
+        background-color: #ffb1b1;
+        opacity: 1;
+        .entry-title {
+            color: #5c0000;
+        }
+        .icon {
+            .dashicons {
+                color: #5c0000;
+            }
+        }
+    }
+    &.success {
+        border: 4px solid #33b400;
+        background-color: #c7ffb1;
+        opacity: 1;
+        .entry-title {
+            color: #1a5c00;
+        }
+        .icon {
+            .dashicons {
+                color: #1a5c00;
+            }
+        }
+    }
+    .icon {
+        display: block;
+        text-align: center;
+        .dashicons {
+            font-size: 3rem;
+            width: 3rem;
+            height: 3rem;
+        }
+    }
+    .entry-title {
+        font-size: 1.5rem;
+    }
+    .subtitle {
+        text-transform: uppercase;
+    }
+    .entry-status-content {
+        border-top: 1px solid $medium-gray;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        .status-text {
+            font-weight: bold;
+        }
+        .status-action {
+            display: block;
+            margin-top: 1rem;
+        }
+        .subtitle {
+            display: block;
+            font-size: .8rem;
+        }
+        .update-date {
+            display: block;
+        }
+    }
+}
 }

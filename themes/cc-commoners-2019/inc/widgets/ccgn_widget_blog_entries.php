@@ -41,12 +41,12 @@ class WP_Widget_news_list extends WP_Widget {
         $small_news = $this->get_last_news( ($size - 1), 1, $the_category );
         if ( !empty( $big_news ) ) {
             echo '<div class="grid-x widget blog-entries">';
-                echo '<div class="cell auto">';
+                echo '<div class="cell large-auto medium-auto small-12">';
                 foreach ( $big_news as $entry ) {
                        echo render::big_news($entry);
                 }
                 echo '</div>';
-                echo '<div class="cell auto">';
+                echo '<div class="cell large-auto medium-auto small-12">';
                     echo '<div class="entries-list">';
                         foreach ( $small_news as $entry ) {
                             echo render::tiny_news($entry);

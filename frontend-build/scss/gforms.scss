@@ -114,7 +114,7 @@
     .gform_footer {
         text-align: center;
         .gform_button {
-            @include button(false,$success-color,lighten($success-color,5),$white, solid);
+            @include button(false,$secondary-color,lighten($secondary-color,5),$white, solid);
         }
     }
 }

@@ -50,8 +50,18 @@ class WP_Widget_User_Status extends WP_Widget {
                         echo '<a href="#" class="status-point second '.$this->get_point_status(2,$current_step).'" '.$this->is_active(2,$current_step).' id="status-second-point"></a>';
                         echo '<a href="#" class="status-point third '.$this->get_point_status(3,$current_step).'" '.$this->is_active(3,$current_step).' id="status-third-point"></a>';
                         echo '<a href="#" class="status-point fourth '.$this->get_point_status(4,$current_step).'" '.$this->is_active(4,$current_step).' id="status-third-point"></a>';
-                        echo '<div class="dropdown-pane" id="user-status-panel" data-alignment="center" data-v-offset="30" data-dropdown data-hover-pane="true">';
+                        echo '<div class="dropdown-pane hide-for-small-only" id="user-status-panel" data-alignment="center" data-v-offset="30" data-dropdown data-hover-pane="true">';
                             echo '<div class="triangle"></div>';
+                            echo '<h4 class="status-title">'.$application_status['step']['title'].'</h4>';
+                            echo '<div class="status-content">';
+                                echo '<p>'.$application_status['step']['msg'].'</p>';
+                                echo '<div class="status-action">';
+                                    echo '<a href="'.$application_status['step']['link'].'" class="button primary">'.$application_status['step']['link_text'].'</a>';
+                                echo '</div>';
+                            echo '</div>';
+                            
+                        echo '</div>';
+                        echo '<div class="dropdown-pane-mobile show-for-small-only">';
                             echo '<h4 class="status-title">'.$application_status['step']['title'].'</h4>';
                             echo '<div class="status-content">';
                                 echo '<p>'.$application_status['step']['msg'].'</p>';

@@ -28,8 +28,8 @@ define ('MEMBERS_PAGE_ID', 4);
 	include TEMPLATEPATH . '/inc/metaboxes.php';
 	include TEMPLATEPATH . '/inc/bp-integration.php';
 	include TEMPLATEPATH . '/inc/search.php';
-	// include TEMPLATEPATH . '/inc/settings.php';
-	// include TEMPLATEPATH . '/inc/filters.php';
+	include TEMPLATEPATH . '/inc/settings.php';
+	include TEMPLATEPATH . '/inc/filters.php';
 	// include TEMPLATEPATH . '/inc/multilang.php';
 	// include TEMPLATEPATH . '/inc/shortcodes.php';
     //include TEMPLATEPATH. '/inc/taxonomies.php';
@@ -77,18 +77,18 @@ $mandatory_sidebars = array(
         'name' => 'home-not-logged-first'
     ),
 	'Not logged in - Home - second row' => array(
-        'name' => 'home-not-logged-first'
+        'name' => 'home-not-logged-second'
     ),
-	'Not logged - Home - Third row' => array(
+	'Not logged in - Home - Third row' => array(
         'name' => 'home-not-logged-third'
     ),
-	'Not logged - Home - fourth row' => array(
+	'Not logged in - Home - fourth row' => array(
         'name' => 'home-not-logged-fourth'
     ),
-	'Not logged - Home - fifth row' => array(
+	'Not logged in - Home - fifth row' => array(
         'name' => 'home-not-logged-fifth'
     ),
-	'Not logged - Home - sixth row' => array(
+	'Not logged in - Home - sixth row' => array(
         'name' => 'home-not-logged-sixth'
     ),
 	// logged in but not approved yet
@@ -253,7 +253,18 @@ class site {
 		$ajax_data = array(
 			'url' => admin_url( 'admin-ajax.php' )
 		);
-		wp_localize_script( 'sotc_script', 'Ajax', $ajax_data );
+		wp_localize_script( 'commoners_script', 'Ajax', $ajax_data );
+
+		if (is_post_type_archive('cc_chapters')) {
+			wp_enqueue_script( 'cc-theme-datatable', THEME_JS . '/datatables.min.js', array('jquery'), self::theme_ver, true );
+			wp_enqueue_script( 'cc-theme-responsive-datatable', THEME_JS . '/responsive.datatables.min.js', array('cc-theme-datatable'), self::theme_ver, true );
+			wp_enqueue_script( 'cc-commoners-chapters',  THEME_JS . '/commoners-chapters.js', array('jquery'), self::theme_ver, true );
+			wp_localize_script('cc-commoners-chapters', 'Ajax', $ajax_data);
+			
+			wp_enqueue_style( 'cc-datatables-styles', THEME_CSS . '/datatables.css', array(), self::theme_ver );
+			wp_enqueue_style( 'cc-datatables-responsive-styles', THEME_CSS . '/responsive.datatables.min.css', array(), self::theme_ver );
+			wp_enqueue_style( 'cc-datatables-styles-foundation', THEME_CSS . '/datatables.css', array('cc-datatables-styles'), self::theme_ver );
+    	}
 	}
 }
 

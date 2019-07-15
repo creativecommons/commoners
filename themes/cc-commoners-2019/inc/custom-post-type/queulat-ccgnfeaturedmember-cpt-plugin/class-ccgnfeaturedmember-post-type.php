@@ -64,7 +64,13 @@ class Ccgnfeaturedmember_Post_Type extends Post_Type {
 			'query_var'             => 'ccgnfeaturedmember',
 			'can_export'            => true,
 			'delete_with_user'      => true,
-			'rewrite'               => false,
+			'rewrite'               => [
+				'with_front' => true,
+				'feeds'      => true,
+				'pages'      => true,
+				'slug'       => 'featured-member',
+				'ep_mask'    => 1,
+			],
 			'supports'              => [
 				0 => 'title',
 			],

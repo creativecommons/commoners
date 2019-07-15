@@ -1,5 +1,5 @@
 <?php if ( is_active_sidebar( 'home-not-logged-first' ) ): ?>
-    <section class="sidebar sidebar-first sidebar-move-up">
+    <section class="sidebar sidebar-first sidebar-move-up tiny-space">
         <div class="grid-container">
             <div class="grid-x grid-padding-x">
                 <?php dynamic_sidebar( 'home-not-logged-first' ) ?>

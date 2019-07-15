@@ -272,6 +272,7 @@
         }
     }
     &.members-list {
+        padding: 0 1rem;
         .widget-header {
             .widget-title {
                 color: $dark-gray;
@@ -283,5 +284,14 @@
 .gray-dark {
     .widget-title {
         color: $light-gray;
+    }
+}
+.not-logged-in {
+    .sidebar-first {
+        .members-list {
+            .widget-title {
+                color: $light-gray;
+            }
+        }
     }
 }

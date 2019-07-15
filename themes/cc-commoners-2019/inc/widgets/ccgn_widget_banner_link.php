@@ -11,7 +11,7 @@ class WP_Widget_banner_link extends WP_Widget {
         $color = ( !empty( $instance['color'] ) ) ? $instance['color'] : 'outline';
         $link_text = ( !empty( $instance['link_text'] ) ) ? $instance['link_text'] : 'View more';
 
-        echo '<div class="cell auto widget banner-link '.$color.'">';
+        echo '<div class="cell large-auto medium-auto small-12 widget banner-link '.$color.'">';
             if ( !empty( $instance['title'] ) ) {
                 echo '<h3 class="widget-title">'.$instance['title'].'</h3>';
             }

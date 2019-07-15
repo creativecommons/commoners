@@ -128,6 +128,7 @@ class Chapters_Metabox extends Metabox
                     ],
                     'properties' => [
                         'instance' => [
+                            'width' => '100%',
                             'multiple' => false,
                             'minimumInputLength' => 3
                             // 'ajax' => [
@@ -159,6 +160,7 @@ class Chapters_Metabox extends Metabox
                     ],
                     'properties' => [
                         'instance' => [
+                            'width' => '100%',
                             'multiple' => false,
                             'minimumInputLength' => 3,
                             'ajax' => [
@@ -195,6 +197,7 @@ class Chapters_Metabox extends Metabox
                     ],
                     'properties' => [
                         'instance' => [
+                            'width' => '100%',
                             'multiple' => false,
                             'minimumInputLength' => 3,
                             'ajax' => [
@@ -225,10 +228,22 @@ class Chapters_Metabox extends Metabox
                 Input_Url::class,
                 [
                     'name' => 'url',
-                    'label' => 'URL',
+                    'label' => 'External URL',
                     'attributes' => [
                         'class' => 'widefat',
-                        'placeholder' => 'Chapter URL',
+                        'placeholder' => 'Chapter external URL (eg. twitter, instagram)',
+                        'type' => 'url'
+                    ]
+                ]
+            ),
+            Node_Factory::make(
+                Input_Url::class,
+                [
+                    'name' => 'chapter_url',
+                    'label' => 'Chapter website URL',
+                    'attributes' => [
+                        'class' => 'widefat',
+                        'placeholder' => 'Official Chapter website URL',
                         'type' => 'url'
                     ]
                 ]
@@ -245,6 +260,17 @@ class Chapters_Metabox extends Metabox
                     ],
                     'properties' => [
                         'description' => 'Chapter first meeting URL'
+                    ]
+                ]
+            ),
+            Node_Factory::make(
+                Input_Text::class,
+                [
+                    'name' => 'mailing_list',
+                    'label' => 'Mailing list',
+                    'attributes' => [
+                        'class' => 'widefat',
+                        'placeholder' => 'Chapter mailing list'
                     ]
                 ]
             )
@@ -273,10 +299,16 @@ class Chapters_Metabox extends Metabox
                 case 'url':
                     $sanitized[$key] = esc_url_raw($val);
                     break;
+                case 'chapter_url':
+                    $sanitized[$key] = esc_url_raw($val);
+                    break;
                 case 'meeting_url':
                     $sanitized[$key] = esc_url_raw($val);
                     break;
                 case 'chapter_status':
+                    $sanitized[$key] = $val;
+                break;
+                case 'mailing_list':
                     $sanitized[$key] = $val;
                 break;
             }

@@ -13,37 +13,37 @@
  ?>
 <body <?php body_class(); ?>>
 <!-- MENU MOBILE -->
-<div class="show-for-small-only mobile-nav primary">
-    <div class="grid-container">
-        <div class="grid-x">
-            <div class="cell small-8">
-            <a href="<?php bloginfo('url') ?>">
-                <div class="mobile-logo"></div>
-            </a>
-            </div>
-            <div class="cell small-4">
-                <span class="search-link">
-                    <a href="#"><i class="ion-search"></i></a>	
-                </span>
-                <a href="#" class="mobile-nav-open"><i class="ion-navicon"></i></a>
+<header class="mobile-header show-for-small-only">
+        <div class="grid-container">
+            <div class="grid-x align-justify">
+                <div class="cell small-5">
+                    <a href="<?php echo site_url(); ?>" class="logo"><h1>CC Network</h1></a>
+                </div>
+                <div class="cell small-3 mobile-buttons">
+                    <a href="#" class="open-mobile-menu"><span class="dashicons dashicons-menu"></span></a>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="menu-mobile-container closed">
-    <a class="close" href="#"><i class="ion-close"></i></span></a>
-    <?php 
-          $args = array(
-              'theme_location' => 'main-menu-mobile',
-              'container' => '',
-              'depth' => 2,
-              'fallback_cb' => false,
-              'items_wrap' => '<ul id = "%1$s" class = "menu vertical %2$s">%3$s</ul>'
-              );
+    </header>
+    <div class="menu-mobile-container hide">
+        <a class="close" href="#">
+            <button class="close-button" aria-label="Close alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </a>
+        <nav class="mobile-navigation">
+        <?php 
+            $args = array(
+                'theme_location' => 'main-menu-mobile',
+                'container' => '',
+                'depth' => 2,
+                'items_wrap' => '<ul id = "%1$s" class = "menu vertical %2$s">%3$s</ul>'
+            );
 
-          wp_nav_menu( $args );
-     ?>
-</div>
+            wp_nav_menu($args);
+            ?>
+        </nav>
+    </div>
 <header class="main-header">
     <div class="grid-container gradient-yellow">
         <div class="grid-x grid-padding-x navigation hide-for-small-only">

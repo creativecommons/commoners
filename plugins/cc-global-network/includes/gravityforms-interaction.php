@@ -66,12 +66,27 @@ define( 'CCGN_GF_DETAILS_AVATAR_GRAVATAR', '13' );*/
 define('CCGN_GF_DETAILS_WAS_AFFILIATE', '15');
 define('CCGN_GF_DETAILS_WAS_AFFILIATE_NAME', '16');
 define('CCGN_GF_DETAILS_RECEIVE_EMAILS', '18.1');
+
+define('CCGN_GF_DETAILS_ATTEND_CC_EVENT', '22.1');
+define('CCGN_GF_DETAILS_ATTEND_CC_EVENT_DETAILS', '23');
+define('CCGN_GF_DETAILS_ORGANIZE_CC_EVENT', '24,1');
+define('CCGN_GF_DETAILS_ORGANIZE_CC_EVENT_DETAILS', '25');
+define('CCGN_GF_DETAILS_DEVELOP_OPEN', '26.1');
+define('CCGN_GF_DETAILS_DEVELOP_OPEN_DETAILS', '27');
+define(
+    'CCGN_GF_DETAILS_CONTRIBUTE_CC', 
+    ['30.1', '30.2', '30.3', '30.4', '30.5']
+);
+define('CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS', '29');
+
 define('CCGN_GF_DETAILS_NAME_PARAMETER', 'your-name');
 define('CCGN_GF_DETAILS_BIO_PARAMETER', 'brief-biography');
 define('CCGN_GF_DETAILS_STATEMENT_PARAMETER', 'brief-statement');
 define('CCGN_GF_DETAILS_AREAS_OF_INTEREST_PARAMETER', 'areas-of-interest');
 define('CCGN_GF_DETAILS_LANGUAGES_PARAMETER', 'languages');
 define('CCGN_GF_DETAILS_LOCATION_PARAMETER', 'primary-location');
+
+
 define(
     'CCGN_GF_DETAILS_CHAPTER_INTEREST_PARAMETER',
     'preferred-country-chapter'
@@ -80,6 +95,14 @@ define('CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS_PARAMETER', 'social-media-urls');
 define('CCGN_GF_DETAILS_WAS_AFFILIATE_PARAMETER', 'affiliate-status');
 define('CCGN_GF_DETAILS_WAS_AFFILIATE_NAME_PARAMETER', 'affiliate-name');
 define('CCGN_GF_DETAILS_RECEIVE_EMAILS_PARAMETER', 'receive-updates');
+define('CCGN_GF_DETAILS_ATTEND_CC_EVENT_PARAMETER', 'attend-event');
+define('CCGN_GF_DETAILS_ATTEND_CC_EVENT_DETAILS_PARAMETER', 'attend-event-details');
+define('CCGN_GF_DETAILS_ORGANIZE_CC_EVENT_PARAMETER', 'organize-event');
+define('CCGN_GF_DETAILS_ORGANIZE_CC_EVENT_DETAILS_PARAMETER', 'organize-event-details');
+define('CCGN_GF_DETAILS_DEVELOP_OPEN_PARAMETER', 'open-develop');
+define('CCGN_GF_DETAILS_DEVELOP_OPEN_DETAILS_PARAMETER', 'open-develop-details');
+define('CCGN_GF_DETAILS_CONTRIBUTE_CC_PARAMETER', 'contribute-cc');
+define('CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS_PARAMETER', 'contribute-cc-detail');
 
 // Adding anything here? Check:
 // ccgn_registration_institution_shortcode_render_view
@@ -230,6 +253,14 @@ define(
         ['Location', CCGN_GF_DETAILS_LOCATION],
         ['Chapter of Interest', CCGN_GF_DETAILS_CHAPTER_INTEREST],
         ['Social Media / URLs', CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS],
+        ['Attended CC (or open movement) event', CCGN_GF_DETAILS_ATTEND_CC_EVENT],
+        ['Attended event details', CCGN_GF_DETAILS_ATTEND_CC_EVENT_DETAILS],
+        ['Organise or contribute CC (or open movement) event', CCGN_GF_DETAILS_ORGANIZE_CC_EVENT],
+        ['Organised event detail', CCGN_GF_DETAILS_ORGANIZE_CC_EVENT_DETAILS],
+        ['Open content, tool, platform developed', CCGN_GF_DETAILS_DEVELOP_OPEN],
+        ['Details of development', CCGN_GF_DETAILS_DEVELOP_OPEN_DETAILS],
+        ['Contribution to CC Network', CCGN_GF_DETAILS_CONTRIBUTE_CC],
+        ['Contribution Details', CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS]
     ]
 );
 

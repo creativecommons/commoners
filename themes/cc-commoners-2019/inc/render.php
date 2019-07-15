@@ -39,6 +39,26 @@ class render {
         }
         return $out;
     }
+    static function chapter_member($member_id,$position) {
+        $out = '';
+        if ( !empty( $member_id ) ) {
+            $member = get_user_by('ID', $member_id);
+            $profile_link = bp_core_get_user_domain( $member_id );
+            $out .= '<article class="cell hentry entry-voucher entry-chapter-member">';
+                $out .= '<header class="voucher">';
+                    $out .= '<figure class="entry-image">';
+                        $out .= bp_core_fetch_avatar ( array( 'item_id' => $member_id, 'type' => 'full' ) );
+                    $out .= '</figure>';
+                    $out .= '<h3 class="entry-title">'.$member->display_name.'</h3>';
+                    $out .= '<span class="country">'.$position.'</span>';
+                $out .= '</header>';
+                $out .= '<div class="entry-summary">';
+                    $out .= '<a href="'.$profile_link.'" class="button secondary">View profile</a>';
+                $out .= '</div>';
+			$out .= '</article>';
+        }
+        return $out;
+    }
     static function post_gallery($gallery_ids) {
         $out = '';
         if ( !empty( $gallery_ids ) ) {
@@ -89,12 +109,12 @@ class render {
         $out = '';
         $out .= '<article class="hentry entry-bignews">';
             $out .= '<div class="grid-x grid-padding-x">';
-                $out .= '<div class="cell auto">';
+                $out .= '<div class="cell large-auto medium-auto small-12">';
                     $out .= '<figure class="entry-image">';
                         $out .= '<a href="'.get_permalink($post->ID).'">'.get_the_post_thumbnail($post->ID,'squared').'</a>';
                     $out .= '</figure>';
                 $out .= '</div>';
-                $out .= '<div class="cell auto">';
+                $out .= '<div class="cell large-auto medium-auto small-12">';
                     $out .= '<span class="subtitle">'.get_the_category_list( ', ', '', $post->ID ).'</span>';
                     $out .= '<h3 class="entry-title"><a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'</a></h3>';
                     $out .= '<span class="date">'.self::date_format($post->post_date).'</span>';

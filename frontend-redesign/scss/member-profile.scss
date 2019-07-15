@@ -126,13 +126,16 @@
         margin-top: 1rem;
         font-size: .9rem;
         &:before {
-            content: '“';
-            position: absolute;
-            left: 0;
-            top: -1rem;
-            font-size: 5rem;
-            font-weight: 600;
-            color: $medium-gray;
+            @include quote;
+        }
+    }
+    &.entry-chapter-member {
+        .entry-summary {
+            &:before {
+                content: '';
+            }
+            text-align: center;
+            padding-left: 0;
         }
     }
 }
@@ -166,5 +169,25 @@
     .country {
         font-style: italic;
         color: $dark-gray;
+    }
+}
+.featured-member-header {
+    .entry-title {
+        font-weight: 600;
+    }
+    .entry-image {
+        margin-bottom: 1rem;
+    }
+    .light-text {
+        font-size: 1.1rem;
+    }
+}
+.feature-member-statement {
+    position: relative;
+    font-size: 1.2rem;
+    &::before {
+        @include quote;
+        left: -3rem;
+        top: -2rem;
     }
 }

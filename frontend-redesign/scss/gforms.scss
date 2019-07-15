@@ -1,5 +1,10 @@
 .gform_wrapper {
     .gform_body {
+        .gfield_html_formatted {
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
         .gfield {
             a {
                 color: $alert-color;
@@ -109,12 +114,17 @@
             .gfield_select {
                 padding-right: 1.5rem;
             }
+            &.ginput_container_select {
+                .voucher_profile_link {
+                    margin-left: 1rem;
+                }
+            }
         }
     }
     .gform_footer {
         text-align: center;
         .gform_button {
-            @include button(false,$success-color,lighten($success-color,5),$white, solid);
+            @include button(false,$secondary-color,lighten($secondary-color,5),$white, solid);
         }
     }
 }

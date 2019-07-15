@@ -81,9 +81,9 @@
             
         </div>
         <div class="entry-content">
-            <div class="grid-x grid-margin-x large-up-4">
                 <?php 
                     if ( !empty( $member_list) ) {
+                        echo '<div class="grid-x grid-margin-x large-up-4 medium-up-4 small-up-2">';
                         foreach ( $member_list as $member ) {
                             echo render::member_single( $member );
                         }
@@ -103,9 +103,15 @@
                                 ));
                             echo '</div>';
                         echo '</div>';
-                    }
+                    echo '</div>';
+                } else {
+                    echo '<div class="callout warning">';
+                        echo '<h5>No results</h5>';
+                        echo '<p>Sorry, no results for your search criteria </p>';
+                    echo '</div>';
+                }
                 ?>
-            </div>
+            
         </div>
     </div>
 </section>

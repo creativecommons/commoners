@@ -159,7 +159,7 @@ add_action( 'bp_core_setup_globals', '_bp_set_default_component' );
 add_filter( 'bp_is_active', '_bp_remove_components', 10, 2 );
 
 // Hide group/member directories etc. from users who are not logged in
-add_filter( 'get_header', '_bp_not_signed_in_redirect', 1 );
+//add_filter( 'get_header', '_bp_not_signed_in_redirect', 1 );
 
 // Don't show unvouched users in member directory, do list alphabetically
 add_action( 'bp_ajax_querystring', 'ccgn_bp_directory_query', 20, 2 );

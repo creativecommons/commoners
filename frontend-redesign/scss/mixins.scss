@@ -15,6 +15,23 @@
     background-size: contain;
     background-repeat: no-repeat;
 }
+@mixin logo-display {
+    display: block;
+    width: 230px;
+    height: 50px;
+    margin: 20px auto 0 auto;
+    background: url('../img/cc.logo.mini.black.svg') no-repeat center top;
+    background-size: contain;
+    opacity: 1;
+    transition: all .2s ease;
+    h1, span {
+        display: block;
+        text-indent: -1000rem;
+    }
+    &:hover {
+        opacity: .4;
+    }
+}
 @mixin placeholder {
     &.placeholder { @content; }
     &:-moz-placeholder { @content; }
@@ -29,7 +46,15 @@
     width: 100%;
     height: 100%;
 }
-
+@mixin quote {
+    content: '“';
+    position: absolute;
+    left: 0;
+    top: -1rem;
+    font-size: 5rem;
+    font-weight: 600;
+    color: $medium-gray;
+}
 // ---------------- Appearance
 @mixin shadow {
     box-shadow: 0 1px 4px rgba(0,0,0,.2);

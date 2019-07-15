@@ -7,8 +7,20 @@ body {
 .inner-space {
     padding-top: 2rem;
     padding-bottom: 2rem;
+    &.tight-padding {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
     &.no-bottom-space {
         padding-bottom: 0;
+    }
+}
+.outer-space {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    &.tight-margin {
+        margin-top: 1rem;
+    margin-bottom: 1rem;
     }
 }
 .closed {
@@ -72,6 +84,18 @@ body {
     font-weight: 600;
     color: $dark-gray;
 }
+.enclosed {
+    border-top: 1px solid $light-gray;
+    border-bottom: 1px solid $light-gray;
+    .button {
+        margin-bottom: 0;
+    }
+}
+.rounded {
+    img {
+        border-radius: 50%;
+    }
+}
 //colors
 a {
     color: $secondary-color;
@@ -101,5 +125,8 @@ a {
     }
     &.primary {
         color: darken($primary-color,40) !important;
+    }
+    &.secondary {
+        color: $white;
     }
 }
