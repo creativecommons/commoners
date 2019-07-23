@@ -437,14 +437,17 @@ function ccgn_rest_return_application_approval_list() {
             $log_user = ccgn_ask_clarification_log_get_id($user_id);
             $user_is_asked_for_clarification = 0;
             $voucher_asked = null;
-            foreach ($log_user as $entry) {
-                $asked_meta = get_user_meta($entry['voucher_id'], 'ccgn_need_to_clarify_vouch_reason_applicant_status', true);
-                if ( ($asked_meta['status'] == 1) && ($asked_meta['applicant_id'] == $user_id) ) {
-                    $user_is_asked_for_clarification = 1;
-                    $asked_voucher_user = get_user_by('ID', $entry['voucher_id'])->display_name;
-                } else if (($asked_meta['status'] == 0) && ($asked_meta['applicant_id'] == $user_id)) {
-                    $user_is_asked_for_clarification = 2;
-                    $asked_voucher_user = get_user_by('ID', $entry['voucher_id'])->display_name;
+            $asked_voucher_user = false;
+            if (!empty($log_user)) {
+                foreach ($log_user as $entry) {
+                    $asked_meta = get_user_meta($entry['voucher_id'], 'ccgn_need_to_clarify_vouch_reason_applicant_status', true);
+                    if ( ($asked_meta['status'] == 1) && ($asked_meta['applicant_id'] == $user_id) ) {
+                        $user_is_asked_for_clarification = 1;
+                        $asked_voucher_user = get_user_by('ID', $entry['voucher_id'])->display_name;
+                    } else if (($asked_meta['status'] == 0) && ($asked_meta['applicant_id'] == $user_id)) {
+                        $user_is_asked_for_clarification = 2;
+                        $asked_voucher_user = get_user_by('ID', $entry['voucher_id'])->display_name;
+                    }
                 }
             }
             // The last form the user filled out, so the time to use

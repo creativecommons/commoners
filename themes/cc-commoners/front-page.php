@@ -63,14 +63,14 @@
 			<p>
 				If you are an existing or prospective institutional member, please visit the institutional membership page to learn more.
 			</p>
-			<a class="block-link" href="http://ccnetwork.lo/sign-up/institution/">Institutional Sign Up</a>
+			<a class="block-link" href="<?php echo site_url('sign-up/institution') ?>">Institutional Sign Up</a>
 		</div>
 		<div class="block cell">
 			<h3>Chapters</h3>
 			<p>
 				Chapters are the way we organize locally. Check here if we there's already a group of volunteers working in your country.
 			</p>
-			<a class="block-link" href="http://ccnetwork.lo/chapters/">Read more</a>
+			<a class="block-link" href="<?php echo site_url('chapters') ?>">Read more</a>
 		</div>
 	</section>
 </div>

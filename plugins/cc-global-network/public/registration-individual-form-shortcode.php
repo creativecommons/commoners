@@ -50,9 +50,16 @@ function ccgn_registration_individual_form_submit_handler ( $entry,
         // updates. This works well because in both cases we want to move the
         // user to the RECEIVED state.
     case CCGN_GF_INDIVIDUAL_DETAILS:
-        ccgn_registration_current_user_set_stage (
-            CCGN_APPLICATION_STATE_RECEIVED
-        );
+        $user_state = ccgn_registration_user_get_stage( $entry['created_by'] );
+        if ( $user_state == CCGN_APPLICATION_STATE_UPDATE_DETAILS ) {
+            $status = get_user_meta( $entry['created_by'], 'ccgn_applicant_update_details_state', true );
+            $state['state'] = 'updated';
+            $state['updated'] = 1;
+            $state['date'] = date('Y-m-d H:i:s', strtotime('now'));
+            update_user_meta( $entry['created_by'], 'ccgn_applicant_update_details_state', $status );
+        }
+        ccgn_registration_user_set_stage ( $entry['created_by'], CCGN_APPLICATION_STATE_RECEIVED );
+
         // Move if this is no longer the last form the applicant completes in
         // the initial data entry stage!
         ccgn_registration_individual_post_last_form ();
@@ -71,6 +78,7 @@ function ccgn_registration_individual_shortcode_render_view ( $user ) {
         break;
     case CCGN_APPLICATION_STATE_DETAILS:
     case CCGN_APPLICATION_STATE_UPDATE_DETAILS:
+
         ccgn_registration_individual_shortcode_render_details( $user );
         break;
     case CCGN_APPLICATION_STATE_VOUCHERS:

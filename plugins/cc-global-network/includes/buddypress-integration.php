@@ -769,16 +769,15 @@ if ( defined( 'INTERIM_MEMBERSHIP_COUNCIL' ) ) {
         ccgn_user_join_membership_council( $user_id );
     }
 }
-
+/* Rejected account should be deleted. There's no need to keep this data on the website **/
 function ccgn_user_level_set_rejected ( $user_id ) {
-    $user = get_user_by( 'ID', $user_id );
-    // Lock the account
-    $user->set_role( '' );
-    $user->remove_all_caps();
-    ccgn_registration_user_set_stage(
-        $user_id,
-        CCGN_APPLICATION_STATE_REJECTED
-    );
+
+    _ccgn_application_delete_entries_created_by($user_id);
+    delete_user_meta($user_id, CCGN_APPLICATION_TYPE);
+    delete_user_meta($user_id, CCGN_APPLICATION_STATE);
+    delete_user_meta($user_id, CCGN_USER_IS_AUTOVOUCHED);
+
+    $delete = wp_delete_user($user_id);
 }
 
 function ccgn_user_level_set_didnt_update_vouchers ( $user_id ) {
@@ -946,9 +945,19 @@ function _bp_not_signed_in_redirect () {
 // Not all users, just new users (who are not yet members)
 
 function ccgn_bp_directory_query ( $qs=false, $object=false ) {
+    $output = '';
+    $qs_var = parse_str($qs, $output);
     $current_page = get_query_var('name');
+    $is_member_page = false;
+    $is_search = false;
+    if (!empty($output['search_terms'])) {
+        $is_search = true;
+    }
+    if ( ( $current_page == 'members' ) || ( ( $_SERVER['HTTP_REFERER'] == get_bloginfo('url')."/members/" ) && ( get_query_var('name') != 'institution' ) ) ) {
+        $is_member_page = true;
+    }
     //I add this condition because we don't need to filter members when a certain type of member type directory is showed
-    if ($current_page == 'members') {
+    if ($is_member_page || $is_search) {
         if ( $object != 'members' ) {
             return $qs;
         }
@@ -961,13 +970,16 @@ function ccgn_bp_directory_query ( $qs=false, $object=false ) {
         // Filter users manually so we can exclude those with no role (those that
         // have had their application declined) and exclude institutions
         foreach ( $users as $user ) {
-            if (
+            $user_status = get_user_meta($user->ID, 'ccgn-application-state', true);
+             if (
                 array_intersect(
                     $user->roles,
                     array( 'subscriber', 'membership-council-member' )
                 ) == array()
-                || ccgn_member_is_institution( $user->ID )
+                ||  ccgn_member_is_institution( $user->ID ) 
+                || ($user_status != 'accepted') 
             ) {
+                //echo '<pre>'; print_r($user_status); echo '</pre>';
                 $exclude[] = $user->ID;
             }
         }

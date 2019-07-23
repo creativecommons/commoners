@@ -279,7 +279,11 @@ function ccgn_ask_clarification_log_get()
 }
 function ccgn_ask_clarification_log_get_id($applicant_id) {
     $log = ccgn_ask_clarification_log_get();
-    return $log[$applicant_id];
+    if (!empty($log[$applicant_id])) {
+        return $log[$applicant_id];
+    } else {
+        return false;
+    }
 }
 function ccgn_ask_clarification_log_user_get($user_id) {
     $log = ccgn_ask_clarification_log_get();

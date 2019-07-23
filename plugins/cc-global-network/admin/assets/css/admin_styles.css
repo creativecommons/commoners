@@ -99,6 +99,9 @@
 .dataTable tbody tr.orange-mark {
     background-color: #fcf3e6;
 }
+.dataTable tbody tr.yellow-mark {
+    background-color: #fffdea;
+}
 .dataTable tbody tr.blue-mark {
     background-color: #cff9f7;
 }

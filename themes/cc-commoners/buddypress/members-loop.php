@@ -52,7 +52,7 @@
 
 
 	<?php while ( bp_members() ) : bp_the_member(); ?>
-
+	
 		<article <?php bp_member_class(); ?>>
 
 			<div class="avatar-container">

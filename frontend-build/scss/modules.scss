@@ -142,7 +142,7 @@
             font-size: 0.9rem;
             margin-bottom: 15px;
             a {
-                color: $black;
+                color: $secondary-color;
             }
         }
         .hub-grid-block-svg {
@@ -161,6 +161,7 @@
             }
             a {
                 color: $white;
+                text-decoration: underline;
             }
         }
 

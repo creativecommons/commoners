@@ -137,6 +137,13 @@ function ccgn_application_users_page_pre_form_submit_handler ( $entry,
                 'ccgn-email-update-details',
                 $update_message
             );
+            $update_details_meta = array(
+                'state' => 'none',
+                'updated' => 0,
+                'date' => date('Y-m-d H:i:s', strtotime('now')),
+                'done' => false
+            );
+            update_user_meta( $applicant_id, 'ccgn_applicant_update_details_state', $update_details_meta );
         } else {
             ccgn_user_level_set_rejected( $applicant_id );
             ccgn_registration_email_application_rejected( $applicant_id );
@@ -553,20 +560,20 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
                 $log_user = ccgn_ask_clarification_log_get_id($applicant_id);
                 foreach ($log_user as $entry) {
                     $asked_meta = get_user_meta($entry['voucher_id'], 'ccgn_need_to_clarify_vouch_reason_applicant_status', true);
-                    
                     if (($asked_meta['status'] == 1) && ($entry['voucher_id'] == $voucher['id'])) {
                         $user_is_asked_for_clarification = 1;
                         $asked_class = 'asked-box';
-                        $who_asked = $entry['ask_user_name'];
+                        $who_asked = (!empty($asked_info['ask_user'])) ? get_user_by('ID',$asked_info['ask_user'])->display_name : $entry['ask_user_name'];
                     } else if (($asked_meta['status'] == 0) && ($entry['voucher_id'] == $voucher['id'])) {
                         $user_is_asked_for_clarification = 2;
                         $asked_class = 'asked-box-answered';
-                        $who_asked = $entry['ask_user_name'];
+                        $who_asked = (!empty($asked_info['ask_user'])) ? get_user_by('ID',$asked_info['ask_user'])->display_name : $entry['ask_user_name'];
                     }
                 }
 
             } else {
-                $who_asked = get_user_by('ID', $asked_info['user_id'])->display_name;
+                $log_user = ccgn_ask_clarification_log_get_id($asked_info['applicant_id']);
+                $who_asked = (!empty($asked_info['ask_user'])) ? get_user_by('ID',$asked_info['ask_user'])->display_name : $log_user[count($log_user)-1]['ask_user_name'];
                 $user_is_asked_for_clarification = $asked_info['status'];
             }
             echo '<div class="ccgn-box applicant '.$asked_class.'">';
@@ -774,14 +781,15 @@ function ccgn_ajax_ask_voucher()
 {
     $user_id = $_POST['user_id'];
     $applicant_id = $_POST['applicant_id'];
+    $current_user_ask = get_current_user_id();
     if (check_ajax_referer('ask_voucher', 'sec') && (!empty($user_id))) {
         ccgn_ask_email_vouching_request($applicant_id,$user_id);
         //set user state to clarification of the reason to vouch applicant
-        $update_ask_status = array('status' => 1, 'applicant_id' => $applicant_id, 'user_id' => $user_id);
+        $update_ask_status = array('status' => 1, 'applicant_id' => $applicant_id, 'user_id' => $user_id, 'ask_user' => $current_user_ask, 'time' => time());
         update_user_meta($user_id, 'ccgn_need_to_clarify_vouch_reason_applicant_status', $update_ask_status );
         update_user_meta($user_id,'ccgn_need_to_clarify_vouch_reason',1);
         ccgn_ask_clarification_log_append($applicant_id,$user_id);
-        echo 'ok';        
+        echo 'ok';
     }
     exit(0);
 }

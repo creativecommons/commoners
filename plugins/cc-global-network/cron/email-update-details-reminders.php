@@ -67,6 +67,7 @@ function ccgn_email_update_details_reminders()
                 ccgn_registration_email_update_details_first_reminder($applicant_id);
                 $update_details_meta = array(
                     'state' => 'first-reminder',
+                    'updated' => 0,
                     'date' => date('Y-m-d H:i:s', strtotime('now')),
                     'done' => true
                 );
@@ -78,6 +79,7 @@ function ccgn_email_update_details_reminders()
                 ccgn_registration_email_update_details_second_reminder($applicant_id);
                 $update_details_meta = array(
                     'state' => 'second-reminder',
+                    'updated' => 0,
                     'date' => date('Y-m-d H:i:s', strtotime('now')),
                     'done' => true
                 );
