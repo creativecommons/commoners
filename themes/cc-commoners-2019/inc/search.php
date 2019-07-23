@@ -91,7 +91,7 @@ class members_search {
             if ($words > 2) {
 			    $default['search'] = $this->search_text;
             } else {
-                $default['search'] = $this->search_text.'*';
+                $default['search'] = '*'.$this->search_text.'*';
             }
 		}
 		if ( !empty( $this->page ) ) {

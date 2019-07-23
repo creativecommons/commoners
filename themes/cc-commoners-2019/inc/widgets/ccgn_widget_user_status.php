@@ -56,7 +56,9 @@ class WP_Widget_User_Status extends WP_Widget {
                             echo '<div class="status-content">';
                                 echo '<p>'.$application_status['step']['msg'].'</p>';
                                 echo '<div class="status-action">';
+                                if ( !empty( $application_status['step']['link'] ) ) {
                                     echo '<a href="'.$application_status['step']['link'].'" class="button primary">'.$application_status['step']['link_text'].'</a>';
+                                }
                                 echo '</div>';
                             echo '</div>';
                             
@@ -66,7 +68,9 @@ class WP_Widget_User_Status extends WP_Widget {
                             echo '<div class="status-content">';
                                 echo '<p>'.$application_status['step']['msg'].'</p>';
                                 echo '<div class="status-action">';
+                                if ( !empty( $application_status['step']['link'] ) ) {
                                     echo '<a href="'.$application_status['step']['link'].'" class="button primary">'.$application_status['step']['link_text'].'</a>';
+                                }
                                 echo '</div>';
                             echo '</div>';
                             
