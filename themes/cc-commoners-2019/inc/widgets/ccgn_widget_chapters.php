@@ -23,7 +23,7 @@ class WP_Widget_Chapter_List extends WP_Widget {
                     echo '</article>';
                     echo '<article class="stats-item">';
                         echo '<span class="stats-number">'.$stats['total_members'].'</span>';
-                        echo '<span class="stats-name">Users</span>';
+                        echo '<span class="stats-name">Members</span>';
                     echo '</article>';
                 echo '</div>';
                 echo '<div class="chapter-list">';
