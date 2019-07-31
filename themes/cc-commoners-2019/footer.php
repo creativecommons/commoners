@@ -13,12 +13,16 @@
                 </div>
                 <p>Except where otherwise noted, content on this site is licensed under a Creative Commons Attribution 4.0 International license. Icons by The Noun Project.</p>
                 <nav class="footer-navigation">
-                    <ul class="menu simple">
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of use</a></li>
-                        <li><a href="#">Charter</a></li>
-                    </ul>
+                    <?php 
+                        $args = array(
+                            'theme_location' => 'footer',
+                            'container' => '',
+                            'depth' => 2,
+                            'items_wrap' => '<ul id = "%1$s" class = "menu simple %2$s">%3$s</ul>'
+                        );
+
+                        wp_nav_menu($args);
+                    ?>
                 </nav>
             </div>
         </div>
