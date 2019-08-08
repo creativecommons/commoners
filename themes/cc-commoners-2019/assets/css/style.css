@@ -6548,6 +6548,19 @@ a {
     .big-select .content-selector .menu .back-link {
       margin-top: 1.2rem; }
 
+.status-bar {
+  background-color: #27a635;
+  font-size: .9rem;
+  font-family: "Roboto condensed", sans-serif;
+  border-bottom: 2px solid #fefefe; }
+  .status-bar .grid-container {
+    padding-top: 0;
+    padding-bottom: 0; }
+    .status-bar .grid-container a {
+      color: #fefefe; }
+      .status-bar .grid-container a:hover {
+        text-decoration: underline; }
+
 .page-template-template-user-status .application-status {
   position: relative;
   padding: 1.5rem;

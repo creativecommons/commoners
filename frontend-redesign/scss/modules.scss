@@ -569,6 +569,22 @@
     }
 }
 
+.status-bar {
+    background-color: $success-color;
+    font-size: .9rem;
+    font-family: $title-font-family;
+    border-bottom: 2px solid $white;
+    .grid-container {
+        padding-top: 0;
+        padding-bottom: 0;
+        a {
+            color: $white;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
 .page-template-template-user-status {
     .application-status {
         position: relative;

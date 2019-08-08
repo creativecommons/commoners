@@ -45,6 +45,32 @@
         </nav>
     </div>
 <header class="main-header">
+    <?php 
+    if ( is_user_logged_in() ) {
+        $current_user = get_user_by( 'ID', get_current_user_id());
+        $member_or_applicant = ( bp_commoners::current_user_is_accepted() )? 'member' : 'applicant';
+        $individual_or_institutional = (ccgn_member_is_individual( get_current_user_id() )) ? 'Individual' : 'Institutional';
+        $user_type = ' ( '.$individual_or_institutional.' '.$member_or_applicant.' ) ';
+        echo '<div class="status-bar">';
+            echo '<div class="grid-container">';
+                echo '<div class="grid-x align-justify">';
+                    echo '<div class="cell large-4 align-self-middle">';
+                        echo '<i class="ion-chevron-right"></i> ';
+                        echo "Logged in as: $current_user->display_name $user_type";
+                    echo '</div>';
+                    echo '<div class="cell large-2 align-self-middle">';
+                        echo '<nav class="status-menu">';
+                            echo '<ul class="menu align-right">';
+                                echo '<li><a href="'. bp_loggedin_user_domain() . 'profile/edit/">Edit profile</a></li>';
+                                echo '<li><a href="'.wp_logout_url().'"> <i class="ion-log-out"></i> Log out</a></li>';
+                            echo '</ul>';
+                        echo '</nav>';
+                    echo '</div>';
+                echo '</div>';
+            echo '</div>';
+        echo '</div>';
+    }
+    ?>
     <div class="grid-container gradient-yellow">
         <div class="grid-x grid-padding-x navigation hide-for-small-only">
             <div class="cell large-3 columns logo">
