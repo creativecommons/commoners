@@ -78,6 +78,8 @@ define(
     ['30.1', '30.2', '30.3', '30.4', '30.5']
 );
 define('CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS', '29');
+define('CCGN_GF_DETAILS_WORK_FREE_CULTURE', '31');
+define('CCGN_GF_DETAILS_WORK_FREE_CULTURE_DETAILS', '32');
 
 define('CCGN_GF_DETAILS_NAME_PARAMETER', 'your-name');
 define('CCGN_GF_DETAILS_BIO_PARAMETER', 'brief-biography');
@@ -103,6 +105,8 @@ define('CCGN_GF_DETAILS_DEVELOP_OPEN_PARAMETER', 'open-develop');
 define('CCGN_GF_DETAILS_DEVELOP_OPEN_DETAILS_PARAMETER', 'open-develop-details');
 define('CCGN_GF_DETAILS_CONTRIBUTE_CC_PARAMETER', 'contribute-cc');
 define('CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS_PARAMETER', 'contribute-cc-detail');
+define('CCGN_GF_DETAILS_WORK_FREE_CULTURE_PARAMETER','work-free-culture');
+
 
 // Adding anything here? Check:
 // ccgn_registration_institution_shortcode_render_view
@@ -260,7 +264,9 @@ define(
         ['Open content, tool, platform developed', CCGN_GF_DETAILS_DEVELOP_OPEN],
         ['Details of development', CCGN_GF_DETAILS_DEVELOP_OPEN_DETAILS],
         ['Contribution to CC Network', CCGN_GF_DETAILS_CONTRIBUTE_CC],
-        ['Contribution Details', CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS]
+        ['Contribution Details', CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS],
+        ['Worked in open knowledge or free culture space', CCGN_GF_DETAILS_WORK_FREE_CULTURE],
+        ['Details of work', CCGN_GF_DETAILS_WORK_FREE_CULTURE_DETAILS]
     ]
 );
 
