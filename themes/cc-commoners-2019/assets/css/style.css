@@ -6548,6 +6548,25 @@ a {
     .big-select .content-selector .menu .back-link {
       margin-top: 1.2rem; }
 
+.badges {
+  display: flex;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  align-items: center;
+  justify-content: center; }
+  .badges .badge {
+    text-align: center; }
+    .badges .badge svg {
+      width: 60%; }
+    .badges .badge.chapter-lead #badge-logo {
+      fill: #ee4c30; }
+    .badges .badge.gnc #badge-logo {
+      fill: #27a635; }
+    .badges .badge.excom #badge-logo {
+      fill: #ffae00; }
+    .badges .badge.mc #badge-logo {
+      fill: #F7D962; }
+
 .status-bar {
   background-color: #27a635;
   font-size: .9rem;

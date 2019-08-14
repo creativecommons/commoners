@@ -128,6 +128,39 @@ class Commoners {
         }
         return $stats;
     }
+    public static function reps() {
+        delete_transient('ccgn_reps_members');
+        if (false === ($members = get_transient('ccgn_reps_members'))) {
+            $chapters = new WP_Query(array(
+                'post_type' => 'cc_chapters',
+                'post_status' => 'publish',
+                'posts_per_page' => -1
+            ));
+            if ($chapters->have_posts()) {
+                $members = [];
+                foreach ($chapters->posts as $chapter) {
+                    $chapter_lead = $chapter->cc_chapters_chapter_lead;
+                    $gnc_rep = $chapter->cc_chapters_member_gnc;
+                    $chapter_country = $chapter->cc_chapters_chapter_country;
+                    $members['chapter_leads'][$chapter_lead] = $chapter_country;
+                    $members['gnc_members'][$gnc_rep] = $chapter_country;
+                }
+            // SET THE TRANSIENT FOR 12 HRS
+            set_transient('ccgn_reps_members', $members, 12 * 60 * 60);
+            }
+        }
+        return $members;
+    }
+    static function is_excom_member( $user_id ) {
+        global $_set;
+		$settings = $_set->settings;
+        for ($i = 1; $i <= 8; $i++) {
+            if ($settings['excom_member'.$i] == $user_id) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 //add_action("wp_ajax_event-chapters__get_countries", Commoners::get_chapters_by_status());
 add_action('wp_ajax_event-get-chapters',array('Commoners','get_chapters_by_status'));

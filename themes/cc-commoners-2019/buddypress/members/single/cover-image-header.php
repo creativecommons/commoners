@@ -40,7 +40,6 @@ do_action( 'bp_before_member_header' ); ?>
 
 	</div><!-- #item-header-cover-image -->
 </div><!-- #cover-image-container -->
-
 <div id="item-header-content">
 
 	<?php if ( bp_is_active( 'activity' ) && bp_activity_do_mentions() ) : ?>

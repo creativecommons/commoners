@@ -568,7 +568,39 @@
         }
     }
 }
-
+.badges {
+    display: flex;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    .badge {
+        text-align: center;
+        svg {
+            width: 60%;
+        }
+        &.chapter-lead {
+            #badge-logo {
+                fill: $alert-color;
+            }
+        }
+        &.gnc {
+            #badge-logo {
+                fill: $success-color;
+            }
+        }
+        &.excom {
+            #badge-logo {
+                fill: $warning-color;
+            }
+        }
+        &.mc {
+            #badge-logo {
+                fill: $primary-color;
+            }
+        }
+    }
+}
 .status-bar {
     background-color: $success-color;
     font-size: .9rem;

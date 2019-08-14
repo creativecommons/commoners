@@ -50,6 +50,38 @@
 			}
 		 ?>
 	</div>
+	<?php 
+		
+		$user = get_user_by('ID', bp_displayed_user_id());
+		$chapters_reps = Commoners::reps();
+		$membership_comitee = in_array( 'membership-council-member', $user->roles );
+		$chapter_lead = $chapters_reps['chapter_leads'][ bp_displayed_user_id() ];
+		$gnc_member = $chapters_reps['gnc_members'][ bp_displayed_user_id() ];
+		if ( Commoners::is_excom_member( bp_displayed_user_id() ) || $membership_comitee || $chapter_lead || $gnc_member ) {
+			echo '<div class="badges">';
+				if ( Commoners::is_excom_member( bp_displayed_user_id() ) ) {
+					echo '<div class="badge excom" data-tooltip title="This member is part of the Executive Committee">';
+						get_template_part( 'inc/partials/badges/member', 'excom' );
+					echo '</div>';
+				}
+				if ( $membership_comitee ) {
+					echo '<div class="badge mc" data-tooltip title="This member is part of the Membership Committee">';
+						get_template_part( 'inc/partials/badges/member', 'mc' );
+					echo '</div>';
+				}
+				if ( !empty( $chapter_lead ) ) {
+					echo '<div class="badge chapter-lead" data-tooltip title="This member is a Chapter Lead">';
+						get_template_part( 'inc/partials/badges/member', 'chapter-lead' );
+					echo '</div>';
+				}
+				if ( !empty( $gnc_member ) ) {
+					echo '<div class="badge gnc" data-tooltip title="This member is a GNC representative">';
+						get_template_part( 'inc/partials/badges/member', 'gnc' );
+					echo '</div>';
+				}
+			echo '</div>';
+		}
+	?>
 	<div id="item-nav">
 		<div class="item-list-tabs no-ajax" id="object-nav" aria-label="<?php esc_attr_e( 'Member primary navigation', 'buddypress' ); ?>" role="navigation">
 			<ul>
