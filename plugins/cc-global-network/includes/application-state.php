@@ -382,8 +382,10 @@ function ccgn_show_current_application_status($user_id) {
             'title' => "Let's get started",
             'msg' => 'You should begin your application process',
             'class' => 'success',
-            'link' => $link_form,
-            'link_text' => 'Application form'   
+            'link' => site_url('sign-up/individual/form'),
+            'link_text' => 'Individual Application',
+            'link2' => site_url('sign-up/institution/form'),
+            'link_text2' => 'Institutional Application',
         ),
         'charter-form' => array(
             'step' => 1,

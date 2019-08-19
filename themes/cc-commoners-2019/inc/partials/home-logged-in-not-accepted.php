@@ -7,6 +7,15 @@
         </div>
     </section>
 <?php endif; ?>
+<?php if ( is_active_sidebar( 'home-logged-inactive-no-form-second' ) && ( !ccgn_user_is_individual_applicant( get_current_user_id() ) && !ccgn_user_is_institutional_applicant( get_current_user_id() ) ) ): ?>
+    <section class="sidebar sidebar-second no-form inner-space">
+        <div class="grid-container">
+            <div class="grid-x">
+                <?php dynamic_sidebar( 'home-logged-inactive-no-form-second' ) ?>
+            </div>
+        </div>
+    </section>
+<?php endif; ?>
 <?php if ( is_active_sidebar( 'home-logged-inactive-second' ) ): ?>
     <section class="sidebar sidebar-second inner-space">
         <div class="grid-container">

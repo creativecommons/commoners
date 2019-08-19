@@ -49,8 +49,14 @@
     if ( is_user_logged_in() ) {
         $current_user = get_user_by( 'ID', get_current_user_id());
         $member_or_applicant = ( bp_commoners::current_user_is_accepted() )? 'member' : 'applicant';
-        $individual_or_institutional = (ccgn_member_is_individual( get_current_user_id() )) ? 'Individual' : 'Institutional';
-        $user_type = ' ( '.$individual_or_institutional.' '.$member_or_applicant.' ) ';
+        //$individual_or_institutional = () ? 'Individual' : 'Institutional';
+        $usert_type = '';
+        if ( ccgn_user_is_individual_applicant( get_current_user_id() ) ) {
+            $user_type = ' ( Individual '.$member_or_applicant.' ) ';
+        } else if ( ccgn_user_is_institutional_applicant( get_current_user_id() ) ) {
+            $user_type = ' ( Insitutional '.$member_or_applicant.' ) ';
+        }
+        
         echo '<div class="status-bar">';
             echo '<div class="grid-container">';
                 echo '<div class="grid-x align-justify">';

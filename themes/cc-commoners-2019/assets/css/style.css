@@ -6716,7 +6716,10 @@ a {
   .widget.user-status .widget-content .dropdown-pane .status-content {
     display: flex; }
     .widget.user-status .widget-content .dropdown-pane .status-content .status-action {
+      display: flex;
       margin-left: 1rem; }
+      .widget.user-status .widget-content .dropdown-pane .status-content .status-action .button:first-child {
+        margin-right: .5rem; }
 
 .widget.big-search {
   position: relative;

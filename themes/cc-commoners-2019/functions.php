@@ -98,6 +98,9 @@ $mandatory_sidebars = array(
 	'Logged inactive - Home - second row' => array(
         'name' => 'home-logged-inactive-second'
     ),
+	'Logged inactive (no form yet) - Home - second row' => array(
+        'name' => 'home-logged-inactive-no-form-second'
+    ),
 	'Logged inactive - Home - third row' => array(
         'name' => 'home-logged-inactive-third'
     ),

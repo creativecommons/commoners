@@ -61,7 +61,13 @@
                 .status-content {
                     display: flex;
                     .status-action {
+                        display: flex;
                         margin-left: 1rem;
+                        .button {
+                            &:first-child {
+                                margin-right: .5rem;
+                            }
+                        }
                     }
                 }
             }
