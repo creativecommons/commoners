@@ -32,3 +32,20 @@ function remove_admin_bar()
         show_admin_bar(false);
     }
 }
+/**
+ *  We add member metadata when and administrator is added to the website
+ *  The administraror will ve an approved individual member but won't be listed in the members section because isn't a subscriber
+ */
+function add_admin_member_metadata( $user_id ) {
+    if ( !current_user_can( 'edit_user', $user_id ) ) {
+        return false;
+    }
+    if ( isset( $_POST['md_multiple_roles'] ) && ( in_array( 'administrator', $_POST['md_multiple_roles'] ) ) ) {
+        ccgn_user_set_individual_applicant( $user_id );
+        _ccgn_registration_user_set_stage( $user_id, 'accepted' );
+    }
+}
+//Hooks for user (Update/add)
+add_action('personal_options_update', 'add_admin_member_metadata');
+add_action('edit_user_profile_update', 'add_admin_member_metadata');
+add_action('user_register', 'add_admin_member_metadata'); //When adding new users
