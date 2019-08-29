@@ -75,12 +75,20 @@ function ccgn_field_values ( $entry, $id ) {
 
 function ccgn_vp_format_field ( $entry, $item ) {
     $html = '';
-    $value = ccgn_vp_clean_string(
-        ccgn_field_values(
-            $entry,
-            $item[ 1 ]
-        )
-    );
+    $value = '';
+    if ( is_array( $item[1] ) ) {
+        foreach ( $item[1] as $item_detail ) {
+            $value .= ccgn_field_values( $entry, $item_detail ).' ';
+        }
+    } else {
+        $value = ccgn_vp_clean_string(
+            ccgn_field_values(
+                $entry,
+                $item[ 1 ]
+            )
+        );
+    }
+    
     // Make sure the entry has a value for this item
     if( $value ) {
         $html = '<tr>'
@@ -157,7 +165,7 @@ function ccgn_vouching_form_profile_format( $entry, $map, $applicant_id ) {
     unset ($statement);
     unset ($bio);
     foreach( $map as $item ) {
-         $html .= ccgn_vp_format_field( $entry, $item );
+        $html .= ccgn_vp_format_field( $entry, $item );
     }
     $html .= '</table>';
     $html .= '</div>';

@@ -39,7 +39,10 @@ define(
     'CCGN_BP_DISABLED_MODULES_APPLICANT',
     array_merge(
         CCGN_BP_DISABLED_MODULES_MEMBER,
-        array( 'xprofile', 'settings' )
+        array( 
+            //'xprofile', 
+            'settings' 
+        )
     )
 );
 
@@ -88,7 +91,7 @@ define('CCGN_USER_ROLE_SUB_ADMIN', 'membership-cc-sub-admin');
 // Make sure institutional profiles are always visible
 
 $ccgn_access_levels = [
-    'PUBLIC' => [ 'Insititutional Member' ],
+    'PUBLIC' => [ 'Insititutional Member', 'Individual Member' ],
     'LOGGED_IN' => [ 'Insititutional Member' ],
     'LOGGED_IN_AND_VOUCHED' => [ 'Individual Member', 'Insititutional Member' ],
     'ADMIN' => [  'Individual Member', 'Institutional Member' ]

@@ -66,12 +66,29 @@ define( 'CCGN_GF_DETAILS_AVATAR_GRAVATAR', '13' );*/
 define('CCGN_GF_DETAILS_WAS_AFFILIATE', '15');
 define('CCGN_GF_DETAILS_WAS_AFFILIATE_NAME', '16');
 define('CCGN_GF_DETAILS_RECEIVE_EMAILS', '18.1');
+
+define('CCGN_GF_DETAILS_ATTEND_CC_EVENT', '22.1');
+define('CCGN_GF_DETAILS_ATTEND_CC_EVENT_DETAILS', '23');
+define('CCGN_GF_DETAILS_ORGANIZE_CC_EVENT', '24,1');
+define('CCGN_GF_DETAILS_ORGANIZE_CC_EVENT_DETAILS', '25');
+define('CCGN_GF_DETAILS_DEVELOP_OPEN', '26.1');
+define('CCGN_GF_DETAILS_DEVELOP_OPEN_DETAILS', '27');
+define(
+    'CCGN_GF_DETAILS_CONTRIBUTE_CC', 
+    ['30.1', '30.2', '30.3', '30.4', '30.5']
+);
+define('CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS', '29');
+define('CCGN_GF_DETAILS_WORK_FREE_CULTURE', '31');
+define('CCGN_GF_DETAILS_WORK_FREE_CULTURE_DETAILS', '32');
+
 define('CCGN_GF_DETAILS_NAME_PARAMETER', 'your-name');
 define('CCGN_GF_DETAILS_BIO_PARAMETER', 'brief-biography');
 define('CCGN_GF_DETAILS_STATEMENT_PARAMETER', 'brief-statement');
 define('CCGN_GF_DETAILS_AREAS_OF_INTEREST_PARAMETER', 'areas-of-interest');
 define('CCGN_GF_DETAILS_LANGUAGES_PARAMETER', 'languages');
 define('CCGN_GF_DETAILS_LOCATION_PARAMETER', 'primary-location');
+
+
 define(
     'CCGN_GF_DETAILS_CHAPTER_INTEREST_PARAMETER',
     'preferred-country-chapter'
@@ -80,6 +97,16 @@ define('CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS_PARAMETER', 'social-media-urls');
 define('CCGN_GF_DETAILS_WAS_AFFILIATE_PARAMETER', 'affiliate-status');
 define('CCGN_GF_DETAILS_WAS_AFFILIATE_NAME_PARAMETER', 'affiliate-name');
 define('CCGN_GF_DETAILS_RECEIVE_EMAILS_PARAMETER', 'receive-updates');
+define('CCGN_GF_DETAILS_ATTEND_CC_EVENT_PARAMETER', 'attend-event');
+define('CCGN_GF_DETAILS_ATTEND_CC_EVENT_DETAILS_PARAMETER', 'attend-event-details');
+define('CCGN_GF_DETAILS_ORGANIZE_CC_EVENT_PARAMETER', 'organize-event');
+define('CCGN_GF_DETAILS_ORGANIZE_CC_EVENT_DETAILS_PARAMETER', 'organize-event-details');
+define('CCGN_GF_DETAILS_DEVELOP_OPEN_PARAMETER', 'open-develop');
+define('CCGN_GF_DETAILS_DEVELOP_OPEN_DETAILS_PARAMETER', 'open-develop-details');
+define('CCGN_GF_DETAILS_CONTRIBUTE_CC_PARAMETER', 'contribute-cc');
+define('CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS_PARAMETER', 'contribute-cc-detail');
+define('CCGN_GF_DETAILS_WORK_FREE_CULTURE_PARAMETER','work-free-culture');
+
 
 // Adding anything here? Check:
 // ccgn_registration_institution_shortcode_render_view
@@ -230,6 +257,16 @@ define(
         ['Location', CCGN_GF_DETAILS_LOCATION],
         ['Chapter of Interest', CCGN_GF_DETAILS_CHAPTER_INTEREST],
         ['Social Media / URLs', CCGN_GF_DETAILS_SOCIAL_MEDIA_URLS],
+        ['Attended CC (or open movement) event', CCGN_GF_DETAILS_ATTEND_CC_EVENT],
+        ['Attended event details', CCGN_GF_DETAILS_ATTEND_CC_EVENT_DETAILS],
+        ['Organise or contribute CC (or open movement) event', CCGN_GF_DETAILS_ORGANIZE_CC_EVENT],
+        ['Organised event detail', CCGN_GF_DETAILS_ORGANIZE_CC_EVENT_DETAILS],
+        ['Open content, tool, platform developed', CCGN_GF_DETAILS_DEVELOP_OPEN],
+        ['Details of development', CCGN_GF_DETAILS_DEVELOP_OPEN_DETAILS],
+        ['Contribution to CC Network', CCGN_GF_DETAILS_CONTRIBUTE_CC],
+        ['Contribution Details', CCGN_GF_DETAILS_CONTRIBUTE_CC_DETAILS],
+        ['Worked in open knowledge or free culture space', CCGN_GF_DETAILS_WORK_FREE_CULTURE],
+        ['Details of work', CCGN_GF_DETAILS_WORK_FREE_CULTURE_DETAILS]
     ]
 );
 
@@ -2275,6 +2312,88 @@ new GFLimitCheckboxes(54, array(
         'max' => 6
     )
 ));
+/**
+* Gravity Wiz // Require Minimum Character Limit for Gravity Forms
+* 
+* Adds support for requiring a minimum number of characters for text-based Gravity Form fields.
+* 
+* @version	 1.0
+* @author    David Smith <david@gravitywiz.com>
+* @license   GPL-2.0+
+* @link      http://gravitywiz.com/...
+* @copyright 2013 Gravity Wiz
+*/
+class GW_Minimum_Characters {
+    
+    public function __construct( $args = array() ) {
+        
+        // make sure we're running the required minimum version of Gravity Forms
+        if( ! property_exists( 'GFCommon', 'version' ) || ! version_compare( GFCommon::$version, '1.7', '>=' ) )
+            return;
+    	
+    	// set our default arguments, parse against the provided arguments, and store for use throughout the class
+    	$this->_args = wp_parse_args( $args, array( 
+    		'form_id' => false,
+    		'field_id' => false,
+    		'min_chars' => 0,
+            'max_chars' => false,
+            'validation_message' => false,
+            'min_validation_message' => __( 'Please enter at least %s characters.' ),
+            'max_validation_message' => __( 'You may only enter %s characters.' )
+    	) );
+    	
+        extract( $this->_args );
+        
+        if( ! $form_id || ! $field_id || ! $min_chars )
+            return;
+        
+    	// time for hooks
+    	add_filter( "gform_field_validation_{$form_id}_{$field_id}", array( $this, 'validate_character_count' ), 10, 4 );
+        
+    }
+    
+    public function validate_character_count( $result, $value, $form, $field ) {
+
+        $char_count = strlen( $value );
+        $is_min_reached = $this->_args['min_chars'] !== false && $char_count >= $this->_args['min_chars'];
+        $is_max_exceeded = $this->_args['max_chars'] !== false && $char_count > $this->_args['max_chars'];
+
+        if( ! $is_min_reached ) {
+
+            $message = $this->_args['validation_message'];
+            if( ! $message )
+                $message = $this->_args['min_validation_message'];
+
+            $result['is_valid'] = false;
+            $result['message'] = sprintf( $message, $this->_args['min_chars'] );
+
+        } else if( $is_max_exceeded ) {
+
+            $message = $this->_args['max_validation_message'];
+            if( ! $message )
+                $message = $this->_args['validation_message'];
+
+            $result['is_valid'] = false;
+            $result['message'] = sprintf( $message, $this->_args['max_chars'] );
+
+        }
+        
+        return $result;
+    }
+    
+}
+new GW_Minimum_Characters( array( 
+    'form_id' => 49,
+    'field_id' => 2,
+    'min_chars' => 240,
+    'min_validation_message' => __( 'Oops! You need to enter at least %s characters.' )
+) );
+new GW_Minimum_Characters( array( 
+    'form_id' => 49,
+    'field_id' => 3,
+    'min_chars' => 240,
+    'min_validation_message' => __( 'Oops! You need to enter at least %s characters.' )
+) );
 add_filter('gform_entries_field_value', 'ccgn_gf_display_name_instead_login', 10, 4);
 function ccgn_gf_display_name_instead_login($value, $form_id, $field_id, $entry)
 {

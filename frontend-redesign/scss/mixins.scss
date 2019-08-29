@@ -1,0 +1,85 @@
+// Global network mixins
+@mixin white-logo {
+   @include main-logo(white);
+}
+@mixin darkgray-logo {
+   @include main-logo(darkgray);
+}
+@mixin main-logo($color) {
+    @if $color == white {
+        background-image: url(../img/cc.logo.white.svg);
+    } @else if $color == darkgray {
+        background-image: url(../img/cc.logo.dark.gray.svg);
+    }
+    text-indent: -100rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+@mixin logo-display {
+    display: block;
+    width: 230px;
+    height: 50px;
+    margin: 20px auto 0 auto;
+    background: url('../img/cc.logo.mini.black.svg') no-repeat center top;
+    background-size: contain;
+    opacity: 1;
+    transition: all .2s ease;
+    h1, span {
+        display: block;
+        text-indent: -1000rem;
+    }
+    &:hover {
+        opacity: .4;
+    }
+}
+@mixin placeholder {
+    &.placeholder { @content; }
+    &:-moz-placeholder { @content; }
+    &::-moz-placeholder { @content; }
+    &:-ms-input-placeholder { @content; }
+    &::-webkit-input-placeholder { @content; } 
+}
+@mixin coverer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+@mixin quote {
+    content: '“';
+    position: absolute;
+    left: 0;
+    top: -1rem;
+    font-size: 5rem;
+    font-weight: 600;
+    color: $medium-gray;
+}
+// ---------------- Appearance
+@mixin shadow {
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+@mixin light-shadow {
+    box-shadow: 0 1px 4px 1px rgba(0,0,0,.1);
+}
+//colors
+@mixin gradient-yellow {
+    background-image: linear-gradient(92deg, $primary-color 0%, lighten($primary-color,10) 50%, $primary-color 100%);
+}
+
+//buttons 
+@mixin button-arrow($color) {
+    position: relative;
+    background-color: $color;
+    &:after {
+        content: "";
+        position: absolute;
+        right:-23px;
+        top:-1px;
+        width: 0; 
+        height: 0; 
+        border-top: 21px solid transparent;
+        border-bottom: 21px solid transparent;
+        border-left: 22px solid $color;
+    }
+}

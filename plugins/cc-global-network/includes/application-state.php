@@ -377,8 +377,19 @@ function ccgn_show_current_application_status($user_id) {
     }
     $link_form = (ccgn_user_is_individual_applicant($user_id)) ? site_url('sign-up/individual/form') : site_url('sign-up/institution/form');
     $steps = array(
+        '' => array(
+            'step' => 1,
+            'title' => "Let's get started",
+            'msg' => 'You should begin your application process',
+            'class' => 'success',
+            'link' => site_url('sign-up/individual/form'),
+            'link_text' => 'Individual Application',
+            'link2' => site_url('sign-up/institution/form'),
+            'link_text2' => 'Institutional Application',
+        ),
         'charter-form' => array(
             'step' => 1,
+            'title' => "Charter",
             'msg' => 'You have to agree with the Charter',
             'class' => 'success',
             'link' => $link_form,
@@ -386,6 +397,7 @@ function ccgn_show_current_application_status($user_id) {
         ),
         'details-form' => array(
             'step' => 1,
+            'title' => "Your details",
             'msg' =>'You have to fill out the details form',
             'class' => 'success',
             'link' => $link_form,
@@ -393,6 +405,7 @@ function ccgn_show_current_application_status($user_id) {
         ),
         'vouchers-form' => array(
             'step' => 1,
+            'title' => "Select vouchers",
             'msg' => 'You have to select your vouchers',
             'class' => 'success',
             'link' => $link_form,
@@ -400,6 +413,7 @@ function ccgn_show_current_application_status($user_id) {
         ),
         'update-details' => array(
             'step' => 1,
+            'title' => "Update details",
             'msg' => 'You have to update your details',
             'class' => 'success',
             'link' => $link_form,
@@ -407,48 +421,57 @@ function ccgn_show_current_application_status($user_id) {
         ),
         'received' => array(
             'step' => 2,
+            'title' => "Pre approval",
             'msg' => 'You have selected your Vouchers and now you have to wait for pre-approval',
             'class' => 'on-hold'
         ),
         'vouching' => array(
             'step' => 2,
+            'title' => "Pre approved",
             'msg' => 'You have been pre-approved and you have to wait for your vouchers',
             'class' => 'on-hold'
         ),
         'voting' => array(
             'step' => 3,
+            'title' => "Under revision",
             'msg' => 'Your application going OK and it’s now under review for being approved.',
             'class' => 'on-hold'
         ),
         'update-vouchers' => array(
             'step' => 2,
+            'title' => "Update Vouchers",
             'msg' => 'You have to update your vouchers',
             'class' => 'success',
             'link' => $link_form,
             'link_text' => 'Update vouchers'
         ),
         'rejected-because-didnt-update-vouchers' => array(
-            'step' => 2,
+            'step' => 4,
+            'title' => "Rejected",
             'msg' => 'Your application has been declined, because you didn \'t update your vouchers on time',
             'class' => 'error'
         ),
         'accepted' => array(
-            'step' => 3,
+            'step' => 4,
+            'title' => "Accepted",
             'msg' => 'Your application has been accepted in final approval',
             'class' => 'success'
         ),
         'legal' => array(
             'step' => 3,
+            'title' => "Legal approval",
             'msg' => 'Your application has been approved and now is waiting for Legal approval',
             'class' => 'on-hold'
         ),
         'on-hold' => array(
-            'step' => 3,
+            'step' => 4,
+            'title' => "Paused",
             'msg' => 'The application has been paused for some reason. Contact us at '.antispambot('network-support@creativecommons.org'),
             'class' => 'error'
         ),
         'rejected' => array(
-            'step' => 3,
+            'step' => 4,
+            'title' => "Rejected",
             'msg' => 'Your application has been rejected. Please get in touch with us at' . antispambot('network-support@creativecommons.org'),
             'class' => 'error'
         )
