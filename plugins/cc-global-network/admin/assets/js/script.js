@@ -311,6 +311,9 @@ jQuery(document).ready(function ($) {
             if (data.is_asked == 2) {
                 $(row).addClass('blue-mark');
             }
+            if (data.need_review == 1) {
+                $(row).addClass('purple-mark');
+            }
         }
     });
     var table_members = $('#ccgn-list-new-individuals').DataTable({

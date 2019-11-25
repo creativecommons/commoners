@@ -181,6 +181,71 @@ function ccgn_application_users_page_pre_form ( $applicant_id ) {
         )
     );
 }
+function ccgn_application_mc_review_form ( $applicant_id ) {
+    if ( ccgn_current_user_is_membership_council() || ccgn_current_user_is_final_approver() ) {
+        $existing_entry = ccgn_entries_referring_to_user (
+            $applicant_id,
+            CCGN_GF_MC_REVIEW,
+            CCGN_GF_MC_REVIEW_RESULT
+        )[0];
+        gravity_form(
+            CCGN_GF_MC_REVIEW,
+            false,
+            false,
+            false,
+            array(
+                CCGN_GF_MC_REVIEW_RESULT_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_MC_REVIEW_RESULT
+                ],
+                CCGN_GF_MC_REVIEW_NOTE_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_MC_REVIEW_NOTE
+                ],
+                CCGN_GF_MC_REVIEW_APPLICANT_ID_PARAMETER
+                => $applicant_id
+            )
+        );
+    }
+}
+function ccgn_application_mc_review_submit_handler( $entry, $form ) {
+    if ( $form[ 'title' ] == CCGN_GF_MC_REVIEW ) {
+        $applicant_id = $entry[ CCGN_GF_MC_REVIEW_APPLICANT_ID ];
+        if ( ccgn_current_user_is_membership_council() || ccgn_current_user_is_final_approver() ) {
+            if ( $entry[ CCGN_GF_MC_REVIEW_RESULT ] == 'Yes' ) {
+                $choose_vouchers_entry = ccgn_application_vouchers($applicant_id);
+                $no_voucher = '';
+                foreach ( $choose_vouchers_entry as $entry ) {
+                    if ( $entry[ CCGN_GF_MC_REVIEW_RESULT ] == 'No' ) {
+                        $no_voucher = $entry[ CCGN_GF_MC_REVIEW_APPLICANT_ID ];
+                    }
+                }
+                ccgn_registration_user_set_stage( $applicant_id, CCGN_APPLICATION_STATE_UPDATE_VOUCHERS );
+                $update_date = date('Y-m-d H:i:s', strtotime('now'));
+                $vouch = ccgn_vouches_for_applicant_by_voucher(
+                    $applicant_id,
+                    $no_voucher
+                )[0];
+                $original_vouch = $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH];
+                //FIXME: Check to see if $original_vouch = REMOVED?
+                $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH] = CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED;
+                GFAPI::update_entry($vouch);
+                ccgn_set_entry_update_date($vouch, $update_date);
+                // Update the date on the Choose Vouchers form, resetting the timescale
+                // for updating voucher choices
+                $choose_vouchers_entry = ccgn_application_vouchers($applicant_id);
+                ccgn_set_entry_update_date( $choose_vouchers_entry, $update_date );
+                ccgn_registration_email_to_applicant (
+                    $applicant_id,
+                    'ccgn-email-mc-review-update-vouchers',
+                    $entry[ CCGN_GF_MC_REVIEW_NOTE ]
+                );
+            } elseif ( $entry[ CCGN_GF_MC_REVIEW_RESULT ] == 'No' ) {
+                ccgn_decline_and_notify_applicant( $applicant_id );
+            }
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Handle vote form results
@@ -461,6 +526,10 @@ function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
     } elseif ( $state == '' ) {
         echo _('<h2>New User.</h2>');
         echo _("<p>They haven't completed an application yet.</p>");
+    } elseif ( $state == CCGN_APPLICATION_STATE_REVIEW ) {
+        echo _('<h2>To be reviewed by Membership Comitee.</h2>');
+        echo _("<p>This application needs to be reviewed by the Membership Comitee.</p>");    
+        ccgn_application_mc_review_form($applicant_id);
     } else {
         echo _('<h2>Application resolved.</h2>');
         echo '<p>Status: ' . $state . '</p>';

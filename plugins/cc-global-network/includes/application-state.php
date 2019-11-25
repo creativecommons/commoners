@@ -104,7 +104,8 @@ define(
     'CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS',
     'rejected-because-didnt-update-vouchers'
 );
-
+// This application state happens when a member reject the applicant who asked for vouch, voting 'NO'
+define( 'CCGN_APPLICATION_STATE_REVIEW', 'to-be-reviewed' );
 define(
     'CCGN_APPLICATION_STATE_CAN_BE_PRE_APPROVED',
     [
@@ -287,18 +288,31 @@ function ccgn_applicant_ids_of_type ( $type ) {
 }
 
 function ccgn_applicants_with_state ( $state ) {
+    if ( is_array( $state ) ) {
+        $meta_query = array();
+        foreach ( $state as $item ) {
+            $meta_query[] = array(
+                'key' => CCGN_APPLICATION_STATE,
+                'value' => $item,
+                'compaer' => '='
+            );
+        }
+        $meta_query['relation'] = 'OR';
+    } else {
+        $meta_query = array(
+            array(
+                'key' => CCGN_APPLICATION_STATE,
+                'value' => $state,
+                'compare' => '='
+            )
+        );
+    }
     $users = get_users(
         array(
             'fields' => array(
                 'ID'
             ),
-            'meta_query' => array(
-                array(
-                    'key' => CCGN_APPLICATION_STATE,
-                    'value' => $state,
-                    'compare' => '='
-                )
-            ),
+            'meta_query' => $meta_query,
             // Ideally by application date but that isn't accessible here
             'orderby' => 'ID',
             'order' => 'ASC'

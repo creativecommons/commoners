@@ -30,6 +30,7 @@ define('CCGN_GF_CHOOSE_VOUCHERS', 'Choose Vouchers');
 // Member vouching for applicant / institution
 
 define('CCGN_GF_VOUCH', 'Vouch For Applicant');
+define('CCGN_GF_MC_REVIEW', 'MC user review');
 
 // Admin approval of applicant
 
@@ -199,6 +200,12 @@ define(
     'CCGN_GF_ADMIN_CHANGE_VOUCHERS_APPLICANT_ID_PARAMETER',
     'applicant_id'
 );
+define('CCGN_GF_MC_REVIEW_RESULT', '1');
+define('CCGN_GF_MC_REVIEW_NOTE', '2');
+define('CCGN_GF_MC_REVIEW_APPLICANT_ID', '3');
+define('CCGN_GF_MC_REVIEW_RESULT_PARAMETER', 'mc-review-result');
+define('CCGN_GF_MC_REVIEW_NOTE_PARAMETER', 'mc-review-note');
+define('CCGN_GF_MC_REVIEW_APPLICANT_ID_PARAMETER', 'applicant_id');
 
 // Field values that we need to check
 

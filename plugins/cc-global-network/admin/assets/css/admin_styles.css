@@ -89,6 +89,9 @@
 .color-guide .colors li .color.blue {
     background-color: #cff9f7;
 }
+.color-guide .colors li .color.purple {
+    background-color: #dbc3d7;
+}
 /* Marked Rows */
 .dataTable tbody tr.red-mark {
     background-color: #fff4f4;
@@ -104,6 +107,9 @@
 }
 .dataTable tbody tr.blue-mark {
     background-color: #cff9f7;
+}
+.dataTable tbody tr.purple-mark {
+    background-color: #dbc3d7;
 }
 /* CELL STYLES */
 .dataTable tbody tr td.text-center {
