@@ -975,8 +975,10 @@ function ccgn_application_can_be_voted($applicant_id)
 
 function ccgn_is_application_vouch_cannot($vouch)
 {
-    return $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH]
-        == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT;
+    return ( ( $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH]
+        == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT ) 
+        || ($vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH] 
+        == CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED ) );
 }
 
 // The list of CURRENT Vouches that selected the 'Cannot' state and that must
@@ -986,7 +988,7 @@ function ccgn_is_application_vouch_cannot($vouch)
 
 function ccgn_application_vouches_cannots($applicant_id)
 {
-    // Anyone who ever vouched Cannot
+    // Anyone who ever vouched Cannot or Removed voucher
     $all_cannots = array_filter(
         ccgn_application_vouches($applicant_id),
         'ccgn_is_application_vouch_cannot'

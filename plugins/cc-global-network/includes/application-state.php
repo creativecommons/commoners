@@ -459,6 +459,12 @@ function ccgn_show_current_application_status($user_id) {
             'link' => $link_form,
             'link_text' => 'Update vouchers'
         ),
+        'to-be-reviewed' => array(
+            'step' => 2,
+            'title' => "Under revision",
+            'msg' => 'Your application is under review',
+            'class' => 'on-hold'
+        ),
         'rejected-because-didnt-update-vouchers' => array(
             'step' => 4,
             'title' => "Rejected",
