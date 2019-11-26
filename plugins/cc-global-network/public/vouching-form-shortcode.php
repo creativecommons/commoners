@@ -226,7 +226,16 @@ function ccgn_application_vouching_form_submit_handler ( $entry,
                 $voucher_id
             );
         } else {
-
+            if ( $entry[ CCGN_GF_VOUCH_DO_YOU_VOUCH ] == CCGN_GF_VOUCH_DO_YOU_VOUCH_NO ) {
+                //User reject application, we should set a status to be rewviewed by MC
+                ccgn_registration_user_set_stage(
+                    $applicant_id,
+                    CCGN_APPLICATION_STATE_REVIEW
+                );
+                ccgn_registration_email_mc_review(
+                    $applicant_id
+                );
+            }
         }
     }
 }

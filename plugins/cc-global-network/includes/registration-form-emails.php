@@ -329,6 +329,13 @@ function ccgn_registration_email_update_details_second_reminder($applicant_id)
         'ccgn-email-update-details-second-reminder'
     );
 }
+function ccgn_registration_email_mc_review($applicant_id)
+{
+    ccgn_registration_email_to_applicant(
+        $applicant_id,
+        'ccgn-email-mc-review'
+    );
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Use the name and address from our settings for emails

@@ -30,6 +30,7 @@ define('CCGN_GF_CHOOSE_VOUCHERS', 'Choose Vouchers');
 // Member vouching for applicant / institution
 
 define('CCGN_GF_VOUCH', 'Vouch For Applicant');
+define('CCGN_GF_MC_REVIEW', 'MC user review');
 
 // Admin approval of applicant
 
@@ -199,6 +200,12 @@ define(
     'CCGN_GF_ADMIN_CHANGE_VOUCHERS_APPLICANT_ID_PARAMETER',
     'applicant_id'
 );
+define('CCGN_GF_MC_REVIEW_RESULT', '1');
+define('CCGN_GF_MC_REVIEW_NOTE', '2');
+define('CCGN_GF_MC_REVIEW_APPLICANT_ID', '3');
+define('CCGN_GF_MC_REVIEW_RESULT_PARAMETER', 'mc-review-result');
+define('CCGN_GF_MC_REVIEW_NOTE_PARAMETER', 'mc-review-note');
+define('CCGN_GF_MC_REVIEW_APPLICANT_ID_PARAMETER', 'applicant_id');
 
 // Field values that we need to check
 
@@ -968,8 +975,10 @@ function ccgn_application_can_be_voted($applicant_id)
 
 function ccgn_is_application_vouch_cannot($vouch)
 {
-    return $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH]
-        == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT;
+    return ( ( $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH]
+        == CCGN_GF_VOUCH_DO_YOU_VOUCH_CANNOT ) 
+        || ($vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH] 
+        == CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED ) );
 }
 
 // The list of CURRENT Vouches that selected the 'Cannot' state and that must
@@ -979,7 +988,7 @@ function ccgn_is_application_vouch_cannot($vouch)
 
 function ccgn_application_vouches_cannots($applicant_id)
 {
-    // Anyone who ever vouched Cannot
+    // Anyone who ever vouched Cannot or Removed voucher
     $all_cannots = array_filter(
         ccgn_application_vouches($applicant_id),
         'ccgn_is_application_vouch_cannot'

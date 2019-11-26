@@ -323,6 +323,7 @@ function ccgn_application_approval_page () {
         <li><span class="color green"></span> Already voted</li>
         <li><span class="color orange"></span> Asked for clarification</li>
         <li><span class="color blue"></span> Statement updated</li>
+        <li><span class="color purple"></span> Application needs review</li>
     </ul>
 </div>
 <div class="ccgn-table-container">
@@ -332,13 +333,11 @@ function ccgn_application_approval_page () {
             <th></th>  
         <th>Applicant</th>
         <th>Type</th>
-    <?php// if ( ccgn_current_user_is_final_approver() ) { ?>
         <th>Votes</th>
         <th>Vouching Status</th>
         <!-- <th>Vouches Declined</th>
         <th>Vouches For</th>
         <th>Vouches Against</th> -->
-    <?php // } ?>
         <th>Voting Status</th>
         <!-- <th>Votes For</th>
         <th>Votes Against</th> -->
@@ -425,9 +424,10 @@ function ccgn_rest_return_application_approval_list() {
         $voted_users[] = $vote[4];
     }
     if ( rest_cookie_check_errors() && $the_user->has_cap('ccgn_list_applications') ) {
-        $user_entries = ccgn_applicant_ids_with_state(
-            CCGN_APPLICATION_STATE_VOUCHING
-        );
+        $user_entries = ccgn_applicant_ids_with_state( array(
+            CCGN_APPLICATION_STATE_VOUCHING,
+            CCGN_APPLICATION_STATE_REVIEW
+        ));
         $return_data = array();
         usort($user_entries, "ccgn_final_applications_cmp");
         foreach ($user_entries as $user_id) {
@@ -484,7 +484,7 @@ function ccgn_rest_return_application_approval_list() {
             $user_data['applicant_type'] = ccgn_applicant_type_desc( $user_id );
             $user_data['user_mail'] = $user->user_email;
             $user_data['already_voted_by_me'] = (in_array($user_id,$voted_users)) ? 'yes' : 'no';
-            $user_data['vouching_status'] = ccgn_final_approval_status_for_vouch_counts( $vouch_counts );
+            $user_data['vouching_status'] = ( $user_application_status == CCGN_APPLICATION_STATE_REVIEW ) ? 'Review needed' : ccgn_final_approval_status_for_vouch_counts( $vouch_counts );
             $user_data['vouches_declined'] = $vouch_counts[ 'cannot' ];
             $user_data['vouches_for'] = $vouch_counts[ 'yes' ];
             $user_data['vouches_against'] = $vouch_counts[ 'no' ];
@@ -494,6 +494,7 @@ function ccgn_rest_return_application_approval_list() {
             $user_data['application_date'] = date('Y-m-d', strtotime($vouchers_entry[ 'date_created' ]));
             $user_data['is_asked'] = $user_is_asked_for_clarification;
             $user_data['who_is_asked'] = $asked_voucher_user;
+            $user_data['need_review'] = ( $user_application_status == CCGN_APPLICATION_STATE_REVIEW ) ? 1 : 0;
 
             $return_data['data'][] = $user_data;
         }

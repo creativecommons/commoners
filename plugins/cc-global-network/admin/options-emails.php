@@ -376,6 +376,48 @@ function ccgn_settings_emails_update_details_second_message()
 
 }
 
+function ccgn_settings_emails_mc_review_subject()
+{
+    $options = get_option('ccgn-email-mc-review');
+    ?>
+    <input type="text" name="ccgn-email-mc-review[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+
+}
+
+function ccgn_settings_emails_mc_review_message()
+{
+    $options = get_option('ccgn-email-mc-review');
+    ?>
+    <textarea name="ccgn-email-mc-review[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+
+}
+function ccgn_settings_emails_mc_review_update_vouchers_subject()
+{
+    $options = get_option('ccgn-email-mc-review-update-vouchers');
+    ?>
+    <input type="text" name="ccgn-email-mc-review-update-vouchers[subject]"
+      class="large-text"
+      value="<?php echo $options['subject']; ?>" />
+    <?php
+
+}
+
+function ccgn_settings_emails_mc_review_update_vouchers_message()
+{
+    $options = get_option('ccgn-email-mc-review-update-vouchers');
+    ?>
+    <textarea name="ccgn-email-mc-review-update-vouchers[message]"
+      rows="12" cols="64" class="large-text"
+      ><?php echo $options['message']; ?></textarea>
+    <?php
+
+}
 function ccgn_settings_emails_options_page () {
     add_options_page(
         'Global Network Emails',
@@ -978,6 +1020,68 @@ function ccgn_settings_emails_options_update_details_second_reminder()
     );
 }
 
+function ccgn_settings_emails_options_mc_review()
+{
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-mc-review'
+    );
+
+    add_settings_section(
+        'ccgn-email-mc-review',
+        'Application to be reviewed by Membership Comitee',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_mc_review_subject',
+        'global-network-emails',
+        'ccgn-email-mc-review'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message Wrapper',
+        'ccgn_settings_emails_mc_review_message',
+        'global-network-emails',
+        'ccgn-email-mc-review'
+    );
+}
+function ccgn_settings_emails_options_mc_review_update_vouchers()
+{
+    register_setting(
+        'ccgn-emails',
+        'ccgn-email-mc-review-update-vouchers'
+    );
+
+    add_settings_section(
+        'ccgn-email-mc-review-update-vouchers',
+        'Applicant notification from MC Review (yes)',
+        'ccgn_settings_emails_section_callback',
+        'global-network-emails'
+    );
+
+    add_settings_field(
+        'registration-subject',
+        'Subject',
+        'ccgn_settings_emails_mc_review_update_vouchers_subject',
+        'global-network-emails',
+        'ccgn-email-mc-review-update-vouchers'
+    );
+
+    add_settings_field(
+        'registration-message',
+        'Message Wrapper',
+        'ccgn_settings_emails_mc_review_update_vouchers_message',
+        'global-network-emails',
+        'ccgn-email-mc-review-update-vouchers'
+    );
+}
+
+
 function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_page();
     ccgn_settings_emails_options_sender();
@@ -1000,6 +1104,8 @@ function ccgn_settings_emails_register () {
     ccgn_settings_emails_options_ask_voucher();
     ccgn_settings_emails_options_update_details_first_reminder();
     ccgn_settings_emails_options_update_details_second_reminder();
+    ccgn_settings_emails_options_mc_review();
+    ccgn_settings_emails_options_mc_review_update_vouchers();
 }
 
 function ccgn_settings_emails_print_info () {
