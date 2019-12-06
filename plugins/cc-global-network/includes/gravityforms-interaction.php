@@ -593,7 +593,7 @@ function ccgn_vouching_request_spoof_cannot($applicant_id, $voucher_id)
         'SPOOFING "CANNOT" VOUCH ENTRY: this is due to the Voucher not responding in time.'
     );
     // If applicant is vouching, they must now update vouchers
-    ccgn_registration_user_set_stage_update_vouchers($application_id);
+    ccgn_registration_user_set_stage_update_vouchers($applicant_id);
     return true;
 }
 
