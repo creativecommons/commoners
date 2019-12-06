@@ -104,7 +104,7 @@ function ccgn_email_vouch_request_reminders () {
         // which is the last time their Vouchers were initially notified.
         $days_in_state = ccgn_days_since_state_set ( $applicant_id, $now );
         $date_last_set_to_state = get_user_meta(
-            $user_id
+            $applicant_id
         )[ CCGN_APPLICATION_STATE_DATE ][ 0 ];
         $request_date = new DateTime( $date_last_set_to_state );
         # php 5.2.2 or later for DateTime comparisons....
