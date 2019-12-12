@@ -111,18 +111,18 @@ function ccgn_email_vouch_request_reminders () {
         $day = ($now->diff($request_date))->days;
         $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
         foreach ( $vouchers as $voucher_id ) {
-            if ( ccgn_vouching_request_open ( $applicant_id, $voucher_id ) ) {
-                 ccgn_email_vouch_request_reminder_maybe_close (
+            if ( ccgn_vouching_request_open ( $applicant_id, $voucher_id ) && ccgn_registration_user_is_vouchable ( $applicant_id ) ) {
+                ccgn_email_vouch_request_reminder_maybe_close (
                     $voucher_id,
                     $applicant_id,
                     $day
                 );
                 // This will notify the voucher if the request was closed
-                 ccgn_email_vouch_request_reminder_send (
+                ccgn_email_vouch_request_reminder_send (
                     $voucher_id,
                     $applicant_id,
                     $day
-                 );
+                );
             }
         }
     }
