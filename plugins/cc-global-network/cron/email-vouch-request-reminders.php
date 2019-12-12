@@ -15,10 +15,10 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 // Defines
 ////////////////////////////////////////////////////////////////////////////////
 
-define('CCGN_VOUCH_REQUEST_REMINDER_DAY_FIRST_REMINDER', 1);
-define('CCGN_VOUCH_REQUEST_REMINDER_DAY_SECOND_REMINDER', 3);
-define('CCGN_VOUCH_REQUEST_REMINDER_DAY_FINAL_REMINDER', 5);
-define('CCGN_VOUCH_REQUEST_REMINDER_DAY_CLOSE', 6);
+define('CCGN_VOUCH_REQUEST_REMINDER_DAY_FIRST_REMINDER', 3);
+define('CCGN_VOUCH_REQUEST_REMINDER_DAY_SECOND_REMINDER', 6);
+define('CCGN_VOUCH_REQUEST_REMINDER_DAY_FINAL_REMINDER', 8);
+define('CCGN_VOUCH_REQUEST_REMINDER_DAY_CLOSE', 14);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Checking and sending
@@ -111,7 +111,7 @@ function ccgn_email_vouch_request_reminders () {
         $day = ($now->diff($request_date))->days;
         $vouchers = ccgn_application_vouchers_users_ids ( $applicant_id );
         foreach ( $vouchers as $voucher_id ) {
-            if ( ccgn_vouching_request_open ( $applicant_id, $voucher_id ) && ccgn_registration_user_is_vouchable ( $applicant_id ) ) {
+            if ( ccgn_vouching_request_open ( $applicant_id, $voucher_id ) ) {
                 ccgn_email_vouch_request_reminder_maybe_close (
                     $voucher_id,
                     $applicant_id,
