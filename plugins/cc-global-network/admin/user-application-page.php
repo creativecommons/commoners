@@ -912,6 +912,8 @@ function ccgn_ajax_change_voucher()
         $update_date = GFAPI::update_entry_field($entry_id, 'date_updated', date('Y-m-d H:m:s'));
         $change_voucher_result = GFAPI::update_entry_field($entry_id, $position, $new_voucher);
         if ($change_voucher_result) {
+            //change user state to "vouching". if we dont't do this, the applicant will not appear to the new voucher request list
+            _ccgn_registration_user_set_stage( $applicant_id, CCGN_APPLICATION_STATE_VOUCHING );
             //send email to the new voucher
             $send_mail = ccgn_registration_email_vouching_request(
                 $applicant_id,
