@@ -179,9 +179,14 @@ function _ccgn_registration_user_set_stage( $user_id, $stage ) {
     );
 }
 
-// Note that this isn't general-purpose: it will refuse to update if the user
-// is past final approval
-
+/**
+ * User set stage
+ * Change user stage but it will refuse this change if the user is past final approval
+ *
+ * @param int $user_id
+ * @param string $stage
+ * @return void
+ */
 function ccgn_registration_user_set_stage ( $user_id, $stage ) {
     $current = ccgn_registration_user_get_stage( $user_id );
     if ( ! in_array( $current, CCGN_APPLICATION_STATE_PAST_APPROVAL ) ) {
