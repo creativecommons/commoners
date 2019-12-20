@@ -1,5 +1,4 @@
 jQuery(document).ready(function($){
-    
     var Country_data = [];
     var info_box = $('#world-map-info');
     var writeInfoBox = function (value) {
@@ -68,4 +67,13 @@ jQuery(document).ready(function($){
             $(target).addClass('active');
         return false;
     });
+     var panZoomMap = svgPanZoom('#cc_worldmap', {
+         zoomEnabled: true,
+          controlIconsEnabled: true,
+          fit: true,
+          dblClickZoomEnabled: true,
+          mouseWheelZoomEnabled: false,
+          center: true,
+          viewportSelector: '#cc_worldmap_group'
+     });
 });

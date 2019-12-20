@@ -261,6 +261,7 @@ class site {
 		if (is_post_type_archive('cc_chapters')) {
 			wp_enqueue_script( 'cc-theme-datatable', THEME_JS . '/datatables.min.js', array('jquery'), self::theme_ver, true );
 			wp_enqueue_script( 'cc-theme-responsive-datatable', THEME_JS . '/responsive.datatables.min.js', array('cc-theme-datatable'), self::theme_ver, true );
+			wp_enqueue_script( 'cc-commoners-chapters-panzoom',  THEME_JS . '/svgpanzoom.js', array('jquery'), self::theme_ver, true );
 			wp_enqueue_script( 'cc-commoners-chapters',  THEME_JS . '/commoners-chapters.js', array('jquery'), self::theme_ver, true );
 			wp_localize_script('cc-commoners-chapters', 'Ajax', $ajax_data);
 			
