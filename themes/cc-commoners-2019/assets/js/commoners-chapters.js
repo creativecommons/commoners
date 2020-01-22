@@ -10,23 +10,10 @@ jQuery(document).ready(function($){
         info_box.find('.button.more').attr('href',value.link);
     }
     
-    var windowPosition = function(target, event) {
-        var position = target.offset(),
-            boundingBox = target[0].getBBox(),
-            topY = event.pageY + 10,
+    var windowPosition = function(event) {
+        var topY = event.pageY + 10,
             leftX = event.pageX + 10,
-            mapOffset = $('#cc_worldmap').offset(),
-            mapWidth = $('#cc_worldmap').outerWidth();
             positionObj = { 'top': topY, 'left': leftX }
-
-        // if ( leftX + info_box.outerWidth() > $(window).width() ) {
-        //     valueX = $(window).outerWidth() - info_box.outerWidth() - boundingBox.width;
-        //     positionObj.left = valueX;
-        // }
-        // if ( topY + info_box.outerHeight() > mapOffset.top + $('#cc_worldmap').outerHeight()) {
-        //     topY = topY - boundingBox.height - info_box.outerHeight();
-        //     positionObj.top = topY;
-        // }
 
         country_name.css(positionObj);
     }
@@ -44,24 +31,13 @@ jQuery(document).ready(function($){
                 country_name.find('.chapter-title').html(value.name);
                 country_name.show();
                 object.on('mousemove', function(e){
-                    windowPosition(object,e);
-                });
-                
+                    windowPosition(e);
+                });            
             }, function(e){
                 country_name.hide();
             });
-            // info_box.on('mouseleave', function(e) {
-            //     info_box.hide();
-            // });
-            // $('#cc_worldmap').find('#' + value.country_code).on('mousemove',function(e){
-            //     var object = $(this),   
-            //     windowPosition(object);
-            // });
         });
     });
-    // $(document).on('mousemove', function(e) {
-    //     console.log('MOUSE X: '+e.pageX, 'MOUSE Y: '+e.pageY);
-    // });
     var chapter_table = $('#chapters-table').DataTable({
         "lengthChange": false,
         "responsive" : true
