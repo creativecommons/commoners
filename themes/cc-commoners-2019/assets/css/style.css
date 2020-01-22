@@ -7283,6 +7283,33 @@ a {
       .view-switch .grid-x .buttons .button.active:hover {
         background-color: #f8b99b; }
 
+.view-switch .map-header-content {
+  display: none; }
+  .view-switch .map-header-content .inline-container {
+    display: flex;
+    align-items: center; }
+    .view-switch .map-header-content .inline-container .chapter-title {
+      font-family: "Roboto condensed", sans-serif;
+      margin-bottom: 0; }
+    .view-switch .map-header-content .inline-container .chapter-metadata {
+      padding-left: 1rem;
+      text-transform: none;
+      font-family: "Source sans pro", Helvetica, Roboto, Arial, sans-serif; }
+      .view-switch .map-header-content .inline-container .chapter-metadata p {
+        margin-bottom: 0; }
+        .view-switch .map-header-content .inline-container .chapter-metadata p:last-child {
+          color: #8a8a8a; }
+    .view-switch .map-header-content .inline-container .more {
+      margin-bottom: 0;
+      margin-left: 1rem; }
+
+#country-name {
+  position: absolute;
+  padding: .5rem;
+  top: 0;
+  background-color: #fefefe;
+  box-shadow: 1px 1px 4px rgba(10, 10, 10, 0.3); }
+
 .view-content {
   display: none;
   margin-bottom: 1.5rem; }
