@@ -24,8 +24,17 @@
 
                 <div class="view-switch show-for-large">
                     <div class="grid-x align-justify">
-                        <div class="cell large-3 title">
-                            &nbsp;
+                        <div class="cell large-10 title">
+                            <div class="map-header-content" id="chapters-map-header">
+                                <div class="inline-container">
+                                    <h3 class="chapter-title"></h3>
+                                    <div class="chapter-metadata">
+                                        <p>Chapter lead: <span class="chapter-lead-name"></span></p>
+                                        <p><small>founded on <em class="chapter-date"></em> </small></p>
+                                    </div>
+                                    <a href="#" class="button warning more">More information</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="cell large-2 buttons">
                             <a href="#view-map" class="button gray active"><span class="dashicons dashicons-location-alt"></span> Map</a>
@@ -35,13 +44,9 @@
                 </div>
                 <div class="world-map view-content active show-for-large" id="view-map">
                     <?php get_template_part('inc/partials/maps/world','map'); ?>
-                    <div id="world-map-info">
-                        <h2 class="chapter-title"></h2>
-                        <p class="chapter-line">Founded on <span class="chapter-date"></span> </p>
-                        <p class="chapter-lead">Chapter Lead: <span class="chapter-lead-name"></span></p>
-                        <p class="chapter-buttons">
-                            <a href="#" class="button warning more">More information</a>
-                        </p>
+                    <div class="text-center"><em>Click in a highlighted country to get more information</em></div>
+                    <div id="country-name">
+                        <span class="chapter-title"></span>
                     </div>
                 </div>
                 <div class="map-list view-content" id="view-list">

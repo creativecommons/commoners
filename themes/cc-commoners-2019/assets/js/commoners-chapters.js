@@ -1,6 +1,8 @@
 jQuery(document).ready(function($){
+    
     var Country_data = [];
-    var info_box = $('#world-map-info');
+    var info_box = $('#chapters-map-header');
+    var country_name = $('#country-name');
     var writeInfoBox = function (value) {
         info_box.find('.chapter-title').html(value.name);
         info_box.find('.chapter-date').html(value.date);
@@ -8,51 +10,34 @@ jQuery(document).ready(function($){
         info_box.find('.button.more').attr('href',value.link);
     }
     
-    var windowPosition = function(target) {
-        var position = target.offset(),
-            boundingBox = target[0].getBBox(),
-            topY = position.top + boundingBox.height,
-            leftX = position.left + boundingBox.width,
-            mapOffset = $('#cc_worldmap').offset(),
-            mapWidth = $('#cc_worldmap').outerWidth();
+    var windowPosition = function(event) {
+        var topY = event.pageY + 10,
+            leftX = event.pageX + 10,
             positionObj = { 'top': topY, 'left': leftX }
 
-        if ( leftX + info_box.outerWidth() > $(window).width() ) {
-            valueX = $(window).outerWidth() - info_box.outerWidth() - boundingBox.width;
-            positionObj.left = valueX;
-        }
-        if ( topY + info_box.outerHeight() > mapOffset.top + $('#cc_worldmap').outerHeight()) {
-            topY = topY - boundingBox.height - info_box.outerHeight();
-            positionObj.top = topY;
-        }
-
-        info_box.css(positionObj);
+        country_name.css(positionObj);
     }
     $.post(Ajax.url, { action: 'event-get-chapters'}, function(data){
         Country_data = data;
         $.each(data,function(index, value){
             
             $('#cc_worldmap').find('#'+value.country_code).addClass('active');
-            $('#cc_worldmap').find('#'+value.country_code).hover(function(e){
-                var object = $(this);
-                windowPosition(object);
+            $('#cc_worldmap').find('#'+value.country_code).on('click',function(e){
                 writeInfoBox(value);
                 info_box.show();
+            });
+            $('#cc_worldmap').find('#'+value.country_code).hover(function(e){
+                var object = $(this);
+                country_name.find('.chapter-title').html(value.name);
+                country_name.show();
+                object.on('mousemove', function(e){
+                    windowPosition(e);
+                });            
             }, function(e){
-                // info_box.hide();
+                country_name.hide();
             });
-            info_box.on('mouseleave', function(e) {
-                info_box.hide();
-            });
-            // $('#cc_worldmap').find('#' + value.country_code).on('mousemove',function(e){
-            //     var object = $(this),   
-            //     windowPosition(object);
-            // });
         });
     });
-    // $(document).on('mousemove', function(e) {
-    //     console.log('MOUSE X: '+e.pageX, 'MOUSE Y: '+e.pageY);
-    // });
     var chapter_table = $('#chapters-table').DataTable({
         "lengthChange": false,
         "responsive" : true
@@ -67,7 +52,7 @@ jQuery(document).ready(function($){
             $(target).addClass('active');
         return false;
     });
-     var panZoomMap = svgPanZoom('#cc_worldmap', {
+    var panZoomMap = svgPanZoom('#cc_worldmap', {
          zoomEnabled: true,
           controlIconsEnabled: true,
           fit: true,
