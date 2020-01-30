@@ -347,6 +347,13 @@ jQuery(document).ready(function ($) {
                 'end_date': wpApiSettings.date_now
             }
         },
+        dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ],
         rowCallback: function (row, data) {
             if (data.user_type == 'Institution') {
                 $(row).addClass('red-mark');
@@ -490,5 +497,8 @@ jQuery(document).ready(function ($) {
         $(target).slideToggle('fast');
         return false;
     });
-    $('#input_changeVoucher').chosen({});
+    var changeVoucherInput = $('#input_changeVoucher');
+    if (changeVoucherInput.length) {
+        changeVoucherInput.chosen({});
+    }
 });
