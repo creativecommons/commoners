@@ -350,9 +350,7 @@ jQuery(document).ready(function ($) {
         dom: 'Bfrtip',
         buttons: [
             'copyHtml5',
-            'excelHtml5',
-            'csvHtml5',
-            'pdfHtml5'
+            'csvHtml5'
         ],
         rowCallback: function (row, data) {
             if (data.user_type == 'Institution') {
