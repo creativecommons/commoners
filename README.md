@@ -1,13 +1,13 @@
-# License
+# common
 
-GNU General Public License Version 2 or (at your option) any later version.
+Creative Commons Global Network website - https://network.creativecommons.org/
 
 
 ## Install
 
 :warning: **This install needs significant work and is not ready for
 community contribution (ex. [Building the site fails. · Issue 
-#388][issue388].**
+#388][issue388].)**
 
 [issue388]: https://github.com/creativecommons/commoners/issues/388
 
@@ -83,3 +83,10 @@ members' basic profiles.
 everyone's full profiles.
 
 * ADMIN - The user is a WordPress Administrator.
+
+
+## License
+
+* [`LICENSE`](LICENSE) ([GPLv2 or later][gplv2] License)
+
+[gplv2]: https://opensource.org/licenses/GPL-2.0 "GNU General Public License version 2 | Open Source Initiative"
