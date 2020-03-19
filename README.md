@@ -7,7 +7,7 @@ Creative Commons Global Network website - https://network.creativecommons.org/
 
 :warning: **This install needs significant work and is not ready for
 community contribution (ex. [Building the site fails. · Issue 
-#388][issue388].)**
+#388][issue388]).**
 
 [issue388]: https://github.com/creativecommons/commoners/issues/388
 
