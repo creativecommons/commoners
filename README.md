@@ -1,4 +1,4 @@
-# common
+# commoners
 
 Creative Commons Global Network website - https://network.creativecommons.org/
 
