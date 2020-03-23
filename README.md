@@ -1,47 +1,57 @@
-# License
+# commoners
 
-GNU General Public License Version 2 or (at your option) any later version.
+Creative Commons Global Network website - https://network.creativecommons.org/
 
-# Dependencies
 
-    apt install apache2 mysql-client libapache2-mod-php php7.0-fpm php-mysql php-curl php-dom
+## Install
 
-# Configuration
+:warning: **This install needs significant work and is not ready for
+community contribution (ex. [Building the site fails. · Issue 
+#388][issue388]).**
 
-## Apache
+[issue388]: https://github.com/creativecommons/commoners/issues/388
 
-    a2enmod rewrite
-    apachectl restart
 
-## WordPress
+### Dependencies
 
-See the `setup/` directory for information.
+```shell
+sudo apt-get install apache2 mysql-client libapache2-mod-php php7.0-fpm php-mysql php-curl php-dom
+```
 
-# How To Install
+```shell
+a2enmod rewrite
+apachectl restart
+```
 
-## Production
 
-See the `setup/` directory .
+### Production
 
-## Testing
+See the `setup/` directory for information (including WordPress information).
+
+
+### Testing
 
 See the `test-setup/` directory.
 
 Be very careful with this code, it deletes things. And drops them.
 
-# Design Notes
 
-## CAS Maestro
+## Design Notes
+
+
+### CAS Maestro
 
 Our version changes how usernames are taken from the CAS server to use the CCID
 global nickname.
 
-## cc-global-network
+
+### cc-global-network
 
 cc-global-network is a monolithic plugin that supports the registration and
 vouching functions that we need.
 
-### Registration
+
+#### Registration
 
 cc-global-network removes those parts of the BuddyPress User Profile UI that
 clash with the use of CAS for login - the ability to change the user email and
@@ -49,7 +59,8 @@ nickname, etc.
 
 Registration forms are implemented using GravityForms.
 
-### Vouching
+
+#### Vouching
 
 cc-global-network uses WordPress's APIs to determine whether a user is logged
 in, and if so whether they are an admin or not.
@@ -72,3 +83,10 @@ members' basic profiles.
 everyone's full profiles.
 
 * ADMIN - The user is a WordPress Administrator.
+
+
+## License
+
+* [`LICENSE`](LICENSE) ([GPLv2 or later][gplv2] License)
+
+[gplv2]: https://opensource.org/licenses/GPL-2.0 "GNU General Public License version 2 | Open Source Initiative"
