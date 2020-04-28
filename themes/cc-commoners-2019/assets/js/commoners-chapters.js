@@ -6,7 +6,12 @@ jQuery(document).ready(function($){
     var writeInfoBox = function (value) {
         info_box.find('.chapter-title').html(value.name);
         info_box.find('.chapter-date').html(value.date);
-        info_box.find('.chapter-lead-name').html(value.chapter_lead);
+        if (value.chapter_lead != null) {
+            $('.chaper-lead-container').show();
+            info_box.find('.chapter-lead-name').html(value.chapter_lead);
+        } else {
+            $('.chaper-lead-container').hide();
+        }
         info_box.find('.button.more').attr('href',value.link);
     }
     

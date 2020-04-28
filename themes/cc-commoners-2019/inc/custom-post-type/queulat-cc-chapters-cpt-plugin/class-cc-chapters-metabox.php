@@ -161,8 +161,10 @@ class Chapters_Metabox extends Metabox
                     'properties' => [
                         'instance' => [
                             'width' => '100%',
-                            'multiple' => false,
+                            'multiple' => true,
                             'minimumInputLength' => 3,
+                            'allowClear' => true,
+                            'placeholder' => 'Select',
                             'ajax' => [
                                 'url' => admin_url('admin-ajax.php?action=event-metabox__search-members&chapter_id=' . get_the_ID()),
                             ]
@@ -200,6 +202,8 @@ class Chapters_Metabox extends Metabox
                             'width' => '100%',
                             'multiple' => false,
                             'minimumInputLength' => 3,
+                            'allowClear' => true,
+                            'placeholder' => 'Select',
                             'ajax' => [
                                 'url' => admin_url('admin-ajax.php?action=event-metabox__search-members&chapter_id=' . get_the_ID()),
                             ]

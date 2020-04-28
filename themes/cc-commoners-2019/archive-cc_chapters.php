@@ -29,7 +29,7 @@
                                 <div class="inline-container">
                                     <h3 class="chapter-title"></h3>
                                     <div class="chapter-metadata">
-                                        <p>Chapter lead: <span class="chapter-lead-name"></span></p>
+                                        <p class="chaper-lead-container">Chapter lead: <span class="chapter-lead-name"></span></p>
                                         <p><small>founded on <em class="chapter-date"></em> </small></p>
                                     </div>
                                     <a href="#" class="button warning more">More information</a>
