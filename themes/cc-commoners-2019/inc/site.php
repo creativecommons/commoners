@@ -57,12 +57,21 @@ class Commoners {
         $results = [];
         if ($query->have_posts()) {
             foreach ($query->posts as $post) {
+                $chapter_lead = get_post_meta($post->ID, 'cc_chapters_chapter_lead',false);
+                $chapter_lead_name = '';
+                if (count($chapter_lead) > 1) {
+                    foreach ($chapter_lead as $member_id) {
+                        $chapter_lead_name[] = get_user_by('id', $member_id)->display_name;
+                    }
+                } else {
+                    $chapter_lead_name = get_user_by('id', $chapter_lead[0])->display_name;
+                }
                 $single_chapter = [];
                 $single_chapter['name'] = $post->post_title;
                 $single_chapter['link'] = get_permalink( $post->ID );
                 $single_chapter['date'] = $post->cc_chapters_date;
                 $single_chapter['email'] = $post->cc_chapters_email;
-                $single_chapter['chapter_lead'] = get_user_by('id', $post->cc_chapters_chapter_lead)->display_name;
+                $single_chapter['chapter_lead'] = $chapter_lead_name;
                 $single_chapter['member_gnc'] = get_user_by('id', $post->cc_chapters_member_gnc)->display_name;
                 $single_chapter['country_code'] = $post->cc_chapters_chapter_country;
                 $single_chapter['url'] = $post->cc_chapters_url;

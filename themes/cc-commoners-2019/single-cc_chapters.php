@@ -15,9 +15,9 @@
                 <section class="entry-meta chapter-metadata">
                     <?php 
                         global $post;
+                        $chapter_lead = get_post_meta($post->ID, 'cc_chapters_chapter_lead',false);
                         $date_founded = $post->cc_chapters_date;
                         $chapter_mail = $post->cc_chapters_email;
-                        $chapter_lead = $post->cc_chapters_chapter_lead;
                         $member_gnc = $post->cc_chapters_member_gnc;
                         $external_url = $post->cc_chapters_url;
                         $chapter_url = $post->cc_chapters_chapter_url;
@@ -64,9 +64,11 @@
                          ?>
                     </div>
                     <?php 
-                        echo '<div class="grid-x grid-margin-x large-up-2 medium-up-2">';
+                        echo '<div class="grid-x grid-margin-x grid-margin-y large-up-2 medium-up-2">';
                             if ( !empty( $chapter_lead ) ) {
-                                echo render::chapter_member($chapter_lead, 'Chapter Lead');
+                                foreach ($chapter_lead as $chapter_lead_id) {
+                                    echo render::chapter_member($chapter_lead_id, 'Chapter Lead');
+                                }
                             }
                             if ( !empty( $member_gnc ) ) {
                                 echo render::chapter_member($member_gnc, 'Representative to the Global Network Council');
