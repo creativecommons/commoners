@@ -7,8 +7,14 @@ jQuery(document).ready(function($){
         info_box.find('.chapter-title').html(value.name);
         info_box.find('.chapter-date').html(value.date);
         if (value.chapter_lead != null) {
+            var chapter_lead_string = '';
             $('.chaper-lead-container').show();
-            info_box.find('.chapter-lead-name').html(value.chapter_lead);
+            if (Array.isArray(value.chapter_lead)) {
+                chapter_lead_string = value.chapter_lead.join(', ');
+            } else {
+                chapter_lead_string = value.chapter_lead;
+            }
+            info_box.find('.chapter-lead-name').html(chapter_lead_string);
         } else {
             $('.chaper-lead-container').hide();
         }
