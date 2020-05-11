@@ -79,7 +79,6 @@ function ccgn_email_update_details_reminders()
             } elseif ( $status['state'] == 'none' ) {
                 ccgn_update_details_set_first_reminder($applicant_id);
             } elseif ( $status['state'] == 'first-reminder' ) {
-                echo "HEY I'M STUCK ON FIRST REMINDER \n";
                 ccgn_update_details_set_second_reminder($applicant_id);
             } else {
                 //update user status date
