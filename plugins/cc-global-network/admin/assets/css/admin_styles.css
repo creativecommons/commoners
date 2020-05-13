@@ -207,6 +207,13 @@ table.ccgn-profile tr td.title {
 }
 .applicant-columns .ccgn-box.applicant {
     text-align: center;
+    max-width: 15%;
+}
+.applicant-columns .ccgn-box.applicant .reason-text {
+    max-height: 10rem;
+    overflow: auto;
+    padding: .5rem;
+    border: 1px solid #f0f0f0;
 }
 .applicant-columns .ccgn-box .icon .dashicons {
     font-size: 3rem;
