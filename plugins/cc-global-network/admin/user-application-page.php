@@ -52,7 +52,6 @@ function ccgn_application_users_page_vote_responses ( $applicant_id ) {
     $result = '';
     $votes = ccgn_application_votes ( $applicant_id );
     foreach ($votes as $vote) {
-        //echo '<pre>'; print_r($vote); echo '</pre>';
         $voter = get_user_by('ID', $vote['created_by']);
         $reason = $vote[ CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION_REASON ];
         $result .= '<div class="ccgn-box applicant">';
