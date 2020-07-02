@@ -661,6 +661,9 @@
     margin-bottom: 1rem;
     text-align: center;
     opacity: .5;
+    &.auto-height {
+        min-height: auto;
+    }
     &.on-hold {
         border: 4px solid #fdad00;
         background-color: #ffe4b1;
