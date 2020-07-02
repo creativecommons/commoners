@@ -5,11 +5,12 @@ the_post();
 $level = ccgn_current_user_level();
 $logged_in = is_user_logged_in();
 $user_id = get_current_user_id();
+$user_status = ccgn_registration_user_get_stage_and_date($user_id);
 $application_status = ccgn_show_current_application_status($user_id);
 $step = array();
-$step[1] = ($application_status['step']['step'] == 1) ? $application_status['step']['class'] : '';
-$step[2] = ($application_status['step']['step'] == 2) ? $application_status['step']['class'] : '';
-$step[3] = ($application_status['step']['step'] == 3) ? $application_status['step']['class'] : '';
+$step[1] = ($application_status['step']['step'] == 1) ? $application_status['step']['class'] : 'hide-for-small-only';
+$step[2] = ($application_status['step']['step'] == 2) ? $application_status['step']['class'] : 'hide-for-small-only';
+$step[3] = ($application_status['step']['step'] == 3) ? $application_status['step']['class'] : 'hide-for-small-only';
 ?>
 <section class="main-content space-top">
     <div class="grid-container">
@@ -22,7 +23,17 @@ $step[3] = ($application_status['step']['step'] == 3) ? $application_status['ste
                     <?php the_content(); ?>
                     <div class="user-status-container">
                         <?php if ($logged_in): ?>
-                           
+                           <?php if ($user_status['stage'] == 'accepted'): ?>
+                            <div class="grid-x grid-padding-x">
+                                <div class="cell">
+                                    <div class="entry-status success auto-height">
+                                        <span class="icon"><span class="dashicons dashicons-yes-alt"></span></span>
+                                        <span class="subtitle">Application Approved</span>
+                                        <h4 class="entry-title">You're now a member</h4>
+                                    </div>
+                                </div>
+                            </div>
+                           <?php else: ?>
                             <div class="grid-x grid-padding-x large-up-3 medium-up-3 small-up-1">
                                 <div class="cell">
                                     <article class="entry-status <?php echo $step[1] ?>">
@@ -85,6 +96,7 @@ $step[3] = ($application_status['step']['step'] == 3) ? $application_status['ste
                                     </article>
                                 </div>
                             </div>
+                            <?php endif; ?>
                         <?php else: ?>
                         <div class="callout warning">
                             <h5 class="title">Logged in</h5>

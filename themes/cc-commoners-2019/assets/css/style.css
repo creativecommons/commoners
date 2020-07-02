@@ -6618,6 +6618,8 @@ a {
   margin-bottom: 1rem;
   text-align: center;
   opacity: .5; }
+  .page-template-template-user-status .entry-status.auto-height {
+    min-height: auto; }
   .page-template-template-user-status .entry-status.on-hold {
     border: 4px solid #fdad00;
     background-color: #ffe4b1;
