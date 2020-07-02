@@ -5898,6 +5898,9 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 .rounded img {
   border-radius: 50%; }
 
+.auto-height {
+  min-height: auto !important; }
+
 a {
   color: #F5976B; }
   a:hover {
