@@ -155,7 +155,7 @@ jQuery(document).ready(function ($) {
         $('#remove-voucher-for-sure').off('click');
         $('#remove-voucher-modal').find('.name-display').html(name);
         tb_show("Remove voucher", "#TB_inline?width=600&height=350&inlineId=remove-voucher-modal");
-        $('#close-ask-voucher').on('click', function (e) {
+        $('#close-remove-voucher').on('click', function (e) {
             e.preventDefault();
             tb_remove();
             return false;
