@@ -151,6 +151,46 @@ jQuery(document).ready(function ($) {
             });
         });
     }
+    $.removeVoucher = function (id, name, applicant_id) {
+        $('#remove-voucher-for-sure').off('click');
+        $('#remove-voucher-modal').find('.name-display').html(name);
+        tb_show("Remove voucher", "#TB_inline?width=600&height=350&inlineId=remove-voucher-modal");
+        $('#close-remove-voucher').on('click', function (e) {
+            e.preventDefault();
+            tb_remove();
+            return false;
+        });
+        $('#remove-voucher-for-sure').on('click', function (e) {
+            var sec = $('#remove_voucher_nonce').val(),
+                this_button = $(this);
+            $.ajax({
+                url: wpApiSettings.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'remove_voucher',
+                    user_id: id,
+                    applicant_id: applicant_id,
+                    sec: sec
+                },
+                beforeSend: function () {
+                    this_button.text('Working...');
+                },
+                success: function (data) {
+                    this_button.text("Yes, I'm sure");
+                    $('#alert-messages').html('');
+                    if (data.trim() == 'ok') {
+                        $('#alert-messages').append('<div class="updated notice is-dismissible"><p>The voucher was removed succesfully</p></div>').find('.notice').delay(3200).fadeOut(300);
+                        tb_remove();
+                        location.reload();
+                    }
+                    if (data.trim() == 'error') {
+                        $('#alert-messages').append('<div class="error notice is-dismissible"><p>There was an error sending your request</p></div>').find('.notice').delay(3200).fadeOut(300);
+                    }
+                    tb_remove();
+                }
+            });
+        });
+    }
     $.askVoucher = function (id, name, applicant_id) {
         $('#ask-voucher-for-sure').off('click');
         $('#ask-clarification-modal').find('.name-display').html(name);

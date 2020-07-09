@@ -645,7 +645,6 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
             $applicant_votes = ccgn_application_votes_counts($applicant_id);
             $asked_class = '';
             $who_asked = '';
-            //print_r($voucher);
             if (empty($asked_info['user_id'])) {
                 $log_user = ccgn_ask_clarification_log_get_id($applicant_id);
                 foreach ($log_user as $entry) {
@@ -667,7 +666,6 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
                 $user_is_asked_for_clarification = $asked_info['status'];
             }
             echo '<div class="ccgn-box applicant '.$asked_class.'">';
-                //echo '<div class="icon"><span class="dashicons dashicons-admin-users"></span></div>';
                 echo '<h3 class="applicant-name">'.$voucher['name'].'</h3>';
                 echo '<span class="date">'.$voucher['date'].'</span>';
                 if ($user_is_asked_for_clarification) {
@@ -687,28 +685,33 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
                 if (($voucher['vouched'] == 'Yes') && (ccgn_current_user_is_final_approver($applicant_id) || ccgn_current_user_is_membership_council($applicant_id)) ) {
                     echo '<a href="#" onClick="$.askVoucher('.$voucher['id'].',\''.$voucher['name'].'\','.$applicant_id.')" class="button">Ask for clarification</a>';
                 }
+                if (current_user_can( 'administrator' ) && ($voucher['vouched'] == 'No')) {
+                    echo '<br><a href="#" class="button-primary" style="background-color: #dc3232;" onClick="$.removeVoucher('.$voucher['id'].',\''.$voucher['name'].'\','.$applicant_id.')" class="button">Remove this voucher</a>';
+                }
             
             echo '</div>';
         }
         echo '</div>';
-        // echo  cgn_application_users_page_vouch_responses (
-        //     $applicant_id,
-        //     true
-        // );
         add_thickbox();
+        echo '<div id="remove-voucher-modal" style="display:none;">';
+            echo '<h2>You are about to remove this voucher: <span class="name-display"></span></h2>';
+            echo '<p>That means that you think the vouch is not correct and the applicant needs to choose another voucher</p>';
+            echo '<p>this process will send an email to the applicant in order to choose a new voucher the status will be updated to "update-vouchers" </p>';
+            echo '<p>Are you sure you want to do this? </p>';
+            echo '<br>';
+            echo wp_nonce_field('remove_voucher', 'remove_voucher_nonce', true, false);
+            echo '<div class="buttons">';
+                echo '<button id="close-remove-voucher" class="button close-window">Close</button> ';
+                echo "<button id=\"remove-voucher-for-sure\"  class=\"button button-primary ask-voucher-for-sure\">Yes, I'm sure</button>";
+            echo '</div>';
+        echo '</div>';
         echo '<div id="ask-clarification-modal" style="display:none;">';
             echo '<h2>You are about to ask for clarification to the voucher: <span class="name-display"></span></h2>';
             echo '<p>That means you think the text supporting this application is not enough, is not clear or is not helpful for you to approve this application. If that is the case, you can ask the voucher to clarify.</p>';
-            
-            
             echo '<div class="log-content" id="log-content-ask-voucher">';
                 echo '<p>This already was requested by: </p>';
                 echo '<div class="inner-scroll medium">';
                     echo '<ol class="log-entries" id="log-entry-ask-voucher">';
-
-                    //foreach ($log as $entry) {
-                      //  echo '<li><div class="log-entry"><strong>'.$entry['ask_user_name'].'</strong> asked on <span class="date">'.$entry['date'].'</span></div></li>';
-                    //}
                     echo '</ol>';
                 echo '</div>';
                 echo '<p>There is no need to send this email again to the voucher. In case you consider that necessary, you can do it again.</p>';
@@ -721,7 +724,6 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
                 echo '<button id="close-ask-voucher" class="button close-window">Close</button> ';
                 echo "<button id=\"ask-voucher-for-sure\"  class=\"button button-primary ask-voucher-for-sure\">Yes, I'm sure</button>";
             echo '</div>';
-            //echo '</p>';
         echo '</div>';
         echo '<div id="change-voucher-modal" style="display:none;">';
             echo '<h2>You are about to change the current voucher: <span class="name-display"></span></h2>';
@@ -885,6 +887,40 @@ function ccgn_ajax_ask_voucher()
 }
 add_action('wp_ajax_nopriv_ask_voucher', 'ccgn_ajax_ask_voucher');
 add_action('wp_ajax_ask_voucher', 'ccgn_ajax_ask_voucher');
+
+function ccgn_ajax_remove_voucher()
+{
+    $user_id = $_POST['user_id'];
+    $applicant_id = $_POST['applicant_id'];
+    if (check_ajax_referer('remove_voucher', 'sec') && (!empty($user_id))) {
+        $entries = ccgn_entries_referring_to_user($applicant_id,'Vouch For Applicant');
+        $entry_id = null;
+        foreach ($entries as $entry) {
+            if ($entry['form_id'] == 44) {
+                $entry_id = $entry['id'];
+                break;
+            }
+        }
+        $created_by_applicant = ccgn_entries_created_by_user($applicant_id,41);
+        foreach ($created_by_applicant as $form_entry) {
+            if ($form_entry['form_id'] == 41) {
+                if ($form_entry['1'] == $user_id ) {
+                    GFAPI::update_entry_field($form_entry['id'], '1', '');
+                } elseif ($form_entry['2'] == $user_id) {
+                    GFAPI::update_entry_field($form_entry['id'], '2', '');
+                }
+            }
+        }
+        GFAPI::delete_entry( $entry_id );
+        _ccgn_registration_user_set_stage( $applicant_id, 'update-vouchers' );
+        ccgn_registration_email_voucher_cannot( $applicant_id, $user_id );
+        echo 'ok';
+    }
+    exit(0);
+}
+
+add_action('wp_ajax_nopriv_remove_voucher', 'ccgn_ajax_remove_voucher');
+add_action('wp_ajax_remove_voucher', 'ccgn_ajax_remove_voucher');
 
 function ccgn_ajax_change_voucher()
 {
