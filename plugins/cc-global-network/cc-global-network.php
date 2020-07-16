@@ -317,6 +317,12 @@ if ( is_admin() ){
         2
     );
     add_action(
+        'gform_after_submission_43',
+        'ccgn_application_users_page_vote_form_submit_handler',
+        10,
+        2
+    );
+    add_action(
         'gform_after_submission',
          'ccgn_application_users_page_legal_approval_form_submit_handler',
         10,

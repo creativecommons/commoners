@@ -226,7 +226,7 @@ table.ccgn-profile tr td.title {
     font-size: .7rem;
 }
 .applicant-columns .ccgn-box .applicant-reason {
-    width: 15rem;
+    max-width: 15rem;
 }
 .preview-details {
     margin-bottom: 2rem;

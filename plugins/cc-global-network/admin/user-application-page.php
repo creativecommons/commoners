@@ -227,31 +227,45 @@ function ccgn_application_mc_review_submit_handler( $entry, $form ) {
         );
         update_user_meta($applicant_id, 'ccgn-user-mc-review', $user_meta);
         if ( ccgn_current_user_is_membership_council() || ccgn_current_user_is_final_approver() ) {
+            $was_voted_no = get_user_meta( $applicant_id, 'ccgn-application-voted-no', true );
             if ( $entry[ CCGN_GF_MC_REVIEW_RESULT ] == 'Yes' ) {
                 $choose_vouchers_entry = ccgn_application_vouchers($applicant_id);
                 $no_voucher = '';
                 $first_voucher = ccgn_vouches_for_applicant_by_voucher( $applicant_id, $choose_vouchers_entry[1] );
                 $second_voucher = ccgn_vouches_for_applicant_by_voucher( $applicant_id, $choose_vouchers_entry[2] );
-
-                ccgn_registration_user_set_stage( $applicant_id, CCGN_APPLICATION_STATE_UPDATE_VOUCHERS );
-                $update_date = date('Y-m-d H:i:s', strtotime('now'));
-                
-                if ( $first_voucher[0][CCGN_GF_VOUCH_DO_YOU_VOUCH] == 'No' ) {
-                    $vouch = $first_voucher[0];
-                } elseif ( $second_voucher[0][CCGN_GF_VOUCH_DO_YOU_VOUCH] == 'No' ) {
-                    $vouch = $second_voucher[0];
+                if ( $was_voted_no['status'] ) {
+                    $no_vote_entry_id = $was_voted_no['entry_id'];
+                    $no_vote_restore = array(
+                        'status' => false,
+                        'entry_id' => false,
+                        'date' => date('Y-m-d H:i:s', strtotime('now'))
+                    );
+                    update_user_meta($applicant_id, 'ccgn-application-voted-no', $no_vote_restore);
+                    if (!empty($no_vote_entry_id)) {
+                        GFAPI::delete_entry( $no_vote_entry_id );
+                    }
+                    ccgn_registration_user_set_stage( $applicant_id, CCGN_APPLICATION_STATE_VOUCHING );
+                } else {
+                    ccgn_registration_user_set_stage( $applicant_id, CCGN_APPLICATION_STATE_UPDATE_VOUCHERS );
+                    $update_date = date('Y-m-d H:i:s', strtotime('now'));
+                    
+                    if ( $first_voucher[0][CCGN_GF_VOUCH_DO_YOU_VOUCH] == 'No' ) {
+                        $vouch = $first_voucher[0];
+                    } elseif ( $second_voucher[0][CCGN_GF_VOUCH_DO_YOU_VOUCH] == 'No' ) {
+                        $vouch = $second_voucher[0];
+                    }
+                    $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH] = CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED;
+                    GFAPI::update_entry($vouch);
+                    ccgn_set_entry_update_date($vouch, $update_date);
+                    // Update the date on the Choose Vouchers form, resetting the timescale
+                    // for updating voucher choices
+                    ccgn_set_entry_update_date( $choose_vouchers_entry, $update_date );
+                    ccgn_registration_email_to_applicant (
+                        $applicant_id,
+                        'ccgn-email-mc-review-update-vouchers',
+                        $entry[ CCGN_GF_MC_REVIEW_NOTE ]
+                    );
                 }
-                $vouch[CCGN_GF_VOUCH_DO_YOU_VOUCH] = CCGN_GF_VOUCH_DO_YOU_VOUCH_REMOVED;
-                GFAPI::update_entry($vouch);
-                ccgn_set_entry_update_date($vouch, $update_date);
-                // Update the date on the Choose Vouchers form, resetting the timescale
-                // for updating voucher choices
-                ccgn_set_entry_update_date( $choose_vouchers_entry, $update_date );
-                ccgn_registration_email_to_applicant (
-                    $applicant_id,
-                    'ccgn-email-mc-review-update-vouchers',
-                    $entry[ CCGN_GF_MC_REVIEW_NOTE ]
-                );
             } elseif ( $entry[ CCGN_GF_MC_REVIEW_RESULT ] == 'No' ) {
                 ccgn_decline_and_notify_applicant( $applicant_id );
             }
@@ -263,8 +277,9 @@ function ccgn_application_mc_review_submit_handler( $entry, $form ) {
 // Handle vote form results
 
 function ccgn_application_users_page_vote_form_submit_handler ( $entry,
-                                                                 $form ) {
-    if ( $form[ 'title' ] == CCGN_GF_VOTE ) {
+                                                                 $form ) { 
+    $applicant_id = $entry[ '4' ];
+    if (!empty($applicant_id)) {
         if (! ( ccgn_current_user_is_membership_council()
              || ccgn_current_user_is_final_approver() ) ) {
             echo 'Must be Membership Council member.';
@@ -277,16 +292,25 @@ function ccgn_application_users_page_vote_form_submit_handler ( $entry,
             echo 'Cannot Vote on Application you are a Voucher for.';
             exit;
         }
-        $applicant_id = $entry[ CCGN_GF_VOTE_APPLICANT_ID ];
         $stage = ccgn_registration_user_get_stage( $applicant_id);
         if ( $stage != CCGN_APPLICATION_STATE_VOUCHING ) {
             echo 'User already post-approved (or updating vouchers)';
             return;
         }
+        if ($entry[CCGN_GF_VOTE_APPROVE_MEMBERSHIP_APPLICATION] == 'No') {
+            _ccgn_registration_user_set_stage( $applicant_id, CCGN_APPLICATION_STATE_REVIEW );
+            $user_vote_no = array(
+                'status' => true,
+                'entry_id' => $entry['id'],
+                'date' => date('Y-m-d H:i:s', strtotime('now'))
+            );
+            update_user_meta($applicant_id, 'ccgn-application-voted-no', $user_vote_no );
+        }
     }
 }
 
 function ccgn_application_users_page_vote_form ( $applicant_id ) {
+    
     if ( ccgn_vouching_request_exists( $applicant_id,
                                        get_current_user_id() ) ) {
         echo _('<i>You have been asked to Vouch for this application, you therefore cannot Vote on it as well.</i>');
@@ -547,7 +571,8 @@ function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
     } elseif ( $state == '' ) {
         echo _('<h2>New User.</h2>');
         echo _("<p>They haven't completed an application yet.</p>");
-    } elseif ( $state == CCGN_APPLICATION_STATE_REVIEW ) {
+    } 
+    if ( $state == CCGN_APPLICATION_STATE_REVIEW ) {
         echo _('<h2>To be reviewed by Membership Comitee.</h2>');
         echo _("<p>This application needs to be reviewed by the Membership Comitee.</p>");    
         ccgn_application_mc_review_form($applicant_id);
@@ -647,16 +672,18 @@ function ccgn_application_users_page_render_details ( $applicant_id, $state ) {
             $who_asked = '';
             if (empty($asked_info['user_id'])) {
                 $log_user = ccgn_ask_clarification_log_get_id($applicant_id);
-                foreach ($log_user as $entry) {
-                    $asked_meta = get_user_meta($entry['voucher_id'], 'ccgn_need_to_clarify_vouch_reason_applicant_status', true);
-                    if (($asked_meta['status'] == 1) && ($entry['voucher_id'] == $voucher['id'])) {
-                        $user_is_asked_for_clarification = 1;
-                        $asked_class = 'asked-box';
-                        $who_asked = (!empty($asked_info['ask_user'])) ? get_user_by('ID',$asked_info['ask_user'])->display_name : $entry['ask_user_name'];
-                    } else if (($asked_meta['status'] == 0) && ($entry['voucher_id'] == $voucher['id'])) {
-                        $user_is_asked_for_clarification = 2;
-                        $asked_class = 'asked-box-answered';
-                        $who_asked = (!empty($asked_info['ask_user'])) ? get_user_by('ID',$asked_info['ask_user'])->display_name : $entry['ask_user_name'];
+                if (!empty($log_user)) {
+                    foreach ($log_user as $entry) {
+                        $asked_meta = get_user_meta($entry['voucher_id'], 'ccgn_need_to_clarify_vouch_reason_applicant_status', true);
+                        if (($asked_meta['status'] == 1) && ($entry['voucher_id'] == $voucher['id'])) {
+                            $user_is_asked_for_clarification = 1;
+                            $asked_class = 'asked-box';
+                            $who_asked = (!empty($asked_info['ask_user'])) ? get_user_by('ID',$asked_info['ask_user'])->display_name : $entry['ask_user_name'];
+                        } else if (($asked_meta['status'] == 0) && ($entry['voucher_id'] == $voucher['id'])) {
+                            $user_is_asked_for_clarification = 2;
+                            $asked_class = 'asked-box-answered';
+                            $who_asked = (!empty($asked_info['ask_user'])) ? get_user_by('ID',$asked_info['ask_user'])->display_name : $entry['ask_user_name'];
+                        }
                     }
                 }
 
