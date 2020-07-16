@@ -965,7 +965,8 @@ function ccgn_application_vouches_counts($applicant_id)
 function ccgn_application_can_be_voted($applicant_id)
 {
     $vouches = ccgn_application_vouches_counts($applicant_id);
-    if ($vouches['yes'] >= 2) {
+    $votes = ccgn_application_votes_counts( $applicant_id );
+    if ( ($vouches['yes'] >= 2) && ($votes['yes'] < 5) ) {
         return true;
     } else {
         return false;
