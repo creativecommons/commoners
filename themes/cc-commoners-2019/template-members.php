@@ -48,8 +48,9 @@
                             <div class="entry-content closed" id="search-members-advanced">
                                 <div class="grid-x grid-padding-x">
                                     <div class="cell auto">
-                                        <?php 
-                                            $countries = GF_Field_Address::get_countries();
+                                        <?php
+                                            $field_address = new GF_Field_Address();
+                                            $countries = $field_address->get_countries();
                                             echo '<select name="country" id="country">';
                                                 echo '<option value="">Select country</option>';
                                                 foreach ( $countries as $country ) {
