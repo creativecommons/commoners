@@ -540,13 +540,12 @@ function ccgn_application_user_page_render_change_vouchers ( $applicant_id,
 
 function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
     $reviewed = get_user_meta($applicant_id, 'ccgn-user-mc-review', true);
-    if ( !empty( $reviewed ) && ( ccgn_current_user_is_final_approver() ) ) {
+    if ( !empty( $reviewed ) && ( ccgn_current_user_is_membership_council() || ccgn_current_user_is_final_approver() ) ) {
         $user = get_user_by('ID', $reviewed['user']);
         echo __('<h3>Reviewed by MC</h3>');
         echo __('<p><strong>Vote:</strong> '.$reviewed['result'].'</p>');
         echo __('<p><strong>Note:</strong> '.$reviewed['note'].'</p>');
         echo __('<p><strong>date:</strong> '.$reviewed['date'].'</p>');
-        echo __('<p><strong>Reviewed by:</strong> '.$user->display_name.'</p>');
     }
     if ( in_array( $state, CCGN_APPLICATION_STATE_CAN_BE_PRE_APPROVED ) ) {
         echo _('<h3>Pre-Approve</h3>');
