@@ -189,7 +189,7 @@ function ccgn_application_users_page_pre_form ( $applicant_id ) {
     );
 }
 function ccgn_application_mc_review_form ( $applicant_id ) {
-    if ( ccgn_current_user_is_membership_council() || ccgn_current_user_is_final_approver() ) {
+    if ( ccgn_current_user_is_final_approver() ) {
         $existing_entry = ccgn_entries_referring_to_user (
             $applicant_id,
             CCGN_GF_MC_REVIEW,
@@ -540,13 +540,12 @@ function ccgn_application_user_page_render_change_vouchers ( $applicant_id,
 
 function ccgn_application_users_page_render_state ( $applicant_id, $state ) {
     $reviewed = get_user_meta($applicant_id, 'ccgn-user-mc-review', true);
-    if ( !empty( $reviewed ) && ( ccgn_current_user_is_final_approver() || ccgn_current_user_is_membership_council() ) ) {
+    if ( !empty( $reviewed ) && ( ccgn_current_user_is_membership_council() || ccgn_current_user_is_final_approver() ) ) {
         $user = get_user_by('ID', $reviewed['user']);
         echo __('<h3>Reviewed by MC</h3>');
         echo __('<p><strong>Vote:</strong> '.$reviewed['result'].'</p>');
         echo __('<p><strong>Note:</strong> '.$reviewed['note'].'</p>');
         echo __('<p><strong>date:</strong> '.$reviewed['date'].'</p>');
-        echo __('<p><strong>Reviewed by:</strong> '.$user->display_name.'</p>');
     }
     if ( in_array( $state, CCGN_APPLICATION_STATE_CAN_BE_PRE_APPROVED ) ) {
         echo _('<h3>Pre-Approve</h3>');
