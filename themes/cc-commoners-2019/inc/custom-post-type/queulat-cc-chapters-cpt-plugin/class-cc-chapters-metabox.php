@@ -22,7 +22,8 @@ class Chapters_Metabox extends Metabox
     public function get_countries() {
         $search = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
         $country_id = (array)get_post_meta(get_the_ID(), 'cc_chapter_chapter_country', false);
-        $countries = $countries = GF_Field_Address::get_countries();
+        $field_address = new GF_Field_Address();
+        $countries = $field_address->get_countries();
         $results = [];
         foreach ($countries as $key=>$country) {
             if (!empty($search)) {
@@ -131,18 +132,12 @@ class Chapters_Metabox extends Metabox
                             'width' => '100%',
                             'multiple' => false,
                             'minimumInputLength' => 3
-                            // 'ajax' => [
-                            //     'url' => admin_url('admin-ajax.php?action=event-metabox__get_countries'),
-                            // ]
                         ],
                         'description' => 'Choose the Chapter Country',
                     ],
                     'options' => (function () {
-                        // $country_id = (array)get_post_meta(get_the_ID(), 'cc_chapter_chapter_country', false);
-                        // if (!$country_id) {
-                        //     return [];
-                        // }
-                        $countries = GF_Field_Address::get_countries();
+                        $field_address = new GF_Field_Address();
+                        $countries = $field_address->get_countries();
                         if (!empty($countries)) {
                             return $countries;
                         }
