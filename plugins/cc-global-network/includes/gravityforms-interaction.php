@@ -401,7 +401,7 @@ define('CCGN_CLEANUP_DAYS', 21);
 
 function ccgn_gf_get_paged_all($form_id, $search_criteria, $sorting)
 {
-    $page_size = 100;
+    $page_size = 200;
     $results = array();
     $paging = array('offset' => 0, 'page_size' => $page_size);
     while (true) {

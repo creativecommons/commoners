@@ -353,12 +353,36 @@ function ccgn_rest_return_members()
     $end_date = (isset($_POST['end_date'])) ? $end_date : '';
     $return_data = array();
     if (rest_cookie_check_errors() && $the_user->has_cap('ccgn_list_applications')) {
-        $individuals = ccgn_new_final_approvals_since($start_date, $end_date);
+        $default =  array(
+			'subscriber' => 'subscriber',
+            'orderby' => 'date',
+            'order' => 'DESC',
+            'meta_query' => array(
+                array(
+                    'key' => 'ccgn-application-state',
+                    'value' => 'accepted'
+                )
+            )
+		);
+        $query = new WP_User_Query($default);
+        $individuals = $query->get_results();
+        //$individuals = ccgn_new_final_approvals_since($start_date, $end_date);
+        $final_approval_form_id = RGFormsModel::get_form_id(CCGN_GF_FINAL_APPROVAL);
         foreach ($individuals as $member) {
+            $user = $member;
+            $member_id = $user->data->ID;
+            $search_criteria = array(
+                'field_filters' => array(
+                    array(
+                        'key' => CCGN_GF_FINAL_APPROVAL_APPLICANT_ID,
+                        'value' => $member_id
+                    ),
+                )
+            );
+            $approval_entry = GFAPI::get_entries( $final_approval_form_id, $search_criteria );
+            $approval_date = (!empty($approval_entry[0]['date_created'])) ? $approval_entry[0]['date_created'] : CCGN_SITE_EPOCH ;
             $user_data = array();
-            $member_id = $member[CCGN_GF_FINAL_APPROVAL_APPLICANT_ID];
-            $user = get_user_by('ID', $member_id);
-
+            $member_last_date = get_user_meta( $member_id, CCGN_APPLICATION_STATE_DATE, true);
             $user_data['user_id'] = $member_id;
             $user_data['user_type'] = ccgn_applicant_type_desc($member_id);
             $user_data['user_url'] = ccgn_application_user_application_page_url($user->data->ID);
@@ -368,7 +392,7 @@ function ccgn_rest_return_members()
             $user_data['location_chapter'] = bp_get_profile_field_data( 'field=Preferred%20Country%20Chapter&user_id=' . $member_id );
             $user_data['member_interests'] = join( ', ', bp_get_profile_field_data( 'field=Areas%20of%20Interest&user_id=' . $member_id ) );
             $user_data['member_vouchers'] = ccgn_application_format_vouches_yes($member_id);
-            $user_data['member_approval_date'] = date('Y-m-d', strtotime($member['date_created']));
+            $user_data['member_approval_date'] = date('Y-m-d', strtotime($approval_date));
 
             $return_data['data'][] = $user_data;
         }
