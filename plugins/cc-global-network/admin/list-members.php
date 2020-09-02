@@ -354,7 +354,7 @@ function ccgn_rest_return_members()
     $return_data = array();
     if (rest_cookie_check_errors() && $the_user->has_cap('ccgn_list_applications')) {
         $default =  array(
-			'subscriber' => 'subscriber',
+            'subscriber' => 'subscriber',
             'orderby' => 'date',
             'order' => 'DESC',
             'meta_query' => array(
@@ -363,10 +363,9 @@ function ccgn_rest_return_members()
                     'value' => 'accepted'
                 )
             )
-		);
+        );
         $query = new WP_User_Query($default);
         $individuals = $query->get_results();
-        //$individuals = ccgn_new_final_approvals_since($start_date, $end_date);
         $final_approval_form_id = RGFormsModel::get_form_id(CCGN_GF_FINAL_APPROVAL);
         foreach ($individuals as $member) {
             $user = $member;
@@ -382,7 +381,6 @@ function ccgn_rest_return_members()
             $approval_entry = GFAPI::get_entries( $final_approval_form_id, $search_criteria );
             $approval_date = (!empty($approval_entry[0]['date_created'])) ? $approval_entry[0]['date_created'] : CCGN_SITE_EPOCH ;
             $user_data = array();
-            $member_last_date = get_user_meta( $member_id, CCGN_APPLICATION_STATE_DATE, true);
             $user_data['user_id'] = $member_id;
             $user_data['user_type'] = ccgn_applicant_type_desc($member_id);
             $user_data['user_url'] = ccgn_application_user_application_page_url($user->data->ID);
