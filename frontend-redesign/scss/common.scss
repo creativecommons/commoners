@@ -130,3 +130,16 @@ a {
         color: $white;
     }
 }
+
+//TEMPORARY FIX
+// Remove country field from profile edits
+// this should be eventually replaced with a country dropdown select 
+#buddypress {
+    #profile-edit-form {
+        .editfield {
+            &.field_location {
+                display: none !important;
+            }
+        }
+    }
+}

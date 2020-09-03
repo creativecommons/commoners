@@ -5927,6 +5927,9 @@ a {
 .button.secondary {
   color: #fefefe; }
 
+#buddypress #profile-edit-form .editfield.field_location {
+  display: none !important; }
+
 .main-header {
   position: relative;
   background-color: #F7D962;
