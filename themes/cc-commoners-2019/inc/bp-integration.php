@@ -9,6 +9,13 @@ class bp_commoners {
             return false;
         }
     }
+    static function check_if_user_is_accepted() {
+        $active = ccgn_registration_user_get_stage_and_date( bp_displayed_user_id() );
+        if ( active['stage'] != 'accepted' ) {
+            wp_redirect( home_url() );
+            exit;
+        }
+    }
     static function add_user_meta($text) {
         $user_id = bp_displayed_user_id();
         $displayed_user = get_user_by('ID', $user_id );
@@ -22,4 +29,5 @@ class bp_commoners {
         }
     }
 }
+add_action('bp_members_screen_display_profile', array( 'bp_commoners', 'check_if_user_is_accepted' ), 10, 1);
 add_action('bp_profile_header_meta', array( 'bp_commoners', 'add_user_meta' ),10,1);
