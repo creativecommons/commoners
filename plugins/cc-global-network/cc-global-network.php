@@ -73,6 +73,7 @@ require_once(CCGN_PATH . 'public/vouching-form-shortcode.php');
 require_once CCGN_PATH . 'cron/email-vouch-request-reminders.php';
 require_once CCGN_PATH . 'cron/email-update-vouchers-reminders.php';
 require_once CCGN_PATH . 'cron/email-update-details-reminders.php';
+require_once CCGN_PATH . 'cron/remove-marked-users.php';
 
 
 // Testing support
