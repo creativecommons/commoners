@@ -772,12 +772,11 @@ if ( defined( 'INTERIM_MEMBERSHIP_COUNCIL' ) ) {
 /* Rejected account should be deleted. There's no need to keep this data on the website **/
 function ccgn_user_level_set_rejected ( $user_id ) {
 
-    _ccgn_application_delete_entries_created_by($user_id);
-    delete_user_meta($user_id, CCGN_APPLICATION_TYPE);
-    delete_user_meta($user_id, CCGN_APPLICATION_STATE);
-    delete_user_meta($user_id, CCGN_USER_IS_AUTOVOUCHED);
-
-    $delete = wp_delete_user($user_id);
+    //regarding to the new rejection policy and the data retencion period this is changed to this state which should be deleted after 30 days
+    ccgn_registration_user_set_stage(
+        $user_id,
+        CCGN_APPLICATION_STATE_DELETE
+    );
 }
 
 function ccgn_user_level_set_didnt_update_vouchers ( $user_id ) {

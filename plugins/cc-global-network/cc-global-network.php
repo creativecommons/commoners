@@ -381,6 +381,19 @@ register_deactivation_hook(
     'ccgn_schedule_remove_email_update_details_reminders'
 );
 
+add_action(
+    'ccgn_check_accounts_to_be_removed',
+    'ccgn_check_accounts_to_be_removed'
+);
+register_activation_hook(
+    __FILE__,
+    'ccgn_schedule_add_retention_data'
+);
+register_deactivation_hook(
+    __FILE__,
+    'ccgn_schedule_remove_retention_data'
+);
+
 ////////////////////////////////////////////////////////////////////////////////
 // Admin script && styles
 ////////////////////////////////////////////////////////////////////////////////

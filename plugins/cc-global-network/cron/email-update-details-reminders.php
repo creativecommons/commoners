@@ -20,7 +20,6 @@ defined('ABSPATH') or die('No script kiddies please!');
 // Also beware any knock-on effect on CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS
 define('CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS', 7);
 define('CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS', CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 7);
-//define('CCGN_SEND_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS', CCGN_SEND_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 3 );
 define( 'CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS', CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 10 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +60,7 @@ function ccgn_update_details_set_second_reminder( $applicant_id ) {
     update_user_meta($applicant_id, 'ccgn_applicant_update_details_state', $update_details_meta);
 }
 
-// Send reminders to those that need them
+// Send reminders to those who need them
 
 function ccgn_email_update_details_reminders()
 {
@@ -70,6 +69,7 @@ function ccgn_email_update_details_reminders()
         CCGN_APPLICATION_STATE_UPDATE_DETAILS
     );
     foreach ($applicants as $applicant_id) {
+        $now = new DateTime( 'now' );
         $status = get_user_meta($applicant_id, 'ccgn_applicant_update_details_state', true);
         $state_date = new DateTime($status['date']);
         $days_in_state = $state_date->diff($now)->days;
@@ -90,12 +90,12 @@ function ccgn_email_update_details_reminders()
             }
         } elseif ( ($days_in_state > CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS) && ($days_in_state <= CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS) ) {
             // Send first reminder
-            if (empty($status['state'])) {
+            if (empty($status['state']) || ($status['state'] == 'none') ) {
                 ccgn_update_details_set_first_reminder($applicant_id);
             }
         } elseif ( ($days_in_state > CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS) && ($days_in_state <= CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS) ) {
             // Send second reminder
-            if (($status['state'] == 'first-reminer') && ($status['done'])) {
+            if (($status['state'] == 'first-reminder') && ($status['done'])) {
                 ccgn_update_details_set_second_reminder($applicant_id);
             }
         }
