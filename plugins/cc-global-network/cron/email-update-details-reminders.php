@@ -19,8 +19,8 @@ defined('ABSPATH') or die('No script kiddies please!');
 // Be careful changing this value, you may send a reminder sooner than expected
 // Also beware any knock-on effect on CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS
 define('CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS', 7);
-define('CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS', CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 7);
-define( 'CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS', CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS + 10 );
+define('CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS', 7);
+define( 'CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS', 10 );
 
 ////////////////////////////////////////////////////////////////////////////////
 // Checking and sending
@@ -71,32 +71,33 @@ function ccgn_email_update_details_reminders()
     foreach ($applicants as $applicant_id) {
         $now = new DateTime( 'now' );
         $status = get_user_meta($applicant_id, 'ccgn_applicant_update_details_state', true);
-        $state_date = new DateTime($status['date']);
+        if (!empty($status)) {
+            $state_date = new DateTime($status['date']);
+        } else {
+            $state_date = get_user_meta($applicant_id, CCGN_APPLICATION_STATE_DATE, true);
+        }
         $days_in_state = $state_date->diff($now)->days;
-        if ($days_in_state > CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS) {
-            if ( ($status['state'] == 'second-reminder') && ($status['done']) ) {
+        $current_state = $status['state'];
+        if ( ( ($current_state == 'none') || (empty($current_state))) && ($days_in_state < CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS) ) {
+            ccgn_update_details_set_first_reminder($applicant_id);
+        } elseif ( ( ($current_state == 'first-reminder') ) && ($days_in_state < CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS) ) {
+            ccgn_update_details_set_second_reminder($applicant_id);
+        } elseif ( $days_in_state > CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS )  {
+            if ( ($current_state == 'second-reminder') && ($status['done']) ) {
                 ccgn_close_update_details_applicant($applicant_id);
-            } elseif ( $status['state'] == 'none' ) {
+            }
+            elseif ( $status['state'] == 'none' ) {
                 ccgn_update_details_set_first_reminder($applicant_id);
             } elseif ( $status['state'] == 'first-reminder' ) {
                 ccgn_update_details_set_second_reminder($applicant_id);
             } else {
                 //update user status date
+                ccgn_update_details_set_first_reminder($applicant_id);
                 update_user_meta(
                     $applicant_id,
                     CCGN_APPLICATION_STATE_DATE,
                     date('Y-m-d H:i:s', strtotime('now'))
                 );
-            }
-        } elseif ( ($days_in_state > CCGN_FIRST_REMINDER_UPDATE_DETAILS_AFTER_DAYS) && ($days_in_state <= CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS) ) {
-            // Send first reminder
-            if (empty($status['state']) || ($status['state'] == 'none') ) {
-                ccgn_update_details_set_first_reminder($applicant_id);
-            }
-        } elseif ( ($days_in_state > CCGN_SECOND_REMINDER_UPDATE_DETAILS_AFTER_DAYS) && ($days_in_state <= CCGN_CLOSE_UPDATE_DETAILS_AFTER_DAYS) ) {
-            // Send second reminder
-            if (($status['state'] == 'first-reminder') && ($status['done'])) {
-                ccgn_update_details_set_second_reminder($applicant_id);
             }
         }
     }
