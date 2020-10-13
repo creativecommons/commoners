@@ -43,7 +43,9 @@ function ccgn_check_accounts_to_be_removed()
 {
     $states_to_delete = array(
       CCGN_APPLICATION_STATE_DELETE,
-      CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS
+      CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS,
+      CCGN_APPLICATION_STATE_CHARTER,
+      CCGN_APPLICATION_STATE_DETAILS
     );
     $now = new DateTime('now');
     foreach ($states_to_delete as $state) {
@@ -53,7 +55,6 @@ function ccgn_check_accounts_to_be_removed()
           $state_date = new DateTime($status_date);
           $days_in_state = $state_date->diff($now)->days;
           if ($days_in_state > CCGN_REMOVE_APPLICATION_AFTER_DAYS) {
-            // Maybe it's a good Idea to log the application that have been deleted (just the name, according to date retention)
             ccgn_close_and_remove_retention_data_applicant($applicant_id);
           } 
       }
