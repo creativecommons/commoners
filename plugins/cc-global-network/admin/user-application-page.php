@@ -215,6 +215,55 @@ function ccgn_application_mc_review_form ( $applicant_id ) {
         );
     }
 }
+function ccgn_application_institutional_agreement_form ( $applicant_id, $state ) {
+    if ( ccgn_current_user_is_legal_team() && ($state == CCGN_APPLICATION_STATE_LEGAL ) ) {
+        echo '<h2>Institutional Agreement</h2>';
+        $institutional_agreement_meta = get_user_meta($applicant_id, 'ccgn-institutional-agreement', true);
+        if (!empty($institutional_agreement_meta) && ($institutional_agreement_meta['status'] == 'sent-agreement')) {
+            $now = new DateTime('now');
+            $agreement_date = new DateTime($institutional_agreement_meta['date']);
+            echo '<p>Agreement sent: '.date('Y-m-d',strtotime($institutional_agreement_meta['date'])).' ('.$agreement_date->diff($now)->days.' days ago)';
+        }
+        $existing_entry = ccgn_entries_referring_to_user (
+            $applicant_id,
+            CCGN_GF_INSTITUTIONAL_AGREEMENT,
+            CCGN_GF_INSTITUTIONAL_AGREEMENT_ID
+        )[0];
+        gravity_form(
+            CCGN_GF_INSTITUTIONAL_AGREEMENT,
+            false,
+            false,
+            false,
+            array(
+                CCGN_GF_INSTITUTIONAL_AGREEMENT_CHECKBOX_PARAMETER
+                => $existing_entry[
+                    CCGN_GF_INSTITUTIONAL_AGREEMENT_CHECKBOX
+                ],
+                CCGN_GF_INSTITUTIONAL_AGREEMENT_ID_PARAMETER
+                => $applicant_id
+            )
+        );
+    }
+}
+function ccgn_application_institutional_agreement_submit_handler( $entry, $form ) {
+    if ( $form[ 'title' ] == CCGN_GF_INSTITUTIONAL_AGREEMENT ) {
+        $applicant_id = $entry[ CCGN_GF_INSTITUTIONAL_AGREEMENT_ID ];
+        if ($entry[ CCGN_GF_INSTITUTIONAL_AGREEMENT_CHECKBOX ] == 'yes') {
+            //The institutional agreement has been sent
+            $institutional_agreement_meta = array(
+                'status' => 'sent-agreement',
+                'date' => date('Y-m-d H:i:s', strtotime('now')),    
+            );
+            update_user_meta($applicant_id, 'ccgn-institutional-agreement', $institutional_agreement_meta);
+        } else {
+            $institutional_agreement_meta = array(
+                'status' => 'agreement-not-sent',
+                'date' => date('Y-m-d H:i:s', strtotime('now')),    
+            );
+            update_user_meta($applicant_id, 'ccgn-institutional-agreement', $institutional_agreement_meta);
+        }
+    }
+}
 function ccgn_application_mc_review_submit_handler( $entry, $form ) {
     if ( $form[ 'title' ] == CCGN_GF_MC_REVIEW ) {
         $applicant_id = $entry[ CCGN_GF_MC_REVIEW_APPLICANT_ID ];
@@ -811,6 +860,7 @@ function ccgn_application_users_page () {
     ccgn_application_users_page_render_details( $applicant_id, $state );
     ccgn_application_users_page_render_state( $applicant_id, $state );
     if ( ccgn_user_is_institutional_applicant( $applicant_id ) ) {
+        ccgn_application_institutional_agreement_form( $applicant_id, $state );
         ccgn_application_format_legal_approval( $applicant_id, $state );
     }
 }

@@ -45,18 +45,30 @@ function ccgn_check_accounts_to_be_removed()
       CCGN_APPLICATION_STATE_DELETE,
       CCGN_APPLICATION_STATE_DIDNT_UPDATE_VOUCHERS,
       CCGN_APPLICATION_STATE_CHARTER,
-      CCGN_APPLICATION_STATE_DETAILS
+      CCGN_APPLICATION_STATE_DETAILS,
+      CCGN_APPLICATION_STATE_LEGAL
     );
     $now = new DateTime('now');
     foreach ($states_to_delete as $state) {
       $applicants = ccgn_applicant_ids_with_state( $state );
       foreach ($applicants as $applicant_id) {
+        if ( $state == CCGN_APPLICATION_STATE_LEGAL) {
+          $stage = get_user_meta($applicant_id, 'ccgn-institutional-agreement', true);
+          if (!empty($stage) && ($stage['status'] == 'sent-agreement')) {
+            $agreement_date = new DateTime($stage['date']);
+            $days_in_state = $agreement_date->diff($now)->days;
+            if ($days_in_state > CCGN_REMOVE_APPLICATION_AFTER_DAYS) {
+              ccgn_close_and_remove_retention_data_applicant($applicant_id);
+            } 
+          }
+        } else {
           $status_date = get_user_meta($applicant_id, 'ccgn-application-state-date', true);
           $state_date = new DateTime($status_date);
           $days_in_state = $state_date->diff($now)->days;
           if ($days_in_state > CCGN_REMOVE_APPLICATION_AFTER_DAYS) {
             ccgn_close_and_remove_retention_data_applicant($applicant_id);
           } 
+        }
       }
     }
 }

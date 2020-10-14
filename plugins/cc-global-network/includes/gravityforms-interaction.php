@@ -31,6 +31,7 @@ define('CCGN_GF_CHOOSE_VOUCHERS', 'Choose Vouchers');
 
 define('CCGN_GF_VOUCH', 'Vouch For Applicant');
 define('CCGN_GF_MC_REVIEW', 'MC user review');
+define('CCGN_GF_INSTITUTIONAL_AGREEMENT', 'Institutional Agreement');
 
 // Admin approval of applicant
 
@@ -207,6 +208,11 @@ define('CCGN_GF_MC_REVIEW_APPLICANT_ID', '3');
 define('CCGN_GF_MC_REVIEW_RESULT_PARAMETER', 'mc-review-result');
 define('CCGN_GF_MC_REVIEW_NOTE_PARAMETER', 'mc-review-note');
 define('CCGN_GF_MC_REVIEW_APPLICANT_ID_PARAMETER', 'applicant_id');
+
+define('CCGN_GF_INSTITUTIONAL_AGREEMENT_CHECKBOX', '1.1');
+define('CCGN_GF_INSTITUTIONAL_AGREEMENT_CHECKBOX_PARAMETER', 'institutional_agreement_sent');
+define('CCGN_GF_INSTITUTIONAL_AGREEMENT_ID', '2');
+define('CCGN_GF_INSTITUTIONAL_AGREEMENT_ID_PARAMETER', 'applicant_id');
 
 // Field values that we need to check
 
