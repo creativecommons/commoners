@@ -73,6 +73,7 @@ require_once(CCGN_PATH . 'public/vouching-form-shortcode.php');
 require_once CCGN_PATH . 'cron/email-vouch-request-reminders.php';
 require_once CCGN_PATH . 'cron/email-update-vouchers-reminders.php';
 require_once CCGN_PATH . 'cron/email-update-details-reminders.php';
+require_once CCGN_PATH . 'cron/remove-marked-users.php';
 
 
 // Testing support
@@ -254,6 +255,13 @@ add_action(
     2
 );
 
+add_action(
+    'gform_after_submission',
+    'ccgn_application_institutional_agreement_submit_handler',
+    10,
+    2
+);
+
 ////////////////////////////////////////////////////////////////////////////////
 // Forms for existing members
 ////////////////////////////////////////////////////////////////////////////////
@@ -379,6 +387,19 @@ register_activation_hook(
 register_deactivation_hook(
     __FILE__,
     'ccgn_schedule_remove_email_update_details_reminders'
+);
+
+add_action(
+    'ccgn_check_accounts_to_be_removed',
+    'ccgn_check_accounts_to_be_removed'
+);
+register_activation_hook(
+    __FILE__,
+    'ccgn_schedule_add_retention_data'
+);
+register_deactivation_hook(
+    __FILE__,
+    'ccgn_schedule_remove_retention_data'
 );
 
 ////////////////////////////////////////////////////////////////////////////////

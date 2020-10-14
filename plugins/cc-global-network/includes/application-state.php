@@ -106,6 +106,11 @@ define(
 );
 // This application state happens when a member reject the applicant who asked for vouch, voting 'NO'
 define( 'CCGN_APPLICATION_STATE_REVIEW', 'to-be-reviewed' );
+// This state applies to the new data retention policy, which should retain the data for no more than 30 days
+define('CCGN_APPLICATION_STATE_DELETE', 'to-be-deleted' );
+//legal is waiting for institutional agreement 30 days countdown to be deleted
+define('CCGN_APPLICATION_STATE_INSTITUTIONAL_AGREEMENT', 'waiting-institutional-agreement' );
+
 define(
     'CCGN_APPLICATION_STATE_CAN_BE_PRE_APPROVED',
     [
