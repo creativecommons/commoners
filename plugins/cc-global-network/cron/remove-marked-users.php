@@ -16,7 +16,6 @@ defined('ABSPATH') or die('No script kiddies please!');
 ////////////////////////////////////////////////////////////////////////////////
 
 // Be careful changing this value, you may send a reminder sooner than expected
-// Also beware any knock-on effect on CCGN_CLOSE_UPDATE_VOUCHERS_AFTER_DAYS
 define('CCGN_REMOVE_APPLICATION_AFTER_DAYS', 30);
 
 
@@ -36,8 +35,6 @@ function ccgn_close_and_remove_retention_data_applicant($applicant_id)
     $delete = wp_delete_user($applicant_id);
 }
 
-
-// Send reminders to those that need them
 
 function ccgn_check_accounts_to_be_removed()
 {
