@@ -11,7 +11,7 @@ class bp_commoners {
     }
     static function check_if_user_is_accepted() {
         $active = ccgn_registration_user_get_stage_and_date( bp_displayed_user_id() );
-        if ( active['stage'] != 'accepted' ) {
+        if ( $active['stage'] != 'accepted' ) {            
             wp_redirect( home_url() );
             exit;
         }
