@@ -31,7 +31,7 @@
     <?php //if ( is_singular() && get_option( 'thread_comments' ) ) wp_enqueue_script( 'comment-reply' ); ?>
     <?php wp_head(); ?>
 
-    <link rel='stylesheet' id='cc-fontello-css' href='https://d15omoko64skxi.cloudfront.net/wp-content/themes/cc/fonts/fontello/css/cc-fontello.css?ver=4.9.1' type='text/css' media='all' />
+    <link rel='stylesheet' id='cc-fontello-css' href='https://creativecommons.org/wp-content/themes/cc/fonts/fontello/css/cc-fontello.css?ver=4.9.1' type='text/css' media='all' />
   </head>
 
   <body <?php body_class(); ?> >
